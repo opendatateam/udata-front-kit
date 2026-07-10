@@ -1,7 +1,30 @@
 <script setup lang="ts">
+import { SearchableSelect } from '@datagouv/components-next'
+import Catalog from '@gouvfr/dsfr/dist/artwork/pictograms/leisure/catalog.svg'
 import config from '@/config'
+import type { PageFilterValueConf } from '@/model/config'
+import { usePageConf } from '@/utils/config'
 
+const router = useRouter()
 const colorsBanner = config.website.home_banner_colors
+
+const casUsagesPage = usePageConf('cas-d-usages')
+const targetUsersFilter = casUsagesPage.filters.find((f) => f.id === 'target-users')
+const fournisseursFilter = casUsagesPage.filters.find((f) => f.id === 'fournisseurs-de-service')
+const targetUsersOptions = targetUsersFilter?.values ?? []
+const fournisseursOptions = fournisseursFilter?.values ?? []
+
+const selectedTargetUsers = ref<PageFilterValueConf | null>(null)
+const selectedFournisseurs = ref<PageFilterValueConf | null>(null)
+
+const explore = () => {
+  const query: Record<string, string> = {}
+  if (selectedTargetUsers.value && targetUsersFilter)
+    query[targetUsersFilter.id] = `${casUsagesPage.filter_prefix}-${targetUsersFilter.id}-${selectedTargetUsers.value.id}`
+  if (selectedFournisseurs.value && fournisseursFilter)
+    query[fournisseursFilter.id] = `${casUsagesPage.filter_prefix}-${fournisseursFilter.id}-${selectedFournisseurs.value.id}`
+  router.push({ name: 'cas-d-usages', query })
+}
 
 const fournisseursDeService = [
   {
@@ -75,50 +98,66 @@ const niveauxDeSimplification = [
 <template>
   <div
     class="banner"
-    :style="
-      'background: linear-gradient(0.25turn, ' +
-      colorsBanner[0] +
-      ', ' +
-      colorsBanner[1] +
-      ', ' +
-      colorsBanner[2] +
-      ');'
-    "
+    :style="`background: linear-gradient(0.25turn, ${colorsBanner[0]}, ${colorsBanner[1]}, ${colorsBanner[2]})`"
   >
-    <div class="fr-container">
-      <h1 class="main-title fr-mb-3v">
-        Acteurs publics, utilisez la donnée pour simplifier vos services !
+    <div class="fr-container fr-py-4w">
+      <h1 class="title fr-mb-2w fr-text--regular">
+        Le catalogue des données<br/>accessibles aux acteurs publics<br>
+        <span class="fr-text--bold">pour simplifier les démarches de leurs usagers</span>
       </h1>
-      <div class="fr-mt-5w">
-        <div class="subtitle fr-text--alt fr-mb-10w">
-          <div class="fr-grid-row fr-grid-row--gutters">
-            <div class="fr-content-media__img fr-col-lg-2 fr-col-4">
-              <img
-                class="fr-responsive-img"
-                src="/static/simplifions/assets/accueil-picto-ecosystem.png"
-                alt=""
-                style="display: block; width: 100%; height: auto"
-              />
-            </div>
-            <div
-              class="fr-col-lg-8 fr-col-12"
-              style="
-                font-family: Marianne, arial, sans-serif !important;
-                font-style: normal;
-              "
-            >
-              <p class="fr-text--lead">
-                Simplifiez les démarches et services des citoyens, entreprises
-                et associations en récupérant pour eux leurs informations
-                administratives grâce aux API et aux données ! Vous gagnerez
-                aussi du temps !
-              </p>
-
-              <router-link
-                class="fr-btn fr-mt-1v fr-mr-2w fr fr-btn--lg fr-text--lg"
-                to="/cas-d-usages"
-                >Tous les cas d'usages</router-link
+      <p class="fr-text--alt fr-mb-3w fr-text--lg" style="text-align: center"><i>
+        Découvrez les API et bases de données utiles pour chaque démarche<br>
+        et les solutions raccordées à ces données</i>
+      </p>
+      <div class="fr-grid-row fr-grid-row--center">
+        <div class="fr-col-12 fr-col-lg-8">
+          <div class="card fr-pb-4w fr-px-3w fr-pt-2w">
+            <div class="fr-grid-row fr-grid-row--middle">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="fr-artwork fr-mr-1w"
+                aria-hidden="true"
+                width="60"
+                height="60"
+                viewBox="0 0 80 80"
               >
+                <use class="fr-artwork-decorative" :href="`${Catalog}#artwork-decorative`" />
+                <use class="fr-artwork-minor" :href="`${Catalog}#artwork-minor`" />
+                <use class="fr-artwork-major" :href="`${Catalog}#artwork-major`" />
+              </svg>
+              <p class="fr-text--bold fr-mb-0 fr-text--xl">Explorer le catalogue :</p>
+            </div>
+            <div class="fr-grid-row fr-grid-row--gutters fr-my-0 fr-mb-3w">
+              <div class="fr-col-12 fr-col-md-6">
+                <SearchableSelect
+                  v-model="selectedTargetUsers"
+                  :options="targetUsersOptions"
+                  :get-option-id="(opt) => opt.id"
+                  :display-value="(opt) => opt.name"
+                  placeholder="particuliers, entreprises, associations"
+                  label="Démarches à destination des :"
+                  :multiple="false"
+                />
+              </div>
+              <div class="fr-col-12 fr-col-md-6">
+                <SearchableSelect
+                  v-model="selectedFournisseurs"
+                  :options="fournisseursOptions"
+                  :get-option-id="(opt) => opt.id"
+                  :display-value="(opt) => opt.name"
+                  placeholder="tous les types d'acteurs publics"
+                  label="Démarches gérées par :"
+                  :multiple="false"
+                />
+              </div>
+            </div>
+            <div class="fr-grid-row fr-grid-row--center">
+              <DsfrButton
+                label="Explorer les démarches référencées"
+                icon="fr-icon-search-line"
+                icon-right
+                @click="explore"
+              />
             </div>
           </div>
         </div>
@@ -126,7 +165,7 @@ const niveauxDeSimplification = [
     </div>
   </div>
 
-  <div class="fr-container hero-text">
+  <div class="fr-container section">
     <h2
       class="fr-h1 fr-mt-15w fr-mb-5w"
       style="color: black; text-align: center"
@@ -176,7 +215,7 @@ const niveauxDeSimplification = [
     </div>
   </div>
 
-  <div class="fr-container hero-text">
+  <div class="fr-container section">
     <h2
       class="fr-h1 fr-mt-15w fr-mb-5w"
       style="color: black; text-align: center"
@@ -261,7 +300,7 @@ const niveauxDeSimplification = [
     </div>
   </div>
 
-  <div class="fr-container hero-text">
+  <div class="fr-container section">
     <h2
       class="fr-h1 fr-mt-15w fr-mb-5w"
       style="color: black; text-align: center"
@@ -312,7 +351,7 @@ const niveauxDeSimplification = [
     </div>
   </div>
 
-  <div class="fr-container hero-text">
+  <div class="fr-container section">
     <h2
       class="fr-h1 fr-mt-15w fr-mb-5w"
       style="color: black; text-align: center"
@@ -394,7 +433,7 @@ const niveauxDeSimplification = [
     </div>
   </div>
   <div
-    class="fr-container hero-text fr-mt-8w fr-py-8w"
+    class="fr-container section fr-mt-8w fr-py-8w"
     style="background-color: rgb(243, 243, 251)"
   >
     <h2
@@ -509,29 +548,34 @@ const niveauxDeSimplification = [
 </template>
 
 <style scoped>
-.fr-container {
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
+
+
+.fr-artwork-minor,
+.fr-artwork-major {
+  fill: var(--text-default-grey);
 }
+
+.fr-artwork-decorative {
+  fill: var(--text-active-blue-france);
+}
+
 .banner {
-  padding-top: 5%;
-  padding-bottom: 5%;
-  position: relative;
+  min-height: calc(100dvh - 220px); /* 220px ≈ hauteur totale header + bannière + nav */
 }
-.main-title {
-  text-align: left;
-  font-size: 48px;
-  line-height: 50px;
-  font-weight: 800;
+
+.title {
+  font-size: clamp(1.375rem, 4vw, 2rem);
+  line-height: 1.25;
+  text-align: center;
 }
-.subtitle {
-  text-align: left;
-  font-style: italic;
-  font-size: 20px;
-  line-height: 28px;
+
+.card {
+  background-color: var(--background-default-grey);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
 }
-.hero-text {
+
+.section {
   margin-top: 30px;
   text-align: left;
 }
