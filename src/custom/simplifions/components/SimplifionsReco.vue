@@ -57,13 +57,13 @@
         <template #title>Par l'API directement</template>
 
         <template v-if="isSolution">
-          <div class="fr-btns-group fr-btns-group--inline fr-mt-2w">
+          <div class="fr-btns-group fr-btns-group--inline fr-btns-group--right fr-mt-2w">
             <router-link
               v-if="topicSlug"
               class="fr-btn fr-btn--secondary test__solution-link"
               :to="{ name: 'solutions_detail', params: { item_id: topicSlug } }"
             >
-              Consulter la solution
+              Plus d'informations sur {{ recommandation.Nom_de_la_recommandation }}
             </router-link>
             <a
               v-if="recommandation.access_link_with_fallback"
@@ -72,7 +72,7 @@
               class="fr-btn test__access-link"
               target="_blank"
             >
-              Demander un accès à la solution pour ce cas d'usage
+              Demander un accès pour ce cas d'usage
             </a>
           </div>
 
