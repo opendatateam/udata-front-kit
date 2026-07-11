@@ -120,7 +120,7 @@ const fournisseursDeService = [
 
   <section>
     <div class="fr-grid-row">
-      <div class="fr-col-12 fr-col-md-6 section-intro__left">
+      <div class="fr-col-12 fr-col-md-6 double-section__col-left" style="background-color: var(--background-alt-beige-gris-galet)">
         <div class="fr-py-6w fr-px-10w">
           <h2 class="fr-h3 fr-mb-2w">
             <i>Ne demandez plus aux usagers<br />ce que l'administration sait déjà.</i>
@@ -142,8 +142,8 @@ const fournisseursDeService = [
           </div>
         </div>
       </div>
-      <div class="fr-col-12 fr-col-md-6 section-intro__right">
-        <div class="fr-py-6w fr-px-10w section-intro__right-content">
+      <div class="fr-col-12 fr-col-md-6 double-section__col-right" style="background-color: var(--background-default-grey)">
+        <div class="fr-py-6w fr-px-10w double-section__col-right--intro">
           <div>
             <h2 class="fr-h3 fr-mb-3w font-light">Qu'est-ce que Simplifions.data.gouv.fr&nbsp;?</h2>
             <p class="fr-text--lead fr-mb-2w">
@@ -182,7 +182,7 @@ const fournisseursDeService = [
 
   <section class="fr-py-6w">
     <div class="fr-container fr-px-6w">
-      <h2 class="fr-h2 font-light fr-mb-4w">Comment simplifions.data peut-il vous aider&nbsp;?</h2>
+      <h2 class="fr-h3 font-light fr-mb-4w">Comment simplifions.data peut-il vous aider&nbsp;?</h2>
 
       <!-- Découvrir -->
       <h3 class="fr-h4 fr-mb-3w"><em>Découvrir</em></h3>
@@ -263,117 +263,91 @@ const fournisseursDeService = [
     </div>
   </section>
 
-  <div
-    class="fr-container fr-mt-8w fr-py-8w"
-    style="background-color: rgb(243, 243, 251)"
-  >
-    <h2
-      id="redaction-contenu"
-      class="fr-h1 fr-mb-5w"
-      style="color: black; text-align: center"
-    >
-      Comment est rédigé le contenu sur <i>Simplifions.data</i> ?
-    </h2>
+  <section id="redaction-contenu">
+    <div class="fr-grid-row">
 
-    <div
-      class="fr-grid-row fr-grid-row--gutters fr-ml-8w fr-mr-8w fr-grid-row--top"
-    >
-      <div class="fr-col-12 fr-col-md-6">
-        <figure role="group" class="fr-content-media fr-content-media--sm">
-          <div class="fr-content-media__img fr-col-4">
-            <img
-              class="fr-responsive-img"
-              src="/static/simplifions/assets/accueil-picto-contenu-ligne-editoriale.png"
-              alt=""
-              style="width: auto; height: 100%"
-            />
+      <div class="fr-col-12 fr-col-md-6 double-section__col-left" style="background-color: var(--background-alt-blue-france)">
+        <div class="fr-py-6w fr-px-10w">
+          <h2 class="fr-h3 fr-mb-3w">
+            Comment est rédigé le contenu sur <i>Simplifions.data</i> ?
+          </h2>
+
+          <div class="fr-grid-row fr-grid-row--gutters fr-my-0 fr-mb-3w">
+            <div class="fr-col">
+              <p class="fr-text--bold fr-text--lg fr-mb-1v">Ligne éditoriale <i>DLNUF/proactivité</i></p>
+              <p class="fr-mb-0">Un contenu rédigé au sein du Pôle Data de la DINUM,
+                focalisé sur la mise en œuvre d'une simplification par la donnée,
+                synthétisant les retours et lisible pour les usagers.</p>
+            </div>
+            <div class="fr-col-auto">
+              <img
+                src="/static/simplifions/assets/accueil-picto-conclusion.svg"
+                width="80" height="80" aria-hidden="true" alt=""
+              />
+            </div>
           </div>
-        </figure>
-        <h3 style="text-align: center">
-          Ligne éditoriale <i>DLNUF/proactivité</i>
-        </h3>
-        <p class="fr-text--lg fr-text--bold">
-          Un contenu rédigé au sein du Pôle Data de la DINUM pour tenir une
-          ligne éditoriale :
-        </p>
-        <ul class="fr-text--lg">
-          <li>
-            focalisée sur la mise en oeuvre d'une simplification par la donnée,
-            souvent via les deux principes que sont le "Dites-le nous une fois"
-            et la "Proactivité" ;
-          </li>
-          <li>synthétisant les retours et les contributions ;</li>
-          <li>lisible pour les usagers.</li>
-        </ul>
-      </div>
-      <div class="fr-col-12 fr-col-md-6">
-        <figure role="group" class="fr-content-media fr-content-media--sm">
-          <div class="fr-content-media__img fr-col-3">
-            <img
-              class="fr-responsive-img"
-              src="/static/simplifions/assets/accueil-picto-contenu-contributif.png"
-              alt=""
-              style="width: auto; height: 100%"
-            />
+
+          <div class="fr-grid-row fr-grid-row--gutters fr-my-0">
+            <div class="fr-col">
+              <p class="fr-text--bold fr-text--lg fr-mb-1v">Contenu collaboratif</p>
+              <p class="fr-mb-0">De nombreux espaces sont disponibles pour permettre aux usagers
+                de proposer des modifications et construire une base de connaissance
+                élaborée sur des expériences concrètes, exhaustive et mise à jour régulièrement.</p>
+            </div>
+            <div class="fr-col-auto">
+              <img
+                src="/static/simplifions/assets/accueil-picto-community.svg"
+                width="80" height="80" aria-hidden="true" alt=""
+              />
+            </div>
           </div>
-        </figure>
-        <h3 style="text-align: center">Contenu collaboratif</h3>
-        <p class="fr-text--lg fr-text--bold">
-          De nombreux espaces sont disponibles sur le site pour permettre aux
-          usagers de proposer des modifications dans l'objectif de construire
-          une base de connaissance :
-        </p>
-        <ul class="fr-text--lg">
-          <li>élaborée sur des expériences concrètes ;</li>
-          <li>exhaustive ;</li>
-          <li>mise à jour régulièrement.</li>
-        </ul>
+        </div>
+      </div>
+
+      <div class="fr-col-12 fr-col-md-6 double-section__col-right">
+
+        <div>
+          <div class="fr-py-6w fr-px-10w" style="background-color: var(--background-alt-beige-gris-galet)">
+            <h3 class="fr-h4 fr-mb-3w">📝 Proposer une modification</h3>
+            <p class="fr-text--lead fr-mb-3w">
+              Proposez l'ajout d'une démarche, d'une solution ou la correction d'un contenu  directement depuis le formulaire en ligne.
+            </p>
+            <a
+              href="https://www.demarches-simplifiees.fr/commencer/proposer-un-contenu-pour-le-site-simplifions"
+              target="_blank"
+              class="fr-btn fr-btn--primary fr-btn--icon-right fr-icon-arrow-right-line"
+            >
+              Formulaire pour proposer un contenu
+            </a>
+          </div>
+
+          <div class="fr-py-6w fr-px-10w" style="background-color: var(--background-default-grey)">
+            <h3 class="fr-h4 fr-mb-3w">Règles de référencement</h3>
+            <p class="fr-text--lead fr-mb-3w">
+              Les règles utilisées par le pôle Data pour identifier les contenus référencés dans <i>Simplifions.data</i> :
+            </p>
+            <div class="fr-mb-2w">
+              <router-link
+                to="/doctrine-referencement-cas-usages"
+                class="fr-btn fr-btn--secondary fr-btn--icon-right fr-icon-arrow-right-line"
+              >
+                Doctrine de référencement des démarches
+              </router-link>
+            </div>
+            <div>
+              <router-link
+                to="/doctrine-referencement-solutions"
+                class="fr-btn fr-btn--secondary fr-btn--icon-right fr-icon-arrow-right-line"
+              >
+                Doctrine de référencement des solutions
+              </router-link>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
-
-    <p
-      class="fr-text--xl fr-text--bold fr-mx-2w fr-mt-4w"
-      style="text-align: center"
-    >
-      📝 Proposez une modification, un cas d'usage ou une solution :
-    </p>
-
-    <div
-      class="fr-mb-4w datagouv-components fr-grid-row fr-grid-row--center fr-grid-row--gutters"
-    >
-      <a
-        href="https://www.demarches-simplifiees.fr/commencer/proposer-un-contenu-pour-le-site-simplifions"
-        target="_blank"
-        class="fr-btn fr-btn--icon-right fr-btn--lg fr-icon-arrow-right-line fr-text--lg fr-my-2w fr-mx-2w"
-      >
-        Formulaire pour proposer un contenu
-      </a>
-    </div>
-    <p
-      class="fr-text--xl fr-text--bold fr-mx-2w fr-mt-2w"
-      style="text-align: center"
-    >
-      Consultez les règles utilisées par le pôle Data <br />pour identifier les
-      contenus qui sont référencés dans <i>Simplifions.data</i> :
-    </p>
-
-    <div class="fr-mt-4w fr-grid-row fr-grid-row--center fr-grid-row--gutters">
-      <router-link
-        to="/doctrine-referencement-cas-usages"
-        class="fr-btn fr-btn--secondary fr-btn--icon-right fr-btn--lg fr-icon-arrow-right-line fr-text--lg fr-my-2w fr-mx-2w"
-      >
-        Doctrine de référencement des cas d'usages
-      </router-link>
-    </div>
-    <div class="fr-mt-1w fr-grid-row fr-grid-row--center fr-grid-row--gutters">
-      <router-link
-        to="/doctrine-referencement-solutions"
-        class="fr-btn fr-btn--secondary fr-btn--icon-right fr-btn--lg fr-icon-arrow-right-line fr-text--lg"
-      >
-        Doctrine de référencement des solutions
-      </router-link>
-    </div>
-  </div>
+  </section>
 </template>
 
 <style scoped>
@@ -408,30 +382,23 @@ const fournisseursDeService = [
   border-radius: 4px;
 }
 
-.button-link {
-  text-decoration: none;
-  background: none;
-}
-
-.section-intro__left {
-  background-color: var(--background-alt-beige-gris-galet);
+.double-section__col-left {
   display: flex;
   justify-content: flex-end;
 }
 
-.section-intro__right {
-  background-color: var(--background-default-grey);
+.double-section__col-right {
   display: flex;
   justify-content: flex-start;
 }
 
-.section-intro__left > div,
-.section-intro__right > div {
+.double-section__col-left > div,
+.double-section__col-right > div {
   max-width: 39rem;
   width: 100%;
 }
 
-.section-intro__right-content {
+.double-section__col-right--intro {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
