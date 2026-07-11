@@ -192,7 +192,7 @@ const niveauxDeSimplification = [
       <div class="fr-col-12 fr-col-md-6 section-intro__right">
         <div class="fr-py-6w fr-px-10w section-intro__right-content">
           <div>
-            <h2 class="fr-h3 fr-mb-3w">Qu'est-ce que Simplifions.data.gouv.fr&nbsp;?</h2>
+            <h2 class="fr-h3 fr-mb-3w font-light">Qu'est-ce que Simplifions.data.gouv.fr&nbsp;?</h2>
             <p class="fr-text--lead fr-mb-2w">
               Un catalogue des données accessibles aux acteurs publics organisé par démarche usagers.
             </p>
@@ -220,6 +220,89 @@ const niveauxDeSimplification = [
               >
                 A propos de simplifions.data
               </router-link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="fr-py-6w">
+    <div class="fr-container fr-px-6w">
+      <h2 class="fr-h2 font-light fr-mb-4w">Comment simplifions.data peut-il vous aider&nbsp;?</h2>
+
+      <!-- Découvrir -->
+      <h3 class="fr-h4 fr-mb-3w"><em>Découvrir</em></h3>
+      <div class="fr-grid-row fr-grid-row--gutters">
+        <div class="fr-col-12 fr-col-md-6">
+          <div class="fr-grid-row fr-grid-row--gutters fr-my-0">
+            <div class="fr-col-auto">
+              <img src="/static/simplifions/assets/accueil-picto-innovation.svg" width="80" height="80" aria-hidden="true" alt="" />
+            </div>
+            <div class="fr-col">
+              <p class="fr-text--bold fr-text--lg fr-mb-1v">Découvrir les démarches que vous pourriez simplifier</p>
+              <p class="fr-mb-0">Inspirez-vous des démarches référencées pour en mettre en oeuvre de nouvelles ou simplifier celles que vous avez déjà.</p>
+            </div>
+          </div>
+        </div>
+        <div class="fr-col-12 fr-col-md-6">
+          <div class="fr-grid-row fr-grid-row--gutters fr-my-0">
+            <div class="fr-col-auto">
+              <img src="/static/simplifions/assets/accueil-picto-self-training.svg" width="80" height="80" aria-hidden="true" alt="" />
+            </div>
+            <div class="fr-col">
+              <p class="fr-text--bold fr-text--lg fr-mb-1v">Identifier les logiciels éditeurs raccordés aux données</p>
+              <p class="fr-mb-0">Par démarche, Simplifions indique les logiciels métiers raccordés aux API et bases de données utiles.</p>
+            </div>
+          </div>
+        </div>
+        <div class="fr-col-12 fr-col-md-6">
+          <div class="fr-grid-row fr-grid-row--gutters fr-my-0">
+            <div class="fr-col-auto">
+              <img src="/static/simplifions/assets/accueil-picto-decouverte-donnees.svg" width="80" height="80" aria-hidden="true" alt="" />
+            </div>
+            <div class="fr-col">
+              <p class="fr-text--bold fr-text--lg fr-mb-1v">Découvrir les données disponibles par démarche</p>
+              <p class="fr-mb-0">Savoir quelles API ou bases de données utiliser pour chaque démarche afin de récupérer les justificatifs des usagers.</p>
+            </div>
+          </div>
+        </div>
+        <div class="fr-col-12 fr-col-md-6">
+          <div class="fr-grid-row fr-grid-row--gutters fr-my-0">
+            <div class="fr-col-auto">
+              <img src="/static/simplifions/assets/accueil-picto-search.svg" width="80" height="80" aria-hidden="true" alt="" />
+            </div>
+            <div class="fr-col">
+              <p class="fr-text--bold fr-text--lg fr-mb-1v">Identifier les sites permettant aux agents de consulter les données</p>
+              <p class="fr-mb-0">Simplifions référence les sites interconnectés aux API de l'État et conçus pour permettre aux agents de consulter les données.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- S'informer + Comparer -->
+      <div class="fr-grid-row fr-grid-row--gutters fr-mt-4w">
+        <div class="fr-col-12 fr-col-md-6">
+          <h3 class="fr-h4 fr-mb-3w"><em>S'informer</em></h3>
+          <div class="fr-grid-row fr-grid-row--gutters fr-my-0">
+            <div class="fr-col-auto">
+              <img src="/static/simplifions/assets/accueil-picto-information.svg" width="80" height="80" aria-hidden="true" alt="" />
+            </div>
+            <div class="fr-col">
+              <p class="fr-text--bold fr-text--lg fr-mb-1v">Consulter le cadre d'utilisation des données pour chaque démarche</p>
+              <p class="fr-mb-0">Une synthèse du contexte et du cadre juridique est proposée pour chaque démarche.</p>
+            </div>
+          </div>
+        </div>
+        <div class="fr-col-12 fr-col-md-6">
+          <h3 class="fr-h4 fr-mb-3w"><em>Comparer</em></h3>
+          <div class="fr-grid-row fr-grid-row--gutters fr-my-0">
+            <div class="fr-col-auto">
+              <img src="/static/simplifions/assets/accueil-picto-justice-scales.svg" width="80" height="80" aria-hidden="true" alt="" />
+            </div>
+            <div class="fr-col">
+              <p class="fr-text--bold fr-text--lg fr-mb-1v">Comparer les différentes solutions en termes d'intégration de données</p>
+              <p class="fr-mb-0">Pour chaque solution, retrouvez la liste des données qu'ils ont intégré.</p>
             </div>
           </div>
         </div>
@@ -617,4 +700,9 @@ const niveauxDeSimplification = [
   justify-content: space-between;
   height: 100%;
 }
+
+.font-light {
+  font-weight: 400 !important;
+}
+
 </style>
