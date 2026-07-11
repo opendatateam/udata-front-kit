@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import { SearchableSelect } from '@datagouv/components-next'
 import Catalog from '@gouvfr/dsfr/dist/artwork/pictograms/leisure/catalog.svg'
-import config from '@/config'
 import type { PageFilterValueConf } from '@/model/config'
 import { usePageConf } from '@/utils/config'
 
 const router = useRouter()
-const colorsBanner = config.website.home_banner_colors
 
 const casUsagesPage = usePageConf('cas-d-usages')
 const targetUsersFilter = casUsagesPage.filters.find((f) => f.id === 'target-users')
@@ -51,7 +49,7 @@ const fournisseursDeService = [
 <template>
   <section
     class="banner"
-    :style="`background: linear-gradient(0.25turn, ${colorsBanner[0]}, ${colorsBanner[1]}, ${colorsBanner[2]})`"
+    style="background: var(--simplifions-homebanner-gradient)"
   >
     <div class="fr-container fr-py-4w">
       <h1 class="title fr-mb-2w fr-text--regular">
@@ -345,6 +343,29 @@ const fournisseursDeService = [
           </div>
         </div>
 
+      </div>
+    </div>
+  </section>
+
+  <section class="fr-py-8w" style="text-align: center; background: var(--simplifions-homebanner-gradient)">
+    <div class="fr-container">
+      <div class="fr-grid-row fr-grid-row--center">
+        <div class="fr-col-12 fr-col-md-8">
+          <h2 class="fr-h2 fr-mb-2w">
+            Prêts à simplifier vos démarches usagers<br />
+            en récupérant à la source la donnée&nbsp;?
+          </h2>
+          <p class="fr-text--alt fr-text--lead fr-mb-4w">
+            <em>Rejoignez les administrations qui utilisent déjà Simplifions.data pour
+            connaître les données et les solutions disponibles.</em>
+          </p>
+          <router-link
+            to="/cas-d-usages"
+            class="fr-btn fr-btn--lg fr-btn--icon-right fr-icon-search-line"
+          >
+            Explorer le catalogue des démarches
+          </router-link>
+        </div>
       </div>
     </div>
   </section>
