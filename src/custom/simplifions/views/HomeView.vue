@@ -31,19 +31,19 @@ const fournisseursDeService = [
     title: 'Particuliers',
     emoji: '👱',
     filters: 'target-users=particuliers',
-    description: "Tous les cas d'usages concernant les particuliers"
+    description: "Toutes les démarches concernant les particuliers"
   },
   {
     title: 'Entreprises',
     emoji: '💼',
     filters: 'target-users=entreprises',
-    description: "Tous les cas d'usages concernant les entreprises"
+    description: "Toutes les démarches concernant les entreprises"
   },
   {
     title: 'Associations',
     emoji: '🤝',
     filters: 'target-users=associations',
-    description: "Tous les cas d'usages concernant les associations"
+    description: "Toutes les démarches concernant les associations"
   }
 ]
 
@@ -96,7 +96,7 @@ const niveauxDeSimplification = [
 </script>
 
 <template>
-  <div
+  <section
     class="banner"
     :style="`background: linear-gradient(0.25turn, ${colorsBanner[0]}, ${colorsBanner[1]}, ${colorsBanner[2]})`"
   >
@@ -163,59 +163,71 @@ const niveauxDeSimplification = [
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="fr-container section">
-    <h2
-      class="fr-h1 fr-mt-15w fr-mb-5w"
-      style="color: black; text-align: center"
-    >
-      Améliorer les services à destination :
-    </h2>
-
-    <p class="fr-text--lg" style="text-align: center">
-      Le portail <i>simplifions.data.gouv.fr</i> vous accompagne pour
-      simplifier, avec de la donnée, les démarches des citoyens.<br />Retrouvez
-      tous les cas d'usages selon le public concerné :
-    </p>
-
-    <div class="fr-grid-row fr-grid-row--gutters">
-      <div
-        v-for="item in fournisseursDeService"
-        :key="item.title"
-        class="fr-col-12 fr-col-lg-4"
-      >
-        <div
-          id="tile-sourcing"
-          class="fr-tile fr-tile--horizontal fr-enlarge-link"
-        >
-          <div class="fr-tile__body">
-            <div class="fr-tile__content">
-              <h3 class="fr-tile__title fr-h3">
-                <router-link :to="`/cas-d-usages?${item.filters}`"
-                  >{{ item.title }}<br />{{ item.emoji }}</router-link
-                >
-              </h3>
-              <p class="fr-tile__detail fr-h6">
-                {{ item.description }}
-              </p>
+  <section>
+    <div class="fr-grid-row">
+      <div class="fr-col-12 fr-col-md-6 section-intro__left">
+        <div class="fr-py-6w fr-px-10w">
+          <h2 class="fr-h3 fr-mb-2w">
+            <i>Ne demandez plus aux usagers<br />ce que l'administration sait déjà.</i>
+          </h2>
+          <p class="fr-mb-3w">
+            Explorez les démarches référencées dans le catalogue à destination des :
+          </p>
+          <div v-for="item in fournisseursDeService" :key="item.title" class="fr-mb-2w">
+            <div class="fr-tile fr-tile--horizontal fr-enlarge-link fr-tile--no-icon">
+              <div class="fr-tile__body">
+                <div class="fr-tile__content">
+                  <h3 class="fr-tile__title">
+                    <router-link :to="`/cas-d-usages?${item.filters}`">{{ item.emoji }} {{ item.title }}</router-link>
+                  </h3>
+                  <p class="fr-tile__desc">{{ item.description }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="fr-col-12 fr-col-md-6 section-intro__right">
+        <div class="fr-py-6w fr-px-10w section-intro__right-content">
+          <div>
+            <h2 class="fr-h3 fr-mb-3w">Qu'est-ce que Simplifions.data.gouv.fr&nbsp;?</h2>
+            <p class="fr-text--lead fr-mb-2w">
+              Un catalogue des données accessibles aux acteurs publics organisé par démarche usagers.
+            </p>
+            <p class="fr-mb-0">
+              Pour chaque démarche —<em>aides et subventions, marchés publics, petite enfance,
+              cantine, transport, etc.</em>—, le catalogue recense les
+              <strong>API et bases de données</strong> utiles,
+              les <strong>solutions publiques et privées</strong> raccordées à ces données,
+              et les sites de consultation de ces données disponibles en ligne.
+            </p>
+          </div>
+          <div class="fr-mb-12w">
+            <div class="fr-mb-2w">
+              <router-link
+                to="#redaction-contenu"
+                class="fr-btn fr-btn--primary fr-btn--icon-right fr-icon-arrow-down-line fr-text--lg"
+              >
+                Comment est rédigé le contenu&nbsp;?
+              </router-link>
+            </div>
+            <div>
+              <router-link
+                to="/about"
+                class="fr-btn fr-btn--secondary fr-btn--icon-right fr-icon-arrow-right-line fr-text--lg"
+              >
+                A propos de simplifions.data
+              </router-link>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="fr-mt-4w fr-col-md-12 fr-grid-row fr-grid-row--center">
-      <router-link to="/cas-d-usages" class="button-link">
-        <button
-          class="fr-btn fr-btn--icon-left fr-btn--lg fr-icon-checkbox-circle-fill"
-        >
-          Tous les cas d'usages
-        </button>
-      </router-link>
-    </div>
-  </div>
+  </section>
 
-  <div class="fr-container section">
+  <div class="fr-container fr-mt-4w">
     <h2
       class="fr-h1 fr-mt-15w fr-mb-5w"
       style="color: black; text-align: center"
@@ -300,7 +312,7 @@ const niveauxDeSimplification = [
     </div>
   </div>
 
-  <div class="fr-container section">
+  <div class="fr-container fr-mt-4w">
     <h2
       class="fr-h1 fr-mt-15w fr-mb-5w"
       style="color: black; text-align: center"
@@ -351,7 +363,7 @@ const niveauxDeSimplification = [
     </div>
   </div>
 
-  <div class="fr-container section">
+  <div class="fr-container fr-mt-4w">
     <h2
       class="fr-h1 fr-mt-15w fr-mb-5w"
       style="color: black; text-align: center"
@@ -423,17 +435,16 @@ const niveauxDeSimplification = [
     </div>
 
     <div class="fr-mt-4w fr-col-md-12 fr-grid-row fr-grid-row--center">
-      <router-link to="/niveaux-simplification" class="button-link">
-        <button
-          class="fr-btn fr-btn--secondary fr-btn--icon-right fr-btn--lg fr-icon-arrow-right-line fr-text--lg"
-        >
-          En savoir plus sur les niveaux de simplification
-        </button>
+      <router-link
+        to="/niveaux-simplification"
+        class="fr-btn fr-btn--secondary fr-btn--icon-right fr-btn--lg fr-icon-arrow-right-line fr-text--lg"
+      >
+        En savoir plus sur les niveaux de simplification
       </router-link>
     </div>
   </div>
   <div
-    class="fr-container section fr-mt-8w fr-py-8w"
+    class="fr-container fr-mt-8w fr-py-8w"
     style="background-color: rgb(243, 243, 251)"
   >
     <h2
@@ -527,21 +538,19 @@ const niveauxDeSimplification = [
     </p>
 
     <div class="fr-mt-4w fr-grid-row fr-grid-row--center fr-grid-row--gutters">
-      <router-link to="/doctrine-referencement-cas-usages" class="button-link">
-        <button
-          class="fr-btn fr-btn--secondary fr-btn--icon-right fr-btn--lg fr-icon-arrow-right-line fr-text--lg fr-my-2w fr-mx-2w"
-        >
-          Doctrine de référencement des cas d'usages
-        </button>
+      <router-link
+        to="/doctrine-referencement-cas-usages"
+        class="fr-btn fr-btn--secondary fr-btn--icon-right fr-btn--lg fr-icon-arrow-right-line fr-text--lg fr-my-2w fr-mx-2w"
+      >
+        Doctrine de référencement des cas d'usages
       </router-link>
     </div>
     <div class="fr-mt-1w fr-grid-row fr-grid-row--center fr-grid-row--gutters">
-      <router-link to="/doctrine-referencement-solutions" class="button-link">
-        <button
-          class="fr-btn fr-btn--secondary fr-btn--icon-right fr-btn--lg fr-icon-arrow-right-line fr-text--lg"
-        >
-          Doctrine de référencement des solutions
-        </button>
+      <router-link
+        to="/doctrine-referencement-solutions"
+        class="fr-btn fr-btn--secondary fr-btn--icon-right fr-btn--lg fr-icon-arrow-right-line fr-text--lg"
+      >
+        Doctrine de référencement des solutions
       </router-link>
     </div>
   </div>
@@ -561,6 +570,10 @@ const niveauxDeSimplification = [
 
 .banner {
   min-height: calc(100dvh - 220px); /* 220px ≈ hauteur totale header + bannière + nav */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .title {
@@ -575,13 +588,33 @@ const niveauxDeSimplification = [
   border-radius: 4px;
 }
 
-.section {
-  margin-top: 30px;
-  text-align: left;
-}
-
 .button-link {
   text-decoration: none;
   background: none;
+}
+
+.section-intro__left {
+  background-color: var(--background-alt-beige-gris-galet);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.section-intro__right {
+  background-color: var(--background-default-grey);
+  display: flex;
+  justify-content: flex-start;
+}
+
+.section-intro__left > div,
+.section-intro__right > div {
+  max-width: 39rem;
+  width: 100%;
+}
+
+.section-intro__right-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
 }
 </style>
