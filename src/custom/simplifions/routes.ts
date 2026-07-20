@@ -21,7 +21,10 @@ export const routes: RouteRecordRaw[] = [
     meta: {
       title: 'APIs FranceConnectées'
     },
-    component: async () => await import('./views/ApisFranceConnectees.vue')
+    component: async () =>
+      await import(
+        './views/Articles/ApisFranceConnectees/ArticleApisFranceConnectees.vue'
+      )
   },
   useGlobalSearchPageRoutes({
     pageKey: 'cas-d-usages',
