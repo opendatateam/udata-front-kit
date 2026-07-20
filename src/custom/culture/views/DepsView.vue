@@ -275,7 +275,7 @@ onMounted(() => {
                 <h4 class="fr-h6 fr-mb-2w">{{ item.fields.title }}</h4>
                 <div class="fr-text--sm fr-mb-3w">
                   <!-- eslint-disable-next-line vue/no-v-html -->
-                  <div v-html="fromMarkdown(item.fields.content)"></div>
+                  <div v-html="fromMarkdown(item.fields.content).html"></div>
                 </div>
                 <a
                   v-if="item.fields.ctaLink && item.fields.ctaLabel"
@@ -303,7 +303,7 @@ onMounted(() => {
             :key="item.id"
           >
             <!-- eslint-disable-next-line vue/no-v-html -->
-            <div v-html="fromMarkdown(item.fields.content)"></div>
+            <div v-html="fromMarkdown(item.fields.content).html"></div>
           </div>
         </section>
 
@@ -321,7 +321,7 @@ onMounted(() => {
                   :key="item.id"
                 >
                   <!-- eslint-disable-next-line vue/no-v-html -->
-                  <div v-html="fromMarkdown(item.fields.content)"></div>
+                  <div v-html="fromMarkdown(item.fields.content).html"></div>
                 </div>
                 <br />
                 <a

@@ -109,6 +109,7 @@ interface GlobalSearchPageRoutesOptions {
   descriptionComponent?: () => Promise<{ default: Component }>
   detailsViewComponent?: () => Promise<{ default: Component }>
   topicConf?: TopicPageRouterConf
+  renderRootPage?: boolean
 }
 
 const CUSTOM_FILTER_TYPE_SET = new Set<CustomFilterType>(CUSTOM_FILTER_TYPES)
@@ -146,7 +147,9 @@ function buildSingleTypeConfig(
     hiddenFilters,
     basicFilters,
     advancedFilters,
-    ...(placeholder !== undefined ? { placeholder } : {})
+    ...(placeholder !== undefined ? { placeholder } : {}),
+    ...(pageConf.icon !== undefined ? { icon: pageConf.icon } : {}),
+    ...(pageConf.default_sort ? { defaultSort: pageConf.default_sort } : {})
   }
   // basicFilters/advancedFilters are string[] but upstream expects per-type key unions
   // (e.g. keyof DatasetSearchFilters) — cast is intentional, filter keys come from YAML config.
@@ -190,11 +193,7 @@ export function buildGlobalSearchConfig(pageKey: string): {
 
   // Build customFilters for the primary page (rendered via SearchSelectFilter/SearchOrganizationFilter in #custom-filters slot).
   const customFilters: CustomFilterConfig[] = pageConf.filters
-    .filter(
-      (f) =>
-        !f.hide_on_list &&
-        CUSTOM_FILTER_TYPE_SET.has(f.type as CustomFilterType)
-    )
+    .filter((f) => CUSTOM_FILTER_TYPE_SET.has(f.type as CustomFilterType))
     .flatMap((f): CustomFilterConfig[] => {
       if (f.type === 'organization_custom') {
         return [
@@ -250,7 +249,8 @@ export const useGlobalSearchPageRoutes = ({
   datasetCardComponent,
   descriptionComponent,
   detailsViewComponent,
-  topicConf
+  topicConf,
+  renderRootPage = true
 }: GlobalSearchPageRoutesOptions): RouteRecordRaw => {
   const pageConf = usePageConf(pageKey)
   const objectType = pageConf.object_type
@@ -263,7 +263,21 @@ export const useGlobalSearchPageRoutes = ({
     datasets: () => import('@/views/datasets/DatasetDetailView.vue')
   }
 
-  return {
+  const childrenPages = {
+    path: renderRootPage ? ':item_id' : `/${pageKey}/:item_id`,
+    name: `${pageKey}_detail`,
+    component: detailsViewComponent ?? defaultDetailsViews[objectType],
+    meta: {
+      pageKey,
+      descriptionComponent,
+      cardComponent,
+      datasetCardComponent
+    },
+    // this forces the component to be recreated when switching page type
+    props: () => ({ key: pageKey, ...topicConf })
+  }
+
+  const rootPage = {
     path: `/${pageKey}`,
     children: [
       {
@@ -279,21 +293,11 @@ export const useGlobalSearchPageRoutes = ({
         },
         component: () => import('@/views/UnifiedSearchView.vue')
       },
-      {
-        path: ':item_id',
-        name: `${pageKey}_detail`,
-        component: detailsViewComponent ?? defaultDetailsViews[objectType],
-        meta: {
-          pageKey,
-          descriptionComponent,
-          cardComponent,
-          datasetCardComponent
-        },
-        // this forces the component to be recreated when switching page type
-        props: () => ({ key: pageKey, ...topicConf })
-      }
+      childrenPages
     ]
   }
+
+  return renderRootPage ? rootPage : childrenPages
 }
 
 export const useTopicAdminPagesRoutes = ({

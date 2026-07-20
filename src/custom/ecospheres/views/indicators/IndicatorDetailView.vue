@@ -7,7 +7,6 @@ import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
 import DatasetAddToTopicModal from '@/components/datasets/DatasetAddToTopicModal.vue'
 import DatasetDataservicesList from '@/components/datasets/DatasetDataservicesList.vue'
-import DatasetInformationPanel from '@/components/datasets/DatasetInformationPanel.vue'
 import DatasetReusesList from '@/components/datasets/DatasetReusesList.vue'
 import DatasetSidebar from '@/components/datasets/DatasetSidebar.vue'
 import ResourcesList from '@/components/datasets/ResourcesList.vue'
@@ -21,6 +20,7 @@ import { usePageConf } from '@/utils/config'
 import { useLabels } from '@/utils/labels'
 import IndicatorInformationPanel from '../../components/indicators/IndicatorInformationPanel.vue'
 import IndicatorSourcesList from '../../components/indicators/IndicatorSourcesList.vue'
+import IndicatorTags from '../../components/indicators/IndicatorTags.vue'
 import type { Indicator } from '../../model/indicator'
 
 const route = useRouteParamsAsString()
@@ -47,12 +47,6 @@ const links = computed(() => [
 ])
 
 const tabTitles = computed(() => [
-  { title: 'Informations', tabId: 'tab-info', panelId: 'tab-content-info' },
-  {
-    title: 'Fichiers',
-    tabId: 'tab-files',
-    panelId: 'tab-content-files'
-  },
   // only display the visualization tab if the indicator has visualization enabled
   ...(indicator.value?.extras['ecospheres-indicateurs'].enable_visualization
     ? [
@@ -63,6 +57,11 @@ const tabTitles = computed(() => [
         }
       ]
     : []),
+  {
+    title: 'Fichiers',
+    tabId: 'tab-files',
+    panelId: 'tab-content-files'
+  },
   { title: 'Sources', tabId: 'tab-sources', panelId: 'tab-content-sources' },
   {
     title: 'Réutilisations et API',
@@ -75,9 +74,9 @@ const tabTitles = computed(() => [
     panelId: 'tab-content-discussions'
   },
   {
-    title: 'Détails techniques',
-    tabId: 'tab-details',
-    panelId: 'tab-content-details'
+    title: 'Informations',
+    tabId: 'tab-infos',
+    panelId: 'tab-content-infos'
   }
 ])
 
@@ -138,7 +137,10 @@ onMounted(() => {
   <GenericContainer v-if="indicator">
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-1w">
       <div class="fr-col-12 fr-col-md-8">
-        <h1 class="fr-mb-2v">{{ indicator.title }}</h1>
+        <div class="fr-mb-4v">
+          <h1 class="fr-mb-1v fr-mr-2v">{{ indicator.title }}</h1>
+          <IndicatorTags :indicator="indicator" />
+        </div>
         <ReadMore max-height="600">
           <!-- eslint-disable-next-line vue/no-v-html -->
           <div v-html="description"></div>
@@ -153,11 +155,6 @@ onMounted(() => {
       tab-list-name="Groupes d'attributs du jeu de données"
       :tab-titles="tabTitles"
     >
-      <!-- Informations -->
-      <DsfrTabContent panel-id="tab-content-info" tab-id="tab-info">
-        <IndicatorInformationPanel :indicator="indicator" />
-      </DsfrTabContent>
-
       <!-- Fichiers -->
       <DsfrTabContent panel-id="tab-content-files" tab-id="tab-files">
         <ResourcesList
@@ -204,9 +201,9 @@ onMounted(() => {
         <IndicatorSourcesList :indicator="indicator" />
       </DsfrTabContent>
 
-      <!-- Détails techniques -->
-      <DsfrTabContent panel-id="tab-content-details" tab-id="tab-details">
-        <DatasetInformationPanel :dataset="indicator" />
+      <!-- Informations -->
+      <DsfrTabContent panel-id="tab-content-infos" tab-id="tab-infos">
+        <IndicatorInformationPanel :indicator="indicator" />
       </DsfrTabContent>
     </DsfrTabs>
   </GenericContainer>

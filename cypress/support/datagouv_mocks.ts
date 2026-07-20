@@ -3,7 +3,7 @@ import type {
   DatasetV2WithFullObject
 } from '@datagouv/components-next'
 
-const datagouvResponseBuilder = (data: object[]) => {
+export const datagouvResponseBuilder = (data: object[]) => {
   return {
     data: data.slice(0, 20),
     next_page: null,
