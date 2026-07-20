@@ -43,10 +43,10 @@ importers:
         version: 12.8.2(typescript@5.7.3)
       '@vueuse/integrations':
         specifier: ^12.8.2
-        version: 12.8.2(axios@1.16.0)(focus-trap@7.8.0)(sortablejs@1.15.3)(typescript@5.7.3)
+        version: 12.8.2(axios@1.18.0(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1))(focus-trap@7.8.0)(sortablejs@1.15.3)(typescript@5.7.3)
       axios:
-        specifier: ^1.16.0
-        version: 1.16.0(debug@4.4.3(supports-color@8.1.1))
+        specifier: ^1.18.0
+        version: 1.18.0(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1)
       chart.js:
         specifier: ^4.5.1
         version: 4.5.1
@@ -92,7 +92,7 @@ importers:
     devDependencies:
       '@babel/eslint-parser':
         specifier: ^7.28.5
-        version: 7.28.5(@babel/core@7.28.5)(eslint@9.39.1(supports-color@8.1.1))
+        version: 7.28.5(@babel/core@7.28.5(supports-color@8.1.1))(eslint@9.39.1(supports-color@8.1.1))
       '@eslint/js':
         specifier: ^9.39.1
         version: 9.39.1
@@ -128,7 +128,7 @@ importers:
         version: 0.7.0(typescript@5.7.3)(vue@3.5.30(typescript@5.7.3))
       axios-mock-adapter:
         specifier: ^2.1.0
-        version: 2.1.0(axios@1.16.0)
+        version: 2.1.0(axios@1.18.0(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1))
       cypress:
         specifier: ^15.16.0
         version: 15.16.0
@@ -179,7 +179,7 @@ importers:
         version: 5.7.3
       typescript-eslint:
         specifier: ^8.48.0
-        version: 8.48.0(eslint@9.39.1(supports-color@8.1.1))(typescript@5.7.3)
+        version: 8.48.0(eslint@9.39.1(supports-color@8.1.1))(supports-color@8.1.1)(typescript@5.7.3)
       unplugin-auto-import:
         specifier: ^19.3.0
         version: 19.3.0(@vueuse/core@12.8.2(typescript@5.7.3))
@@ -1749,8 +1749,8 @@ packages:
     peerDependencies:
       axios: '>= 0.17.0'
 
-  axios@1.16.0:
-    resolution: {integrity: sha512-6hp5CwvTPlN2A31g5dxnwAX0orzM7pmCRDLnZSX772mv8WDqICwFjowHuPs04Mc8deIld1+ejhtaMn5vp6b+1w==}
+  axios@1.18.0:
+    resolution: {integrity: sha512-E32NzpYKp++W7XRe52rHiXV2ehxmh3wbdgO7MHeFM+vqxLBYHzt0ElkiImtOBxtOmyp0yoC8C6uESVV84Y2/hw==}
 
   bail@1.0.5:
     resolution: {integrity: sha512-xFbRxM1tahm08yHBP16MMjVUAvDaBMD38zsM9EMAUN61omwLmKlOpB/Zku5QkjZ8TZ4vn53pj+t518cH0S03RQ==}
@@ -2243,6 +2243,10 @@ packages:
     resolution: {integrity: sha512-FGgH2h8zKNim9ljj7dankFPcICIK9Cp5bm+c2gQSYePhpaG5+esrLODihIorn+Pe6FGJzWhXQotPv73jTaldXA==}
     engines: {node: '>= 0.4'}
 
+  es-object-atoms@1.1.2:
+    resolution: {integrity: sha512-HWcBoN6NileqtSydK2FqHbS/LoDd2pqrnQHLyJzBj4kOp/ky2MWMN694xOfkK8/SnUsW2DH7EfyVlydKCsm1Zw==}
+    engines: {node: '>= 0.4'}
+
   es-set-tostringtag@2.1.0:
     resolution: {integrity: sha512-j6vWzfrGVfyXxge+O0x5sh6cvxAog0a/4Rdd2K36zCMV5eJ+/+tOAngRO8cODMNWbVRdVlmGZQL2YS3yR8bIUA==}
     engines: {node: '>= 0.4'}
@@ -2507,6 +2511,10 @@ packages:
     resolution: {integrity: sha512-8RipRLol37bNs2bhoV67fiTEvdTrbMUYcFTiy3+wuuOnUog2QBHCZWXDRijWQfAkhBj2Uf5UnVaiWwA5vdd82w==}
     engines: {node: '>= 6'}
 
+  form-data@4.0.6:
+    resolution: {integrity: sha512-vKatAh4SlVfgbv+YtmhiRjhEMJsYpsG1Y2rMQtR+SVSbytsSD1YGzDIcrAJmdFec88u/+VoGmxnl+80gL1tRCQ==}
+    engines: {node: '>= 6'}
+
   format@0.2.2:
     resolution: {integrity: sha512-wzsgA6WOq+09wrU1tsJ09udeR/YZRaeArL9e1wPbFg3GG2yDnC2ldKpxs4xunpFF9DgqCqOIra3bc1HWrJ37Ww==}
     engines: {node: '>=0.4.x'}
@@ -2676,8 +2684,8 @@ packages:
     resolution: {integrity: sha512-Hrp5vIK/xr5SkeN2onO32H0MgNZ0f17HRNH39WfL0SYUNOTZ5Lz1TJ8Pajo/87dYGEFlLMm7mIc/k/s6Bvz9HQ==}
     engines: {node: '>=8'}
 
-  hasown@2.0.2:
-    resolution: {integrity: sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==}
+  hasown@2.0.4:
+    resolution: {integrity: sha512-T2UbfbBEF32wiepXIsMlTW9+dDYC6wMh/t/vYA4tuOMKqWz/n3vr1NFSxQiyP+zk2mXsoMA/i/7qV6LKut1t1A==}
     engines: {node: '>= 0.4'}
 
   hast-util-from-parse5@8.0.3:
@@ -4898,16 +4906,16 @@ snapshots:
 
   '@babel/compat-data@7.29.7': {}
 
-  '@babel/core@7.28.5':
+  '@babel/core@7.28.5(supports-color@8.1.1)':
     dependencies:
       '@babel/code-frame': 7.29.7
       '@babel/generator': 7.29.7
       '@babel/helper-compilation-targets': 7.29.7
-      '@babel/helper-module-transforms': 7.29.7(@babel/core@7.28.5)
+      '@babel/helper-module-transforms': 7.29.7(@babel/core@7.28.5(supports-color@8.1.1))(supports-color@8.1.1)
       '@babel/helpers': 7.29.7
       '@babel/parser': 7.29.7
       '@babel/template': 7.29.7
-      '@babel/traverse': 7.29.7
+      '@babel/traverse': 7.29.7(supports-color@8.1.1)
       '@babel/types': 7.29.7
       '@jridgewell/remapping': 2.3.5
       convert-source-map: 2.0.0
@@ -4918,9 +4926,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@babel/eslint-parser@7.28.5(@babel/core@7.28.5)(eslint@9.39.1(supports-color@8.1.1))':
+  '@babel/eslint-parser@7.28.5(@babel/core@7.28.5(supports-color@8.1.1))(eslint@9.39.1(supports-color@8.1.1))':
     dependencies:
-      '@babel/core': 7.28.5
+      '@babel/core': 7.28.5(supports-color@8.1.1)
       '@nicolo-ribaudo/eslint-scope-5-internals': 5.1.1-v1
       eslint: 9.39.1(supports-color@8.1.1)
       eslint-visitor-keys: 2.1.0
@@ -4954,14 +4962,14 @@ snapshots:
       lru-cache: 5.1.1
       semver: 6.3.1
 
-  '@babel/helper-create-class-features-plugin@7.28.5(@babel/core@7.28.5)':
+  '@babel/helper-create-class-features-plugin@7.28.5(@babel/core@7.28.5(supports-color@8.1.1))(supports-color@8.1.1)':
     dependencies:
-      '@babel/core': 7.28.5
+      '@babel/core': 7.28.5(supports-color@8.1.1)
       '@babel/helper-annotate-as-pure': 7.27.3
-      '@babel/helper-member-expression-to-functions': 7.28.5
+      '@babel/helper-member-expression-to-functions': 7.28.5(supports-color@8.1.1)
       '@babel/helper-optimise-call-expression': 7.27.1
-      '@babel/helper-replace-supers': 7.27.1(@babel/core@7.28.5)
-      '@babel/helper-skip-transparent-expression-wrappers': 7.27.1
+      '@babel/helper-replace-supers': 7.27.1(@babel/core@7.28.5(supports-color@8.1.1))(supports-color@8.1.1)
+      '@babel/helper-skip-transparent-expression-wrappers': 7.27.1(supports-color@8.1.1)
       '@babel/traverse': 7.28.5(supports-color@8.1.1)
       semver: 6.3.1
     transitivePeerDependencies:
@@ -4971,33 +4979,33 @@ snapshots:
 
   '@babel/helper-globals@7.29.7': {}
 
-  '@babel/helper-member-expression-to-functions@7.28.5':
+  '@babel/helper-member-expression-to-functions@7.28.5(supports-color@8.1.1)':
     dependencies:
       '@babel/traverse': 7.28.5(supports-color@8.1.1)
       '@babel/types': 7.28.5
     transitivePeerDependencies:
       - supports-color
 
-  '@babel/helper-module-imports@7.27.1':
+  '@babel/helper-module-imports@7.27.1(supports-color@8.1.1)':
     dependencies:
       '@babel/traverse': 7.28.5(supports-color@8.1.1)
       '@babel/types': 7.29.0
     transitivePeerDependencies:
       - supports-color
 
-  '@babel/helper-module-imports@7.29.7':
+  '@babel/helper-module-imports@7.29.7(supports-color@8.1.1)':
     dependencies:
-      '@babel/traverse': 7.29.7
+      '@babel/traverse': 7.29.7(supports-color@8.1.1)
       '@babel/types': 7.29.7
     transitivePeerDependencies:
       - supports-color
 
-  '@babel/helper-module-transforms@7.29.7(@babel/core@7.28.5)':
+  '@babel/helper-module-transforms@7.29.7(@babel/core@7.28.5(supports-color@8.1.1))(supports-color@8.1.1)':
     dependencies:
-      '@babel/core': 7.28.5
-      '@babel/helper-module-imports': 7.29.7
+      '@babel/core': 7.28.5(supports-color@8.1.1)
+      '@babel/helper-module-imports': 7.29.7(supports-color@8.1.1)
       '@babel/helper-validator-identifier': 7.29.7
-      '@babel/traverse': 7.29.7
+      '@babel/traverse': 7.29.7(supports-color@8.1.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -5007,16 +5015,16 @@ snapshots:
 
   '@babel/helper-plugin-utils@7.27.1': {}
 
-  '@babel/helper-replace-supers@7.27.1(@babel/core@7.28.5)':
+  '@babel/helper-replace-supers@7.27.1(@babel/core@7.28.5(supports-color@8.1.1))(supports-color@8.1.1)':
     dependencies:
-      '@babel/core': 7.28.5
-      '@babel/helper-member-expression-to-functions': 7.28.5
+      '@babel/core': 7.28.5(supports-color@8.1.1)
+      '@babel/helper-member-expression-to-functions': 7.28.5(supports-color@8.1.1)
       '@babel/helper-optimise-call-expression': 7.27.1
       '@babel/traverse': 7.28.5(supports-color@8.1.1)
     transitivePeerDependencies:
       - supports-color
 
-  '@babel/helper-skip-transparent-expression-wrappers@7.27.1':
+  '@babel/helper-skip-transparent-expression-wrappers@7.27.1(supports-color@8.1.1)':
     dependencies:
       '@babel/traverse': 7.28.5(supports-color@8.1.1)
       '@babel/types': 7.28.5
@@ -5050,48 +5058,48 @@ snapshots:
     dependencies:
       '@babel/types': 7.29.7
 
-  '@babel/plugin-proposal-decorators@7.28.0(@babel/core@7.28.5)':
+  '@babel/plugin-proposal-decorators@7.28.0(@babel/core@7.28.5(supports-color@8.1.1))(supports-color@8.1.1)':
     dependencies:
-      '@babel/core': 7.28.5
-      '@babel/helper-create-class-features-plugin': 7.28.5(@babel/core@7.28.5)
+      '@babel/core': 7.28.5(supports-color@8.1.1)
+      '@babel/helper-create-class-features-plugin': 7.28.5(@babel/core@7.28.5(supports-color@8.1.1))(supports-color@8.1.1)
       '@babel/helper-plugin-utils': 7.27.1
-      '@babel/plugin-syntax-decorators': 7.27.1(@babel/core@7.28.5)
+      '@babel/plugin-syntax-decorators': 7.27.1(@babel/core@7.28.5(supports-color@8.1.1))
     transitivePeerDependencies:
       - supports-color
 
-  '@babel/plugin-syntax-decorators@7.27.1(@babel/core@7.28.5)':
+  '@babel/plugin-syntax-decorators@7.27.1(@babel/core@7.28.5(supports-color@8.1.1))':
     dependencies:
-      '@babel/core': 7.28.5
+      '@babel/core': 7.28.5(supports-color@8.1.1)
       '@babel/helper-plugin-utils': 7.27.1
 
-  '@babel/plugin-syntax-import-attributes@7.27.1(@babel/core@7.28.5)':
+  '@babel/plugin-syntax-import-attributes@7.27.1(@babel/core@7.28.5(supports-color@8.1.1))':
     dependencies:
-      '@babel/core': 7.28.5
+      '@babel/core': 7.28.5(supports-color@8.1.1)
       '@babel/helper-plugin-utils': 7.27.1
 
-  '@babel/plugin-syntax-import-meta@7.10.4(@babel/core@7.28.5)':
+  '@babel/plugin-syntax-import-meta@7.10.4(@babel/core@7.28.5(supports-color@8.1.1))':
     dependencies:
-      '@babel/core': 7.28.5
+      '@babel/core': 7.28.5(supports-color@8.1.1)
       '@babel/helper-plugin-utils': 7.27.1
 
-  '@babel/plugin-syntax-jsx@7.27.1(@babel/core@7.28.5)':
+  '@babel/plugin-syntax-jsx@7.27.1(@babel/core@7.28.5(supports-color@8.1.1))':
     dependencies:
-      '@babel/core': 7.28.5
+      '@babel/core': 7.28.5(supports-color@8.1.1)
       '@babel/helper-plugin-utils': 7.27.1
 
-  '@babel/plugin-syntax-typescript@7.27.1(@babel/core@7.28.5)':
+  '@babel/plugin-syntax-typescript@7.27.1(@babel/core@7.28.5(supports-color@8.1.1))':
     dependencies:
-      '@babel/core': 7.28.5
+      '@babel/core': 7.28.5(supports-color@8.1.1)
       '@babel/helper-plugin-utils': 7.27.1
 
-  '@babel/plugin-transform-typescript@7.28.5(@babel/core@7.28.5)':
+  '@babel/plugin-transform-typescript@7.28.5(@babel/core@7.28.5(supports-color@8.1.1))(supports-color@8.1.1)':
     dependencies:
-      '@babel/core': 7.28.5
+      '@babel/core': 7.28.5(supports-color@8.1.1)
       '@babel/helper-annotate-as-pure': 7.27.3
-      '@babel/helper-create-class-features-plugin': 7.28.5(@babel/core@7.28.5)
+      '@babel/helper-create-class-features-plugin': 7.28.5(@babel/core@7.28.5(supports-color@8.1.1))(supports-color@8.1.1)
       '@babel/helper-plugin-utils': 7.27.1
-      '@babel/helper-skip-transparent-expression-wrappers': 7.27.1
-      '@babel/plugin-syntax-typescript': 7.27.1(@babel/core@7.28.5)
+      '@babel/helper-skip-transparent-expression-wrappers': 7.27.1(supports-color@8.1.1)
+      '@babel/plugin-syntax-typescript': 7.27.1(@babel/core@7.28.5(supports-color@8.1.1))
     transitivePeerDependencies:
       - supports-color
 
@@ -5121,7 +5129,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@babel/traverse@7.29.7':
+  '@babel/traverse@7.29.7(supports-color@8.1.1)':
     dependencies:
       '@babel/code-frame': 7.29.7
       '@babel/generator': 7.29.7
@@ -5202,8 +5210,8 @@ snapshots:
       rehype-stringify: 10.0.1
       remark-behead: 3.1.0
       remark-breaks: 4.0.0
-      remark-gfm: 4.0.1
-      remark-parse: 11.0.0
+      remark-gfm: 4.0.1(supports-color@8.1.1)
+      remark-parse: 11.0.0(supports-color@8.1.1)
       remark-rehype: 11.1.2
       strip-markdown: 6.0.0
       stylefire: 7.0.3
@@ -5788,7 +5796,7 @@ snapshots:
 
   '@sentry/bundler-plugin-core@4.6.1(supports-color@8.1.1)':
     dependencies:
-      '@babel/core': 7.28.5
+      '@babel/core': 7.28.5(supports-color@8.1.1)
       '@sentry/babel-plugin-component-annotate': 4.6.1
       '@sentry/cli': 2.58.2(supports-color@8.1.1)
       dotenv: 16.6.1
@@ -5903,10 +5911,10 @@ snapshots:
       debug: 4.4.3(supports-color@8.1.1)
       mdast-util-gfm-autolink-literal: 0.1.3(supports-color@8.1.1)
       neotraverse: 0.6.18
-      remark-footnotes: 3.0.0
+      remark-footnotes: 3.0.0(supports-color@8.1.1)
       remark-frontmatter: 3.0.0
-      remark-gfm: 1.0.0
-      remark-parse: 9.0.0
+      remark-gfm: 1.0.0(supports-color@8.1.1)
+      remark-parse: 9.0.0(supports-color@8.1.1)
       structured-source: 4.0.0
       unified: 9.2.2
     transitivePeerDependencies:
@@ -6004,13 +6012,13 @@ snapshots:
     dependencies:
       '@types/node': 22.19.1
 
-  '@typescript-eslint/eslint-plugin@8.48.0(@typescript-eslint/parser@8.48.0(eslint@9.39.1(supports-color@8.1.1))(supports-color@8.1.1)(typescript@5.7.3))(eslint@9.39.1(supports-color@8.1.1))(typescript@5.7.3)':
+  '@typescript-eslint/eslint-plugin@8.48.0(@typescript-eslint/parser@8.48.0(eslint@9.39.1(supports-color@8.1.1))(supports-color@8.1.1)(typescript@5.7.3))(eslint@9.39.1(supports-color@8.1.1))(supports-color@8.1.1)(typescript@5.7.3)':
     dependencies:
       '@eslint-community/regexpp': 4.12.2
       '@typescript-eslint/parser': 8.48.0(eslint@9.39.1(supports-color@8.1.1))(supports-color@8.1.1)(typescript@5.7.3)
       '@typescript-eslint/scope-manager': 8.48.0
-      '@typescript-eslint/type-utils': 8.48.0(eslint@9.39.1(supports-color@8.1.1))(typescript@5.7.3)
-      '@typescript-eslint/utils': 8.48.0(eslint@9.39.1(supports-color@8.1.1))(typescript@5.7.3)
+      '@typescript-eslint/type-utils': 8.48.0(eslint@9.39.1(supports-color@8.1.1))(supports-color@8.1.1)(typescript@5.7.3)
+      '@typescript-eslint/utils': 8.48.0(eslint@9.39.1(supports-color@8.1.1))(supports-color@8.1.1)(typescript@5.7.3)
       '@typescript-eslint/visitor-keys': 8.48.0
       eslint: 9.39.1(supports-color@8.1.1)
       graphemer: 1.4.0
@@ -6025,7 +6033,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/scope-manager': 8.48.0
       '@typescript-eslint/types': 8.48.0
-      '@typescript-eslint/typescript-estree': 8.48.0(typescript@5.7.3)
+      '@typescript-eslint/typescript-estree': 8.48.0(supports-color@8.1.1)(typescript@5.7.3)
       '@typescript-eslint/visitor-keys': 8.48.0
       debug: 4.4.3(supports-color@8.1.1)
       eslint: 9.39.1(supports-color@8.1.1)
@@ -6033,7 +6041,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@typescript-eslint/project-service@8.48.0(typescript@5.7.3)':
+  '@typescript-eslint/project-service@8.48.0(supports-color@8.1.1)(typescript@5.7.3)':
     dependencies:
       '@typescript-eslint/tsconfig-utils': 8.48.0(typescript@5.7.3)
       '@typescript-eslint/types': 8.48.0
@@ -6051,11 +6059,11 @@ snapshots:
     dependencies:
       typescript: 5.7.3
 
-  '@typescript-eslint/type-utils@8.48.0(eslint@9.39.1(supports-color@8.1.1))(typescript@5.7.3)':
+  '@typescript-eslint/type-utils@8.48.0(eslint@9.39.1(supports-color@8.1.1))(supports-color@8.1.1)(typescript@5.7.3)':
     dependencies:
       '@typescript-eslint/types': 8.48.0
-      '@typescript-eslint/typescript-estree': 8.48.0(typescript@5.7.3)
-      '@typescript-eslint/utils': 8.48.0(eslint@9.39.1(supports-color@8.1.1))(typescript@5.7.3)
+      '@typescript-eslint/typescript-estree': 8.48.0(supports-color@8.1.1)(typescript@5.7.3)
+      '@typescript-eslint/utils': 8.48.0(eslint@9.39.1(supports-color@8.1.1))(supports-color@8.1.1)(typescript@5.7.3)
       debug: 4.4.3(supports-color@8.1.1)
       eslint: 9.39.1(supports-color@8.1.1)
       ts-api-utils: 2.1.0(typescript@5.7.3)
@@ -6065,9 +6073,9 @@ snapshots:
 
   '@typescript-eslint/types@8.48.0': {}
 
-  '@typescript-eslint/typescript-estree@8.48.0(typescript@5.7.3)':
+  '@typescript-eslint/typescript-estree@8.48.0(supports-color@8.1.1)(typescript@5.7.3)':
     dependencies:
-      '@typescript-eslint/project-service': 8.48.0(typescript@5.7.3)
+      '@typescript-eslint/project-service': 8.48.0(supports-color@8.1.1)(typescript@5.7.3)
       '@typescript-eslint/tsconfig-utils': 8.48.0(typescript@5.7.3)
       '@typescript-eslint/types': 8.48.0
       '@typescript-eslint/visitor-keys': 8.48.0
@@ -6080,12 +6088,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@typescript-eslint/utils@8.48.0(eslint@9.39.1(supports-color@8.1.1))(typescript@5.7.3)':
+  '@typescript-eslint/utils@8.48.0(eslint@9.39.1(supports-color@8.1.1))(supports-color@8.1.1)(typescript@5.7.3)':
     dependencies:
       '@eslint-community/eslint-utils': 4.9.0(eslint@9.39.1(supports-color@8.1.1))
       '@typescript-eslint/scope-manager': 8.48.0
       '@typescript-eslint/types': 8.48.0
-      '@typescript-eslint/typescript-estree': 8.48.0(typescript@5.7.3)
+      '@typescript-eslint/typescript-estree': 8.48.0(supports-color@8.1.1)(typescript@5.7.3)
       eslint: 9.39.1(supports-color@8.1.1)
       typescript: 5.7.3
     transitivePeerDependencies:
@@ -6164,27 +6172,27 @@ snapshots:
 
   '@vue/babel-helper-vue-transform-on@1.5.0': {}
 
-  '@vue/babel-plugin-jsx@1.5.0(@babel/core@7.28.5)(supports-color@8.1.1)':
+  '@vue/babel-plugin-jsx@1.5.0(@babel/core@7.28.5(supports-color@8.1.1))(supports-color@8.1.1)':
     dependencies:
-      '@babel/helper-module-imports': 7.27.1
+      '@babel/helper-module-imports': 7.27.1(supports-color@8.1.1)
       '@babel/helper-plugin-utils': 7.27.1
-      '@babel/plugin-syntax-jsx': 7.27.1(@babel/core@7.28.5)
+      '@babel/plugin-syntax-jsx': 7.27.1(@babel/core@7.28.5(supports-color@8.1.1))
       '@babel/template': 7.27.2
       '@babel/traverse': 7.28.5(supports-color@8.1.1)
       '@babel/types': 7.28.5
       '@vue/babel-helper-vue-transform-on': 1.5.0
-      '@vue/babel-plugin-resolve-type': 1.5.0(@babel/core@7.28.5)
+      '@vue/babel-plugin-resolve-type': 1.5.0(@babel/core@7.28.5(supports-color@8.1.1))(supports-color@8.1.1)
       '@vue/shared': 3.5.25
     optionalDependencies:
-      '@babel/core': 7.28.5
+      '@babel/core': 7.28.5(supports-color@8.1.1)
     transitivePeerDependencies:
       - supports-color
 
-  '@vue/babel-plugin-resolve-type@1.5.0(@babel/core@7.28.5)':
+  '@vue/babel-plugin-resolve-type@1.5.0(@babel/core@7.28.5(supports-color@8.1.1))(supports-color@8.1.1)':
     dependencies:
       '@babel/code-frame': 7.27.1
-      '@babel/core': 7.28.5
-      '@babel/helper-module-imports': 7.27.1
+      '@babel/core': 7.28.5(supports-color@8.1.1)
+      '@babel/helper-module-imports': 7.27.1(supports-color@8.1.1)
       '@babel/helper-plugin-utils': 7.27.1
       '@babel/parser': 7.28.5
       '@vue/compiler-sfc': 3.5.25
@@ -6295,11 +6303,11 @@ snapshots:
 
   '@vue/eslint-config-typescript@14.6.0(eslint-plugin-vue@9.33.0(eslint@9.39.1(supports-color@8.1.1))(supports-color@8.1.1))(eslint@9.39.1(supports-color@8.1.1))(supports-color@8.1.1)(typescript@5.7.3)':
     dependencies:
-      '@typescript-eslint/utils': 8.48.0(eslint@9.39.1(supports-color@8.1.1))(typescript@5.7.3)
+      '@typescript-eslint/utils': 8.48.0(eslint@9.39.1(supports-color@8.1.1))(supports-color@8.1.1)(typescript@5.7.3)
       eslint: 9.39.1(supports-color@8.1.1)
       eslint-plugin-vue: 9.33.0(eslint@9.39.1(supports-color@8.1.1))(supports-color@8.1.1)
       fast-glob: 3.3.3
-      typescript-eslint: 8.48.0(eslint@9.39.1(supports-color@8.1.1))(typescript@5.7.3)
+      typescript-eslint: 8.48.0(eslint@9.39.1(supports-color@8.1.1))(supports-color@8.1.1)(typescript@5.7.3)
       vue-eslint-parser: 10.2.0(eslint@9.39.1(supports-color@8.1.1))(supports-color@8.1.1)
     optionalDependencies:
       typescript: 5.7.3
@@ -6375,13 +6383,13 @@ snapshots:
       '@vueuse/shared': 14.3.0(vue@3.5.30(typescript@5.7.3))
       vue: 3.5.30(typescript@5.7.3)
 
-  '@vueuse/integrations@12.8.2(axios@1.16.0)(focus-trap@7.8.0)(sortablejs@1.15.3)(typescript@5.7.3)':
+  '@vueuse/integrations@12.8.2(axios@1.18.0(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1))(focus-trap@7.8.0)(sortablejs@1.15.3)(typescript@5.7.3)':
     dependencies:
       '@vueuse/core': 12.8.2(typescript@5.7.3)
       '@vueuse/shared': 12.8.2(typescript@5.7.3)
       vue: 3.5.30(typescript@5.7.3)
     optionalDependencies:
-      axios: 1.16.0(debug@4.4.3(supports-color@8.1.1))
+      axios: 1.18.0(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1)
       focus-trap: 7.8.0
       sortablejs: 1.15.3
     transitivePeerDependencies:
@@ -6515,19 +6523,21 @@ snapshots:
 
   axe-core@4.11.0: {}
 
-  axios-mock-adapter@2.1.0(axios@1.16.0):
+  axios-mock-adapter@2.1.0(axios@1.18.0(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1)):
     dependencies:
-      axios: 1.16.0(debug@4.4.3(supports-color@8.1.1))
+      axios: 1.18.0(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1)
       fast-deep-equal: 3.1.3
       is-buffer: 2.0.5
 
-  axios@1.16.0(debug@4.4.3(supports-color@8.1.1)):
+  axios@1.18.0(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1):
     dependencies:
       follow-redirects: 1.16.0(debug@4.4.3(supports-color@8.1.1))
-      form-data: 4.0.5
+      form-data: 4.0.6
+      https-proxy-agent: 5.0.1(supports-color@8.1.1)
       proxy-from-env: 2.1.0
     transitivePeerDependencies:
       - debug
+      - supports-color
 
   bail@1.0.5: {}
 
@@ -7035,12 +7045,16 @@ snapshots:
     dependencies:
       es-errors: 1.3.0
 
+  es-object-atoms@1.1.2:
+    dependencies:
+      es-errors: 1.3.0
+
   es-set-tostringtag@2.1.0:
     dependencies:
       es-errors: 1.3.0
       get-intrinsic: 1.3.0
       has-tostringtag: 1.0.2
-      hasown: 2.0.2
+      hasown: 2.0.4
 
   es6-promise@4.2.8: {}
 
@@ -7371,7 +7385,15 @@ snapshots:
       asynckit: 0.4.0
       combined-stream: 1.0.8
       es-set-tostringtag: 2.1.0
-      hasown: 2.0.2
+      hasown: 2.0.4
+      mime-types: 2.1.35
+
+  form-data@4.0.6:
+    dependencies:
+      asynckit: 0.4.0
+      combined-stream: 1.0.8
+      es-set-tostringtag: 2.1.0
+      hasown: 2.0.4
       mime-types: 2.1.35
 
   format@0.2.2: {}
@@ -7483,18 +7505,18 @@ snapshots:
       call-bind-apply-helpers: 1.0.2
       es-define-property: 1.0.1
       es-errors: 1.3.0
-      es-object-atoms: 1.1.1
+      es-object-atoms: 1.1.2
       function-bind: 1.1.2
       get-proto: 1.0.1
       gopd: 1.2.0
       has-symbols: 1.1.0
-      hasown: 2.0.2
+      hasown: 2.0.4
       math-intrinsics: 1.1.0
 
   get-proto@1.0.1:
     dependencies:
       dunder-proto: 1.0.1
-      es-object-atoms: 1.1.1
+      es-object-atoms: 1.1.2
 
   get-stream@5.2.0:
     dependencies:
@@ -7585,7 +7607,7 @@ snapshots:
       is-stream: 2.0.1
       type-fest: 0.8.1
 
-  hasown@2.0.2:
+  hasown@2.0.4:
     dependencies:
       function-bind: 1.1.2
 
@@ -7755,7 +7777,7 @@ snapshots:
   internal-slot@1.1.0:
     dependencies:
       es-errors: 1.3.0
-      hasown: 2.0.2
+      hasown: 2.0.4
       side-channel: 1.1.0
 
   is-alphabetical@1.0.4: {}
@@ -7847,7 +7869,7 @@ snapshots:
       call-bound: 1.0.4
       gopd: 1.2.0
       has-tostringtag: 1.0.2
-      hasown: 2.0.2
+      hasown: 2.0.4
 
   is-set@2.0.3: {}
 
@@ -8173,14 +8195,14 @@ snapshots:
       unist-util-is: 6.0.1
       unist-util-visit-parents: 6.0.2
 
-  mdast-util-footnote@0.1.7:
+  mdast-util-footnote@0.1.7(supports-color@8.1.1):
     dependencies:
       mdast-util-to-markdown: 0.6.5
       micromark: 2.11.4(supports-color@8.1.1)
     transitivePeerDependencies:
       - supports-color
 
-  mdast-util-from-markdown@0.8.5:
+  mdast-util-from-markdown@0.8.5(supports-color@8.1.1):
     dependencies:
       '@types/mdast': 3.0.15
       mdast-util-to-string: 2.0.0
@@ -8190,14 +8212,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  mdast-util-from-markdown@2.0.2:
+  mdast-util-from-markdown@2.0.2(supports-color@8.1.1):
     dependencies:
       '@types/mdast': 4.0.4
       '@types/unist': 3.0.3
       decode-named-character-reference: 1.2.0
       devlop: 1.1.0
       mdast-util-to-string: 4.0.0
-      micromark: 4.0.2
+      micromark: 4.0.2(supports-color@8.1.1)
       micromark-util-decode-numeric-character-reference: 2.0.2
       micromark-util-decode-string: 2.0.1
       micromark-util-normalize-identifier: 2.0.1
@@ -8227,11 +8249,11 @@ snapshots:
       mdast-util-find-and-replace: 3.0.2
       micromark-util-character: 2.1.1
 
-  mdast-util-gfm-footnote@2.1.0:
+  mdast-util-gfm-footnote@2.1.0(supports-color@8.1.1):
     dependencies:
       '@types/mdast': 4.0.4
       devlop: 1.1.0
-      mdast-util-from-markdown: 2.0.2
+      mdast-util-from-markdown: 2.0.2(supports-color@8.1.1)
       mdast-util-to-markdown: 2.1.2
       micromark-util-normalize-identifier: 2.0.1
     transitivePeerDependencies:
@@ -8241,10 +8263,10 @@ snapshots:
     dependencies:
       mdast-util-to-markdown: 0.6.5
 
-  mdast-util-gfm-strikethrough@2.0.0:
+  mdast-util-gfm-strikethrough@2.0.0(supports-color@8.1.1):
     dependencies:
       '@types/mdast': 4.0.4
-      mdast-util-from-markdown: 2.0.2
+      mdast-util-from-markdown: 2.0.2(supports-color@8.1.1)
       mdast-util-to-markdown: 2.1.2
     transitivePeerDependencies:
       - supports-color
@@ -8254,12 +8276,12 @@ snapshots:
       markdown-table: 2.0.0
       mdast-util-to-markdown: 0.6.5
 
-  mdast-util-gfm-table@2.0.0:
+  mdast-util-gfm-table@2.0.0(supports-color@8.1.1):
     dependencies:
       '@types/mdast': 4.0.4
       devlop: 1.1.0
       markdown-table: 3.0.4
-      mdast-util-from-markdown: 2.0.2
+      mdast-util-from-markdown: 2.0.2(supports-color@8.1.1)
       mdast-util-to-markdown: 2.1.2
     transitivePeerDependencies:
       - supports-color
@@ -8268,16 +8290,16 @@ snapshots:
     dependencies:
       mdast-util-to-markdown: 0.6.5
 
-  mdast-util-gfm-task-list-item@2.0.0:
+  mdast-util-gfm-task-list-item@2.0.0(supports-color@8.1.1):
     dependencies:
       '@types/mdast': 4.0.4
       devlop: 1.1.0
-      mdast-util-from-markdown: 2.0.2
+      mdast-util-from-markdown: 2.0.2(supports-color@8.1.1)
       mdast-util-to-markdown: 2.1.2
     transitivePeerDependencies:
       - supports-color
 
-  mdast-util-gfm@0.1.2:
+  mdast-util-gfm@0.1.2(supports-color@8.1.1):
     dependencies:
       mdast-util-gfm-autolink-literal: 0.1.3(supports-color@8.1.1)
       mdast-util-gfm-strikethrough: 0.2.3
@@ -8287,14 +8309,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  mdast-util-gfm@3.1.0:
+  mdast-util-gfm@3.1.0(supports-color@8.1.1):
     dependencies:
-      mdast-util-from-markdown: 2.0.2
+      mdast-util-from-markdown: 2.0.2(supports-color@8.1.1)
       mdast-util-gfm-autolink-literal: 2.0.1
-      mdast-util-gfm-footnote: 2.1.0
-      mdast-util-gfm-strikethrough: 2.0.0
-      mdast-util-gfm-table: 2.0.0
-      mdast-util-gfm-task-list-item: 2.0.0
+      mdast-util-gfm-footnote: 2.1.0(supports-color@8.1.1)
+      mdast-util-gfm-strikethrough: 2.0.0(supports-color@8.1.1)
+      mdast-util-gfm-table: 2.0.0(supports-color@8.1.1)
+      mdast-util-gfm-task-list-item: 2.0.0(supports-color@8.1.1)
       mdast-util-to-markdown: 2.1.2
     transitivePeerDependencies:
       - supports-color
@@ -8373,7 +8395,7 @@ snapshots:
       micromark-util-symbol: 2.0.1
       micromark-util-types: 2.0.2
 
-  micromark-extension-footnote@0.3.2:
+  micromark-extension-footnote@0.3.2(supports-color@8.1.1):
     dependencies:
       micromark: 2.11.4(supports-color@8.1.1)
     transitivePeerDependencies:
@@ -8383,7 +8405,7 @@ snapshots:
     dependencies:
       fault: 1.0.4
 
-  micromark-extension-gfm-autolink-literal@0.5.7:
+  micromark-extension-gfm-autolink-literal@0.5.7(supports-color@8.1.1):
     dependencies:
       micromark: 2.11.4(supports-color@8.1.1)
     transitivePeerDependencies:
@@ -8407,7 +8429,7 @@ snapshots:
       micromark-util-symbol: 2.0.1
       micromark-util-types: 2.0.2
 
-  micromark-extension-gfm-strikethrough@0.6.5:
+  micromark-extension-gfm-strikethrough@0.6.5(supports-color@8.1.1):
     dependencies:
       micromark: 2.11.4(supports-color@8.1.1)
     transitivePeerDependencies:
@@ -8422,7 +8444,7 @@ snapshots:
       micromark-util-symbol: 2.0.1
       micromark-util-types: 2.0.2
 
-  micromark-extension-gfm-table@0.4.3:
+  micromark-extension-gfm-table@0.4.3(supports-color@8.1.1):
     dependencies:
       micromark: 2.11.4(supports-color@8.1.1)
     transitivePeerDependencies:
@@ -8442,7 +8464,7 @@ snapshots:
     dependencies:
       micromark-util-types: 2.0.2
 
-  micromark-extension-gfm-task-list-item@0.3.3:
+  micromark-extension-gfm-task-list-item@0.3.3(supports-color@8.1.1):
     dependencies:
       micromark: 2.11.4(supports-color@8.1.1)
     transitivePeerDependencies:
@@ -8456,14 +8478,14 @@ snapshots:
       micromark-util-symbol: 2.0.1
       micromark-util-types: 2.0.2
 
-  micromark-extension-gfm@0.3.3:
+  micromark-extension-gfm@0.3.3(supports-color@8.1.1):
     dependencies:
       micromark: 2.11.4(supports-color@8.1.1)
-      micromark-extension-gfm-autolink-literal: 0.5.7
-      micromark-extension-gfm-strikethrough: 0.6.5
-      micromark-extension-gfm-table: 0.4.3
+      micromark-extension-gfm-autolink-literal: 0.5.7(supports-color@8.1.1)
+      micromark-extension-gfm-strikethrough: 0.6.5(supports-color@8.1.1)
+      micromark-extension-gfm-table: 0.4.3(supports-color@8.1.1)
       micromark-extension-gfm-tagfilter: 0.3.0
-      micromark-extension-gfm-task-list-item: 0.3.3
+      micromark-extension-gfm-task-list-item: 0.3.3(supports-color@8.1.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -8577,7 +8599,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  micromark@4.0.2:
+  micromark@4.0.2(supports-color@8.1.1):
     dependencies:
       '@types/debug': 4.1.12
       debug: 4.4.3(supports-color@8.1.1)
@@ -9100,10 +9122,10 @@ snapshots:
       mdast-util-newline-to-break: 2.0.0
       unified: 11.0.5
 
-  remark-footnotes@3.0.0:
+  remark-footnotes@3.0.0(supports-color@8.1.1):
     dependencies:
-      mdast-util-footnote: 0.1.7
-      micromark-extension-footnote: 0.3.2
+      mdast-util-footnote: 0.1.7(supports-color@8.1.1)
+      micromark-extension-footnote: 0.3.2(supports-color@8.1.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -9112,36 +9134,36 @@ snapshots:
       mdast-util-frontmatter: 0.2.0
       micromark-extension-frontmatter: 0.2.2
 
-  remark-gfm@1.0.0:
+  remark-gfm@1.0.0(supports-color@8.1.1):
     dependencies:
-      mdast-util-gfm: 0.1.2
-      micromark-extension-gfm: 0.3.3
+      mdast-util-gfm: 0.1.2(supports-color@8.1.1)
+      micromark-extension-gfm: 0.3.3(supports-color@8.1.1)
     transitivePeerDependencies:
       - supports-color
 
-  remark-gfm@4.0.1:
+  remark-gfm@4.0.1(supports-color@8.1.1):
     dependencies:
       '@types/mdast': 4.0.4
-      mdast-util-gfm: 3.1.0
+      mdast-util-gfm: 3.1.0(supports-color@8.1.1)
       micromark-extension-gfm: 3.0.0
-      remark-parse: 11.0.0
+      remark-parse: 11.0.0(supports-color@8.1.1)
       remark-stringify: 11.0.0
       unified: 11.0.5
     transitivePeerDependencies:
       - supports-color
 
-  remark-parse@11.0.0:
+  remark-parse@11.0.0(supports-color@8.1.1):
     dependencies:
       '@types/mdast': 4.0.4
-      mdast-util-from-markdown: 2.0.2
+      mdast-util-from-markdown: 2.0.2(supports-color@8.1.1)
       micromark-util-types: 2.0.2
       unified: 11.0.5
     transitivePeerDependencies:
       - supports-color
 
-  remark-parse@9.0.0:
+  remark-parse@9.0.0(supports-color@8.1.1):
     dependencies:
-      mdast-util-from-markdown: 0.8.5
+      mdast-util-from-markdown: 0.8.5(supports-color@8.1.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -9368,7 +9390,7 @@ snapshots:
       execa: 5.1.1
       lazy-ass: 1.6.0
       ps-tree: 1.2.0
-      wait-on: 9.0.3(debug@4.4.3(supports-color@8.1.1))
+      wait-on: 9.0.3(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -9584,12 +9606,12 @@ snapshots:
 
   type-fest@0.8.1: {}
 
-  typescript-eslint@8.48.0(eslint@9.39.1(supports-color@8.1.1))(typescript@5.7.3):
+  typescript-eslint@8.48.0(eslint@9.39.1(supports-color@8.1.1))(supports-color@8.1.1)(typescript@5.7.3):
     dependencies:
-      '@typescript-eslint/eslint-plugin': 8.48.0(@typescript-eslint/parser@8.48.0(eslint@9.39.1(supports-color@8.1.1))(supports-color@8.1.1)(typescript@5.7.3))(eslint@9.39.1(supports-color@8.1.1))(typescript@5.7.3)
+      '@typescript-eslint/eslint-plugin': 8.48.0(@typescript-eslint/parser@8.48.0(eslint@9.39.1(supports-color@8.1.1))(supports-color@8.1.1)(typescript@5.7.3))(eslint@9.39.1(supports-color@8.1.1))(supports-color@8.1.1)(typescript@5.7.3)
       '@typescript-eslint/parser': 8.48.0(eslint@9.39.1(supports-color@8.1.1))(supports-color@8.1.1)(typescript@5.7.3)
-      '@typescript-eslint/typescript-estree': 8.48.0(typescript@5.7.3)
-      '@typescript-eslint/utils': 8.48.0(eslint@9.39.1(supports-color@8.1.1))(typescript@5.7.3)
+      '@typescript-eslint/typescript-estree': 8.48.0(supports-color@8.1.1)(typescript@5.7.3)
+      '@typescript-eslint/utils': 8.48.0(eslint@9.39.1(supports-color@8.1.1))(supports-color@8.1.1)(typescript@5.7.3)
       eslint: 9.39.1(supports-color@8.1.1)
       typescript: 5.7.3
     transitivePeerDependencies:
@@ -9882,12 +9904,12 @@ snapshots:
 
   vite-plugin-vue-inspector@5.3.2(supports-color@8.1.1)(vite@6.4.3(@types/node@22.19.1)(terser@5.44.1)(yaml@2.9.0)):
     dependencies:
-      '@babel/core': 7.28.5
-      '@babel/plugin-proposal-decorators': 7.28.0(@babel/core@7.28.5)
-      '@babel/plugin-syntax-import-attributes': 7.27.1(@babel/core@7.28.5)
-      '@babel/plugin-syntax-import-meta': 7.10.4(@babel/core@7.28.5)
-      '@babel/plugin-transform-typescript': 7.28.5(@babel/core@7.28.5)
-      '@vue/babel-plugin-jsx': 1.5.0(@babel/core@7.28.5)(supports-color@8.1.1)
+      '@babel/core': 7.28.5(supports-color@8.1.1)
+      '@babel/plugin-proposal-decorators': 7.28.0(@babel/core@7.28.5(supports-color@8.1.1))(supports-color@8.1.1)
+      '@babel/plugin-syntax-import-attributes': 7.27.1(@babel/core@7.28.5(supports-color@8.1.1))
+      '@babel/plugin-syntax-import-meta': 7.10.4(@babel/core@7.28.5(supports-color@8.1.1))
+      '@babel/plugin-transform-typescript': 7.28.5(@babel/core@7.28.5(supports-color@8.1.1))(supports-color@8.1.1)
+      '@vue/babel-plugin-jsx': 1.5.0(@babel/core@7.28.5(supports-color@8.1.1))(supports-color@8.1.1)
       '@vue/compiler-dom': 3.5.25
       kolorist: 1.8.0
       magic-string: 0.30.21
@@ -10032,15 +10054,16 @@ snapshots:
     optionalDependencies:
       typescript: 5.7.3
 
-  wait-on@9.0.3(debug@4.4.3(supports-color@8.1.1)):
+  wait-on@9.0.3(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1):
     dependencies:
-      axios: 1.16.0(debug@4.4.3(supports-color@8.1.1))
+      axios: 1.18.0(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1)
       joi: 18.0.2
       lodash: 4.18.1
       minimist: 1.2.8
       rxjs: 7.8.2
     transitivePeerDependencies:
       - debug
+      - supports-color
 
   web-namespaces@2.0.1: {}
 
