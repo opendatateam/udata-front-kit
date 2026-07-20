@@ -47,6 +47,7 @@
             <img
               v-if="recommandation.Image?.length"
               :src="grist.imageUrl(recommandation.Image[0])"
+              alt=""
               class="fr-responsive-img fr-ratio-16x9"
             />
           </div>
@@ -71,7 +72,9 @@
             </div>
             <!-- eslint-disable vue/no-v-html -->
             <div
-              v-html="fromMarkdown(recommandation.Donnees_utiles_disponibles)"
+              v-html="
+                fromMarkdown(recommandation.Donnees_utiles_disponibles).html
+              "
             ></div>
             <!-- eslint-enable vue/no-v-html -->
           </div>
@@ -96,7 +99,7 @@
               v-html="
                 fromMarkdown(
                   recommandation.Parametres_a_saisir_pour_recuperer_les_donnees
-                )
+                ).html
               "
             ></div>
             <!-- eslint-enable vue/no-v-html -->
@@ -155,8 +158,8 @@
             >
               <DsfrTabContent
                 v-if="integratingSolutionsLogicielsMetiers?.length"
-                panel-id="tab-content-logiciel-metier"
-                tab-id="tab-logiciel-metier"
+                :panel-id="`${uid}-tab-content-logiciel-metier`"
+                :tab-id="`${uid}-tab-logiciel-metier`"
                 style="background-color: white"
               >
                 <p>
@@ -189,8 +192,8 @@
 
               <DsfrTabContent
                 v-if="integratingSolutionsBriquesTechniques?.length"
-                panel-id="tab-content-brique-technique"
-                tab-id="tab-brique-technique"
+                :panel-id="`${uid}-tab-content-brique-technique`"
+                :tab-id="`${uid}-tab-brique-technique`"
                 style="background-color: white"
               >
                 <p>
@@ -224,8 +227,8 @@
 
               <DsfrTabContent
                 v-if="integratingSolutionsPortailsConsultation?.length"
-                panel-id="tab-content-portail-consultation"
-                tab-id="tab-portail-consultation"
+                :panel-id="`${uid}-tab-content-portail-consultation`"
+                :tab-id="`${uid}-tab-portail-consultation`"
                 style="background-color: white"
               >
                 <p>
@@ -296,6 +299,8 @@ import SimplifionsRecoSolutionsIntegratricesCard from './SimplifionsRecoSolution
 const props = defineProps<{
   recommandation: Recommandation
 }>()
+
+const uid = useId()
 
 const recommandation = props.recommandation
 
@@ -469,30 +474,34 @@ const tabTitles = computed(() => {
     const count = integratingSolutionsLogicielsMetiers.value.length
     titles.push({
       title: `Logiciels métiers (${count}) 💠💠💠`,
-      tabId: 'tab-logiciel-metier',
-      panelId: 'tab-content-logiciel-metier'
+      tabId: `${uid}-tab-logiciel-metier`,
+      panelId: `${uid}-tab-content-logiciel-metier`
     })
   }
   if (integratingSolutionsBriquesTechniques.value.length > 0) {
     const count = integratingSolutionsBriquesTechniques.value.length
     titles.push({
       title: `Briques techniques (${count}) 💠💠💠`,
-      tabId: 'tab-brique-technique',
-      panelId: 'tab-content-brique-technique'
+      tabId: `${uid}-tab-brique-technique`,
+      panelId: `${uid}-tab-content-brique-technique`
     })
   }
   if (integratingSolutionsPortailsConsultation.value.length > 0) {
     const count = integratingSolutionsPortailsConsultation.value.length
     titles.push({
       title: `Portails de consultation (${count})`,
-      tabId: 'tab-portail-consultation',
-      panelId: 'tab-content-portail-consultation'
+      tabId: `${uid}-tab-portail-consultation`,
+      panelId: `${uid}-tab-content-portail-consultation`
     })
   }
   return titles
 })
 
 const hasIntegratingSolutions = computed(() => tabTitles.value.length > 0)
+
+watch(tabTitles, () => {
+  activeTab.value = 0
+})
 </script>
 
 <style scoped>

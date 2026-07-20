@@ -90,8 +90,12 @@ export function useMeta({
           property: 'og:title',
           content: fullTitle()
         },
-        { name: 'description', content: metaDescription },
-        { property: 'og:description', content: metaDescription },
+        ...(metaDescription
+          ? [
+              { name: 'description', content: metaDescription },
+              { property: 'og:description', content: metaDescription }
+            ]
+          : []),
         ...(metaKeywords != null
           ? [{ name: 'keywords', content: metaKeywords }]
           : []),

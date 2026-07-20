@@ -169,7 +169,6 @@ Le filtre `organization_custom` ne déclare pas de `values` : la liste des organ
 | `default_value`    | Valeur par défaut                                                                                          |
 | `advanced`         | Place le filtre dans la section "Filtres avancés" de `GlobalSearch`                                        |
 | `applies_to_pages` | Indique les pages pour lesquelles le filtre est partagé (valeur de filtre conservée au changement de page) |
-| `hide_on_list`     | Masque le filtre sur la page de liste                                                                      |
 
 ### Exemple détaillé
 
