@@ -106,7 +106,8 @@ const imageUrl = solution?.Image?.[0] ? grist.imageUrl(solution.Image[0]) : ''
 
 <style scoped>
 .simplifions-card-link {
-  display: block;
+  display: flex;
+  flex-direction: column;
   margin-bottom: 1rem;
   background: none;
 }
@@ -137,6 +138,12 @@ const imageUrl = solution?.Image?.[0] ? grist.imageUrl(solution.Image[0]) : ''
 .card-image {
   max-height: 250px;
   object-position: top center;
+}
+
+.topic-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .topic-card--private {
