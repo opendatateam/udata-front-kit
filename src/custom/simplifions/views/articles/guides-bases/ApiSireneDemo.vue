@@ -6,7 +6,7 @@
     </p>
 
     <form @submit.prevent="search">
-      <DsfrInput
+      <DsfrInputGroup
         id="siret-demo-input"
         v-model="siretInput"
         label="Numéro de SIRET d'un établissement :"

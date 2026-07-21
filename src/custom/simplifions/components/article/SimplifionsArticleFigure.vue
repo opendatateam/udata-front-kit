@@ -20,7 +20,7 @@ defineProps<{
   height: auto;
   display: block;
   border: 1px solid var(--border-default-grey);
-  border-radius: var(--radius-default);
+  border-radius: 4px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 

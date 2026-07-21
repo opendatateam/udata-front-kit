@@ -27,11 +27,13 @@
         transmet à la cuisine, et revient avec votre plat.
       </p>
 
-      <p class="italic">
-        Une <strong>API</strong>, c'est <strong>ce serveur</strong> — mais entre deux ordinateurs.
-        Elle transmet une demande d'un système à un autre, récupère la réponse,
-        et la renvoie, sans que les deux systèmes aient besoin de se connaître
-        directement.
+      <p>
+        <em>
+          Une <strong>API</strong>, c'est <strong>ce serveur</strong> — mais entre deux ordinateurs.
+          Elle transmet une demande d'un système à un autre, récupère la réponse,
+          et la renvoie, sans que les deux systèmes aient besoin de se connaître
+          directement.
+        </em>
       </p>
 
       <h3>Un exemple concret</h3>
@@ -349,7 +351,7 @@ const articleMeta = {
     "Comprendre ce qu'est une API sans vocabulaire technique : comment ces outils permettent aux administrations d'échanger des données pour simplifier les démarches des entreprises, associations et particuliers.",
   articleCategory: 'guide' as const,
   showNoDevelopmentBadge: false,
-  articleTags: [{ label: 'Petites collectivités' }],
+  articleTags: [{}],
   heroBackdropGradient: 'linear-gradient(135deg, #5770be 0%, #d2e2f6 100%)',
   heroPanelBackground: 'var(--background-alt-beige-gris-galet)'
 }
