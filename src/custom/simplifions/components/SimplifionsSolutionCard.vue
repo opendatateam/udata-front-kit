@@ -8,27 +8,40 @@
       :class="{ 'topic-card--private': topic.private }"
     >
       <div class="fr-card__body">
-        <div class="fr-card__content">
+        <div class="fr-card__content fr-px-2w fr-pt-3w">
           <div class="fr-grid-row">
             <SimplifionsSolutionOperateurTag
-              v-if="!imageUrl"
+              v-if="showOperateurTag && (!imageUrl || !showImage)"
               :topic-solution="topic"
             />
             <DraftTag v-if="topic.private" class="fr-ml-auto" />
           </div>
           <h3 class="fr-card__title fr-text--lead fr-mb-0">{{ topic.name }}</h3>
 
-          <p class="fr-card__desc">
+          <p v-if="showDescription" class="fr-card__desc">
             {{ stripFromMarkdown(topic.description.split('\n')[0]) }}
           </p>
 
           <div class="fr-card__end">
-            <SimplifionsTags :topic="topic" :page-key="pageKey" />
+            <SimplifionsTags
+              :topic="topic"
+              :page-key="pageKey"
+              :show-target-users="showTargetUsers"
+              :show-fournisseurs="showFournisseurs"
+              :hide-simplification="!showSimplificationTags"
+              :show-categorie-de-solution="showCategorieDeSolution"
+            />
+            <div v-if="showArrow" class="card-arrow" aria-hidden="true">
+              <span class="fr-icon-arrow-right-line" />
+            </div>
           </div>
         </div>
       </div>
       <div class="fr-card__header">
-        <div v-if="imageUrl" class="fr-card__img topic-image-container fr-mx-0">
+        <div
+          v-if="showImage && imageUrl"
+          class="fr-card__img topic-image-container fr-mx-0"
+        >
           <img
             :src="imageUrl"
             :alt="topic.name"
@@ -36,6 +49,7 @@
           />
           <div class="topic-image-overlay"></div>
           <SimplifionsSolutionOperateurTag
+            v-if="showOperateurTag"
             :topic-solution="topic"
             class="badge-absolute"
           />
@@ -46,25 +60,47 @@
 </template>
 
 <script setup lang="ts">
-import { useCurrentPageConf } from '@/router/utils'
 import { stripFromMarkdown } from '@/utils'
+import { useRoute } from 'vue-router'
 import { grist } from '../grist.ts'
 import type { TopicSolution } from '../model/topics'
 import DraftTag from './DraftTag.vue'
 import SimplifionsSolutionOperateurTag from './SimplifionsSolutionOperateurTag.vue'
 import SimplifionsTags from './SimplifionsTags.vue'
 
-const { pageKey } = useCurrentPageConf()
-
-const props = defineProps({
-  topic: {
-    type: Object as () => TopicSolution,
-    required: true
+const props = withDefaults(
+  defineProps<{
+    topic: TopicSolution
+    pageKey?: string
+    showDescription?: boolean
+    showImage?: boolean
+    showOperateurTag?: boolean
+    showTargetUsers?: boolean
+    showFournisseurs?: boolean
+    showSimplificationTags?: boolean
+    showCategorieDeSolution?: boolean
+    showArrow?: boolean
+  }>(),
+  {
+    pageKey: undefined,
+    showDescription: true,
+    showImage: true,
+    showOperateurTag: true,
+    showTargetUsers: true,
+    showFournisseurs: true,
+    showSimplificationTags: true,
+    showCategorieDeSolution: true,
+    showArrow: false
   }
-})
+)
+
+const route = useRoute()
+const pageKey = computed(
+  () =>
+    props.pageKey ?? (route.meta.pageKey as string | undefined) ?? 'solutions'
+)
 
 const solution = props.topic.extras['simplifions-v2-solutions']
-
 const imageUrl = solution?.Image?.[0] ? grist.imageUrl(solution.Image[0]) : ''
 </script>
 
@@ -104,8 +140,8 @@ const imageUrl = solution?.Image?.[0] ? grist.imageUrl(solution.Image[0]) : ''
 }
 
 .topic-card--private {
-  background-color: #f6f6f6;
-  color: #6b7280; /* gris moyen */
+  background-color: var(--background-alt-grey);
+  color: var(--text-mention-grey);
 }
 
 .fr-card__title {
@@ -114,5 +150,12 @@ const imageUrl = solution?.Image?.[0] ? grist.imageUrl(solution.Image[0]) : ''
 .fr-card__desc {
   color: var(--text-default-grey);
   font-size: 1rem;
+}
+
+.card-arrow {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+  color: var(--text-action-high-blue-france);
 }
 </style>
