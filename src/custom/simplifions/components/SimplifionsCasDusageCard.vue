@@ -89,14 +89,18 @@ const hasDetails = computed(
 
 <style scoped>
 .simplifions-card-link {
-  display: block;
+  display: flex;
+  flex-direction: column;
   margin-bottom: 1rem;
   background: none;
 }
 
-
 .topic-card {
   border: 1px solid var(--border-default-grey);
+  background-color: var(--background-default-grey);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 .topic-card:hover {
   background-color: var(--background-alt-grey);
@@ -140,9 +144,7 @@ const hasDetails = computed(
 .description-topic {
   padding: 16px;
   min-height: 80px;
-  background-color: var(--background-default-grey);
 }
-
 
 .card-arrow {
   display: flex;
