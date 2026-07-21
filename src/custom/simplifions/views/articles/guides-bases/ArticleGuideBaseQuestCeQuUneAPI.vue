@@ -351,7 +351,7 @@ const articleMeta = {
     "Comprendre ce qu'est une API sans vocabulaire technique : comment ces outils permettent aux administrations d'échanger des données pour simplifier les démarches des entreprises, associations et particuliers.",
   articleCategory: 'guide' as const,
   showNoDevelopmentBadge: false,
-  articleTags: [{}],
+  articleTags: [],
   heroBackdropGradient: 'linear-gradient(135deg, #5770be 0%, #d2e2f6 100%)',
   heroPanelBackground: 'var(--background-alt-beige-gris-galet)'
 }
