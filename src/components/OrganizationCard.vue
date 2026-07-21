@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import VIconCustom from '@/components/VIconCustom.vue'
+import VIconDsfr from '@/components/VIconDsfr.vue'
 import { stripFromMarkdown } from '@/utils'
 
 const props = defineProps({
@@ -46,13 +46,13 @@ const isPublicService = (): boolean =>
             class="fr-tile__link"
             :to="`/organizations/${organization.slug}`"
           >
-            <VIconCustom
+            <VIconDsfr
               v-if="isPublicService()"
               name="bank-line"
               class="fr-icon--sm fr-mr-1v badge"
             />
             {{ organization.name }}
-            <VIconCustom
+            <VIconDsfr
               v-if="isCertified()"
               name="checkbox-circle-line"
               class="fr-icon--sm fr-mr-1v badge"
