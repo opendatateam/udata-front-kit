@@ -1,25 +1,26 @@
 <template>
-  <div class="fr-my-4w">
-    <DsfrCard
-      horizontal
-      size="sm"
-      title-tag="h3"
-      :title="title"
-      :description="description"
-      :link="to"
-      :detail="label"
-    />
+  <div class="fr-callout fr-callout--beige-gris-galet fr-my-4w fr-p-2w">
+  
+    <p v-if="description" class="fr-callout__text fr-text--sm">
+      <strong>Lire plus</strong> • {{ description }}
+    </p>
+    <router-link
+      :to="to"
+      class="fr-link fr-link--sm fr-icon-article-line fr-link--icon-left"
+    >
+      {{ articleTitle }}
+    </router-link>
   </div>
 </template>
 
 <script setup lang="ts">
-withDefaults(
-  defineProps<{
-    to: string
-    title: string
-    description?: string
-    label?: string
-  }>(),
-  { description: undefined, label: "Lire l'article" }
-)
+import { useRouter } from 'vue-router'
+
+const props = defineProps<{
+  to: string
+  description?: string
+}>()
+
+const router = useRouter()
+const articleTitle = router.resolve(props.to).meta.title as string
 </script>

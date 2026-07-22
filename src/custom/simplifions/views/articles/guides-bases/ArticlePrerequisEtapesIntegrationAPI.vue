@@ -31,7 +31,6 @@
 
     <SimplifionsArticleReadMore
       to="/qu-est-ce-qu-une-api"
-      title="Qu'est-ce qu'une API ?"
       description="Comprendre ce qu'est une API sans vocabulaire technique."
     />
 
@@ -119,7 +118,7 @@
 
       <SimplifionsArticleReadMore
         to="/apis-franceconnectees"
-        title="API FranceConnectées"
+        description="Consulter la liste de toutes les API FranceConnectées"
       />
     </ArticleSection>
 
