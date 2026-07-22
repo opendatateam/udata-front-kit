@@ -461,15 +461,15 @@
         </p>
       </blockquote>
 
-      <div class="fr-callout fr-callout--beige-gris-galet">
-        <p class="fr-callout__text fr-mb-0">
+      <blockquote class="fr-highlight fr-highlight--grey-border">
+        <p>
           ⚙️ <strong>Que s'est-il passé techniquement ?</strong> Le
           formulaire de la mairie intègre l'API Association du Ministère des
           Sports ou bien l'API données association en open data de l'API
           Entreprise. Le numéro RNA est le paramètre d'appel de cette API.
           Au moment où il est saisi par l'usager, un appel se déclenche.
         </p>
-      </div>
+      </blockquote>
 
       <p class="fr-mt-3w">
         Ce parcours est le plus rapide à mettre en œuvre, car il ne
@@ -539,15 +539,15 @@
         </p>
       </blockquote>
 
-      <div class="fr-callout fr-callout--beige-gris-galet">
-        <p class="fr-callout__text fr-mb-0">
+      <blockquote class="fr-highlight fr-highlight--grey-border">
+        <p>
           ⚙️ <strong>Que s'est-il passé techniquement ?</strong> Le portail
           de la commune intègre plusieurs API. Le SIRET saisi par Camille
           sert de paramètre d'appel. Les documents récupérés sont stockés
           côté back-office et associés au dossier de Camille, sans lui être
           directement exposés.
         </p>
-      </div>
+      </blockquote>
 
       <p class="fr-mt-3w">
         Ce parcours est le parcours à privilégier lorsqu'il n'est pas
@@ -599,15 +599,15 @@
         </p>
       </blockquote>
 
-      <div class="fr-callout fr-callout--beige-gris-galet">
-        <p class="fr-callout__text fr-mb-0">
+      <blockquote class="fr-highlight fr-highlight--grey-border">
+        <p>
           ⚙️ <strong>Que s'est-il passé techniquement ?</strong> Le logiciel
           métier du CCAS intègre les API XXXX du bouquet API Particulier.
           Karim saisit l'identifiant XXX de Mme Dubois, connu grâce au
           dossier déjà ouvert à son nom : c'est ce paramètre d'appel qui
           déclenche la requête.
         </p>
-      </div>
+      </blockquote>
 
       <h4>C. Après authentification de l'usager, via la saisie des paramètres</h4>
 
@@ -654,8 +654,8 @@
         </p>
       </blockquote>
 
-      <div class="fr-callout fr-callout--beige-gris-galet">
-        <p class="fr-callout__text fr-mb-0">
+      <blockquote class="fr-highlight fr-highlight--grey-border">
+        <p>
           ⚙️ <strong>Que s'est-il passé techniquement ?</strong> Le portail
           de l'opérateur de transport dans sa ville intègre les API statut
           étudiant et statut étudiant boursier. Le numéro INE, paramètre
@@ -663,7 +663,7 @@
           compte l'année précédente. En confirmant son INE, Léa déclenche la
           requête auprès des API qui retournent son statut.
         </p>
-      </div>
+      </blockquote>
 
       <p class="fr-mt-3w">
         <i
@@ -761,8 +761,8 @@
         </p>
       </blockquote>
 
-      <div class="fr-callout fr-callout--beige-gris-galet">
-        <p class="fr-callout__text fr-mb-0">
+      <blockquote class="fr-highlight fr-highlight--grey-border">
+        <p>
           ⚙️ <strong>Que s'est-il passé techniquement ?</strong> Le portail
           de la commune intègre FranceConnect et les API FranceConnectées
           Quotient familial CAF &amp; MSA du bouquet API Particulier et
@@ -773,7 +773,7 @@
           confirme la liste des données transmises au site, il lance à la
           fois sa connexion et l'appel aux API.
         </p>
-      </div>
+      </blockquote>
 
       <p class="fr-mt-3w">
         Ce parcours bénéficie de la sécurité apportée par FranceConnect.
@@ -1180,3 +1180,9 @@ const articleMeta = {
   heroPanelBackground: 'var(--background-alt-beige-gris-galet)'
 }
 </script>
+
+<style scoped>
+.fr-highlight--grey-border {
+  background-image: linear-gradient(0deg, var(--border-default-grey), var(--border-default-grey));
+}
+</style>
