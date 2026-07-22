@@ -89,9 +89,8 @@
 
       <p>
         Lors de l'intégration d'une API FranceConnectée dans votre service, il
-        est pré-requis d'intégrer la
-        <a href="/solutions/franceconnect-2">solution FranceConnect</a> car le
-        bouton "FranceConnect" sera la modalité d'appel utilisée par l'API pour
+        est pré-requis d'intégrer la solution FranceConnect car le bouton
+        "FranceConnect" sera la modalité d'appel utilisée par l'API pour
         renvoyer les données à l'usager.
       </p>
 
@@ -102,24 +101,40 @@
         Poste, etc.).
       </p>
 
-      <blockquote class="fr-highlight">
+      <SimplifionsArticleTopicSpotlight
+        :slugs="['franceconnect-2']"
+        page-key="solutions"
+        :show-description="true"
+        :show-image="true"
+        :show-arrow="true"
+      >
         <p>
-          💬 <strong>Rôle de FranceConnect :</strong><br />
+          <strong
+            >FranceConnect, votre interlocuteur pour l'ajout du bouton
+            FranceConnect :</strong
+          ><br />
           FranceConnect est votre interlocuteur pour intégrer le bouton
           FranceConnect, de l'habilitation à l'homologation, en passant par
           l'intégration. Par contre FranceConnect n'est pas en mesure de
           répondre à vos questions sur les données distribuées via les API
           FranceConnectées.
-          <br /><br />
-          💬 <strong>Rôle des fournisseurs d'identité :</strong><br />
+        </p>
+        <p>
+          <strong
+            >Les fournisseurs d'identité, par défaut proposés à vos usagers
+            :</strong
+          ><br />
           Les fournisseurs d'identité ne seront jamais vos interlocuteurs. En
           intégrant FranceConnect, tous les fournisseurs d'identité seront
           proposés à vos usagers quand ils cliqueront sur le bouton
           FranceConnect.
         </p>
-      </blockquote>
+      </SimplifionsArticleTopicSpotlight>
 
-      <h3 class="fr-h4">Les fournisseurs de données :</h3>
+      <h3 class="fr-h4">
+        Les fournisseurs de données, vos interlocuteurs pour l'accès aux données
+        :
+      </h3>
       <p>
         Différentes administrations mettent à disposition, après habilitation et
         via des API FranceConnectées, les données administratives des
@@ -152,16 +167,22 @@
 
       <p>
         <b>Afin de simplifier l'intégration des API FranceConnectées</b>, la
-        <a href="/solutions/bouquet-api-particulier"
-          >solution API Particulier</a
-        >
-        regroupe dans un même bouquet d'API une grande partie des API
-        FranceConnectées.
+        solution API Particulier regroupe dans un même bouquet d'API une grande
+        partie des API FranceConnectées.
       </p>
 
-      <blockquote class="fr-highlight">
+      <SimplifionsArticleTopicSpotlight
+        :slugs="['bouquet-api-particulier']"
+        page-key="solutions"
+        :show-description="true"
+        :show-image="true"
+        :show-arrow="true"
+      >
         <p>
-          💬 <strong>Rôle de l'API Particulier :</strong><br />
+          <strong
+            >API Particulier, un seul interlocuteur pour les données de
+            différents fournisseurs :</strong
+          ><br />
           Si vous accédez aux API FranceConnectées via ce bouquet d'API, API
           Particulier est votre interlocuteur unique pour l'habilitation,
           l'intégration et la maintenance des API FranceConnectées du bouquet.
@@ -170,7 +191,7 @@
           cas de difficulté, API Particulier se charge des échanges avec les
           fournisseurs de données.
         </p>
-      </blockquote>
+      </SimplifionsArticleTopicSpotlight>
     </ArticleSection>
 
     <ArticleSection
@@ -308,6 +329,7 @@
 <script setup lang="ts">
 import SimplifionsArticleLayout from '../../../components/article/SimplifionsArticleLayout.vue'
 import ArticleSection from '../../../components/article/SimplifionsArticleSection.vue'
+import SimplifionsArticleTopicSpotlight from '../../../components/article/SimplifionsArticleTopicSpotlight.vue'
 import SimplifionsDataApi from '../../../components/SimplifionsDataApi.vue'
 import { grist } from '../../../grist'
 import type { ApiOrDataset } from '../../../model/grist'

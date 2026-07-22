@@ -23,7 +23,29 @@ export const routes: RouteRecordRaw[] = [
     },
     component: async () =>
       await import(
-        './views/Articles/ApisFranceConnectees/ArticleApisFranceConnectees.vue'
+        './views/articles/apis-france-connectees/ArticleApisFranceConnectees.vue'
+      )
+  },
+  {
+    path: '/guide-base-petites-collectivites',
+    name: 'guide-base-petites-collectivites',
+    meta: {
+      title: 'Guide de base pour les petites collectivités'
+    },
+    component: async () =>
+      await import(
+        './views/articles/guides-bases/ArticleGuideBasePetitesCollectivites.vue'
+      )
+  },
+  {
+    path: '/qu-est-ce-qu-une-api',
+    name: 'qu-est-ce-qu-une-api',
+    meta: {
+      title: "Qu'est-ce qu'une API ?"
+    },
+    component: async () =>
+      await import(
+        './views/articles/guides-bases/ArticleGuideBaseQuestCeQuUneAPI.vue'
       )
   },
   useGlobalSearchPageRoutes({
