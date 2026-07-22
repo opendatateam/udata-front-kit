@@ -635,8 +635,10 @@ watch(activeApiAccordion, (val) => {
   height: var(--row-height, auto);
 }
 
-.fr-table__header .fr-search-bar {
-  min-width: 28rem;
+@media (min-width: 48em) {
+  .fr-table__header .fr-search-bar {
+    min-width: 28rem;
+  }
 }
 
 .reco-card {
