@@ -37,6 +37,17 @@ export const routes: RouteRecordRaw[] = [
         './views/articles/guides-bases/ArticleGuideBasePetitesCollectivites.vue'
       )
   },
+  {
+    path: '/qu-est-ce-qu-une-api',
+    name: 'qu-est-ce-qu-une-api',
+    meta: {
+      title: "Qu'est-ce qu'une API ?"
+    },
+    component: async () =>
+      await import(
+        './views/articles/guides-bases/ArticleGuideBaseQuestCeQuUneAPI.vue'
+      )
+  },
   useGlobalSearchPageRoutes({
     pageKey: 'cas-d-usages',
     topicConf,
