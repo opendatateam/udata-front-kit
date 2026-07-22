@@ -54,7 +54,7 @@
 
     <DsfrAccordionsGroup v-model="activeAccordion">
       <DsfrAccordion title-tag="h6">
-        <template #title>Par l'API directement</template>
+        <template #title>{{ apiAccordionTitle }}</template>
 
         <template v-if="isSolution">
           <div class="fr-btns-group fr-btns-group--inline fr-btns-group--right fr-mt-2w">
@@ -269,6 +269,12 @@ const typeLabel = computed(() => {
   if (t === 'API') return 'API'
   if (t === 'Jeu de données') return 'jeu de données'
   return 'API ou jeu de données'
+})
+
+const apiAccordionTitle = computed(() => {
+  return recommandation.Type_de_recommandation === 'Jeu de données'
+    ? 'Par la base de données directement'
+    : "Par l'API directement"
 })
 
 const fetchSolutionsForCategory = async (ids: number[]) => {
