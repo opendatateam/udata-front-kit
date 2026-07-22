@@ -7,26 +7,19 @@
     :hero-backdrop-gradient="articleMeta.heroBackdropGradient"
     :hero-panel-background="articleMeta.heroPanelBackground"
   >
-    <p class="fr-text--lead">
+    <p class="fr-text--lg">
       <em>Pré-remplir automatiquement les informations d'une entreprise à partir
       de son numéro de SIRET&nbsp;? Connaître le statut boursier d'un
       étudiant qui demande une réduction de transport&nbsp;? C'est possible
       grâce aux API référencées dans le catalogue de Simplifions.data</em>.
     </p>
-    <p class="fr-text--lead">
+    <p class="fr-text-lg">
       Néanmoins, entre le moment où vous prenez connaissance de l'existence
       d'une API qui couvre votre besoin et le moment où elle est utilisée en
       production dans votre téléservice, plusieurs étapes sont à franchir. Ce
-      guide vous donne une vision détaillée du parcours, généraliste à toute
+      guide s'adresse aux acteurs publics, et donne une vision détaillée des étapes et prérequis nécessaire à l'intégration de toute
       API visant à simplifier des démarches via la récupération des données
-      de l'usager.
-    </p>
-    <p class="fr-text-lg">
-      Ce guide concerne tout acteur public qui souhaite intégrer, dans un
-      formulaire de démarche en ligne ou dans le logiciel métier de ses
-      agents, une API qui donne accès à des données ou documents
-      administratifs déjà détenus par l'État, pour éviter de les redemander
-      aux usagers — principe du «&nbsp;Dites-le-nous une fois&nbsp;».
+      de l'usager — <em>principe du «&nbsp;Dites-le-nous une fois&nbsp;»</em>.
     </p>
 
     <SimplifionsArticleReadMore
@@ -35,21 +28,21 @@
     />
 
     <ArticleSection id="types-api" label="Les différents types d'API">
-      <p class="fr-text--lead">
+      <p class="fr-text--lg">
         Dans l'écosystème des API utiles pour mettre en place le
-        Dites-le-nous une fois, il existe différents types pouvant se
+        «&nbsp;Dites-le-nous une fois&nbsp;», il existe différents types pouvant se
         superposer :
       </p>
 
-      <ul class="fr-mb-3w">
-        <li>
-          <strong>Les bouquets d'API</strong> : Ces API regroupent, derrière
+
+          <h3>Les bouquets d'API</h3> 
+          <p>Ces API regroupent, derrière
           un seul point d'entrée et un seul point de contact, plusieurs API,
           généralement organisées autour d'un secteur ou d'un usage commun.
           Ces «&nbsp;bouquets d'API&nbsp;» permettent donc d'accéder à de
           nombreuses données à partir d'une même API ayant plusieurs
           «&nbsp;branches&nbsp;», appelées «&nbsp;endpoints&nbsp;». On
-          distingue deux types de bouquets d'API, ceux :
+          distingue deux types de bouquets d'API, ceux :</p>
           <ul>
             <li>
               <strong>regroupant les API d'un même fournisseur</strong> : Il
@@ -63,58 +56,55 @@
               permet d'accélérer l'intégration d'API grâce notamment à une
               demande d'habilitation unique et une cohérence technique (même
               authentification, mêmes conventions de nommage et de réponse).
+              <br/>
+              <br/>
+              <SimplifionsArticleTopicSpotlight
+                :slugs="['bouquet-api-entreprise', 'bouquet-api-particulier']"
+                page-key="solutions"
+                :show-operateur-tag="true"
+                :show-categorie-de-solution="true"
+                :show-target-users="true"
+                :show-arrow="true"
+              >
+                <p>
+            <strong>L'API Entreprise et l'API Particulier sont des bouquets d'API multi-fournisseurs</strong> conçus pour mettre en oeuvre le «&nbsp;Dites-le-nous une fois&nbsp;». L'API Entreprise donne accès aux données des entreprises <em> - Insee, Inpi, DGFIP, URSSAF, caisses de retraite...-</em> ; l'API Particulier, aux données des particuliers <em>- CAF/MSA, France Travail, ministères de l'éducation nationale et de l'enseignement supérieur...-</em>. Les intégrer permet aussi de bénéficier du travail métier effectué pour proposer une offre en cohérence avec les démarches à simplifier.
+                </p>
+              </SimplifionsArticleTopicSpotlight>
             </li>
           </ul>
-        </li>
-      </ul>
 
-      <SimplifionsArticleTopicSpotlight
-        :slugs="['bouquet-api-entreprise', 'bouquet-api-particulier']"
-        page-key="solutions"
-        :show-operateur-tag="true"
-        :show-categorie-de-solution="true"
-        :show-target-users="true"
-        :show-arrow="true"
-      >
-        <p>
-          <strong
-            >L'API Entreprise et l'API Particulier sont deux exemples de
-            bouquets d'API</strong
-          >
-          qui ont été spécialement conçus pour faciliter la mise en œuvre du
-          Dites-le-nous une fois. L'API Particulier permet d'accéder à
-          plusieurs données des particuliers issues de la CAF/MSA, de
-          FranceTravail, des ministères de l'éducation nationale et de
-          l'enseignement supérieur. L'API Entreprise permet d'accéder à de
-          nombreuses données des entreprises et associations, issues de
-          l'Insee, de l'Inpi, de la DGFIP, de l'URSSAF, des caisses de
-          retraites, etc. En intégrant ces bouquets, vous bénéficiez aussi du
-          travail métier opéré par les équipes gérant les bouquets, qui
-          cherchent à déployer une offre en cohérence avec les démarches à
-          simplifier.
-        </p>
-      </SimplifionsArticleTopicSpotlight>
 
-      <ul class="fr-mt-3w fr-mb-3w">
-        <li>
-          <strong>Les API classiques, «&nbsp;à l'unité&nbsp;»</strong> : Ces
+          <h3>Les API classiques, «&nbsp;à l'unité&nbsp;»</h3> 
+          <p> Ces
           API sont propres à un seul fournisseur de données, comme l'API
           Impôt Particulier de la DGFiP ou l'API Statut étudiant du
           ministère de l'enseignement supérieur. Souvent très utiles et
           complémentaires aux bouquets, elles ont chacune leur propre
           formulaire d'habilitation, ainsi que leur propre gestion des accès
-          et du support.
-        </li>
-        <li>
-          <strong>Les API FranceConnectées</strong> : Il s'agit d'une
+          et du support.</p>
+
+          <SimplifionsArticleTopicSpotlight
+            :slugs="['api-impot-particulier']"
+            page-key="solutions"
+            :show-operateur-tag="true"
+            :show-categorie-de-solution="true"
+            :show-target-users="true"
+            :show-arrow="true"
+          >
+            <p>
+              <strong>L'API Impôt Particulier de la DGFiP</strong> est un exemple d'API «&nbsp;à l'unité&nbsp;» : elle est propre à un seul fournisseur et dispose de sa propre demande d'habilitation, distincte de celle des bouquets d'API.
+            </p>
+          </SimplifionsArticleTopicSpotlight>
+
+          <h3>Les API FranceConnectées</h3> 
+          <p>Il s'agit d'une
           catégorie d'API qui ne concerne que les données des particuliers.
           Elles sont dites «&nbsp;FranceConnectées&nbsp;», car elles peuvent
           être appelées avec l'identité pivot FranceConnect plutôt qu'un
           simple identifiant. Ce niveau d'intégration supplémentaire
           simplifie le parcours de l'usager, sous conditions de quelques
-          prérequis techniques spécifiques.
-        </li>
-      </ul>
+          prérequis techniques spécifiques.</p>
+  
 
       <SimplifionsArticleReadMore
         to="/apis-franceconnectees"
@@ -123,7 +113,7 @@
     </ArticleSection>
 
     <ArticleSection id="interlocuteurs" label="Les interlocuteurs">
-      <p class="fr-text--lead">
+      <p class="fr-text--lg">
         Voici les différents acteurs et leurs implications au cours de
         l'intégration d'une API :
       </p>
@@ -141,35 +131,34 @@
             <tr>
               <td><strong>Le fournisseur de la donnée</strong></td>
               <td>
-                Détient et produit la donnée. Ce n'est pas toujours lui que
-                vous contactez directement. C'est votre interlocuteur s'il
-                est aussi l'opérateur de l'API ou du bouquet.
+                Détient et produit la donnée. C'est votre interlocuteur s'il
+                est également l'opérateur de l'API ou du bouquet, autrement ce n'est pas votre point de contact.
               </td>
               <td>
-                DGFiP pour le revenu fiscal de référence ou une attestation
+                La DGFiP pour le revenu fiscal de référence ou une attestation
                 fiscale, la CAF ou la MSA pour le quotient familial, le
-                Cnous pour le statut boursier
+                Cnous pour le statut boursier.
               </td>
             </tr>
             <tr>
               <td><strong>L'opérateur de l'API</strong></td>
               <td>
-                C'est lui qui gère l'API et la met à disposition. C'est
+               Gère l'API et la met à disposition. C'est
                 votre interlocuteur, sauf si vous utilisez son API via un
                 bouquet. Dans ce dernier cas, c'est alors l'opérateur du
                 bouquet qui est votre interlocuteur.
               </td>
-              <td>La CNAV pour le quotient familial</td>
+              <td>La CNAV pour le quotient familial.</td>
             </tr>
             <tr>
               <td><strong>L'opérateur du bouquet</strong></td>
               <td>
-                Si vous utilisez un bouquet d'API regroupant des API de
+              Gère le bouquet d'API et tous ses endpoints. Si vous utilisez un bouquet d'API regroupant des API de
                 plusieurs fournisseurs, il s'agit de votre interlocuteur
                 unique pour l'habilitation, l'intégration technique et le
                 support, pour toutes les API du bouquet.
               </td>
-              <td>La DINUM pour l'API Particulier et l'API Entreprise</td>
+              <td>La DINUM pour l'API Particulier et l'API Entreprise.</td>
             </tr>
             <tr>
               <td>
@@ -177,7 +166,7 @@
                 échéant
               </td>
               <td>
-                Il gère votre ou vos logiciels métiers et intègre les API à
+                Gère votre ou vos logiciels métiers et intègre les API à
                 l'intérieur. C'est votre interlocuteur privilégié. En cas de
                 difficulté concernant une API, c'est lui que vous devez
                 contacter en premier, notamment parce que le problème
@@ -205,9 +194,9 @@
     </ArticleSection>
 
     <ArticleSection id="prerequis" label="Les prérequis avant de démarrer">
-      <p class="fr-text--lead">
+      <p class="fr-text--lg">
         Quatre familles de prérequis, à vérifier avant d'intégrer une API —
-        les rassembler en amont peut vous faire gagner du temps.
+        les rassembler en amont peut vous faire gagner du temps :
       </p>
 
       <h3>1. Un prérequis de conception : penser au parcours de vos usagers</h3>
@@ -225,29 +214,25 @@
       <ul class="fr-mb-3w">
         <li>
           <strong>La granularité de la réponse</strong>. Certaines API
-          renvoient un simple statut ou un booléen (par exemple,
-          «&nbsp;est demandeur d'emploi : oui/non&nbsp;»), tandis que
+          renvoient un simple statut ou une réponse par oui ou par non - <em>par exemple,
+          «&nbsp;est demandeur d'emploi : oui/non&nbsp;»</em> -, tandis que
           d'autres renvoient un objet complet avec de nombreuses données
-          associées (état civil, coordonnées, dates d'inscription...). Une
+          associées <em> - état civil, coordonnées, dates d'inscription... -</em>. Dans le cas d'une API délivrant des données protégées, une
           API plus riche que nécessaire vous imposera de gérer, sécuriser et
-          minimiser des données dont vous n'avez pas l'usage — la CNIL
-          veille au respect du principe de minimisation des données dans le
-          cadre de votre habilitation.
+          minimiser des données dont vous n'avez pas l'usage — au moment de votre demande d'habilitation, il vous sera demandé de
+          veiller au respect du principe de minimisation des données.
         </li>
         <li>
           <strong>Le périmètre couvert</strong>. Une API peut comporter des
           exceptions géographiques, temporelles ou statutaires : par
           exemple, certains territoires ou situations particulières peuvent
-          être exclus du périmètre. Vérifiez que votre public cible est bien
-          intégralement couvert avant d'en faire un prérequis de votre
-          parcours usager.
+          être exclus du périmètre. Vérifiez que votre public cible est bien couvert et anticipez des parcours alternatifs pour les usagers qui ne le sont pas.
         </li>
         <li>
           <strong>La fraîcheur des données</strong>. Selon l'API, la donnée
           peut être mise à jour en temps réel, quotidiennement, ou selon une
-          fréquence propre au fournisseur. Si votre usage nécessite une
-          donnée à l'instant T (ex. vérification d'éligibilité),
-          assurez-vous que la fréquence de mise à jour est compatible avec
+          fréquence propre au fournisseur.
+          Assurez-vous que la fréquence de mise à jour est compatible avec
           votre cas d'usage.
         </li>
       </ul>
@@ -260,7 +245,7 @@
       <p>
         Une API ne se déclenche jamais toute seule : pour l'appeler, il faut
         lui fournir un <strong>paramètre d'appel</strong> qui permet
-        d'identifier l'usager dont on souhaite récupérer/pré-remplir les
+        d'identifier l'entité dont on souhaite récupérer/pré-remplir les
         données. Selon l'API, ce paramètre peut être par exemple un numéro
         de SIRET/SIREN pour une association ou une entreprise, un numéro
         fiscal ou l'état civil pour un particulier.
@@ -274,8 +259,7 @@
         <a href="#parcours-usager"
           >section «&nbsp;Anticiper le parcours usager&nbsp;» ci-dessous</a
         >
-        — il détermine directement la qualité de l'expérience usager, bien
-        plus que la qualité technique de l'intégration elle-même.
+        — il est déterminant pour la qualité de l'expérience usager.
       </p>
 
       <h4>Maquetter ou prototyper avant de développer</h4>
@@ -295,8 +279,7 @@
       </h3>
 
       <p>
-        L'accès aux API permettant la mise en œuvre du Dites-le-nous une
-        fois et distribuant des données protégées requiert une habilitation.
+        L'accès aux API permettant la mise en œuvre du «&nbsp;Dites-le-nous une fois&nbsp;» et distribuant des données protégées requiert une habilitation.
       </p>
 
       <p>
@@ -305,8 +288,8 @@
         règlementaire spécifiant que votre administration est habilitée à
         demander ces informations. Pour les collectivités, une
         <strong>délibération</strong> décrivant précisément les données
-        nécessaires (ex. barème tarifaire lié au quotient familial pour une
-        tarification de cantine) est souvent requise.
+        nécessaires, <em>par exemple le barème tarifaire lié au quotient familial pour une
+        tarification de cantine</em>, est souvent requise.
       </p>
 
       <div class="fr-callout fr-callout--beige-gris-galet">
@@ -430,7 +413,7 @@
 
       <p>
         L'utilisation des API référencées sur Simplifions.data et utiles
-        pour le Dites-le-nous une fois est <strong>gratuite</strong>. Mais
+        pour le «&nbsp;Dites-le-nous une fois&nbsp;» est <strong>gratuite</strong>. Mais
         le raccordement (développement, tests, maintenance, montée de
         version de l'API) reste à votre charge, il est donc nécessaire de
         prévoir ces coûts de développement initial et de maintien en
@@ -1185,7 +1168,7 @@ const articleMeta = {
   h1: "Prérequis et étapes d'intégration d'une API",
   title: "Prérequis et étapes d'intégration d'une API",
   description:
-    "Prérequis techniques, juridiques et d'usage, étapes d'intégration, limites à connaître : ce guide vous aide à comprendre ce qui vous attend lorsque vous vous engagez dans la simplification de vos démarches grâce aux API.",
+    "Prérequis techniques, juridiques et d'usage, étapes d'intégration, limites à connaître : Acteurs publics, ce guide vous aide à comprendre ce qui vous attend lorsque vous vous engagez dans la simplification de vos démarches grâce aux API.",
   articleTags: [],
   heroBackdropGradient: 'linear-gradient(135deg, #1b3a5c 0%, #cfe0ef 100%)',
   heroPanelBackground: 'var(--background-alt-beige-gris-galet)'
