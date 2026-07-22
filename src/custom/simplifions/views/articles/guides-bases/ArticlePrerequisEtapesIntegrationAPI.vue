@@ -274,10 +274,9 @@
       </p>
 
       <h3>
-        2. Un prérequis juridique si l'API distribue des données protégées :
-        cadre légal et contacts
+        2. Un prérequis juridique si l'API distribue des données protégées
       </h3>
-
+      <h4>Cadre légal</h4>
       <p>
         L'accès aux API permettant la mise en œuvre du «&nbsp;Dites-le-nous une fois&nbsp;» et distribuant des données protégées requiert une habilitation.
       </p>
@@ -292,13 +291,20 @@
         tarification de cantine</em>, est souvent requise.
       </p>
 
-      <div class="fr-callout fr-callout--beige-gris-galet">
-        <p class="fr-callout__text fr-mb-0">
+           <p class="fr-mb-0">
           Simplifions.data vous aide dans l'identification de ce cadre
-          juridique.
+          juridique :
         </p>
-      </div>
 
+      <SimplifionsArticleFigure
+        src="/static/simplifions/assets/article-prerequis-etapes-integration-api-exemple-cadre-juridique-dans-simplifions.png"
+        alt="Capture d'écran d'un exemple de cadre juridique affiché sur Simplifions.data"
+      >
+        Exemple de cadre juridique renseigné pour un cas d'usage sur Simplifions.data.
+      </SimplifionsArticleFigure>
+
+  
+      <h4>Contacts</h4>
       <p class="fr-mt-3w">
         Une demande d'habilitation mobilise généralement plusieurs profils
         (qui peuvent parfois être la même personne) :
@@ -413,7 +419,7 @@
 
       <p>
         L'utilisation des API référencées sur Simplifions.data et utiles
-        pour le «&nbsp;Dites-le-nous une fois&nbsp;» est <strong>gratuite</strong>. Mais
+        pour le «&nbsp;Dites-le-nous une fois&nbsp;» est gratuite. Mais
         le raccordement (développement, tests, maintenance, montée de
         version de l'API) reste à votre charge, il est donc nécessaire de
         prévoir ces coûts de développement initial et de maintien en
@@ -422,10 +428,9 @@
     </ArticleSection>
 
     <ArticleSection id="parcours-usager" label="Anticiper le parcours usager">
-      <p class="fr-text--lead">
+      <p class="fr-text--lg">
         Le parcours usager à concevoir est différent selon que la donnée
-        transmise par l'API est <strong>publique</strong> ou
-        <strong>protégée</strong>.
+        transmise par l'API est publique ou protégée.
       </p>
 
       <h3>I. Données publiques : une simple saisie des paramètres d'appel suffit</h3>
@@ -833,7 +838,7 @@
       id="etapes-integration"
       label="Les étapes d'intégration d'une API"
     >
-      <p class="fr-text--lead">
+      <p class="fr-text--lg">
         Les étapes d'intégration d'une API dépendent de l'ouverture de
         l'API : une API en <strong>accès libre</strong> est appelable sans
         habilitation ni clé d'accès, tandis qu'une API en
@@ -981,7 +986,7 @@
     </ArticleSection>
 
     <ArticleSection id="limites" label="Les limites d'une API">
-      <p class="fr-text--lead">
+      <p class="fr-text--lg">
         Intégrer des API dans vos démarches pour récupérer directement les
         informations déjà connues de l'administration est une étape requise
         pour simplifier vos démarches en profondeur — mais l'usage des API
@@ -1163,6 +1168,7 @@ import ArticleSection from '../../../components/article/SimplifionsArticleSectio
 import SimplifionsArticleChecklist from '../../../components/article/SimplifionsArticleChecklist.vue'
 import SimplifionsArticleTopicSpotlight from '../../../components/article/SimplifionsArticleTopicSpotlight.vue'
 import SimplifionsArticleReadMore from '../../../components/article/SimplifionsArticleReadMore.vue'
+import SimplifionsArticleFigure from '../../../components/article/SimplifionsArticleFigure.vue'
 
 const articleMeta = {
   h1: "Prérequis et étapes d'intégration d'une API",
