@@ -181,101 +181,58 @@
       </DsfrAccordion>
     </DsfrAccordionsGroup>
 
-    <DsfrAccordionsGroup
+    <SimplifionsRecoIntegratingSolutionsAccordion
       v-model="activeBriquesAccordion"
-      :class="{ 'accordion-empty': !integratingSolutionsBriquesTechniques.length }"
+      title="Via une brique logicielle à intégrer"
+      :solutions="integratingSolutionsBriquesTechniques"
+      :integration-score-per-solution="integrationScorePerSolution"
+      :nom-fournisseur="recommandation.Nom_de_la_recommandation"
+      :type-label="typeLabel"
     >
-      <DsfrAccordion title-tag="h6">
-        <template #title>Via une brique logicielle à intégrer</template>
-        <p>
-          <strong>Briques techniques logicielles</strong> destinées à être
-          intégrées dans un système informatique existant et conçues pour le cas
-          d'usage «<i
-            >&nbsp;{{ recommandation.Nom_complet_du_cas_d_usage }}&nbsp;</i
-          >» :
-        </p>
-        <div class="fr-grid-row fr-grid-row--gutters fr-mt-2w">
-          <div
-            v-for="solution in integratingSolutionsBriquesTechniques"
-            :key="solution.id"
-            class="fr-col-12 fr-col-sm-6 fr-col-lg-4 fr-col-xl-3 fr-col-2xl-2"
-          >
-            <SimplifionsRecoSolutionsIntegratricesCard
-              :solution="solution"
-              :integration-score="integrationScorePerSolution.get(solution.id)"
-              :nom-fournisseur="recommandation.Nom_de_la_recommandation"
-              :type-label="typeLabel"
-            />
-          </div>
-        </div>
-      </DsfrAccordion>
-    </DsfrAccordionsGroup>
+      <p>
+        <strong>Briques techniques logicielles</strong> destinées à être
+        intégrées dans un système informatique existant et conçues pour le cas
+        d'usage «<i>&nbsp;{{ recommandation.Nom_complet_du_cas_d_usage }}&nbsp;</i>» :
+      </p>
+    </SimplifionsRecoIntegratingSolutionsAccordion>
 
-    <DsfrAccordionsGroup
+    <SimplifionsRecoIntegratingSolutionsAccordion
       v-model="activeLogicielsAccordion"
-      :class="{ 'accordion-empty': !integratingSolutionsLogicielsMetiers.length }"
+      title="Via un logiciel métier « clé en main »"
+      :solutions="integratingSolutionsLogicielsMetiers"
+      :integration-score-per-solution="integrationScorePerSolution"
+      :nom-fournisseur="recommandation.Nom_de_la_recommandation"
+      :type-label="typeLabel"
     >
-      <DsfrAccordion title-tag="h6">
-        <template #title>Via un logiciel métier « clé en main »</template>
-        <p>
-          <strong>Liste des logiciels métier, sur étagère</strong> conçus pour
-          le cas d'usage «<i
-            >&nbsp;{{ recommandation.Nom_complet_du_cas_d_usage }}&nbsp;</i
-          >» :
-        </p>
-        <div class="fr-grid-row fr-grid-row--gutters fr-mt-2w">
-          <div
-            v-for="solution in integratingSolutionsLogicielsMetiers"
-            :key="solution.id"
-            class="fr-col-12 fr-col-sm-6 fr-col-lg-4 fr-col-xl-3 fr-col-2xl-2"
-          >
-            <SimplifionsRecoSolutionsIntegratricesCard
-              :solution="solution"
-              :integration-score="integrationScorePerSolution.get(solution.id)"
-              :nom-fournisseur="recommandation.Nom_de_la_recommandation"
-              :type-label="typeLabel"
-            />
-          </div>
-        </div>
-      </DsfrAccordion>
-    </DsfrAccordionsGroup>
+      <p>
+        <strong>Liste des logiciels métier, sur étagère</strong> conçus pour
+        le cas d'usage «<i>&nbsp;{{ recommandation.Nom_complet_du_cas_d_usage }}&nbsp;</i>» :
+      </p>
+    </SimplifionsRecoIntegratingSolutionsAccordion>
 
-    <DsfrAccordionsGroup
+    <SimplifionsRecoIntegratingSolutionsAccordion
       v-model="activePortailsAccordion"
-      :class="{ 'accordion-empty': !integratingSolutionsPortailsConsultation.length }"
+      title="Via un portail de consultation"
+      :solutions="integratingSolutionsPortailsConsultation"
+      :integration-score-per-solution="integrationScorePerSolution"
+      :nom-fournisseur="recommandation.Nom_de_la_recommandation"
+      :type-label="typeLabel"
     >
-      <DsfrAccordion title-tag="h6">
-        <template #title>Via un portail de consultation</template>
-        <p>
-          <b
-            >Ces sites vous permettent de consulter certaines des données utiles
-            pour ce cas d'usage :</b
-          >
+      <p>
+        <b
+          >Ces sites vous permettent de consulter certaines des données utiles
+          pour ce cas d'usage :</b
+        >
+      </p>
+      <div class="fr-m-2w fr-highlight--orange-terre-battue fr-highlight">
+        <p class="fr-mb-0">
+          💡 Pour vraiment simplifier la vie des usagers, l'intégration
+          directe de cette API ou de jeu de données dans vos logiciels métiers
+          est à privilégier car elle permet de mettre en oeuvre le
+          <i>dites-le-nous une fois</i> et la proactivité !
         </p>
-        <div class="fr-m-2w fr-highlight--orange-terre-battue fr-highlight">
-          <p class="fr-mb-0">
-            💡 Pour vraiment simplifier la vie des usagers, l'intégration
-            directe de cette API ou de jeu de données dans vos logiciels métiers
-            est à privilégier car elle permet de mettre en oeuvre le
-            <i>dites-le-nous une fois</i> et la proactivité !
-          </p>
-        </div>
-        <div class="fr-grid-row fr-grid-row--gutters fr-mt-2w">
-          <div
-            v-for="solution in integratingSolutionsPortailsConsultation"
-            :key="solution.id"
-            class="fr-col-12 fr-col-sm-6 fr-col-lg-4 fr-col-xl-3 fr-col-2xl-2"
-          >
-            <SimplifionsRecoSolutionsIntegratricesCard
-              :solution="solution"
-              :integration-score="integrationScorePerSolution.get(solution.id)"
-              :nom-fournisseur="recommandation.Nom_de_la_recommandation"
-              :type-label="typeLabel"
-            />
-          </div>
-        </div>
-      </DsfrAccordion>
-    </DsfrAccordionsGroup>
+      </div>
+    </SimplifionsRecoIntegratingSolutionsAccordion>
 
     <p class="fr-text--sm fr-mx-2w fr-mt-2w">
       <i
@@ -302,7 +259,7 @@ import type {
 } from '../model/grist'
 import TopicsAPI from '../simplifionsTopicsApi'
 import SimplifionsDataApi from './SimplifionsDataApi.vue'
-import SimplifionsRecoSolutionsIntegratricesCard from './SimplifionsRecoSolutionsIntegratricesCard.vue'
+import SimplifionsRecoIntegratingSolutionsAccordion from './SimplifionsRecoIntegratingSolutionsAccordion.vue'
 
 const props = defineProps<{
   recommandation: Recommandation
@@ -652,16 +609,6 @@ watch(activeApiAccordion, (val) => {
 :deep(.fr-accordion__btn[aria-expanded='true']) {
   background-color: var(--background-alt-blue-france);
   color: var(--text-action-high-blue-france);
-}
-
-.accordion-empty :deep(.fr-accordion__btn) {
-  color: var(--text-disabled-grey);
-  pointer-events: none;
-  cursor: not-allowed;
-}
-
-.accordion-empty :deep(.fr-accordion__btn::after) {
-  color: var(--text-disabled-grey);
 }
 
 .fr-text--sm :deep(p) {
