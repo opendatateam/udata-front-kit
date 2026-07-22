@@ -52,7 +52,7 @@
       Moyens d'accès à ces données :
     </h5>
 
-    <DsfrAccordionsGroup v-model="activeApiAccordion">
+    <DsfrAccordionsGroup v-model="activeAccordion">
       <DsfrAccordion title-tag="h6">
         <template #title>Par l'API directement</template>
 
@@ -179,60 +179,57 @@
           />
         </template>
       </DsfrAccordion>
-    </DsfrAccordionsGroup>
 
-    <SimplifionsRecoIntegratingSolutionsAccordion
-      v-model="activeBriquesAccordion"
-      title="Via une brique logicielle à intégrer"
-      :solutions="integratingSolutionsBriquesTechniques"
-      :integration-score-per-solution="integrationScorePerSolution"
-      :nom-fournisseur="recommandation.Nom_de_la_recommandation"
-      :type-label="typeLabel"
-    >
-      <p>
-        <strong>Briques techniques logicielles</strong> destinées à être
-        intégrées dans un système informatique existant et conçues pour le cas
-        d'usage «<i>&nbsp;{{ recommandation.Nom_complet_du_cas_d_usage }}&nbsp;</i>» :
-      </p>
-    </SimplifionsRecoIntegratingSolutionsAccordion>
-
-    <SimplifionsRecoIntegratingSolutionsAccordion
-      v-model="activeLogicielsAccordion"
-      title="Via un logiciel métier « clé en main »"
-      :solutions="integratingSolutionsLogicielsMetiers"
-      :integration-score-per-solution="integrationScorePerSolution"
-      :nom-fournisseur="recommandation.Nom_de_la_recommandation"
-      :type-label="typeLabel"
-    >
-      <p>
-        <strong>Liste des logiciels métier, sur étagère</strong> conçus pour
-        le cas d'usage «<i>&nbsp;{{ recommandation.Nom_complet_du_cas_d_usage }}&nbsp;</i>» :
-      </p>
-    </SimplifionsRecoIntegratingSolutionsAccordion>
-
-    <SimplifionsRecoIntegratingSolutionsAccordion
-      v-model="activePortailsAccordion"
-      title="Via un portail de consultation"
-      :solutions="integratingSolutionsPortailsConsultation"
-      :integration-score-per-solution="integrationScorePerSolution"
-      :nom-fournisseur="recommandation.Nom_de_la_recommandation"
-      :type-label="typeLabel"
-    >
-      <p>
-        <b
-          >Ces sites vous permettent de consulter certaines des données utiles
-          pour ce cas d'usage :</b
-        >
-      </p>
-      <div class="fr-m-2w fr-highlight--orange-terre-battue fr-highlight">
-        <p class="fr-mb-0">
-          💡 Pour vraiment simplifier la vie des usagers, l'intégration
-          directe de cette API ou de jeu de données dans vos logiciels métiers
-          est à privilégier car elle permet de mettre en oeuvre le
-          <i>dites-le-nous une fois</i> et la proactivité !
+      <SimplifionsRecoIntegratingSolutionsAccordion
+        title="Via une brique logicielle à intégrer"
+        :solutions="integratingSolutionsBriquesTechniques"
+        :integration-score-per-solution="integrationScorePerSolution"
+        :nom-fournisseur="recommandation.Nom_de_la_recommandation"
+        :type-label="typeLabel"
+      >
+        <p>
+          <strong>Briques techniques logicielles</strong> destinées à être
+          intégrées dans un système informatique existant et conçues pour le cas
+          d'usage «<i>&nbsp;{{ recommandation.Nom_complet_du_cas_d_usage }}&nbsp;</i>» :
         </p>
-      </div>
-    </SimplifionsRecoIntegratingSolutionsAccordion>
+      </SimplifionsRecoIntegratingSolutionsAccordion>
+
+      <SimplifionsRecoIntegratingSolutionsAccordion
+        title="Via un logiciel métier « clé en main »"
+        :solutions="integratingSolutionsLogicielsMetiers"
+        :integration-score-per-solution="integrationScorePerSolution"
+        :nom-fournisseur="recommandation.Nom_de_la_recommandation"
+        :type-label="typeLabel"
+      >
+        <p>
+          <strong>Liste des logiciels métier, sur étagère</strong> conçus pour
+          le cas d'usage «<i>&nbsp;{{ recommandation.Nom_complet_du_cas_d_usage }}&nbsp;</i>» :
+        </p>
+      </SimplifionsRecoIntegratingSolutionsAccordion>
+
+      <SimplifionsRecoIntegratingSolutionsAccordion
+        title="Via un portail de consultation"
+        :solutions="integratingSolutionsPortailsConsultation"
+        :integration-score-per-solution="integrationScorePerSolution"
+        :nom-fournisseur="recommandation.Nom_de_la_recommandation"
+        :type-label="typeLabel"
+      >
+        <p>
+          <b
+            >Ces sites vous permettent de consulter certaines des données utiles
+            pour ce cas d'usage :</b
+          >
+        </p>
+        <div class="fr-m-2w fr-highlight--orange-terre-battue fr-highlight">
+          <p class="fr-mb-0">
+            💡 Pour vraiment simplifier la vie des usagers, l'intégration
+            directe de cette API ou de jeu de données dans vos logiciels métiers
+            est à privilégier car elle permet de mettre en oeuvre le
+            <i>dites-le-nous une fois</i> et la proactivité !
+          </p>
+        </div>
+      </SimplifionsRecoIntegratingSolutionsAccordion>
+    </DsfrAccordionsGroup>
 
     <p class="fr-text--sm fr-mx-2w fr-mt-2w">
       <i
@@ -444,7 +441,7 @@ const sortedUsefulEndpoints = computed(() => {
 
 watch(filteredEndpoints, () => {
   currentPage.value = 0
-  if (activeApiAccordion.value === 0) recomputePageBreaks()
+  if (activeAccordion.value === API_ACCORDION_INDEX) recomputePageBreaks()
 })
 
 // === API/dataset-specific ===
@@ -568,15 +565,14 @@ const integrationScorePerSolution = computed(() => {
   }
 })
 
-const activeApiAccordion = ref(-1)
-const activeBriquesAccordion = ref(-1)
-const activeLogicielsAccordion = ref(-1)
-const activePortailsAccordion = ref(-1)
+// Index of the "Par l'API directement" accordion within the shared group (registered first)
+const API_ACCORDION_INDEX = 0
+const activeAccordion = ref(-1)
 
 const ACCORDION_TRANSITION_MS = 350 // DsfrAccordion animation duration
 
-watch(activeApiAccordion, (val) => {
-  if (val === 0) setTimeout(recomputePageBreaks, ACCORDION_TRANSITION_MS)
+watch(activeAccordion, (val) => {
+  if (val === API_ACCORDION_INDEX) setTimeout(recomputePageBreaks, ACCORDION_TRANSITION_MS)
 })
 </script>
 

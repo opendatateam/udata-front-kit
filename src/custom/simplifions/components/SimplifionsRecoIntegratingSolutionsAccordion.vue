@@ -8,26 +8,24 @@
       </span>
     </h6>
   </section>
-  <DsfrAccordionsGroup v-else v-model="activeAccordion">
-    <DsfrAccordion title-tag="h6">
-      <template #title>{{ title }}</template>
-      <slot />
-      <div class="fr-grid-row fr-grid-row--gutters fr-mt-2w">
-        <div
-          v-for="solution in solutions"
-          :key="solution.id"
-          class="fr-col-12 fr-col-sm-6 fr-col-lg-4 fr-col-xl-3 fr-col-2xl-2"
-        >
-          <SimplifionsRecoSolutionsIntegratricesCard
-            :solution="solution"
-            :integration-score="integrationScorePerSolution.get(solution.id)"
-            :nom-fournisseur="nomFournisseur"
-            :type-label="typeLabel"
-          />
-        </div>
+  <DsfrAccordion v-else title-tag="h6">
+    <template #title>{{ title }}</template>
+    <slot />
+    <div class="fr-grid-row fr-grid-row--gutters fr-mt-2w">
+      <div
+        v-for="solution in solutions"
+        :key="solution.id"
+        class="fr-col-12 fr-col-sm-6 fr-col-lg-4 fr-col-xl-3 fr-col-2xl-2"
+      >
+        <SimplifionsRecoSolutionsIntegratricesCard
+          :solution="solution"
+          :integration-score="integrationScorePerSolution.get(solution.id)"
+          :nom-fournisseur="nomFournisseur"
+          :type-label="typeLabel"
+        />
       </div>
-    </DsfrAccordion>
-  </DsfrAccordionsGroup>
+    </div>
+  </DsfrAccordion>
 </template>
 
 <script setup lang="ts">
@@ -41,8 +39,6 @@ defineProps<{
   nomFournisseur: string
   typeLabel: string
 }>()
-
-const activeAccordion = defineModel<number>({ required: true })
 </script>
 
 <style scoped>
