@@ -1,14 +1,18 @@
 <script setup lang="ts">
-import { SearchableSelect } from '@datagouv/components-next'
-import Catalog from '@gouvfr/dsfr/dist/artwork/pictograms/leisure/catalog.svg'
 import type { PageFilterValueConf } from '@/model/config'
 import { usePageConf } from '@/utils/config'
+import { SearchableSelect } from '@datagouv/components-next'
+import Catalog from '@gouvfr/dsfr/dist/artwork/pictograms/leisure/catalog.svg'
 
 const router = useRouter()
 
 const casUsagesPage = usePageConf('cas-d-usages')
-const targetUsersFilter = casUsagesPage.filters.find((f) => f.id === 'target-users')
-const fournisseursFilter = casUsagesPage.filters.find((f) => f.id === 'fournisseurs-de-service')
+const targetUsersFilter = casUsagesPage.filters.find(
+  (f) => f.id === 'target-users'
+)
+const fournisseursFilter = casUsagesPage.filters.find(
+  (f) => f.id === 'fournisseurs-de-service'
+)
 const targetUsersOptions = targetUsersFilter?.values ?? []
 const fournisseursOptions = fournisseursFilter?.values ?? []
 
@@ -18,30 +22,34 @@ const selectedFournisseurs = ref<PageFilterValueConf | null>(null)
 const explore = () => {
   const query: Record<string, string> = {}
   if (selectedTargetUsers.value && targetUsersFilter)
-    query[targetUsersFilter.id] = `${casUsagesPage.filter_prefix}-${targetUsersFilter.id}-${selectedTargetUsers.value.id}`
+    query[targetUsersFilter.id] =
+      `${casUsagesPage.filter_prefix}-${targetUsersFilter.id}-${selectedTargetUsers.value.id}`
   if (selectedFournisseurs.value && fournisseursFilter)
-    query[fournisseursFilter.id] = `${casUsagesPage.filter_prefix}-${fournisseursFilter.id}-${selectedFournisseurs.value.id}`
+    query[fournisseursFilter.id] =
+      `${casUsagesPage.filter_prefix}-${fournisseursFilter.id}-${selectedFournisseurs.value.id}`
   router.push({ name: 'cas-d-usages', query })
 }
+
+const targetUsersPrefix = `${casUsagesPage.filter_prefix}-target-users`
 
 const fournisseursDeService = [
   {
     title: 'Particuliers',
     emoji: '👱',
-    filters: 'target-users=particuliers',
-    description: "Toutes les démarches concernant les particuliers"
+    filters: `target-users=${targetUsersPrefix}-particuliers`,
+    description: 'Toutes les démarches concernant les particuliers'
   },
   {
     title: 'Entreprises',
     emoji: '💼',
-    filters: 'target-users=entreprises',
-    description: "Toutes les démarches concernant les entreprises"
+    filters: `target-users=${targetUsersPrefix}-entreprises`,
+    description: 'Toutes les démarches concernant les entreprises'
   },
   {
     title: 'Associations',
     emoji: '🤝',
-    filters: 'target-users=associations',
-    description: "Toutes les démarches concernant les associations"
+    filters: `target-users=${targetUsersPrefix}-associations`,
+    description: 'Toutes les démarches concernant les associations'
   }
 ]
 </script>
@@ -53,12 +61,16 @@ const fournisseursDeService = [
   >
     <div class="fr-container fr-py-4w">
       <h1 class="title fr-mb-2w fr-text--regular">
-        Le catalogue des données<br/>accessibles aux acteurs publics<br>
-        <span class="fr-text--bold">pour simplifier les démarches de leurs usagers</span>
+        Le catalogue des données<br />accessibles aux acteurs publics<br />
+        <span class="fr-text--bold"
+          >pour simplifier les démarches de leurs usagers</span
+        >
       </h1>
-      <p class="fr-text--alt fr-mb-3w fr-text--lg" style="text-align: center"><i>
-        Découvrez les API et bases de données utiles pour chaque démarche<br>
-        et les solutions raccordées à ces données</i>
+      <p class="fr-text--alt fr-mb-3w fr-text--lg" style="text-align: center">
+        <i>
+          Découvrez les API et bases de données utiles pour chaque démarche<br />
+          et les solutions raccordées à ces données</i
+        >
       </p>
       <div class="fr-grid-row fr-grid-row--center">
         <div class="fr-col-12 fr-col-lg-8">
@@ -72,11 +84,22 @@ const fournisseursDeService = [
                 height="60"
                 viewBox="0 0 80 80"
               >
-                <use class="fr-artwork-decorative" :href="`${Catalog}#artwork-decorative`" />
-                <use class="fr-artwork-minor" :href="`${Catalog}#artwork-minor`" />
-                <use class="fr-artwork-major" :href="`${Catalog}#artwork-major`" />
+                <use
+                  class="fr-artwork-decorative"
+                  :href="`${Catalog}#artwork-decorative`"
+                />
+                <use
+                  class="fr-artwork-minor"
+                  :href="`${Catalog}#artwork-minor`"
+                />
+                <use
+                  class="fr-artwork-major"
+                  :href="`${Catalog}#artwork-major`"
+                />
               </svg>
-              <p class="fr-text--bold fr-mb-0 fr-text--xl">Explorer le catalogue :</p>
+              <p class="fr-text--bold fr-mb-0 fr-text--xl">
+                Explorer le catalogue :
+              </p>
             </div>
             <div class="fr-grid-row fr-grid-row--gutters fr-my-0 fr-mb-3w">
               <div class="fr-col-12 fr-col-md-6">
@@ -118,20 +141,35 @@ const fournisseursDeService = [
 
   <section>
     <div class="fr-grid-row">
-      <div class="fr-col-12 fr-col-md-6 double-section__col-left" style="background-color: var(--background-alt-beige-gris-galet)">
+      <div
+        class="fr-col-12 fr-col-md-6 double-section__col-left"
+        style="background-color: var(--background-alt-beige-gris-galet)"
+      >
         <div class="fr-py-6w fr-px-10w">
           <h2 class="fr-h3 fr-mb-2w">
-            <i>Ne demandez plus aux usagers<br />ce que l'administration sait déjà.</i>
+            <i
+              >Ne demandez plus aux usagers<br />ce que l'administration sait
+              déjà.</i
+            >
           </h2>
           <p class="fr-mb-3w">
-            Explorez les démarches référencées dans le catalogue à destination des :
+            Explorez les démarches référencées dans le catalogue à destination
+            des :
           </p>
-          <div v-for="item in fournisseursDeService" :key="item.title" class="fr-mb-2w">
-            <div class="fr-tile fr-tile--horizontal fr-enlarge-link fr-tile--no-icon">
+          <div
+            v-for="item in fournisseursDeService"
+            :key="item.title"
+            class="fr-mb-2w"
+          >
+            <div
+              class="fr-tile fr-tile--horizontal fr-enlarge-link fr-tile--no-icon"
+            >
               <div class="fr-tile__body">
                 <div class="fr-tile__content">
                   <h3 class="fr-tile__title">
-                    <router-link :to="`/cas-d-usages?${item.filters}`">{{ item.emoji }} {{ item.title }}</router-link>
+                    <router-link :to="`/cas-d-usages?${item.filters}`"
+                      >{{ item.emoji }} {{ item.title }}</router-link
+                    >
                   </h3>
                   <p class="fr-tile__desc">{{ item.description }}</p>
                 </div>
@@ -140,19 +178,28 @@ const fournisseursDeService = [
           </div>
         </div>
       </div>
-      <div class="fr-col-12 fr-col-md-6 double-section__col-right" style="background-color: var(--background-default-grey)">
+      <div
+        class="fr-col-12 fr-col-md-6 double-section__col-right"
+        style="background-color: var(--background-default-grey)"
+      >
         <div class="fr-py-6w fr-px-10w double-section__col-right--intro">
           <div>
-            <h2 class="fr-h3 fr-mb-3w font-light">Qu'est-ce que Simplifions.data.gouv.fr&nbsp;?</h2>
+            <h2 class="fr-h3 fr-mb-3w font-light">
+              Qu'est-ce que Simplifions.data.gouv.fr&nbsp;?
+            </h2>
             <p class="fr-text--lead fr-mb-2w">
-              Un catalogue des données accessibles aux acteurs publics organisé par démarche usagers.
+              Un catalogue des données accessibles aux acteurs publics organisé
+              par démarche usagers.
             </p>
             <p class="fr-mb-0">
-              Pour chaque démarche —<em>aides et subventions, marchés publics, petite enfance,
-              cantine, transport, etc.</em>—, le catalogue recense les
-              <strong>API et bases de données</strong> utiles,
-              les <strong>solutions publiques et privées</strong> raccordées à ces données,
-              et les sites de consultation de ces données disponibles en ligne.
+              Pour chaque démarche —<em
+                >aides et subventions, marchés publics, petite enfance, cantine,
+                transport, etc.</em
+              >—, le catalogue recense les
+              <strong>API et bases de données</strong> utiles, les
+              <strong>solutions publiques et privées</strong> raccordées à ces
+              données, et les sites de consultation de ces données disponibles
+              en ligne.
             </p>
           </div>
           <div class="fr-mb-12w">
@@ -180,7 +227,9 @@ const fournisseursDeService = [
 
   <section class="fr-py-6w">
     <div class="fr-container fr-px-6w">
-      <h2 class="fr-h3 font-light fr-mb-4w">Comment simplifions.data peut-il vous aider&nbsp;?</h2>
+      <h2 class="fr-h3 font-light fr-mb-4w">
+        Comment simplifions.data peut-il vous aider&nbsp;?
+      </h2>
 
       <!-- Découvrir -->
       <h3 class="fr-h4 fr-mb-3w"><em>Découvrir</em></h3>
@@ -188,44 +237,89 @@ const fournisseursDeService = [
         <div class="fr-col-12 fr-col-md-6">
           <div class="fr-grid-row fr-grid-row--gutters fr-my-0">
             <div class="fr-col-auto">
-              <img src="/static/simplifions/assets/accueil-picto-innovation.svg" width="80" height="80" aria-hidden="true" alt="" />
+              <img
+                src="/static/simplifions/assets/accueil-picto-innovation.svg"
+                width="80"
+                height="80"
+                aria-hidden="true"
+                alt=""
+              />
             </div>
             <div class="fr-col">
-              <p class="fr-text--bold fr-text--lg fr-mb-1v">Découvrir les démarches que vous pourriez simplifier</p>
-              <p class="fr-mb-0">Inspirez-vous des démarches référencées pour en mettre en oeuvre de nouvelles ou simplifier celles que vous avez déjà.</p>
+              <p class="fr-text--bold fr-text--lg fr-mb-1v">
+                Découvrir les démarches que vous pourriez simplifier
+              </p>
+              <p class="fr-mb-0">
+                Inspirez-vous des démarches référencées pour en mettre en oeuvre
+                de nouvelles ou simplifier celles que vous avez déjà.
+              </p>
             </div>
           </div>
         </div>
         <div class="fr-col-12 fr-col-md-6">
           <div class="fr-grid-row fr-grid-row--gutters fr-my-0">
             <div class="fr-col-auto">
-              <img src="/static/simplifions/assets/accueil-picto-self-training.svg" width="80" height="80" aria-hidden="true" alt="" />
+              <img
+                src="/static/simplifions/assets/accueil-picto-self-training.svg"
+                width="80"
+                height="80"
+                aria-hidden="true"
+                alt=""
+              />
             </div>
             <div class="fr-col">
-              <p class="fr-text--bold fr-text--lg fr-mb-1v">Identifier les logiciels éditeurs raccordés aux données</p>
-              <p class="fr-mb-0">Par démarche, Simplifions indique les logiciels métiers raccordés aux API et bases de données utiles.</p>
+              <p class="fr-text--bold fr-text--lg fr-mb-1v">
+                Identifier les logiciels éditeurs raccordés aux données
+              </p>
+              <p class="fr-mb-0">
+                Par démarche, Simplifions indique les logiciels métiers
+                raccordés aux API et bases de données utiles.
+              </p>
             </div>
           </div>
         </div>
         <div class="fr-col-12 fr-col-md-6">
           <div class="fr-grid-row fr-grid-row--gutters fr-my-0">
             <div class="fr-col-auto">
-              <img src="/static/simplifions/assets/accueil-picto-decouverte-donnees.svg" width="80" height="80" aria-hidden="true" alt="" />
+              <img
+                src="/static/simplifions/assets/accueil-picto-decouverte-donnees.svg"
+                width="80"
+                height="80"
+                aria-hidden="true"
+                alt=""
+              />
             </div>
             <div class="fr-col">
-              <p class="fr-text--bold fr-text--lg fr-mb-1v">Découvrir les données disponibles par démarche</p>
-              <p class="fr-mb-0">Savoir quelles API ou bases de données utiliser pour chaque démarche afin de récupérer les justificatifs des usagers.</p>
+              <p class="fr-text--bold fr-text--lg fr-mb-1v">
+                Découvrir les données disponibles par démarche
+              </p>
+              <p class="fr-mb-0">
+                Savoir quelles API ou bases de données utiliser pour chaque
+                démarche afin de récupérer les justificatifs des usagers.
+              </p>
             </div>
           </div>
         </div>
         <div class="fr-col-12 fr-col-md-6">
           <div class="fr-grid-row fr-grid-row--gutters fr-my-0">
             <div class="fr-col-auto">
-              <img src="/static/simplifions/assets/accueil-picto-search.svg" width="80" height="80" aria-hidden="true" alt="" />
+              <img
+                src="/static/simplifions/assets/accueil-picto-search.svg"
+                width="80"
+                height="80"
+                aria-hidden="true"
+                alt=""
+              />
             </div>
             <div class="fr-col">
-              <p class="fr-text--bold fr-text--lg fr-mb-1v">Identifier les sites permettant aux agents de consulter les données</p>
-              <p class="fr-mb-0">Simplifions référence les sites interconnectés aux API de l'État et conçus pour permettre aux agents de consulter les données.</p>
+              <p class="fr-text--bold fr-text--lg fr-mb-1v">
+                Identifier les sites permettant aux agents de consulter les
+                données
+              </p>
+              <p class="fr-mb-0">
+                Simplifions référence les sites interconnectés aux API de l'État
+                et conçus pour permettre aux agents de consulter les données.
+              </p>
             </div>
           </div>
         </div>
@@ -237,11 +331,23 @@ const fournisseursDeService = [
           <h3 class="fr-h4 fr-mb-3w"><em>S'informer</em></h3>
           <div class="fr-grid-row fr-grid-row--gutters fr-my-0">
             <div class="fr-col-auto">
-              <img src="/static/simplifions/assets/accueil-picto-information.svg" width="80" height="80" aria-hidden="true" alt="" />
+              <img
+                src="/static/simplifions/assets/accueil-picto-information.svg"
+                width="80"
+                height="80"
+                aria-hidden="true"
+                alt=""
+              />
             </div>
             <div class="fr-col">
-              <p class="fr-text--bold fr-text--lg fr-mb-1v">Consulter le cadre d'utilisation des données pour chaque démarche</p>
-              <p class="fr-mb-0">Une synthèse du contexte et du cadre juridique est proposée pour chaque démarche.</p>
+              <p class="fr-text--bold fr-text--lg fr-mb-1v">
+                Consulter le cadre d'utilisation des données pour chaque
+                démarche
+              </p>
+              <p class="fr-mb-0">
+                Une synthèse du contexte et du cadre juridique est proposée pour
+                chaque démarche.
+              </p>
             </div>
           </div>
         </div>
@@ -249,11 +355,23 @@ const fournisseursDeService = [
           <h3 class="fr-h4 fr-mb-3w"><em>Comparer</em></h3>
           <div class="fr-grid-row fr-grid-row--gutters fr-my-0">
             <div class="fr-col-auto">
-              <img src="/static/simplifions/assets/accueil-picto-justice-scales.svg" width="80" height="80" aria-hidden="true" alt="" />
+              <img
+                src="/static/simplifions/assets/accueil-picto-justice-scales.svg"
+                width="80"
+                height="80"
+                aria-hidden="true"
+                alt=""
+              />
             </div>
             <div class="fr-col">
-              <p class="fr-text--bold fr-text--lg fr-mb-1v">Comparer les différentes solutions en termes d'intégration de données</p>
-              <p class="fr-mb-0">Pour chaque solution, retrouvez la liste des données qu'ils ont intégré.</p>
+              <p class="fr-text--bold fr-text--lg fr-mb-1v">
+                Comparer les différentes solutions en termes d'intégration de
+                données
+              </p>
+              <p class="fr-mb-0">
+                Pour chaque solution, retrouvez la liste des données qu'ils ont
+                intégré.
+              </p>
             </div>
           </div>
         </div>
@@ -263,8 +381,10 @@ const fournisseursDeService = [
 
   <section id="redaction-contenu">
     <div class="fr-grid-row">
-
-      <div class="fr-col-12 fr-col-md-6 double-section__col-left" style="background-color: var(--background-alt-blue-france)">
+      <div
+        class="fr-col-12 fr-col-md-6 double-section__col-left"
+        style="background-color: var(--background-alt-blue-france)"
+      >
         <div class="fr-py-6w fr-px-10w">
           <h2 class="fr-h3 fr-mb-3w">
             Comment est rédigé le contenu sur <i>Simplifions.data</i> ?
@@ -272,30 +392,45 @@ const fournisseursDeService = [
 
           <div class="fr-grid-row fr-grid-row--gutters fr-my-0 fr-mb-3w">
             <div class="fr-col">
-              <p class="fr-text--bold fr-text--lg fr-mb-1v">Ligne éditoriale <i>DLNUF/proactivité</i></p>
-              <p class="fr-mb-0">Un contenu rédigé au sein du Pôle Data de la DINUM,
-                focalisé sur la mise en œuvre d'une simplification par la donnée,
-                synthétisant les retours et lisible pour les usagers.</p>
+              <p class="fr-text--bold fr-text--lg fr-mb-1v">
+                Ligne éditoriale <i>DLNUF/proactivité</i>
+              </p>
+              <p class="fr-mb-0">
+                Un contenu rédigé au sein du Pôle Data de la DINUM, focalisé sur
+                la mise en œuvre d'une simplification par la donnée,
+                synthétisant les retours et lisible pour les usagers.
+              </p>
             </div>
             <div class="fr-col-auto">
               <img
                 src="/static/simplifions/assets/accueil-picto-conclusion.svg"
-                width="80" height="80" aria-hidden="true" alt=""
+                width="80"
+                height="80"
+                aria-hidden="true"
+                alt=""
               />
             </div>
           </div>
 
           <div class="fr-grid-row fr-grid-row--gutters fr-my-0">
             <div class="fr-col">
-              <p class="fr-text--bold fr-text--lg fr-mb-1v">Contenu collaboratif</p>
-              <p class="fr-mb-0">De nombreux espaces sont disponibles pour permettre aux usagers
-                de proposer des modifications et construire une base de connaissance
-                élaborée sur des expériences concrètes, exhaustive et mise à jour régulièrement.</p>
+              <p class="fr-text--bold fr-text--lg fr-mb-1v">
+                Contenu collaboratif
+              </p>
+              <p class="fr-mb-0">
+                De nombreux espaces sont disponibles pour permettre aux usagers
+                de proposer des modifications et construire une base de
+                connaissance élaborée sur des expériences concrètes, exhaustive
+                et mise à jour régulièrement.
+              </p>
             </div>
             <div class="fr-col-auto">
               <img
                 src="/static/simplifions/assets/accueil-picto-community.svg"
-                width="80" height="80" aria-hidden="true" alt=""
+                width="80"
+                height="80"
+                aria-hidden="true"
+                alt=""
               />
             </div>
           </div>
@@ -303,12 +438,15 @@ const fournisseursDeService = [
       </div>
 
       <div class="fr-col-12 fr-col-md-6 double-section__col-right">
-
         <div>
-          <div class="fr-py-6w fr-px-10w" style="background-color: var(--background-alt-beige-gris-galet)">
+          <div
+            class="fr-py-6w fr-px-10w"
+            style="background-color: var(--background-alt-beige-gris-galet)"
+          >
             <h3 class="fr-h4 fr-mb-3w">📝 Proposer une modification</h3>
             <p class="fr-text--lead fr-mb-3w">
-              Proposez l'ajout d'une démarche, d'une solution ou la correction d'un contenu  directement depuis le formulaire en ligne.
+              Proposez l'ajout d'une démarche, d'une solution ou la correction
+              d'un contenu directement depuis le formulaire en ligne.
             </p>
             <a
               href="https://www.demarches-simplifiees.fr/commencer/proposer-un-contenu-pour-le-site-simplifions"
@@ -319,10 +457,14 @@ const fournisseursDeService = [
             </a>
           </div>
 
-          <div class="fr-py-6w fr-px-10w" style="background-color: var(--background-default-grey)">
+          <div
+            class="fr-py-6w fr-px-10w"
+            style="background-color: var(--background-default-grey)"
+          >
             <h3 class="fr-h4 fr-mb-3w">Règles de référencement</h3>
             <p class="fr-text--lead fr-mb-3w">
-              Les règles utilisées par le pôle Data pour identifier les contenus référencés dans <i>Simplifions.data</i> :
+              Les règles utilisées par le pôle Data pour identifier les contenus
+              référencés dans <i>Simplifions.data</i> :
             </p>
             <div class="fr-mb-2w">
               <router-link
@@ -342,12 +484,17 @@ const fournisseursDeService = [
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </section>
 
-  <section class="fr-py-8w" style="text-align: center; background: var(--simplifions-homebanner-gradient)">
+  <section
+    class="fr-py-8w"
+    style="
+      text-align: center;
+      background: var(--simplifions-homebanner-gradient);
+    "
+  >
     <div class="fr-container">
       <div class="fr-grid-row fr-grid-row--center">
         <div class="fr-col-12 fr-col-md-8">
@@ -356,8 +503,10 @@ const fournisseursDeService = [
             en récupérant à la source la donnée&nbsp;?
           </h2>
           <p class="fr-text--alt fr-text--lead fr-mb-4w">
-            <em>Rejoignez les administrations qui utilisent déjà Simplifions.data pour
-            connaître les données et les solutions disponibles.</em>
+            <em
+              >Rejoignez les administrations qui utilisent déjà Simplifions.data
+              pour connaître les données et les solutions disponibles.</em
+            >
           </p>
           <router-link
             to="/cas-d-usages"
@@ -372,8 +521,6 @@ const fournisseursDeService = [
 </template>
 
 <style scoped>
-
-
 .fr-artwork-minor,
 .fr-artwork-major {
   fill: var(--text-default-grey);
@@ -384,7 +531,9 @@ const fournisseursDeService = [
 }
 
 .banner {
-  min-height: calc(100dvh - 220px); /* 220px ≈ hauteur totale header + bannière + nav */
+  min-height: calc(
+    100dvh - 220px
+  ); /* 220px ≈ hauteur totale header + bannière + nav */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -429,5 +578,4 @@ const fournisseursDeService = [
 .font-light {
   font-weight: 400 !important;
 }
-
 </style>
