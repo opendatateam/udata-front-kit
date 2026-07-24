@@ -358,7 +358,7 @@ const articleMeta = {
   articleCategory: 'guide' as const,
   showNoDevelopmentBadge: false,
   articleTags: [],
-  heroBackdropGradient: 'linear-gradient(135deg, #5770be 0%, #d2e2f6 100%)',
+  heroBackdropGradient: 'linear-gradient(135deg, #decdbd 0%, #d2e2f6 100%)',
   heroPanelBackground: 'var(--background-alt-beige-gris-galet)'
 }
 </script>

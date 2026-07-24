@@ -249,7 +249,7 @@ const articleMeta = {
   description:
     "Bouquet d'API mono ou multi-fournisseur, API à l'unité, API FranceConnectée : identifiez qui contacter — fournisseur de la donnée, opérateur de l'API ou du bouquet, éditeur métier — selon le type d'API que vous intégrez.",
   articleTags: [],
-  heroBackdropGradient: 'linear-gradient(135deg, #2c5f8a 0%, #d2e2f6 100%)',
+  heroBackdropGradient: 'linear-gradient(135deg, #decdbd 0%, #e3e3fd 100%)',
   heroPanelBackground: 'var(--background-alt-beige-gris-galet)'
 }
 </script>

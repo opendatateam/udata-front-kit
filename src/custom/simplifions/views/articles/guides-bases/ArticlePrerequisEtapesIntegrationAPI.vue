@@ -1002,7 +1002,7 @@ const articleMeta = {
   description:
     "Prérequis techniques, juridiques et d'usage, étapes d'intégration, limites à connaître : Acteurs publics, ce guide vous aide à comprendre ce qui vous attend lorsque vous vous engagez dans la simplification de vos démarches grâce aux API.",
   articleTags: [],
-  heroBackdropGradient: 'linear-gradient(135deg, #1b3a5c 0%, #cfe0ef 100%)',
+  heroBackdropGradient: 'linear-gradient(135deg, #decdbd 0%, #a3afce 100%)',
   heroPanelBackground: 'var(--background-alt-beige-gris-galet)'
 }
 </script>
