@@ -117,16 +117,18 @@
           </nav>
         </aside>
 
-        <main
-          ref="articleRef"
-          class="fr-col-12 fr-col-lg-9 article-content-col"
-        >
+        <div ref="articleRef" class="fr-col-12 fr-col-lg-9 article-content-col">
           <div class="article-content">
             <slot />
           </div>
-        </main>
+        </div>
       </div>
     </div>
+
+    <SimplifionsArticleRelatedTopics
+      :entries="topicEntries"
+      :gradient="heroBackdropGradient"
+    />
   </div>
 </template>
 
@@ -134,7 +136,9 @@
 import type { BreadcrumbItem } from '@/model/breadcrumb'
 import { useCanonicalUrl, useMeta } from '@/utils/seo'
 import { provide, useSlots } from 'vue'
+import { provideArticleTopicsRegistry } from '../../composables/useArticleTopicsRegistry'
 import { articleSectionKey } from './articleSectionKey'
+import SimplifionsArticleRelatedTopics from './SimplifionsArticleRelatedTopics.vue'
 
 type ArticleSection = {
   id: string
@@ -168,7 +172,8 @@ const props = withDefaults(
     kicker: '',
     heroImageSrc: '',
     articleTags: () => [],
-    heroBackdropGradient: 'linear-gradient(135deg, #1b1b35 0%, #1e1e1e 100%)',
+    heroBackdropGradient:
+      'linear-gradient(135deg, var(--background-action-low-blue-ecume) 0%, var(--background-contrast-blue-ecume) 100%)',
     heroPanelBackground: 'var(--background-alt-beige-gris-galet)',
     breadcrumbLinks: () => []
   }
@@ -185,6 +190,8 @@ useMeta({
 
 const sections = ref<ArticleSection[]>([])
 provide(articleSectionKey, (id, label) => sections.value.push({ id, label }))
+
+const topicEntries = provideArticleTopicsRegistry()
 
 const sidemenuExpanded = ref(true)
 
@@ -220,6 +227,7 @@ onMounted(() => {
 
   if (!targets.length || typeof IntersectionObserver === 'undefined') return
 
+  const elementById = new Map(targets.map((el) => [el.id, el]))
   const visibleSections = new Set<string>()
 
   observer = new IntersectionObserver(
@@ -245,7 +253,7 @@ onMounted(() => {
       const zoneTop = window.innerHeight * 0.1
       let last = ''
       for (const section of sections.value) {
-        const el = container.querySelector<HTMLElement>(`#${section.id}`)
+        const el = elementById.get(section.id)
         if (el && el.getBoundingClientRect().top < zoneTop) last = section.id
       }
       if (last) activeSection.value = last
