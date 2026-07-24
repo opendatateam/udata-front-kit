@@ -266,7 +266,7 @@ describe("Simplifions Cas d'usages Show Page for cas d'usage with APIs or datase
   it('should display the dataservices and datasets useful inside the recommandation', () => {
     cy.get('.reco-card').should(
       'contain.text',
-      'Endpoints de l\'API utiles pour ce cas d\'usage'
+      "Endpoints de l'API utiles pour ce cas d'usage"
     )
     cy.get('.test__api-or-dataset-utile').should('have.length', 2)
   })
@@ -398,5 +398,217 @@ describe("Simplifions Cas d'usages Show page - integration score on solution car
       'contain.text',
       'API ou jeu de données'
     )
+  })
+})
+
+describe("Simplifions Cas d'usages Show page - useful endpoints table filtering and pagination", () => {
+  // Creates the recommandation's useful endpoints table and opens the
+  // direct-access accordion where it lives.
+  const setupWithEndpoints = (
+    gristApis: ReturnType<typeof apiOrDatasetFactory.many>
+  ) => {
+    cy.baseMocksForSimplifions()
+    cy.mockGristRecords('APIs_et_datasets', gristApis)
+    gristApis.forEach((api) => cy.mockGristRecord('APIs_et_datasets', api))
+
+    const { gristRecommandation } = mockSolutionRecommandation({
+      API_et_datasets_utiles_fournis: gristApis.map((a) => a.id),
+      Descriptions_des_API_et_datasets_utiles_fournis: [],
+      Ces_logiciels_l_integrent_deja: []
+    })
+    const { topicCasUsage } = mockCasUsage({}, [gristRecommandation])
+    cy.visit(`/cas-d-usages/${topicCasUsage.slug}`)
+
+    cy.get('.fr-accordion__btn').first().click()
+  }
+
+  describe('filtering', () => {
+    beforeEach(() => {
+      const gristApis = [
+        apiOrDatasetFactory.one({
+          overrides: { fields: { Nom: 'Guichet unique des entreprises' } }
+        }),
+        ...apiOrDatasetFactory.many(4)
+      ]
+      setupWithEndpoints(gristApis)
+    })
+
+    it('should filter endpoints matching the search query', () => {
+      cy.get('.test__api-or-dataset-utile').should('have.length', 5)
+
+      cy.get('input[type="search"]').type('Guichet unique')
+
+      cy.get('.test__api-or-dataset-utile').should('have.length', 1)
+      cy.get('.test__api-or-dataset-utile').should(
+        'contain.text',
+        'Guichet unique des entreprises'
+      )
+    })
+
+    it('should display a message when no endpoint matches the search query', () => {
+      cy.get('input[type="search"]').type('does not exist at all')
+
+      cy.get('.test__api-or-dataset-utile').should('not.exist')
+      cy.contains('Aucun endpoint ne correspond à votre recherche.').should(
+        'be.visible'
+      )
+    })
+
+    it('should display all endpoints again once the search query is cleared', () => {
+      cy.get('input[type="search"]').type('Guichet unique')
+      cy.get('.test__api-or-dataset-utile').should('have.length', 1)
+
+      cy.get('input[type="search"]').clear()
+      cy.get('.test__api-or-dataset-utile').should('have.length', 5)
+    })
+  })
+
+  describe('pagination', () => {
+    beforeEach(() => {
+      setupWithEndpoints(apiOrDatasetFactory.many(40))
+    })
+
+    it('should split endpoints across several pages', () => {
+      cy.get('.fr-table__footer').should('be.visible')
+      cy.get('.fr-pagination__link[title]').should('have.length.gt', 1)
+      cy.get('.test__api-or-dataset-utile').should('have.length.lt', 40)
+    })
+
+    it('should display different endpoints on the next page', () => {
+      cy.get('.test__api-or-dataset-utile b').then(($rows) => {
+        const firstPageNames = [...$rows].map((el) => el.textContent)
+
+        cy.get('.fr-pagination__link--next').click()
+
+        cy.get('.test__api-or-dataset-utile b').should(($newRows) => {
+          const secondPageNames = [...$newRows].map((el) => el.textContent)
+          expect(secondPageNames).to.not.deep.equal(firstPageNames)
+          firstPageNames.forEach((name) => {
+            expect(secondPageNames).to.not.include(name)
+          })
+        })
+      })
+    })
+
+    it('should reset to the first page when the endpoints are re-filtered', () => {
+      cy.get('.fr-pagination__link--next').click()
+      cy.get('.fr-pagination__link[aria-current="page"]').should(
+        'not.contain.text',
+        '1'
+      )
+
+      // Every generated endpoint name contains "n°", so this keeps the full
+      // list (and thus pagination) while still re-triggering the filter watcher.
+      cy.get('input[type="search"]').type('n°')
+
+      cy.get('.fr-pagination__link[aria-current="page"]').should(
+        'contain.text',
+        '1'
+      )
+    })
+  })
+})
+
+describe("Simplifions Cas d'usages Show page - accordions behaviour", () => {
+  // Creates a solution recommandation with two real (clickable) accordions:
+  // the direct-access one (API/database) and the "logiciel métier" one.
+  const setupWithTwoAccordions = (recommandationOverrides = {}) => {
+    cy.baseMocksForSimplifions()
+
+    const { gristSolution: gristIntegrateur } = mockSolution({
+      Nom: 'Solution Intégratrice',
+      Visible_sur_simplifions: true,
+      liste_categories_de_solution: ['Logiciel métier']
+    })
+
+    const { gristRecommandation } = mockSolutionRecommandation({
+      API_et_datasets_utiles_fournis: [],
+      Descriptions_des_API_et_datasets_utiles_fournis: [],
+      Ces_logiciels_l_integrent_deja: [],
+      Solutions_integratrices_categorie_logiciel_metier: [gristIntegrateur.id],
+      ...recommandationOverrides
+    })
+
+    const { topicCasUsage } = mockCasUsage({}, [gristRecommandation])
+    cy.visit(`/cas-d-usages/${topicCasUsage.slug}`)
+  }
+
+  it('should title the direct-access accordion "Par l\'API directement" when Type_de_recommandation is API', () => {
+    setupWithTwoAccordions({ Type_de_recommandation: 'API' })
+    cy.get('button.fr-accordion__btn')
+      .eq(0)
+      .should('contain.text', "Par l'API directement")
+  })
+
+  it('should title the direct-access accordion "Par la base de données directement" when Type_de_recommandation is Jeu de données', () => {
+    setupWithTwoAccordions({ Type_de_recommandation: 'Jeu de données' })
+    cy.get('button.fr-accordion__btn')
+      .eq(0)
+      .should('contain.text', 'Par la base de données directement')
+  })
+
+  it('should fall back to "Par la base de données ou l\'API directement" for the accordion title when Type_de_recommandation is null', () => {
+    setupWithTwoAccordions({ Type_de_recommandation: null })
+    cy.get('button.fr-accordion__btn')
+      .eq(0)
+      .should('contain.text', "Par la base de données ou l'API directement")
+  })
+
+  it('should collapse the previously open accordion when another one is opened', () => {
+    setupWithTwoAccordions()
+
+    cy.get('button.fr-accordion__btn').eq(0).click()
+    cy.get('button.fr-accordion__btn')
+      .eq(0)
+      .should('have.attr', 'aria-expanded', 'true')
+
+    cy.get('button.fr-accordion__btn').eq(1).click()
+    cy.get('button.fr-accordion__btn')
+      .eq(1)
+      .should('have.attr', 'aria-expanded', 'true')
+    cy.get('button.fr-accordion__btn')
+      .eq(0)
+      .should('have.attr', 'aria-expanded', 'false')
+  })
+
+  it('should render empty integrating-solutions categories as non-interactive placeholders', () => {
+    cy.baseMocksForSimplifions()
+
+    const { gristRecommandation } = mockSolutionRecommandation({
+      API_et_datasets_utiles_fournis: [],
+      Descriptions_des_API_et_datasets_utiles_fournis: [],
+      Ces_logiciels_l_integrent_deja: []
+    })
+    const { topicCasUsage } = mockCasUsage({}, [gristRecommandation])
+    cy.visit(`/cas-d-usages/${topicCasUsage.slug}`)
+
+    // The 3 "solutions intégratrices" categories have no solution by default
+    cy.get('.accordion-empty .fr-accordion__btn--empty').should(
+      'have.length',
+      3
+    )
+    cy.get('.accordion-empty .fr-accordion__btn--empty').each(($el) => {
+      expect($el.prop('tagName')).to.eq('SPAN')
+      expect($el.attr('aria-expanded')).to.eq(undefined)
+    })
+  })
+
+  it("should not affect another reco-card's accordion when one is opened", () => {
+    cy.baseMocksForSimplifions()
+
+    const { gristRecommandations } = mockApidatasetRecommandations(2)
+    const { topicCasUsage } = mockCasUsage({}, gristRecommandations)
+    cy.visit(`/cas-d-usages/${topicCasUsage.slug}`)
+
+    cy.get('.reco-card').eq(0).find('button.fr-accordion__btn').click()
+
+    cy.get('.reco-card')
+      .eq(0)
+      .find('button.fr-accordion__btn')
+      .should('have.attr', 'aria-expanded', 'true')
+    cy.get('.reco-card')
+      .eq(1)
+      .find('button.fr-accordion__btn')
+      .should('have.attr', 'aria-expanded', 'false')
   })
 })

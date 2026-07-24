@@ -272,9 +272,10 @@ const typeLabel = computed(() => {
 })
 
 const apiAccordionTitle = computed(() => {
-  return recommandation.Type_de_recommandation === 'Jeu de données'
-    ? 'Par la base de données directement'
-    : "Par l'API directement"
+  const t = recommandation.Type_de_recommandation
+  if (t === 'API') return "Par l'API directement"
+  if (t === 'Jeu de données') return 'Par la base de données directement'
+  return "Par la base de données ou l'API directement"
 })
 
 const fetchSolutionsForCategory = async (ids: number[]) => {
