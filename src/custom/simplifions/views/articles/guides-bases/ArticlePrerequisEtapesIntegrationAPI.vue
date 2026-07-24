@@ -27,171 +27,10 @@
       description="Comprendre ce qu'est une API sans vocabulaire technique."
     />
 
-    <ArticleSection id="types-api" label="Les différents types d'API">
-      <p class="fr-text--lg">
-        Dans l'écosystème des API utiles pour mettre en place le
-        «&nbsp;Dites-le-nous une fois&nbsp;», il existe différents types pouvant se
-        superposer :
-      </p>
-
-
-          <h3>Les bouquets d'API</h3> 
-          <p>Ces API regroupent, derrière
-          un seul point d'entrée et un seul point de contact, plusieurs API,
-          généralement organisées autour d'un secteur ou d'un usage commun.
-          Ces «&nbsp;bouquets d'API&nbsp;» permettent donc d'accéder à de
-          nombreuses données à partir d'une même API ayant plusieurs
-          «&nbsp;branches&nbsp;», appelées «&nbsp;endpoints&nbsp;». On
-          distingue deux types de bouquets d'API, ceux :</p>
-          <ul>
-            <li>
-              <strong>regroupant les API d'un même fournisseur</strong> : Il
-              s'agit d'un regroupement des API d'une même administration,
-              comme par exemple le bouquet des API de FranceTravail.
-            </li>
-            <li>
-              <strong>regroupant différents fournisseurs d'API</strong> : Il
-              s'agit d'un regroupement d'API issues de différentes
-              administrations fournisseurs d'API. Cette mise en commun
-              permet d'accélérer l'intégration d'API grâce notamment à une
-              demande d'habilitation unique et une cohérence technique (même
-              authentification, mêmes conventions de nommage et de réponse).
-              <br/>
-              <br/>
-              <SimplifionsArticleTopicSpotlight
-                :slugs="['bouquet-api-entreprise', 'bouquet-api-particulier']"
-                page-key="solutions"
-                :show-operateur-tag="true"
-                :show-categorie-de-solution="true"
-                :show-target-users="true"
-                :show-arrow="true"
-              >
-                <p>
-            <strong>L'API Entreprise et l'API Particulier sont des bouquets d'API multi-fournisseurs</strong> conçus pour mettre en oeuvre le «&nbsp;Dites-le-nous une fois&nbsp;». L'API Entreprise donne accès aux données des entreprises <em> - Insee, Inpi, DGFIP, URSSAF, caisses de retraite...-</em> ; l'API Particulier, aux données des particuliers <em>- CAF/MSA, France Travail, ministères de l'éducation nationale et de l'enseignement supérieur...-</em>. Les intégrer permet aussi de bénéficier du travail métier effectué pour proposer une offre en cohérence avec les démarches à simplifier.
-                </p>
-              </SimplifionsArticleTopicSpotlight>
-            </li>
-          </ul>
-
-
-          <h3>Les API classiques, «&nbsp;à l'unité&nbsp;»</h3> 
-          <p> Ces
-          API sont propres à un seul fournisseur de données, comme l'API
-          Impôt Particulier de la DGFiP ou l'API Statut étudiant du
-          ministère de l'enseignement supérieur. Souvent très utiles et
-          complémentaires aux bouquets, elles ont chacune leur propre
-          formulaire d'habilitation, ainsi que leur propre gestion des accès
-          et du support.</p>
-
-          <SimplifionsArticleTopicSpotlight
-            :slugs="['api-impot-particulier']"
-            page-key="solutions"
-            :show-operateur-tag="true"
-            :show-categorie-de-solution="true"
-            :show-target-users="true"
-            :show-arrow="true"
-          >
-            <p>
-              <strong>L'API Impôt Particulier de la DGFiP</strong> est un exemple d'API «&nbsp;à l'unité&nbsp;» : elle est propre à un seul fournisseur et dispose de sa propre demande d'habilitation, distincte de celle des bouquets d'API.
-            </p>
-          </SimplifionsArticleTopicSpotlight>
-
-          <h3>Les API FranceConnectées</h3> 
-          <p>Il s'agit d'une
-          catégorie d'API qui ne concerne que les données des particuliers.
-          Elles sont dites «&nbsp;FranceConnectées&nbsp;», car elles peuvent
-          être appelées avec l'identité pivot FranceConnect plutôt qu'un
-          simple identifiant. Ce niveau d'intégration supplémentaire
-          simplifie le parcours de l'usager, sous conditions de quelques
-          prérequis techniques spécifiques.</p>
-  
-
-      <SimplifionsArticleReadMore
-        to="/apis-franceconnectees"
-        description="Consulter la liste de toutes les API FranceConnectées"
-      />
-    </ArticleSection>
-
-    <ArticleSection id="interlocuteurs" label="Les interlocuteurs">
-      <p class="fr-text--lg">
-        Voici les différents acteurs et leurs implications au cours de
-        l'intégration d'une API :
-      </p>
-
-      <div class="fr-table">
-        <table>
-          <thead>
-            <tr>
-              <th>Acteur</th>
-              <th>Rôle</th>
-              <th>Exemple</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Le fournisseur de la donnée</strong></td>
-              <td>
-                Détient et produit la donnée. C'est votre interlocuteur s'il
-                est également l'opérateur de l'API ou du bouquet, autrement ce n'est pas votre point de contact.
-              </td>
-              <td>
-                La DGFiP pour le revenu fiscal de référence ou une attestation
-                fiscale, la CAF ou la MSA pour le quotient familial, le
-                Cnous pour le statut boursier.
-              </td>
-            </tr>
-            <tr>
-              <td><strong>L'opérateur de l'API</strong></td>
-              <td>
-               Gère l'API et la met à disposition. C'est
-                votre interlocuteur, sauf si vous utilisez son API via un
-                bouquet. Dans ce dernier cas, c'est alors l'opérateur du
-                bouquet qui est votre interlocuteur.
-              </td>
-              <td>La CNAV pour le quotient familial.</td>
-            </tr>
-            <tr>
-              <td><strong>L'opérateur du bouquet</strong></td>
-              <td>
-              Gère le bouquet d'API et tous ses endpoints. Si vous utilisez un bouquet d'API regroupant des API de
-                plusieurs fournisseurs, il s'agit de votre interlocuteur
-                unique pour l'habilitation, l'intégration technique et le
-                support, pour toutes les API du bouquet.
-              </td>
-              <td>La DINUM pour l'API Particulier et l'API Entreprise.</td>
-            </tr>
-            <tr>
-              <td>
-                <strong>Votre éditeur de logiciel métier</strong>, le cas
-                échéant
-              </td>
-              <td>
-                Gère votre ou vos logiciels métiers et intègre les API à
-                l'intérieur. C'est votre interlocuteur privilégié. En cas de
-                difficulté concernant une API, c'est lui que vous devez
-                contacter en premier, notamment parce que le problème
-                rencontré peut provenir du logiciel et non de l'API. Si
-                l'éditeur constate que le problème provient bien de l'API,
-                c'est à lui de contacter l'opérateur de l'API ou du bouquet
-                d'API.
-              </td>
-              <td>—</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <p class="fr-text--sm">
-        <i
-          >Par exemple, pour l'API Quotient familial CAF/MSA, les
-          fournisseurs de la donnée sont la CAF et la MSA. L'opérateur de
-          l'API est la caisse nationale d'assurance vieillesse pour des
-          raisons internes aux systèmes d'informations de l'État. L'API est
-          distribuée dans le bouquet API Particulier, l'opérateur du bouquet
-          est donc la DINUM.</i
-        >
-      </p>
-    </ArticleSection>
+    <SimplifionsArticleReadMore
+      to="/vos-interlocuteurs-selon-le-type-d-api"
+      description="Découvrir les différents types d'API et identifier vos points de contact."
+    />
 
     <ArticleSection id="prerequis" label="Les prérequis avant de démarrer">
       <p class="fr-text--lg">
@@ -1114,18 +953,6 @@
     <ArticleSection id="recapitulatif" label="Pour résumer">
       <SimplifionsArticleChecklist>
         <li>
-          <strong>Trois familles d'API, à combiner selon vos besoins.</strong>
-          Bouquets (un point d'entrée pour plusieurs API, mono ou
-          multi-fournisseurs), API à l'unité, ou API FranceConnectées : ces
-          catégories se complètent et répondent à des besoins différents.
-        </li>
-        <li>
-          <strong>Identifiez vos interlocuteurs.</strong> Fournisseur de la
-          donnée, opérateur de l'API, opérateur du bouquet, éditeur métier :
-          selon votre situation, un seul de ces acteurs est votre point de
-          contact réel.
-        </li>
-        <li>
           <strong
             >Quatre prérequis avant de lancer un chantier d'intégration
             d'API.</strong
@@ -1166,7 +993,6 @@
 import SimplifionsArticleLayout from '../../../components/article/SimplifionsArticleLayout.vue'
 import ArticleSection from '../../../components/article/SimplifionsArticleSection.vue'
 import SimplifionsArticleChecklist from '../../../components/article/SimplifionsArticleChecklist.vue'
-import SimplifionsArticleTopicSpotlight from '../../../components/article/SimplifionsArticleTopicSpotlight.vue'
 import SimplifionsArticleReadMore from '../../../components/article/SimplifionsArticleReadMore.vue'
 import SimplifionsArticleFigure from '../../../components/article/SimplifionsArticleFigure.vue'
 

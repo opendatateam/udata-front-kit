@@ -59,6 +59,17 @@ export const routes: RouteRecordRaw[] = [
         './views/articles/guides-bases/ArticlePrerequisEtapesIntegrationAPI.vue'
       )
   },
+  {
+    path: '/vos-interlocuteurs-selon-le-type-d-api',
+    name: 'vos-interlocuteurs-selon-le-type-d-api',
+    meta: {
+      title: "Vos interlocuteurs selon le type d'API"
+    },
+    component: async () =>
+      await import(
+        './views/articles/guides-bases/ArticleVosInterlocuteursSelonTypeAPI.vue'
+      )
+  },
   useGlobalSearchPageRoutes({
     pageKey: 'cas-d-usages',
     topicConf,
