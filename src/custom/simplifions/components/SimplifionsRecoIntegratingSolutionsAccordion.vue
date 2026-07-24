@@ -1,5 +1,5 @@
 <template>
-  <section v-if="!solutions.length" class="fr-accordion accordion-empty">
+  <section v-if="!solutions.length" class="fr-accordion">
     <h6 class="fr-accordion__title">
       <span class="fr-accordion__btn fr-accordion__btn--empty">
         {{ title }}
