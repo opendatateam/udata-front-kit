@@ -18,7 +18,7 @@
           <button type="button" class="fr-btn">Filtrer</button>
         </div>
       </div>
-      <div ref="tableWrapperRef" class="fr-table__wrapper">
+      <div class="fr-table__wrapper">
         <div class="fr-table__container">
           <div class="fr-table__content">
             <table>
@@ -28,13 +28,13 @@
                   <th class="fr-col--lg fr-py-2w" scope="col">Description de l'utilité pour le cas d'usage «&nbsp;{{ caseUsageName }}&nbsp;»</th>
                 </tr>
               </thead>
-              <tbody ref="tableBodyRef">
+              <tbody>
                 <tr v-if="!filteredEndpoints.length">
                   <td colspan="2"><i>Aucun endpoint ne correspond à votre recherche.</i></td>
                 </tr>
                 <template v-else>
                   <tr
-                    v-for="record in displayedEndpoints"
+                    v-for="record in paginatedEndpoints"
                     :key="record.fields.UID_datagouv"
                     class="test__api-or-dataset-utile"
                   >
@@ -87,19 +87,13 @@ const props = defineProps<{
   endpoints: ApiOrDatasetRecord[] | undefined
   customDescriptions: Record<number, ApiOrDatasetUtiles>
   caseUsageName: string
-  active: boolean
 }>()
+
+const ENDPOINTS_PER_PAGE = 4
 
 const searchId = useId()
 const searchQuery = ref('')
 const currentPage = ref(0)
-const tableWrapperRef = ref<HTMLElement | null>(null)
-const tableBodyRef = ref<HTMLElement | null>(null)
-const pageBreaks = ref<number[]>([0])
-const isMeasuring = ref(false)
-const usableHeight = ref(0)
-
-const ACCORDION_TRANSITION_MS = 350 // DsfrAccordion animation duration
 
 const datagouvUrlType = (apiOrDataset: ApiOrDataset) => {
   switch (apiOrDataset.Type) {
@@ -147,119 +141,31 @@ const filteredEndpoints = computed(() => {
 })
 
 const paginatedEndpoints = computed(() => {
-  const start = pageBreaks.value[currentPage.value] ?? 0
-  const end = pageBreaks.value[currentPage.value + 1] ?? filteredEndpoints.value.length
-  return filteredEndpoints.value.slice(start, end)
+  const start = currentPage.value * ENDPOINTS_PER_PAGE
+  return filteredEndpoints.value.slice(start, start + ENDPOINTS_PER_PAGE)
 })
 
-const paginationPages = computed(() =>
-  pageBreaks.value.map((_, i) => ({
+const paginationPages = computed(() => {
+  const pageCount = Math.ceil(filteredEndpoints.value.length / ENDPOINTS_PER_PAGE)
+  return Array.from({ length: pageCount }, (_, i) => ({
     label: String(i + 1),
     title: `Page ${i + 1}`,
     href: '#'
   }))
-)
-
-const displayedEndpoints = computed(() =>
-  isMeasuring.value ? filteredEndpoints.value : paginatedEndpoints.value
-)
-
-const updateRowHeight = () => {
-  if (!tableWrapperRef.value || !usableHeight.value) return
-  const rowsOnPage = paginatedEndpoints.value.length
-  if (!rowsOnPage) {
-    tableWrapperRef.value.style.removeProperty('--row-height')
-    return
-  }
-  const rowH = usableHeight.value / rowsOnPage
-  tableWrapperRef.value.style.setProperty('--row-height', `${rowH}px`)
-}
-
-const handlePageChange = async (page: number) => {
-  currentPage.value = page
-  await nextTick()
-  updateRowHeight()
-}
-
-const recomputePageBreaks = async () => {
-  const wrapper = tableWrapperRef.value
-  if (!wrapper || !filteredEndpoints.value.length) return
-
-  isMeasuring.value = true
-  await nextTick()
-
-  // Remove height constraint to measure natural row heights
-  wrapper.style.removeProperty('--row-height')
-
-  const theadHeight = tableBodyRef.value?.closest('table')?.querySelector('thead')?.offsetHeight ?? 0
-  // clientHeight excludes wrapper borders (1px × 2 = 2px)
-  usableHeight.value = wrapper.clientHeight - theadHeight
-
-  const rows = [...(tableBodyRef.value?.querySelectorAll('tr') ?? [])]
-  const breaks = [0]
-  let pageStart = 0
-  let maxH = 0
-
-  for (let i = 0; i < rows.length; i++) {
-    const h = (rows[i] as HTMLElement).offsetHeight
-    const rowsAfterAdd = i - pageStart + 1
-    const newMax = Math.max(maxH, h)
-
-    // Invariant: rowsAfterAdd × max(heights) ≤ usableHeight
-    // Ensures no row overflows after uniform stretching to usableHeight/n
-    if (rowsAfterAdd > 1 && rowsAfterAdd * newMax > usableHeight.value) {
-      breaks.push(i)
-      pageStart = i
-      maxH = h
-    } else {
-      maxH = newMax
-    }
-  }
-
-  pageBreaks.value = breaks
-  isMeasuring.value = false
-  await nextTick()
-  updateRowHeight()
-}
-
-let resizeTimer: ReturnType<typeof setTimeout> | undefined
-const debouncedRecomputePageBreaks = () => {
-  clearTimeout(resizeTimer)
-  resizeTimer = setTimeout(recomputePageBreaks, 150)
-}
-
-onMounted(() => window.addEventListener('resize', debouncedRecomputePageBreaks))
-onUnmounted(() => {
-  window.removeEventListener('resize', debouncedRecomputePageBreaks)
-  clearTimeout(resizeTimer)
 })
 
-watch(
-  filteredEndpoints,
-  () => {
-    currentPage.value = 0
-    if (props.active) recomputePageBreaks()
-  },
-  { flush: 'post' }
-)
+const handlePageChange = (page: number) => {
+  currentPage.value = page
+}
 
-watch(
-  () => props.active,
-  (active) => {
-    if (active) setTimeout(recomputePageBreaks, ACCORDION_TRANSITION_MS)
-  }
-)
+watch(filteredEndpoints, () => {
+  currentPage.value = 0
+})
 </script>
 
 <style scoped>
 .fr-table .fr-table__wrapper {
   border: 1px solid var(--border-default-grey);
-  height: calc(100vh - 13rem);
-  overflow: hidden;
-}
-
-.fr-table .fr-table__wrapper tbody tr {
-  height: var(--row-height, auto);
 }
 
 @media (min-width: 48em) {

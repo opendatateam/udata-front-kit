@@ -427,13 +427,13 @@ describe("Simplifions Cas d'usages Show page - useful endpoints table filtering 
         apiOrDatasetFactory.one({
           overrides: { fields: { Nom: 'Guichet unique des entreprises' } }
         }),
-        ...apiOrDatasetFactory.many(4)
+        ...apiOrDatasetFactory.many(3)
       ]
       setupWithEndpoints(gristApis)
     })
 
     it('should filter endpoints matching the search query', () => {
-      cy.get('.test__api-or-dataset-utile').should('have.length', 5)
+      cy.get('.test__api-or-dataset-utile').should('have.length', 4)
 
       cy.get('input[type="search"]').type('Guichet unique')
 
@@ -458,22 +458,19 @@ describe("Simplifions Cas d'usages Show page - useful endpoints table filtering 
       cy.get('.test__api-or-dataset-utile').should('have.length', 1)
 
       cy.get('input[type="search"]').clear()
-      cy.get('.test__api-or-dataset-utile').should('have.length', 5)
+      cy.get('.test__api-or-dataset-utile').should('have.length', 4)
     })
   })
 
   describe('pagination', () => {
     beforeEach(() => {
-      setupWithEndpoints(apiOrDatasetFactory.many(40))
+      setupWithEndpoints(apiOrDatasetFactory.many(6))
     })
 
     it('should split endpoints across several pages', () => {
       cy.get('.fr-table__footer').should('be.visible')
-      cy.get('a.fr-pagination__link.fr-unhidden-lg').should(
-        'have.length.gt',
-        1
-      )
-      cy.get('.test__api-or-dataset-utile').should('have.length.lt', 40)
+      cy.get('a.fr-pagination__link.fr-unhidden-lg').should('have.length', 2)
+      cy.get('.test__api-or-dataset-utile').should('have.length', 4)
     })
 
     it('should display different endpoints on the next page', () => {

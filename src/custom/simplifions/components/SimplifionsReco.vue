@@ -80,7 +80,6 @@
             :endpoints="usefulDataApiFourniesParLaSolution"
             :custom-descriptions="customDescriptions"
             :case-usage-name="recommandation.Nom_complet_du_cas_d_usage"
-            :active="activeAccordion === API_ACCORDION_INDEX"
           />
         </template>
 
@@ -352,8 +351,6 @@ const integrationScorePerSolution = computed(() => {
   }
 })
 
-// Index of the "Par l'API directement" accordion within the shared group (registered first)
-const API_ACCORDION_INDEX = 0
 const activeAccordion = ref(-1)
 </script>
 
