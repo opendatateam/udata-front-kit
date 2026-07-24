@@ -234,10 +234,14 @@ onUnmounted(() => {
   clearTimeout(resizeTimer)
 })
 
-watch(filteredEndpoints, () => {
-  currentPage.value = 0
-  if (props.active) recomputePageBreaks()
-})
+watch(
+  filteredEndpoints,
+  () => {
+    currentPage.value = 0
+    if (props.active) recomputePageBreaks()
+  },
+  { flush: 'post' }
+)
 
 watch(
   () => props.active,

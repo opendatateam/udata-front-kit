@@ -469,7 +469,10 @@ describe("Simplifions Cas d'usages Show page - useful endpoints table filtering 
 
     it('should split endpoints across several pages', () => {
       cy.get('.fr-table__footer').should('be.visible')
-      cy.get('.fr-pagination__link[title]').should('have.length.gt', 1)
+      cy.get('a.fr-pagination__link.fr-unhidden-lg').should(
+        'have.length.gt',
+        1
+      )
       cy.get('.test__api-or-dataset-utile').should('have.length.lt', 40)
     })
 
@@ -582,11 +585,8 @@ describe("Simplifions Cas d'usages Show page - accordions behaviour", () => {
     cy.visit(`/cas-d-usages/${topicCasUsage.slug}`)
 
     // The 3 "solutions intégratrices" categories have no solution by default
-    cy.get('.accordion-empty .fr-accordion__btn--empty').should(
-      'have.length',
-      3
-    )
-    cy.get('.accordion-empty .fr-accordion__btn--empty').each(($el) => {
+    cy.get('.fr-accordion__btn--empty').should('have.length', 3)
+    cy.get('.fr-accordion__btn--empty').each(($el) => {
       expect($el.prop('tagName')).to.eq('SPAN')
       expect($el.attr('aria-expanded')).to.eq(undefined)
     })
