@@ -51,12 +51,15 @@ import { DatasetCard } from '@datagouv/components-next'
 import * as Sentry from '@sentry/vue'
 import type { ApiOrDataset } from '../model/grist'
 
-const props = withDefaults(defineProps<{
-  apiOrDataset: ApiOrDataset
-  titleTag?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
-}>(), {
-  titleTag: 'h3'
-})
+const props = withDefaults(
+  defineProps<{
+    apiOrDataset: ApiOrDataset
+    titleTag?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
+  }>(),
+  {
+    titleTag: 'h3'
+  }
+)
 
 const emit = defineEmits<{
   resourceFetched: [resource: DatasetV2 | Dataservice]

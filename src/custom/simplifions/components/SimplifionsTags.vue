@@ -1,7 +1,10 @@
 <template>
   <div>
     <!--Texte pour préciser les usagers et les fournisseurs de service-->
-    <div v-if="groupedTags['target-users']" class="fr-card__detail">
+    <div
+      v-if="showTargetUsers && groupedTags['target-users']"
+      class="fr-card__detail"
+    >
       <p class="fr-mb-1w white-space-normal">
         Pour simplifier les démarches des
         <HumanReadableList
@@ -10,7 +13,7 @@
       </p>
     </div>
     <div
-      v-if="orderedFournisseursDeService.length > 0"
+      v-if="showFournisseurs && orderedFournisseursDeService.length > 0"
       class="fr-card__detail fr-text--right"
     >
       <p class="fr-mb-1w white-space-normal">
@@ -21,7 +24,7 @@
     </div>
     <!-- Tags indiquant le type de simplification et de budget -->
     <div
-      v-if="!hideSimplification && groupedTags['types-de-simplification']"
+      v-if="!props.hideSimplification && groupedTags['types-de-simplification']"
       class="simplification-group fr-mt-2w"
     >
       <ul class="fr-badges-group">
@@ -55,9 +58,13 @@ const props = withDefaults(
     pageKey: string
     showCategorieDeSolution?: boolean
     hideSimplification?: boolean
+    showTargetUsers?: boolean
+    showFournisseurs?: boolean
   }>(),
   {
-    showCategorieDeSolution: true
+    showCategorieDeSolution: true,
+    showTargetUsers: true,
+    showFournisseurs: true
   }
 )
 
@@ -74,8 +81,6 @@ const groupedTags = computed(() => {
   }
   return groups
 })
-
-const hideSimplification = computed(() => props.hideSimplification)
 
 const orderedFournisseursDeService = computed(() => {
   const extras = props.topic.extras

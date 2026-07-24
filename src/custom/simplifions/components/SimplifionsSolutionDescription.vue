@@ -19,7 +19,7 @@
         <SimplifionsTags
           :topic="topic"
           :page-key="pageKey"
-          :show-simplification="false"
+          :hide-simplification="true"
         />
 
         <ul class="fr-mt-4w">
