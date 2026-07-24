@@ -258,14 +258,14 @@ pages:
         display: false
     editable: false
     filters: # ATTENTION : Ces filtres ont des ids qui correspondent à des valeurs dans Grist
-      - name: 'À destination de :'
+      - name: 'Démarches gérées par :'
         id: fournisseurs-de-service
         type: select
         default_option: Tous les types d'acteurs
         use_filter_prefix: true
         applies_to_pages: [cas-d-usages, solutions]
         values: *fournisseurs_de_service_values
-      - name: 'Pour simplifier les démarches de :'
+      - name: 'Démarches à destination des :'
         id: target-users
         type: select
         default_option: Tous les usagers
@@ -314,14 +314,14 @@ pages:
         display: false
     editable: false
     filters: # ATTENTION : Ces filtres ont des ids qui correspondent à des valeurs dans Grist
-      - name: 'À destination de :'
+      - name: 'Démarches gérées par :'
         id: fournisseurs-de-service
         type: select
         default_option: Tous les types d'acteurs
         use_filter_prefix: true
         applies_to_pages: [cas-d-usages, solutions]
         values: *fournisseurs_de_service_values
-      - name: 'Pour simplifier les démarches de :'
+      - name: 'Démarches à destination des :'
         id: target-users
         type: select
         default_option: Tous les usagers

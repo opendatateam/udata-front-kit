@@ -469,6 +469,7 @@ Related: https://github.com/opendatateam/udata-front-kit/pull/621#issuecomment-2
 
 :root {
   --simplifions-h2-highlight: rgb(167, 212, 205);
+  --simplifions-homebanner-gradient: linear-gradient(0.25turn, #f6f6f6, #e3e3fd, #bfdcb7);
 }
 
 /* ===== Accessibilite custom styles ===== */
