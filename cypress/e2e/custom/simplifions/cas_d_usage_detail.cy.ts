@@ -1,4 +1,5 @@
 import { apiOrDatasetFactory } from '../../../support/factories/custom/simplifions/grist_factory'
+import type { ApiOrDatasetRecord } from '@/custom/simplifions/model/grist'
 import {
   mockApidatasetRecommandations,
   mockApiOrDatasetUtiles,
@@ -404,9 +405,7 @@ describe("Simplifions Cas d'usages Show page - integration score on solution car
 describe("Simplifions Cas d'usages Show page - useful endpoints table filtering and pagination", () => {
   // Creates the recommandation's useful endpoints table and opens the
   // direct-access accordion where it lives.
-  const setupWithEndpoints = (
-    gristApis: ReturnType<typeof apiOrDatasetFactory.many>
-  ) => {
+  const setupWithEndpoints = (gristApis: ApiOrDatasetRecord[]) => {
     cy.baseMocksForSimplifions()
     cy.mockGristRecords('APIs_et_datasets', gristApis)
     gristApis.forEach((api) => cy.mockGristRecord('APIs_et_datasets', api))
