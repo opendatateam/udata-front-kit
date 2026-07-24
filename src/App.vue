@@ -141,7 +141,7 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
   </main>
 
   <DsfrFooter
-    class="fr-mt-16w"
+    :class="[siteID, 'fr-mt-16w']"
     :logo-text="rf_title"
     :operator-img-src="logo?.src"
     :operator-img-style="{
@@ -169,5 +169,8 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
 }
 .fr-footer__logo {
   max-width: 100%;
+}
+.simplifions.fr-mt-16w {
+  margin-top: 0 !important;
 }
 </style>
