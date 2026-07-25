@@ -51,8 +51,8 @@ importers:
         specifier: ^4.5.1
         version: 4.5.1
       dompurify:
-        specifier: ^3.4.9
-        version: 3.4.11
+        specifier: ^3.4.12
+        version: 3.4.12
       maplibre-gl:
         specifier: ^5.13.0
         version: 5.13.0
@@ -2135,8 +2135,8 @@ packages:
     resolution: {integrity: sha512-GrwoxYN+uWlzO8uhUXRl0P+kHE4GtVPfYzVLcUxPL7KNdHKj66vvlhiweIHqYYXWlw+T8iLMp42Lm67ghw4WMQ==}
     engines: {node: '>= 4'}
 
-  dompurify@3.4.11:
-    resolution: {integrity: sha512-zhlUV12GsaRzMsf9q5M254YhA4+VuF0fG+QFqu6aYpoGlKtz+w8//jBcGVYBgQkR5GHjUomejY84AV+/uPbWdw==}
+  dompurify@3.4.12:
+    resolution: {integrity: sha512-zQvGet8Z2sWbQhCmfFz/T5QWH2oBmjnqK3qvOjaqaNLrLEF912WamU+ohnTp0TCep/MFVHpdJuCZEdFOdTnEFg==}
 
   domutils@2.8.0:
     resolution: {integrity: sha512-w96Cjofp72M5IIhpjgobBimYEfoPjx1Vx0BSX9P30WBdZW2WIKU0T1Bd0kz2eNZ9ikjKgHbEyKx8BB6H1L3h3A==}
@@ -5193,7 +5193,7 @@ snapshots:
       '@vueuse/core': 14.3.0(vue@3.5.30(typescript@5.7.3))
       '@vueuse/router': 14.3.0(vue-router@4.6.4(vue@3.5.30(typescript@5.7.3)))(vue@3.5.30(typescript@5.7.3))
       chart.js: 4.5.1
-      dompurify: 3.4.11
+      dompurify: 3.4.12
       echarts: 6.1.0
       geopf-extensions-openlayers: 1.0.0-beta.11(supports-color@8.1.1)
       leaflet: 1.9.4
@@ -6943,7 +6943,7 @@ snapshots:
     dependencies:
       domelementtype: 2.3.0
 
-  dompurify@3.4.11:
+  dompurify@3.4.12:
     optionalDependencies:
       '@types/trusted-types': 2.0.7
 
@@ -7447,7 +7447,7 @@ snapshots:
       ajv-formats: 3.0.1(ajv@8.18.0)
       clusterize.js: 1.0.0
       doctoc: 2.4.1(supports-color@8.1.1)
-      dompurify: 3.4.11
+      dompurify: 3.4.12
       eventbusjs: 0.2.0
       geoportal-access-lib: 3.4.6
       loglevel: 1.9.2
