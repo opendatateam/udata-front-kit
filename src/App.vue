@@ -25,8 +25,16 @@ const skipLinks: SkipLinksProps['links'] = [
     text: 'Aller au contenu'
   },
   {
-    id: 'main-nav',
+    id: 'header-navigation',
     text: 'Aller au menu principal'
+  },
+  {
+    id: 'header-select-search',
+    text: 'Aller à la recherche'
+  },
+  {
+    id: 'main-footer',
+    text: 'Aller au pied de page'
   }
 ]
 const liveInfos: Ref<InfoToAnnounce[] | undefined> = ref()
@@ -93,24 +101,16 @@ onMounted(() => {
 const { footer, rf_title, title } = useWebsiteConfig()
 const { logo, phrase, external_links, mandatory_links } = footer
 
-const skipLinksComp =
-  useTemplateRef<InstanceType<typeof SkipLinks>>('skipLinksComp')
-
 const setAccessibilityProperties: AccessibilityPropertiesType = (
   title,
   focus = true,
   messages = []
 ): void => {
-  // announce page title to screen reader
   if (title) {
     liveInfos.value = [
       { text: `Page ${title} | ${config.website.title}` },
       ...messages
     ]
-  }
-  // focus skip link container
-  if (focus && skipLinksComp.value?.skipLinkList) {
-    skipLinksComp.value.skipLinkList.focus()
   }
 }
 
@@ -120,7 +120,9 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
 <template>
   <Toaster rich-colors />
   <div id="tooltips" />
-  <SkipLinks ref="skipLinksComp" :links="skipLinks" />
+
+  <SkipLinks :links="skipLinks" />
+
   <LiveRegion v-if="liveInfos" :infos="liveInfos" aria-live-mode="assertive" />
   <DsfrNotice
     v-if="!isNoticeClosed && noticeContent"
@@ -130,6 +132,7 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
     <!-- eslint-disable-next-line vue/no-v-html -->
     <span v-html="noticeContent"></span>
   </DsfrNotice>
+
   <HeaderComponent
     :user-name="userName"
     :quick-links="quickLinks"
@@ -141,6 +144,7 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
   </main>
 
   <DsfrFooter
+    id="main-footer"
     :class="[siteID, 'fr-mt-16w']"
     :logo-text="rf_title"
     :operator-img-src="logo?.src"
@@ -155,7 +159,6 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
   />
 </template>
 
-<!-- global styles -->
 <style>
 .es__tiles__list {
   list-style-type: none;
