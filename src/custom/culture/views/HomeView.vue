@@ -188,6 +188,7 @@ onMounted(() => {
           </div>
         </div>
       </section>
+
       <template v-for="section in sections" :key="section.id">
         <section
           v-if="section.fields.type === 'cards'"
@@ -273,7 +274,6 @@ onMounted(() => {
                 </h3>
                 <h4 class="fr-h6 fr-mb-2w">{{ item.fields.title }}</h4>
                 <div class="fr-text--sm fr-mb-3w">
-                  <!-- eslint-disable-next-line vue/no-v-html -->
                   <div v-html="fromMarkdown(item.fields.content).html"></div>
                 </div>
                 <a
@@ -281,7 +281,7 @@ onMounted(() => {
                   :href="item.fields.ctaLink"
                   class="fr-btn"
                   target="_blank"
-                  rel="noopener"
+                  rel="noopener noreferrer"
                 >
                   {{ item.fields.ctaLabel }}
                 </a>
@@ -301,7 +301,6 @@ onMounted(() => {
             v-for="item in getContentForSection(section.fields.section)"
             :key="item.id"
           >
-            <!-- eslint-disable-next-line vue/no-v-html -->
             <div v-html="fromMarkdown(item.fields.content).html"></div>
           </div>
         </section>
@@ -319,132 +318,132 @@ onMounted(() => {
                   v-for="item in getContentForSection(section.fields.section)"
                   :key="item.id"
                 >
-                  <!-- eslint-disable-next-line vue/no-v-html -->
                   <div v-html="fromMarkdown(item.fields.content).html"></div>
                 </div>
-                <br />
                 <a
                   v-if="
                     getContentForSection(section.fields.section)[0]?.fields
-                      .ctaLink &&
-                    getContentForSection(section.fields.section)[0]?.fields
-                      .ctaLabel
+                      .ctaLink
                   "
                   :href="
                     getContentForSection(section.fields.section)[0].fields
                       .ctaLink
                   "
-                  class="fr-btn fr-btn--primary"
+                  class="custom-newsletter-btn"
                   target="_blank"
-                  rel="noopener"
+                  rel="noopener noreferrer"
+                  title="S'abonner à l'infolettre - nouvelle fenêtre"
                 >
-                  {{
-                    getContentForSection(section.fields.section)[0].fields
-                      .ctaLabel
-                  }}
+                  S'abonner à l'infolettre
                 </a>
               </div>
               <div class="divider"></div>
+
               <div class="social-section">
-                <h3>Suivez-nous sur les réseaux sociaux</h3>
-                <ul class="flex justify-between list-none m-0 p-0 *:p-0 -ml-4">
+                <h3>
+                  Suivez-nous <br />
+                  sur les réseaux sociaux
+                </h3>
+                <ul class="social-icons-list">
                   <li>
                     <a
-                      class="link !inline-flex after:!content-none mx-2 !p-2 min-h-10 mh-10 mw-10 !no-underline hover:!bg-gray-some"
-                      title="Linkedin - nouvel onglet"
-                      href="https://www.linkedin.com/company/ministeredelaculture"
-                      target="_blank"
-                      ><svg
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24px"
-                        height="24px"
-                        fill="currentColor"
-                        class="remixicon"
-                      >
-                        <path
-                          d="M4.00098 3H20.001C20.5533 3 21.001 3.44772 21.001 4V20C21.001 20.5523 20.5533 21 20.001 21H4.00098C3.44869 21 3.00098 20.5523 3.00098 20V4C3.00098 3.44772 3.44869 3 4.00098 3ZM5.00098 5V19H19.001V5H5.00098ZM7.50098 9C6.67255 9 6.00098 8.32843 6.00098 7.5C6.00098 6.67157 6.67255 6 7.50098 6C8.3294 6 9.00098 6.67157 9.00098 7.5C9.00098 8.32843 8.3294 9 7.50098 9ZM6.50098 10H8.50098V17.5H6.50098V10ZM12.001 10.4295C12.5854 9.86534 13.2665 9.5 14.001 9.5C16.072 9.5 17.501 11.1789 17.501 13.25V17.5H15.501V13.25C15.501 12.2835 14.7175 11.5 13.751 11.5C12.7845 11.5 12.001 12.2835 12.001 13.25V17.5H10.001V10H12.001V10.4295Z"
-                        ></path></svg
-                    ></a>
-                  </li>
-                  <li>
-                    <a
-                      class="link !inline-flex after:!content-none mx-2 !p-2 min-h-10 mh-10 mw-10 !no-underline hover:!bg-gray-some"
-                      title="Instagram - nouvel onglet"
-                      href="https://www.instagram.com/culture_gouv/"
-                      target="_blank"
-                      ><svg
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24px"
-                        height="24px"
-                        fill="currentColor"
-                        class="remixicon"
-                      >
-                        <path
-                          d="M9.828 5L7.828 7H4V19H20V7H16.172L14.172 5H9.828ZM9 3H15L17 5H21C21.2652 5 21.5196 5.10536 21.7071 5.29289C21.8946 5.48043 22 5.73478 22 6V20C22 20.2652 21.8946 20.5196 21.7071 20.7071C21.5196 20.8946 21.2652 21 21 21H3C2.73478 21 2.48043 20.8946 2.29289 20.7071C2.10536 20.5196 2 20.2652 2 20V6C2 5.73478 2.10536 5.48043 2.29289 5.29289C2.48043 5.10536 2.73478 5 3 5H7L9 3ZM12 18C10.5413 18 9.14236 17.4205 8.11091 16.3891C7.07946 15.3576 6.5 13.9587 6.5 12.5C6.5 11.0413 7.07946 9.64236 8.11091 8.61091C9.14236 7.57946 10.5413 7 12 7C13.4587 7 14.8576 7.57946 15.8891 8.61091C16.9205 9.64236 17.5 11.0413 17.5 12.5C17.5 13.9587 16.9205 15.3576 15.8891 16.3891C14.8576 17.4205 13.4587 18 12 18ZM12 16C12.9283 16 13.8185 15.6313 14.4749 14.9749C15.1313 14.3185 15.5 13.4283 15.5 12.5C15.5 11.5717 15.1313 10.6815 14.4749 10.0251C13.8185 9.36875 12.9283 9 12 9C11.0717 9 10.1815 9.36875 9.52513 10.0251C8.86875 10.6815 8.5 11.5717 8.5 12.5C8.5 13.4283 8.86875 14.3185 9.52513 14.9749C10.1815 15.6313 11.0717 16 12 16V16Z"
-                          fill="#000091"
-                        /></svg
-                    ></a>
-                  </li>
-                  <li>
-                    <a
-                      class="link !inline-flex after:!content-none mx-2 !p-2 min-h-10 mh-10 mw-10 !no-underline hover:!bg-gray-some"
-                      title="Facebook - nouvel onglet"
                       href="https://www.facebook.com/Culture.Gouv/"
                       target="_blank"
-                      ><svg
+                      rel="noopener noreferrer"
+                      title="Facebook - nouvelle fenêtre"
+                      class="social-icon-link"
+                    >
+                      <svg
                         viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24px"
-                        height="24px"
+                        width="24"
+                        height="24"
                         fill="currentColor"
-                        class="remixicon"
                       >
                         <path
-                          d="M14 19H19V5H5V19H12V14H10V12H12V10.346C12 9.009 12.14 8.524 12.4 8.035C12.6561 7.55119 13.052 7.15569 13.536 6.9C13.918 6.695 14.393 6.572 15.223 6.519C15.552 6.498 15.978 6.524 16.501 6.599V8.499H16C15.083 8.499 14.704 8.542 14.478 8.663C14.3431 8.73236 14.2334 8.84215 14.164 8.977C14.044 9.203 14 9.427 14 10.345V12H16.5L16 14H14V19ZM4 3H20C20.2652 3 20.5196 3.10536 20.7071 3.29289C20.8946 3.48043 21 3.73478 21 4V20C21 20.2652 20.8946 20.5196 20.7071 20.7071C20.5196 20.8946 20.2652 21 20 21H4C3.73478 21 3.48043 20.8946 3.29289 20.7071C3.10536 20.5196 3 20.2652 3 20V4C3 3.73478 3.10536 3.48043 3.29289 3.29289C3.48043 3.10536 3.73478 3 4 3V3Z"
-                          fill="#000091"
-                        /></svg
-                    ></a>
+                          d="M12 2C6.477 2 2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.879V14.89h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.989C18.343 21.128 22 16.991 22 12c0-5.523-4.477-10-10-10z"
+                        />
+                      </svg>
+                    </a>
                   </li>
                   <li>
                     <a
-                      class="link !inline-flex after:!content-none mx-2 !p-2 min-h-10 mh-10 mw-10 !no-underline hover:!bg-gray-some"
-                      title="Github - nouvel onglet"
                       href="https://github.com/culturecommunication/interoperabilite-modeles-referentiels"
                       target="_blank"
-                      ><svg
+                      rel="noopener noreferrer"
+                      title="GitHub - nouvelle fenêtre"
+                      class="social-icon-link"
+                    >
+                      <svg
                         viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24px"
-                        height="24px"
+                        width="24"
+                        height="24"
                         fill="currentColor"
-                        class="remixicon"
                       >
                         <path
-                          d="M5.88401 18.6533C5.58404 18.4526 5.32587 18.1975 5.0239 17.8369C4.91473 17.7065 4.47283 17.1524 4.55811 17.2583C4.09533 16.6833 3.80296 16.417 3.50156 16.3089C2.9817 16.1225 2.7114 15.5499 2.89784 15.0301C3.08428 14.5102 3.65685 14.2399 4.17672 14.4263C4.92936 14.6963 5.43847 15.1611 6.12425 16.0143C6.03025 15.8974 6.46364 16.441 6.55731 16.5529C6.74784 16.7804 6.88732 16.9182 6.99629 16.9911C7.20118 17.1283 7.58451 17.1874 8.14709 17.1311C8.17065 16.7489 8.24136 16.3783 8.34919 16.0358C5.38097 15.3104 3.70116 13.3952 3.70116 9.63971C3.70116 8.40085 4.0704 7.28393 4.75917 6.3478C4.5415 5.45392 4.57433 4.37284 5.06092 3.15636C5.1725 2.87739 5.40361 2.66338 5.69031 2.57352C5.77242 2.54973 5.81791 2.53915 5.89878 2.52673C6.70167 2.40343 7.83573 2.69705 9.31449 3.62336C10.181 3.41879 11.0885 3.315 12.0012 3.315C12.9129 3.315 13.8196 3.4186 14.6854 3.62277C16.1619 2.69 17.2986 2.39649 18.1072 2.52651C18.1919 2.54013 18.2645 2.55783 18.3249 2.57766C18.6059 2.66991 18.8316 2.88179 18.9414 3.15636C19.4279 4.37256 19.4608 5.45344 19.2433 6.3472C19.9342 7.28337 20.3012 8.39208 20.3012 9.63971C20.3012 13.3968 18.627 15.3048 15.6588 16.032C15.7837 16.447 15.8496 16.9105 15.8496 17.4121C15.8496 18.0765 15.8471 18.711 15.8424 19.4225C15.8412 19.6127 15.8397 19.8159 15.8375 20.1281C16.2129 20.2109 16.5229 20.5077 16.6031 20.9089C16.7114 21.4504 16.3602 21.9773 15.8186 22.0856C14.6794 22.3134 13.8353 21.5538 13.8353 20.5611C13.8353 20.4708 13.836 20.3417 13.8375 20.1145C13.8398 19.8015 13.8412 19.599 13.8425 19.4094C13.8471 18.7019 13.8496 18.0716 13.8496 17.4121C13.8496 16.7148 13.6664 16.2602 13.4237 16.051C12.7627 15.4812 13.0977 14.3973 13.965 14.2999C16.9314 13.9666 18.3012 12.8177 18.3012 9.63971C18.3012 8.68508 17.9893 7.89571 17.3881 7.23559C17.1301 6.95233 17.0567 6.54659 17.199 6.19087C17.3647 5.77663 17.4354 5.23384 17.2941 4.57702L17.2847 4.57968C16.7928 4.71886 16.1744 5.0198 15.4261 5.5285C15.182 5.69438 14.8772 5.74401 14.5932 5.66413C13.7729 5.43343 12.8913 5.315 12.0012 5.315C11.111 5.315 10.2294 5.43343 9.40916 5.66413C9.12662 5.74359 8.82344 5.69492 8.57997 5.53101C7.8274 5.02439 7.2056 4.72379 6.71079 4.58376C6.56735 5.23696 6.63814 5.77782 6.80336 6.19087C6.94565 6.54659 6.87219 6.95233 6.61423 7.23559C6.01715 7.8912 5.70116 8.69376 5.70116 9.63971C5.70116 12.8116 7.07225 13.9683 10.023 14.2999C10.8883 14.3971 11.2246 15.4769 10.5675 16.0482C10.3751 16.2156 10.1384 16.7802 10.1384 17.4121V20.5611C10.1384 21.5474 9.30356 22.2869 8.17878 22.09C7.63476 21.9948 7.27093 21.4766 7.36613 20.9326C7.43827 20.5204 7.75331 20.2116 8.13841 20.1276V19.1381C7.22829 19.1994 6.47656 19.0498 5.88401 18.6533Z"
-                        ></path></svg
-                    ></a>
+                          d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                        />
+                      </svg>
+                    </a>
                   </li>
                   <li>
                     <a
-                      class="link !inline-flex after:!content-none mx-2 !p-2 min-h-10 mh-10 mw-10 !no-underline hover:!bg-gray-some"
-                      title="Youtube - nouvel onglet"
-                      href="https://www.youtube.com/channel/UCiAzGffvKfhuGsPsCmVe8sQ"
+                      href="https://www.linkedin.com/company/ministeredelaculture"
                       target="_blank"
-                      ><svg
+                      rel="noopener noreferrer"
+                      title="LinkedIn - nouvelle fenêtre"
+                      class="social-icon-link"
+                    >
+                      <svg
                         viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24px"
-                        height="24px"
+                        width="24"
+                        height="24"
                         fill="currentColor"
-                        class="remixicon"
                       >
                         <path
-                          d="M19.606 6.995C19.53 6.697 19.314 6.472 19.067 6.403C18.63 6.28 16.5 6 12 6C7.5 6 5.372 6.28 4.931 6.403C4.687 6.471 4.471 6.696 4.394 6.995C4.285 7.419 4 9.196 4 12C4 14.804 4.285 16.58 4.394 17.006C4.47 17.303 4.686 17.528 4.932 17.596C5.372 17.72 7.5 18 12 18C16.5 18 18.629 17.72 19.069 17.597C19.313 17.529 19.529 17.304 19.606 17.005C19.715 16.581 20 14.8 20 12C20 9.2 19.715 7.42 19.606 6.995ZM21.543 6.498C22 8.28 22 12 22 12C22 12 22 15.72 21.543 17.502C21.289 18.487 20.546 19.262 19.605 19.524C17.896 20 12 20 12 20C12 20 6.107 20 4.395 19.524C3.45 19.258 2.708 18.484 2.457 17.502C2 15.72 2 12 2 12C2 12 2 8.28 2.457 6.498C2.711 5.513 3.454 4.738 4.395 4.476C6.107 4 12 4 12 4C12 4 17.896 4 19.605 4.476C20.55 4.742 21.292 5.516 21.543 6.498ZM10 15.5V8.5L16 12L10 15.5Z"
-                          fill="#000091"
-                        /></svg
-                    ></a>
+                          d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"
+                        />
+                      </svg>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="https://www.instagram.com/culture_gouv/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="Instagram - nouvelle fenêtre"
+                      class="social-icon-link"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        width="24"
+                        height="24"
+                        fill="currentColor"
+                      >
+                        <path
+                          d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
+                        />
+                      </svg>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="https://www.youtube.com/channel/UCiAzGffvKfhuGsPsCmVe8sQ"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="YouTube - nouvelle fenêtre"
+                      class="social-icon-link"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        width="24"
+                        height="24"
+                        fill="currentColor"
+                      >
+                        <path
+                          d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"
+                        />
+                      </svg>
+                    </a>
                   </li>
                 </ul>
               </div>
@@ -571,77 +570,116 @@ section h2 {
   }
 }
 
+/* Section Newsletter / Réseaux sociaux conforme Figma */
 .newsletter-social-section {
-  background-color: var(--background-alt-blue-france);
-  padding: 3rem 0;
-  margin-top: 0;
-  margin-bottom: 0;
+  background-color: #f3f6fe;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  position: relative;
 }
 
 .newsletter-social-content {
   display: flex;
-  align-items: stretch;
-  gap: 2rem;
+  align-items: center;
+  gap: 3rem;
 }
 
 .newsletter-section {
-  flex: 2;
-  padding: 2rem;
+  flex: 1.2;
 }
 
-.newsletter-section h3 {
+.newsletter-section h3,
+.social-section h3 {
   font-size: 1.25rem;
   font-weight: 700;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   color: var(--text-title-grey);
 }
 
 .newsletter-section p {
+  font-size: 0.875rem;
   color: var(--text-default-grey);
   margin-bottom: 1.5rem;
-  line-height: 1.5;
+  line-height: 1.4;
 }
 
+/* Bouton bleu de la newsletter sans soulignement DSFR */
+.custom-newsletter-btn {
+  display: inline-block;
+  background-color: #000091;
+  color: #ffffff !important;
+  font-weight: 500;
+  font-size: 0.9rem;
+  padding: 0.625rem 1.25rem;
+  text-decoration: none !important;
+  border-radius: 0;
+  transition: background-color 0.2s ease;
+  --underline-img: none !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+.custom-newsletter-btn:hover {
+  background-color: #1212ff;
+}
+
+/* Séparateur vertical fin */
 .divider {
   width: 1px;
-  background-color: var(--border-default-grey);
-  margin: 0 1rem;
+  height: 100px;
+  background-color: #c0c7d8;
 }
 
 .social-section {
   flex: 1;
-  padding: 2rem;
+}
+
+/* Alignement des icônes rondes */
+.social-icons-list {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 0;
+  margin: 1rem 0 0 0;
+  list-style: none;
+}
+
+/* Annulation stricte du soulignement DSFR sous les icônes */
+.social-icon-link {
+  color: #000091 !important;
+  text-decoration: none !important;
+  display: flex;
+  align-items: center;
   justify-content: center;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+  --underline-img: none !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border-bottom: none !important;
 }
 
-.social-section h3 {
-  font-size: 1.25rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-  color: var(--text-title-grey);
+.social-icon-link::after,
+.social-icon-link::before {
+  content: none !important;
+  display: none !important;
 }
 
-/* Styles basiques pour les liens sociaux */
-.social-section a {
-  text-decoration: none;
-  --underline-img: none;
-}
-
-.social-section a::after {
-  display: none;
+.social-icon-link:hover {
+  color: #1212ff !important;
+  transform: translateY(-2px);
 }
 
 @media (max-width: 768px) {
   .newsletter-social-content {
     flex-direction: column;
+    gap: 2rem;
   }
 
   .divider {
     width: 100%;
     height: 1px;
-    margin: 1rem 0;
   }
 }
 </style>

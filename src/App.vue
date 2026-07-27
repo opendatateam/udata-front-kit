@@ -103,7 +103,7 @@ const { logo, phrase, external_links, mandatory_links } = footer
 
 const setAccessibilityProperties: AccessibilityPropertiesType = (
   title,
-  focus = true,
+  _focus = true,
   messages = []
 ): void => {
   if (title) {
@@ -129,7 +129,6 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
     :closeable="config.website.notice?.closeable ? true : undefined"
     @close="isNoticeClosed = true"
   >
-    <!-- eslint-disable-next-line vue/no-v-html -->
     <span v-html="noticeContent"></span>
   </DsfrNotice>
 
@@ -145,7 +144,7 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
 
   <DsfrFooter
     id="main-footer"
-    :class="[siteID, 'fr-mt-16w']"
+    :class="[siteID]"
     :logo-text="rf_title"
     :operator-img-src="logo?.src"
     :operator-img-style="{
@@ -172,8 +171,5 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
 }
 .fr-footer__logo {
   max-width: 100%;
-}
-.simplifions.fr-mt-16w {
-  margin-top: 0 !important;
 }
 </style>
