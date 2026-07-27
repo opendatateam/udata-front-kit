@@ -265,7 +265,7 @@ pages:
         display: true
     editable: true
     filters:
-      - name: Catégories
+      - name: Thématique
         default_option: Toutes les catégories
         id: tag
         type: select
@@ -277,8 +277,20 @@ pages:
             id: poids-economique-direct
           - name: 'Financement'
             id: financement
-          - name: 'Consommation culturelle des ménages'
-            id: consommation-culturelle-des-menages
+      - name: Sous-thématique
+        default_option: Toutes les catégories
+        id: tag
+        type: select
+        use_filter_prefix: false
+        values:
+          - name: 'Suivi conjoncturel des secteurs culturels marchands'
+            id: suivi-conjoncturel-des-secteurs-culturels-marchands
+          - name: 'Poids économique direct'
+            id: poids-economique-direct
+          - name: 'Financement'
+            id: financement
+          - name: 'pratiques-usages-consommations'
+            id: pratiques-usages-consommations
           - name: 'Entreprises culturelles'
             id: entreprises-culturelles
           - name: 'Associations culturelles'
@@ -347,23 +359,3 @@ pages:
             id: television
           - name: 'Vidéo'
             id: video
-      - name: Type d'organisation
-        default_option: Tous les types
-        id: organization_badge
-        type: select
-        api_param: organization_badge
-        use_filter_prefix: false
-        color: blue-france
-        values:
-          - name: Service public
-            id: public-service
-          - name: Collectivités territoriales
-            id: local-authority
-          - name: Association
-            id: association
-          - name: Entreprise
-            id: company
-      - name: Organisation
-        default_option: Toutes les organisations
-        id: organization
-        type: organization_custom
