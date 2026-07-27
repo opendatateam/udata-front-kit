@@ -70,7 +70,7 @@ website:
       label:
       link:
     search:
-      display: true
+      display: false
       placeholder: Rechercher un jeu de données culture
   search_bar:
     display: true
