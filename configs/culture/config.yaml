@@ -271,28 +271,82 @@ pages:
         type: select
         use_filter_prefix: false
         values:
-          - name: '🗃️ Archives'
-            id: archives
-          - name: '🏗️ Architecture'
+          - name: 'Suivi conjoncturel des secteurs culturels marchands'
+            id: suivi-conjoncturel-des-secteurs-culturels-marchands
+          - name: 'Poids économique direct'
+            id: poids-economique-direct
+          - name: 'Financement'
+            id: financement
+          - name: 'Consommation culturelle des ménages'
+            id: consommation-culturelle-des-menages
+          - name: 'Entreprises culturelles'
+            id: entreprises-culturelles
+          - name: 'Associations culturelles'
+            id: associations-culturelles
+          - name: 'Emploi culturel'
+            id: emploi-culturel
+          - name: 'Commerce extérieur'
+            id: commerce-exterieur
+          - name: 'Non-salariés des secteurs culturels'
+            id: non-salaries-des-secteurs-culturels
+          - name: 'Artistes-auteurs'
+            id: artistes-auteurs
+          - name: "Droits d'auteurs et droits voisins"
+            id: droits-d-auteurs-et-droits-voisins
+          - name: 'Enseignement supérieur artistique et culturel et insertion professionnelle'
+            id: enseignement-superieur-artistique-et-culturel-et-insertion-professionnelle
+          - name: 'Égalité entre femmes et hommes'
+            id: egalite-entre-femmes-et-hommes
+          - name: "Approche géographique de l'offre culturelle"
+            id: approche-geographique-de-l-offre-culturelle
+          - name: 'Tourisme et culture'
+            id: tourisme-et-culture
+          - name: 'Festivals'
+            id: festivals
+          - name: 'Pratiques culturelles'
+            id: pratiques-culturelles
+          - name: 'Pass Culture'
+            id: pass-culture
+          - name: 'Archéologie'
+            id: archeologie
+          - name: 'Architecture'
             id: architecture
-          - name: '🎨 Arts plastiques'
-            id: arts-plastiques
-          - name: '🎬 Cinéma'
-            id: cinema
-          - name: '🎭 Spectacle vivant'
-            id: spectacle-vivant
-          - name: '📚 Livre & lecture'
-            id: livre
-          - name: '🎵 Musique'
+          - name: 'Archives'
+            id: archives
+          - name: 'Musées'
+            id: musees
+          - name: 'Monuments historiques et sites patrimoniaux'
+            id: monuments-historiques-et-sites-patrimoniaux
+          - name: 'Arts visuels'
+            id: arts-visuels
+          - name: 'Billetterie du spectacle vivant'
+            id: billetterie-du-spectacle-vivant
+          - name: 'Danse'
+            id: danse
+          - name: 'Musique'
             id: musique
-          - name: '📰 Presse écrite'
-            id: presse
-          - name: '🖼️ Musées'
-            id: musee
-          - name: '💬 Langue'
-            id: langue
-          - name: '💡 Industries culturelles'
-            id: industries-culturelles
+          - name: 'Théâtre et arts associés'
+            id: theatre-et-arts-associes
+          - name: 'Diffusion pluridisciplinaire'
+            id: diffusion-pluridisciplinaire
+          - name: 'Cinéma'
+            id: cinema
+          - name: 'Internet'
+            id: internet
+          - name: 'Jeu vidéo'
+            id: jeu-video
+          - name: 'Livre et lecture publique'
+            id: livre-et-lecture-publique
+          - name: 'Musique enregistrée'
+            id: musique-enregistree
+          - name: 'Presse écrite'
+            id: presse-ecrite
+          - name: 'Radio'
+            id: radio
+          - name: 'Télévision'
+            id: television
+          - name: 'Vidéo'
+            id: video
       - name: Type d'organisation
         default_option: Tous les types
         id: organization_badge
