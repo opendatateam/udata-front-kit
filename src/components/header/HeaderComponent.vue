@@ -132,12 +132,21 @@ const { logo, title_image, description, beta, search } = header
   background-color: var(--background-contrast-blue-cumulus);
   color: var(--text-label-blue-cumulus);
 }
+
 :deep(.fr-header__tools-links) {
-  flex-wrap: wrap;
-  align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+
+  & > div {
+    display: flex;
+    justify-content: flex-end;
+  }
 
   & > :last-child.custom-search {
-    flex: 1 0 100%;
+    flex: 0 0 auto;
+    inline-size: 100%;
     max-inline-size: min(24rem, 100%);
   }
 }
