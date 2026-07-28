@@ -70,6 +70,17 @@ export const routes: RouteRecordRaw[] = [
         './views/articles/guides-bases/ArticleVosInterlocuteursSelonTypeAPI.vue'
       )
   },
+  {
+    path: '/anticiper-le-parcours-usager-avant-d-integrer-vos-api',
+    name: 'anticiper-le-parcours-usager-avant-d-integrer-vos-api',
+    meta: {
+      title: "Anticiper le parcours usager avant d'intégrer vos API"
+    },
+    component: async () =>
+      await import(
+        './views/articles/guides-bases/ArticleAnticiperParcoursUsager.vue'
+      )
+  },
   useGlobalSearchPageRoutes({
     pageKey: 'cas-d-usages',
     topicConf,
