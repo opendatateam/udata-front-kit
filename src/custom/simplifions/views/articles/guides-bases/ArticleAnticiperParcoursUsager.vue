@@ -457,6 +457,12 @@
         soit bloquée.
       </p>
 
+    <SimplifionsArticleReadMore
+      to="/prerequis-et-etapes-integration-api#limites"
+      description="En savoir plus sur les limites des API :"
+      section-title="Les limites des API"
+    />
+
       <h3>Pallier une panne ou une indisponibilité de l'API</h3>
       <p>
         Une API peut être indisponible, retourner une erreur, ou ne pas avoir

@@ -19,8 +19,12 @@ import { useRouter } from 'vue-router'
 const props = defineProps<{
   to: string
   description?: string
+  // Title to display when `to` targets a section anchor (e.g. "#limites"),
+  // since the route's meta title is the article title, not the section's.
+  sectionTitle?: string
 }>()
 
 const router = useRouter()
-const articleTitle = router.resolve(props.to).meta.title as string
+const articleTitle =
+  props.sectionTitle ?? (router.resolve(props.to).meta.title as string)
 </script>
