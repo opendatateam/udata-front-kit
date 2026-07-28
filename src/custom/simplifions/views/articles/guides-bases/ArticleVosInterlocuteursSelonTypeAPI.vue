@@ -8,10 +8,10 @@
     :hero-panel-background="articleMeta.heroPanelBackground"
   >
     <p class="fr-text--lg">
-      Selon le type d'API que vous intégrez — bouquet mono ou
-      multi-fournisseur, API à l'unité, API FranceConnectée — votre
-      interlocuteur pour l'habilitation, l'intégration technique et le
-      support n'est pas toujours le même. Ce guide vous aide à identifier qui
+      Selon le type d'API que vous intégrez — <em>bouquet mono ou
+      multi-fournisseur, API à l'unité, API FranceConnectée</em> — votre
+      interlocuteur n'est pas toujours le même pour l'habilitation, l'intégration technique et le
+      support. Ce guide vous aide à identifier qui
       contacter selon votre situation.
     </p>
 
@@ -82,8 +82,7 @@
       <h3>Les API classiques, «&nbsp;à l'unité&nbsp;»</h3>
       <p>
         Ces API sont propres à un seul fournisseur de données, comme l'API
-        Impôt Particulier de la DGFiP ou l'API Statut étudiant du ministère
-        de l'enseignement supérieur. Souvent très utiles et complémentaires
+        Impôt Particulier de la DGFiP ou l'API statut élève scolarisé et boursier du ministère de l'éducation nationale. Souvent très utiles et complémentaires
         aux bouquets, elles ont chacune leur propre formulaire
         d'habilitation, ainsi que leur propre gestion des accès et du
         support.
@@ -107,12 +106,8 @@
 
       <h3>Les API FranceConnectées</h3>
       <p>
-        Il s'agit d'une catégorie d'API qui ne concerne que les données des
-        particuliers. Elles sont dites «&nbsp;FranceConnectées&nbsp;», car
-        elles peuvent être appelées avec l'identité pivot FranceConnect
-        plutôt qu'un simple identifiant. Ce niveau d'intégration
-        supplémentaire simplifie le parcours de l'usager, sous conditions de
-        quelques prérequis techniques spécifiques.
+        Il s'agit d'une catégorie d'API qui ne concerne que les données des particuliers. Ces API se superposent aux deux catégories précédentes, elles peuvent être incluses dans des bouquets ou bien autonomes. Elles sont dites «&nbsp;FranceConnectées&nbsp;», car elles peuvent être appelées avec l'identité pivot FranceConnect plutôt qu'un simple identifiant. Ce niveau d'intégration supplémentaire simplifie le parcours de l'usager, sous conditions de quelques prérequis techniques spécifiques.
+
       </p>
 
       <SimplifionsArticleReadMore
@@ -220,16 +215,15 @@
     <ArticleSection id="recapitulatif" label="Pour résumer">
       <SimplifionsArticleChecklist>
         <li>
-          <strong>Trois familles d'API, à combiner selon vos besoins.</strong>
-          Bouquets (un point d'entrée pour plusieurs API, mono ou
-          multi-fournisseurs), API à l'unité, ou API FranceConnectées : ces
-          catégories se complètent et répondent à des besoins différents.
+          <strong>Trois familles d'API, à combiner selon vos besoins :</strong>
+          Bouquets mono ou
+          multi-fournisseurs, API à l'unité, ou API FranceConnectées.
         </li>
         <li>
           <strong>Identifiez vos interlocuteurs.</strong> Selon votre situation et le type d'API que vous utilisez, votre point de contact est différent.
         </li>
         <li>
-          <strong>Votre éditeur est toujours votre premier point de contact,</strong> s'il a été en charge de l'intégration de l'API.
+          <strong>Votre éditeur est toujours votre premier point de contact,</strong> s'il est en charge de l'intégration de l'API.
         </li>
       </SimplifionsArticleChecklist>
     </ArticleSection>
@@ -247,7 +241,7 @@ const articleMeta = {
   h1: "Vos interlocuteurs selon le type d'API",
   title: "Vos interlocuteurs selon le type d'API",
   description:
-    "Bouquet d'API mono ou multi-fournisseur, API à l'unité, API FranceConnectée : identifiez qui contacter — fournisseur de la donnée, opérateur de l'API ou du bouquet, éditeur métier — selon le type d'API que vous intégrez.",
+    "Identifiez votre interlocuteur selon le type d'API que vous intégrez et selon votre situation.",
   articleTags: [],
   heroBackdropGradient: 'linear-gradient(135deg, #decdbd 0%, #e3e3fd 100%)',
   heroPanelBackground: 'var(--background-alt-beige-gris-galet)'

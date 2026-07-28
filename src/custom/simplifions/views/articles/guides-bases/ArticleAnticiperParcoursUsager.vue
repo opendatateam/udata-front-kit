@@ -9,9 +9,9 @@
   >
     <p class="fr-text--lg">
       Avant d'intégrer une API, il faut décider à quel endroit et comment vous
-      allez récupérer, auprès de l'usager ou de l'agent, le
-      <strong>paramètre d'appel</strong> qui permet de déclencher la requête.
-      C'est un choix de conception produit à part entière, déterminant pour la
+      allez récupérer le
+      paramètre d'appel et afficher les données transmises par l'API.
+      C'est un choix déterminant pour la
       qualité de l'expérience usager — d'autant plus lorsque l'API délivre des
       données protégées.
     </p>
@@ -36,9 +36,9 @@
           L'usager débute sa démarche. Il n'a pas eu besoin de s'authentifier ni
           même de se connecter.
         </li>
-        <li>Au début du parcours, il saisit le paramètre d'appel requis.</li>
+        <li>Au début du parcours, il saisit le ou les paramètres d'appel requis.</li>
         <li>
-          Les données publiques issues de l'API pré-remplissent les champs
+          Les données publiques transmises par l'API pré-remplissent les champs
           connus. Si l'usager identifie une erreur ou souhaite apporter une modification, un parcours dédié lui permet de le faire directement ou bien d'en faire la demande.
         </li>
       </ol>
@@ -221,7 +221,7 @@
       <blockquote class="fr-highlight fr-highlight--grey-border">
         <p>
           ⚙️ <strong>Que s'est-il passé techniquement ?</strong> Le logiciel
-          métier du CCAS intègre l'API quotient familial du bouquet API Particulier. En saisissant les informations d'état civil de Madame Dubois, Karim renseigne en réalité les paramètres d'appel de l'API ce qui déclenche la requête.
+          métier du CCAS intègre l'API quotient familial du bouquet API Particulier. En saisissant les informations d'état civil d'Élisabeth, Karim renseigne en réalité les paramètres d'appel de l'API ce qui déclenche la requête.
         </p>
       </blockquote>
       </div>
@@ -232,18 +232,20 @@
 
       <ol class="fr-mb-3w">
         <li>
-          L'usager se connecte à son compte, son identité réelle a été vérifiée
-          lors de la création de son compte.
+          L'usager se connecte à son compte. Son identité a été vérifiée par l'administration en charge du service : elle sait que ce compte appartient bien à la bonne personne.
         </li>
         <li>
-          Il saisit le paramètre d'appel nécessaire, à moins que celui-ci ne
-          soit déjà disponible dans son compte (par exemple son prénom et son
-          nom qui sont dans ce cas directement saisis).
+          L'usager saisit le ou les paramètres d'appel nécessaires, à moins que ceux-ci ne
+          soient déjà disponibles dans son compte. Dans ce dernier cas, les informations déjà connues dans le compte ne sont pas redemandées (par exemple son prénom et son
+          nom).
         </li>
         <li>
           La donnée protégée est récupérée et affichée directement dans son
-          espace usager. Si l'usager identifie une erreur ou souhaite apporter une modification, un parcours dédié lui permet de le faire directement ou bien d'en faire la demande.
+          espace usager.
         </li>
+        <li>Si l'usager identifie une erreur dans les données ou souhaite apporter une modification, l'interface lui permet.  <router-link to="#parcours-alternatifs"
+          >Plus d'informations sur parcours altenratifs</router-link
+        >.</li>
       </ol>
 
       <div class="user-example fr-p-2w fr-mb-4w">
@@ -277,7 +279,7 @@
         <p>
           ⚙️ <strong>Que s'est-il passé techniquement ?</strong> Le portail de
           l'opérateur de transport dans sa ville intègre les API statut étudiant
-          et statut étudiant boursier. Le numéro INE, paramètre d'appel de ces
+          et statut étudiant boursier. Le numéro INE, un des paramètres d'appel de ces
           API, est déjà connu car saisi par Léa dans son compte l'année
           précédente. En confirmant son INE, Léa déclenche la requête auprès des
           API qui retournent son statut.
@@ -295,17 +297,6 @@
           échoue.</i
         >
       </p>
-      <blockquote class="fr-highlight">
-        <p>
-          💡 <b>Imaginons que la récupération automatique d'un des justificatifs
-          n'ait pas fonctionné</b> : Le statut boursier de Léa n'a pas pu être
-          récupéré. Il lui est alors proposé de pouvoir déposer son document
-          (qui sera traité par un agent) et même de pouvoir s'abonner sans
-          bénéficier du tarif. L'important est de laisser un maximum de liberté
-          à Léa et de ne pas la bloquer si la récupération automatique par API
-          échoue.
-        </p>
-      </blockquote>
       </div>
 
         <div class="user-example fr-p-2w fr-mb-4w">
@@ -356,9 +347,12 @@
           concernant vont être transmises à ce site. L'usager valide.
         </li>
         <li>
-          L'usager est alors connecté sur son compte. Les données protégées sont
-          pré-remplies. Si l'usager identifie une erreur ou souhaite apporter une modification, un parcours dédié lui permet de le faire directement ou bien d'en faire la demande.
+          L'usager est alors connecté au compte du service en question. Les données protégées sont
+          pré-remplies dans sa démarche.
         </li>
+        <li>Si l'usager identifie une erreur dans les données ou souhaite apporter une modification, l'interface lui permet.  <router-link to="#parcours-alternatifs"
+          >Plus d'informations sur parcours altenratifs</router-link
+        >.</li>
       </ol>
 
          <div class="user-example fr-p-2w fr-mb-4w">
@@ -394,9 +388,9 @@
           familial CAF &amp; MSA du bouquet API Particulier et l'API Impôt
           Particulier de la DGFIP. Les paramètres d'appel de ces API n'ont pas à
           être saisis par Malik : en effet l'appel est déclenché avec l'identité
-          pivot (leur état civil) connue de FranceConnect, au moment de la
+          pivot (son état civil) connue de FranceConnect, au moment de la
           FranceConnexion. Au moment où Malik confirme la liste des données
-          transmises au site, il lance à la fois sa connexion et l'appel aux
+          transmises au site, il permet à la fois sa connexion et l'appel aux
           API.
         </p>
       </blockquote>
@@ -452,7 +446,7 @@
           alternatifs.</strong
         >
         Aucune API n'est fiable à 100% : en cas de panne,
-        de donnée manquante ou erronné, l'usager doit pouvoir saisir l'information
+        de donnée manquante ou erronnée, l'usager doit pouvoir saisir l'information
         manuellement ou déposer le document lui-même, sans que sa démarche
         soit bloquée.
       </p>
@@ -475,7 +469,7 @@
       <p>
         Un usager peut aussi constater que la donnée récupérée par API est
         erronée ou périmée. Le parcours alternatif à proposer dépend alors de
-        la fiabilité de l'API.
+        la fiabilité de l'API :
       </p>
       <p>
         <strong
@@ -500,18 +494,17 @@
       <SimplifionsArticleChecklist>
         <li>
           <strong
-            >Le choix du parcours dépend de la nature de la donnée.</strong
+            >Le choix du parcours dépend de l'ouverture de la donnée transmise par API.</strong
           >
-          Une donnée publique se contente d'une simple saisie du paramètre
-          d'appel ; une donnée protégée impose de s'assurer qu'elle n'est
-          visible que par la bonne personne.
+          Lorsque la donnée est plubique, le parcours est facile car la réponse de l'API peut être affichée. En revanche lorsque la donnée est protégée, les parcours possibles sont construits de façon à s'assurer que la donnée protégée sera
+          visible uniquement par les bonnes personnes.
         </li>
         <li>
-          <strong>Quatre parcours possibles pour les données protégées.</strong>
+          <strong>Quatre parcours possibles pour les données protégées :</strong>
           Transmission directe aux instructeurs sans montrer la donnée à
           l'usager si son identité n'est pas vérifiée, consultation par un agent
           en guichet, affichage à l'usager après vérification de son identité
-          (compte usager ou FranceConnect).
+          via son compte usager ou FranceConnect.
         </li>
         <li>
           <strong>Prévoyez toujours un parcours alternatif.</strong> En cas de panne, de donnée obsolète ou erronnée, l'usager doit pouvoir saisir l'information et déposer un justificatif.
@@ -531,7 +524,7 @@ const articleMeta = {
   h1: "Anticiper le parcours usager avant d'intégrer vos API",
   title: "Anticiper le parcours usager avant d'intégrer vos API",
   description:
-    'Donnée publique ou protégée, authentification ou FranceConnect : ce guide détaille les parcours usager possibles pour intégrer une API et vous aide à choisir celui adapté à votre démarche.',
+    'API délivrant des données publiques ou protégées : ce guide détaille les parcours usager possibles pour intégrer une API.',
   articleTags: [],
   heroBackdropGradient: 'linear-gradient(135deg, #decdbd 0%, #cfe0ef 100%)',
   heroPanelBackground: 'var(--background-alt-beige-gris-galet)'

@@ -13,39 +13,38 @@
         de son numéro de SIRET&nbsp;? Connaître le statut boursier d'un étudiant
         qui demande une réduction de transport&nbsp;? C'est possible grâce aux
         API référencées dans le catalogue de Simplifions.data</em
-      >.
+      >. Néanmoins, entre le moment où vous prenez connaissance de l'existence
+      d'une API et le moment où elle est utilisée en
+      production dans votre service, plusieurs étapes se succèdent. 
     </p>
     <p class="fr-text-lg">
-      Néanmoins, entre le moment où vous prenez connaissance de l'existence
-      d'une API qui couvre votre besoin et le moment où elle est utilisée en
-      production dans votre téléservice, plusieurs étapes sont à franchir. Ce
-      guide s'adresse aux acteurs publics souhaitant intégrer des API, et donne une vision détaillée des
-      étapes et prérequis nécessaires à l'intégration de toute API visant à
+      <b>Ce
+      guide s'adresse aux acteurs publics souhaitant intégrer des API</b> et donne une vision détaillée des
+      étapes et prérequis nécessaires à l'intégration de toute API conçue pour
       simplifier des démarches via la récupération des données de l'usager —
       <em>principe du «&nbsp;Dites-le-nous une fois&nbsp;»</em>.
     </p>
+
+    <div class="fr-highlight fr-highlight--green-menthe fr-my-4w">
+      <p>
+      <b>💡 Les informations de cet article s'appliquent si vous intégrez
+      vous-même une API.</b> Si vous passez par un éditeur de logiciel métier, la
+      charge est bien plus légère&nbsp;: il s'agit d'identifier vos
+      cas d'usages, les données utiles et de prendre connaissance des logiciels éditeurs les ayant intégrées.
+    </p>
+    </div>
 
     <SimplifionsArticleReadMore
       to="/qu-est-ce-qu-une-api"
       description="Comprendre ce qu'est une API sans vocabulaire technique."
     />
 
-    <div class="fr-highlight fr-highlight--green-menthe fr-my-4w">
-      <p>
-      <b>💡 Les informations de cet article s'appliquent si vous intégrez
-      vous-même une API.</b> Si vous passez par un éditeur de logiciel métier, la
-      charge est bien plus légère&nbsp;: il s'agit surtout d'identifier vos
-      cas d'usages et les données qui vous seraient utiles, de vérifier que
-      votre éditeur les propose, ou le cas échéant d'en choisir un qui
-      les propose.
-    </p>
-    </div>
+
 
     <ArticleSection id="prerequis" label="Prérequis">
        <template #heading>Les prérequis avant de démarrer</template>
       <p class="fr-text--lg">
-        Quatre familles de prérequis, à vérifier avant d'intégrer une API — les
-        rassembler en amont peut vous faire gagner du temps :
+        Voici quatre familles de prérequis que vous pouvez vérifier bien avant d'intégrer une API pour gagner du temps :
       </p>
 
       <h3>1. Un prérequis de conception : penser au parcours de vos usagers</h3>
@@ -53,9 +52,9 @@
       <h4>Vérifier que l'API délivre les données dont vous avez besoin</h4>
 
       <p>
-        Avant de vous engager dans une demande d'habilitation, prenez le temps
-        de consulter la documentation technique de l'API (souvent un swagger ou
-        une spécification OpenAPI) pour vérifier que les données renvoyées
+        Avant de demander l'accès à une API ou de vous y raccorder, prenez le temps
+        de consulter la documentation technique de l'API (souvent un <i>swagger</i> ou
+        une spécification <i>OpenAPI</i>) pour vérifier que les données renvoyées
         correspondent réellement à votre besoin. Trois points de vigilance
         reviennent régulièrement :
       </p>
@@ -96,11 +95,11 @@
       </h4>
 
       <p>
-        Une API ne se déclenche jamais toute seule : pour l'appeler, il faut lui
-        fournir un <strong>paramètre d'appel</strong> qui permet d'identifier
+        Pour appeler une API, il faut lui
+        fournir un ou plusieurs <strong>paramètres d'appel</strong> qui permettent d'identifier
         l'entité dont on souhaite récupérer/pré-remplir les données. Selon
-        l'API, ce paramètre peut être par exemple un numéro de SIRET/SIREN pour
-        une association ou une entreprise, un numéro fiscal ou l'état civil pour
+        l'API, ces paramètres peuvent être un numéro de SIRET/SIREN pour
+        une association ou une entreprise, un numéro fiscal ou les données d'état civil pour
         un particulier.
       </p>
 
@@ -110,20 +109,21 @@
         l'agent. C'est un choix de conception produit à part entière qui est déterminant pour la qualité de l'expérience usager.
       </p>
 
-      <SimplifionsArticleReadMore
-      to="/anticiper-le-parcours-usager-avant-d-integrer-vos-api"
-      description="Découvrez comment utiliser les API au sein du parcours usager, selon que la donnée est publique ou protégée :"
-    />
       <h4>Maquetter ou prototyper avant de développer</h4>
 
       <p>
         Il n'est pas nécessaire d'attendre l'accès aux API pour valider vos
         parcours. Au contraire, les anticiper en lisant les spécifications des
         API vous permettra de vous assurer que l'API correspond à votre besoin.
-        Certaines API mettent à disposition des environnements de tests qui
+        Certaines API délivrant de la donnée protégée mettent à disposition des environnements de tests qui
         permettent même de concevoir tout votre produit avec de la donnée
-        fictive.
+        fictive en attendant d'obtenir l'accès.
       </p>
+
+      <SimplifionsArticleReadMore
+      to="/anticiper-le-parcours-usager-avant-d-integrer-vos-api"
+      description="Découvrez comment utiliser les API au sein du parcours usager, selon que la donnée est publique ou protégée :"
+      />
 
       <h3>
         2. Un prérequis juridique si l'API distribue des données protégées
@@ -139,7 +139,7 @@
         Chaque demande d'accès doit être justifiée par un
         <strong>cadre juridique précis</strong> : texte de loi ou règlementaire
         spécifiant que votre administration est habilitée à demander ces
-        informations. Pour les collectivités, une
+        informations pour traiter une démarche usager. Pour les collectivités, une
         <strong>délibération</strong> décrivant précisément les données
         nécessaires,
         <em
@@ -162,7 +162,7 @@
 
       <h4>Contacts</h4>
       <p class="fr-mt-3w">
-        Une demande d'habilitation mobilise généralement plusieurs profils (qui
+        Une demande d'habilitation mobilise généralement plusieurs contacts au sein de votre administrtation (qui
         peuvent parfois être la même personne) :
       </p>
 
@@ -179,9 +179,7 @@
               <td><strong>Contact technique</strong></td>
               <td>
                 Responsable de l'intégration technique et de la maintenance de
-                l'API dans votre système d'information. C'est lui qui sera
-                notifié des opérations de maintenance, des incidents et de
-                l'expiration des accès techniques.
+                l'API dans votre système d'information. C'est lui qui pourra récupérer les « clés d'accès techniques », en aura la gestion et devra s'assurer de leur validité. Il devra également s'informer des opérations de maintenance et des incidents. Certains services l'abonneront par défaut à ces informations.
               </td>
             </tr>
             <tr>
@@ -192,9 +190,9 @@
               </td>
               <td>
                 Point de contact pour les questions fonctionnelles/métier sur le
-                service. Lorsqu'il est demandé, c'est lui qui est notifié des
+                service. Lorsqu'il est demandé, c'est lui qui est informé des
                 nouvelles API et des incidents majeurs. Distinct du contact
-                technique, orienté usage plutôt qu'intégration.
+                technique, il est orienté usage plutôt qu'intégration.
               </td>
             </tr>
             <tr>
@@ -203,8 +201,8 @@
                 S'assure que l'organisation protège correctement les données
                 personnelles conformément à la réglementation. Cette personne
                 doit pouvoir exercer en toute indépendance en étant à l'abri des
-                conflits d'intérêt. Ce sera le point de contact privilégié de la
-                CNIL. Dans les collectivités, le DPD est souvent mutualisé avec
+                conflits d'intérêt, elle ne peut donc pas être ni le contact technique, ni le contact métier. C'est le point de contact de la
+                CNIL en cas de problème. Dans les collectivités, le DPD est souvent mutualisé avec
                 d'autres collectivités.
               </td>
             </tr>
@@ -243,19 +241,13 @@
 
       <p>
         <strong>Pour les API à accès restreint</strong>, les exigences sont plus
-        poussées. Pas besoin d'une grande DSI, mais votre équipe technique
-        (interne, externe ou éditeur) doit être en mesure de :
+        poussées. Votre équipe technique doit être en mesure de :
       </p>
 
       <ul class="fr-mb-3w">
         <li>
           gérer des appels HTTPS sortants depuis un serveur back-end (jamais
           depuis un site en front-end : le jeton d'accès serait exposé) ;
-        </li>
-        <li>
-          utiliser un langage et des bibliothèques à jour, compatibles avec un
-          chiffrement TLS récent (les anciennes versions de TLS ne sont plus
-          acceptées) ;
         </li>
         <li>
           autoriser, le cas échéant, l'adresse IP du service dans votre pare-feu
@@ -267,10 +259,12 @@
           sécurité) ;
         </li>
         <li>
-          prévoir la maintenance dans la durée : gestion des montées de version,
-          renouvellement des jetons, suivi des incidents.
+          gérer le renouvellement des jetons d'accès à l'API.
         </li>
       </ul>
+
+      <p><b>Que ce soit pour les API en accès libre ou restreint
+</b>, il est indispensable de prévoir de la maintenance dans la durée pour gérer les montées de version des API, suivre les accidents, etc...</p>
 
       <h3>4. Un prérequis budgétaire</h3>
 
@@ -292,9 +286,9 @@
        <template #heading>Les étapes d'intégration d'une API</template>
       <p class="fr-text--lg">
         Les étapes d'intégration d'une API dépendent de l'ouverture de l'API :
-        une API en <strong>accès libre</strong> est appelable sans habilitation
+        une API en accès libre est appelable sans habilitation
         ni clé d'accès, tandis qu'une API en
-        <strong>accès restreint</strong> (délivrant des données protégées)
+        accès restreint (délivrant des données protégées)
         requiert plus d'étapes pour être utilisable dans vos systèmes
         d'information.
       </p>
@@ -323,7 +317,7 @@
           un <strong>environnement de test (bac à sable)</strong>
           avec des données fictives, ce qui permet à votre équipe technique de
           se familiariser avec les types de données renvoyés et les différentes
-          situations d'usage possibles.
+          situations d'usage possibles. Si les exemples proposés ne répondent pas à tous les cas de figure possibles de votre cas d'usage, certains opérateurs proposent une option permettant de contribuer à l'environnement de bac à sable afin de l'enrichir.
         </li>
       </ul>
 
@@ -338,9 +332,8 @@
       <h3>Étape 2 — Récupérer et, le cas échéant, sécuriser vos accès</h3>
 
       <p>
-        <strong>Pour une API en libre accès</strong>, cette étape est
-        généralement superflue : aucune clé n'est nécessaire, l'API est
-        appelable directement, y compris depuis un site en ligne.
+        <strong>Pour une API en libre accès</strong>, cette étape est généralement superflue : aucune clé n'est nécessaire, l'API est appelable directement depuis une page web, sans avoir à sécuriser l'appel.
+
       </p>
 
       <p>
@@ -378,62 +371,50 @@
       </p>
 
       <p>
-        <strong>Pour une API en accès libre</strong>, l'intégration reste simple
-        : il suffit de gérer les appels HTTPS, le traitement du JSON reçu, et
-        les codes d'erreur HTTP standards — notamment le 429 (limite de débit
-        dépassée) ou un timeout en cas de lenteur du service. Pas de logique de
-        jeton ni de traçabilité particulière à mettre en œuvre.
+        <strong>Pour une API en accès libre</strong>, l'intégration reste simple : il suffit de gérer les appels HTTPS, le traitement du JSON reçu, et les codes d'erreur HTTP standards — notamment le 429 (limite de débit dépassée) ou un timeout en cas de lenteur du service. Pas de logique de jeton ni de traçabilité particulière à mettre en œuvre.
+
       </p>
 
       <p>
-        <strong>Pour une API à accès restreint</strong>, aux erreurs HTTP
-        standards s'ajoutent des codes propres à l'authentification (401 en cas
-        de jeton invalide ou expiré, 403 en cas d'accès à une donnée hors du
-        périmètre habilité) et le respect des limites de volumétrie propres à
-        votre habilitation — au-delà, un bannissement temporaire peut
-        intervenir. Il est également souvent requis de renseigner, dans chaque
-        appel, des paramètres de traçabilité permettant d'identifier l'origine
-        de la requête.
+        <strong>Pour une API à accès restreint</strong>, aux erreurs HTTP standards s'ajoutent des codes propres à l'authentification (401 en cas de jeton invalide ou expiré, 403 en cas d'accès à une donnée hors du périmètre habilité) et le respect des limites de volumétrie propres à votre habilitation — au-delà, un bannissement temporaire peut intervenir. Il est également souvent requis de renseigner, dans chaque appel, des paramètres de traçabilité permettant d'identifier l'origine de la requête.
       </p>
 
-      <div class="fr-highlight fr-highlight--green-menthe">
-        <p class="fr-mb-0">
-          💡 Aucune API ne s'engage sur une disponibilité à 100 %, qu'elle soit
-          ouverte ou protégée, car elle dépend elle-même de systèmes
-          d'information tiers. Or votre service doit continuer à fonctionner en
-          cas de panne :
-          <br />si l'API sert à <strong>pré-remplir un formulaire</strong>,
-          prévoyez une saisie manuelle de secours ; <br />si l'API sert à
+
+        <p><b>Aucune API n'est fiable à 100 %. Or votre service doit continuer à fonctionner en
+          cas de panne :</b>
+        </p>
+        <ul><li>si l'API sert à <strong>pré-remplir un formulaire</strong>,
+          prévoyez une saisie manuelle de secours ;</li><li>si l'API sert à
           <strong>récupérer un justificatif</strong>, prévoyez que l'usager
-          puisse encore le déposer lui-même. <br />⚠️ Le «&nbsp;Dites-le-nous
+          puisse encore le déposer lui-même.</li></ul>
+        <div class="fr-highlight fr-highlight--green-menthe fr-mb-4w">
+          <p>⚠️ Le «&nbsp;Dites-le-nous
           une fois&nbsp;» ne doit jamais devenir un obstacle. Un usager
           préférera souvent ressaisir une information plutôt que de ne pas
-          pouvoir finaliser sa démarche.
-        </p>
+          pouvoir finaliser sa démarche.</p>
       </div>
+
+      <SimplifionsArticleReadMore
+      to="/anticiper-le-parcours-usager-avant-d-integrer-vos-api"
+      description="Découvrez comment utiliser les API au sein du parcours usager, selon que la donnée est publique ou protégée :"
+      />
 
       <h3>Étape 4 — Mettre en production, surveiller, faire évoluer</h3>
 
       <p>
-        Après des tests concluants, l'accès en production peut démarrer.
-        Quelques réflexes à prendre dès le lancement, communs aux deux types
-        d'API :
+       Après des tests concluants, l'accès en production peut démarrer. Quelques bonnes pratiques à mettre en place dès le lancement lorqu'elles sont rendues possibles par l'opérateur de l'API :
       </p>
 
       <ul class="fr-mb-3w">
+        <li>utiliser les <b>kits de développement</b> (SDK) officiels ;</li>
         <li>
-          s'abonner aux pages de statut / notifications d'incident du
-          fournisseur ;
+          s'abonner aux <b>pages de statut / notifications d'incidents</b> ;
         </li>
         <li>
-          si disponibles, utiliser les
-          <strong>routes de monitoring dédiées</strong> («&nbsp;ping&nbsp;»)
-          plutôt que d'appeler les vraies routes de données pour surveiller la
-          disponibilité ;
+          s'abonner aux actualités de l'API indiquant les <b>nouveautés, les montées en version et le changelog</b> ;
         </li>
         <li>
-          s'abonner aux infolettres des fournisseurs, notamment pour être
-          informé des montées en version de l'API.
+          utiliser les <b>routes de monitoring dédiées</b> ("ping"), plutôt que d'appeler les vraies routes de données, pour surveiller la disponibilité.
         </li>
       </ul>
 
