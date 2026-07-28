@@ -17,9 +17,6 @@
           >
             {{ emptyBadgeLabel }}
           </span>
-          <span v-if="solutionKind !== 'brique'" class="fr-badge fr-badge--sm fr-badge--new fr-ml-1w">
-            Sans développement
-          </span>
         </span>
         <span aria-hidden="true" class="fr-icon-subtract-line fr-icon--sm"></span>
         <span class="fr-sr-only">(Aucune solution référencée)</span>
