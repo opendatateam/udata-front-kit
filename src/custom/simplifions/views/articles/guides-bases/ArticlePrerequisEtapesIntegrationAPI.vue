@@ -446,11 +446,7 @@
     <ArticleSection id="limites" label="Limites des API">
       <template #heading>Les limites des API</template>
       <p class="fr-text--lg">
-        Intégrer des API dans vos démarches pour récupérer directement les
-        informations déjà connues de l'administration est une étape requise pour
-        simplifier vos démarches en profondeur — mais l'usage des API n'est pas
-        une solution miracle. Comprendre les limites des API vous permet de
-        mieux cerner ce qu'elles rendent possible et d'anticiper les solutions à
+       Comprendre les limites des API vous permet d'anticiper les solutions à
         mettre en œuvre pour contrebalancer leurs manques.
       </p>
 
@@ -487,26 +483,15 @@
               </td>
             </tr>
             <tr>
-              <td><strong>Paramètres d'appel incorrects</strong></td>
+              <td><strong>Qualité de la donnée</strong></td>
               <td>
-                Toutes les API, sauf les API FranceConnectées, supposent que
-                l'usager saisisse correctement ses informations ; en cas
-                d'erreur de saisie, aucune donnée n'est retournée. Cette
-                difficulté est parfois plus complexe qu'une simple erreur de
-                saisie. Parfois les éléments identifiants à donner pour
-                permettre l'appel ne sont pas forcément évidents pour l'usager
-                lui-même. L'interface utilisateur et l'explication des éléments
-                à fournir est alors cruciale pour limiter les erreurs. De même,
-                la gestion des messages d'erreur donnée à l'usager est également
-                très importante pour lui permettre d'apporter des corrections.
+                La donnée renvoyée par l'API peut elle-même être erronée ou 
+                incomplète. L'API ne fait que refléter la
+                qualité de la donnée détenue par l'administration qui la
+                fournit.
               </td>
               <td>
-                Un étudiant se trompe d'un chiffre dans son numéro INE : l'API
-                Statut étudiant ne renvoie aucun résultat, alors qu'il est
-                réellement inscrit. Un parent doit saisir le code COG de sa
-                commune de naissance en plus d'autres informations pour
-                récupérer son quotient familial. Il se trompe et renseigne le
-                code postal de sa commune de naissance.
+                Cas d'une donnée déclarative : Une adresse postale contient une erreur car cette donnée a été saisie par l'usager qui a fait une faute de frappe.
               </td>
             </tr>
             <tr>
@@ -555,6 +540,29 @@
                 même habilitation.
               </td>
             </tr>
+            <tr>
+              <td><strong>Paramètres d'appel incorrects</strong></td>
+              <td>
+                Toutes les API, sauf les API FranceConnectées, supposent que
+                l'usager saisisse correctement ses informations ; en cas
+                d'erreur de saisie, aucune donnée n'est retournée. Cette
+                difficulté est parfois plus complexe qu'une simple erreur de
+                saisie. Parfois les éléments identifiants à donner pour
+                permettre l'appel ne sont pas forcément évidents pour l'usager
+                lui-même. L'interface utilisateur et l'explication des éléments
+                à fournir est alors cruciale pour limiter les erreurs. De même,
+                la gestion des messages d'erreur donnée à l'usager est également
+                très importante pour lui permettre d'apporter des corrections.
+              </td>
+              <td>
+                Un étudiant se trompe d'un chiffre dans son numéro INE : l'API
+                Statut étudiant ne renvoie aucun résultat, alors qu'il est
+                réellement inscrit. Un parent doit saisir le code COG de sa
+                commune de naissance en plus d'autres informations pour
+                récupérer son quotient familial. Il se trompe et renseigne le
+                code postal de sa commune de naissance.
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -562,10 +570,14 @@
       <p class="fr-mt-3w">
         Dans tous les cas,
         <strong>gardez toujours un chemin de secours pour l'usager</strong>
-        (ressaisie, dépôt manuel du justificatif). C'est ce qui transforme une
-        limite technique en simple détail, plutôt qu'en blocage de service
-        public.
+        (ressaisie, dépôt manuel du justificatif). 
       </p>
+
+    <SimplifionsArticleReadMore
+      to="/anticiper-le-parcours-usager-avant-d-integrer-vos-api#parcours-alternatifs"
+      description="En savoir plus sur les parcours alternatifs à proposer :"
+    />
+
     </ArticleSection>
 
     <ArticleSection id="recapitulatif" label="Pour résumer">
