@@ -4,7 +4,17 @@
       <span class="fr-accordion__btn fr-accordion__btn--empty">
         <span class="fr-mr-auto">
           {{ title }}
-          <span :class="['fr-badge', 'fr-badge--sm','fr-badge--icon-left', 'fr-ml-1w', badgeIconClass]">
+          <span
+            :class="[
+              'fr-badge',
+              'fr-badge--sm',
+              'fr-badge--icon-left',
+  
+              'fr-text-mention--grey',
+              'fr-ml-1w',
+              badgeIconClass,
+            ]"
+          >
             {{ emptyBadgeLabel }}
           </span>
           <span v-if="solutionKind !== 'brique'" class="fr-badge fr-badge--sm fr-badge--new fr-ml-1w">
