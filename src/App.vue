@@ -103,7 +103,6 @@ const { logo, phrase, external_links, mandatory_links } = footer
 
 const setAccessibilityProperties: AccessibilityPropertiesType = (
   title,
-  focus = true,
   messages = []
 ): void => {
   if (title) {

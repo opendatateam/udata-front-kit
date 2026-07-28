@@ -6,7 +6,6 @@ import type { InjectionKey } from 'vue'
 
 export type AccessibilityPropertiesType = (
   title?: string,
-  focus?: boolean,
   messages?: InfoToAnnounce[]
 ) => void
 
