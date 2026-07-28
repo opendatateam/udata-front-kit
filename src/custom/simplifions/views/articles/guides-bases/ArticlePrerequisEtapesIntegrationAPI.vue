@@ -300,32 +300,33 @@
         <router-link to="/anticiper-le-parcours-usager-avant-d-integrer-vos-api"
           >réfléchi aux parcours de vos usagers</router-link
         >, il est utile de vérifier que l'API correspond bien à votre besoin en
-        consultant ses spécifications via sa documentation et/ou son
-        Swagger/OpenAPI.
+        consultant ses spécifications via sa documentation et son
+        <em>swagger</em> ou fichier <em>OpenAPI</em>.
       </p>
 
       <p>Cette étape est commune à toutes les API :</p>
 
       <ul class="fr-mb-3w">
         <li>
-          Pour une <strong>API en accès libre</strong>, vous pouvez tester
+          <strong>Pour une API en accès libre</strong>, vous pouvez tester
           directement l'API en conditions réelles, sans attendre de validation
           préalable.
         </li>
         <li>
-          Pour une <strong>API à accès restreint</strong>, la plupart proposent
-          un <strong>environnement de test (bac à sable)</strong>
+          <strong>Pour une API à accès restreint</strong>, la plupart proposent
+          un environnement de test (bac à sable)
           avec des données fictives, ce qui permet à votre équipe technique de
           se familiariser avec les types de données renvoyés et les différentes
           situations d'usage possibles. Si les exemples proposés ne répondent pas à tous les cas de figure possibles de votre cas d'usage, certains opérateurs proposent une option permettant de contribuer à l'environnement de bac à sable afin de l'enrichir.
         </li>
       </ul>
 
-      <div class="fr-callout fr-callout--beige-gris-galet">
-        <p class="fr-callout__text fr-mb-0">
-          Toutes les API référencées sur Simplifions.data ont une fiche API sur
-          data.gouv. Cette page recense les informations essentielles pour vous
-          permettre d'intégrer l'API.
+       <div class="fr-highlight fr-highlight--green-menthe fr-mb-4w">
+        <p>          
+          Toutes les API référencées sur Simplifions.data sont aussi <b>cataloguées dans Data.gouv.fr</b> où elles ont leur propre page d'information. Cette page recense les éléments essentiels pour vous permettre d'intégrer l'API.
+          <br/>
+          <br/>
+          Cette page data.gouv.fr est toujours mise en lien sur simplifions.data lorsqu'une API ou un jeu de donnée est référencé.
         </p>
       </div>
 
