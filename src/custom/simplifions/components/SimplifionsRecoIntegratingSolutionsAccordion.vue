@@ -9,16 +9,18 @@
               'fr-badge',
               'fr-badge--sm',
               'fr-badge--icon-left',
-  
               'fr-text-mention--grey',
               'fr-ml-1w',
-              badgeIconClass,
+              badgeIconClass
             ]"
           >
             {{ emptyBadgeLabel }}
           </span>
         </span>
-        <span aria-hidden="true" class="fr-icon-subtract-line fr-icon--sm"></span>
+        <span
+          aria-hidden="true"
+          class="fr-icon-subtract-line fr-icon--sm"
+        ></span>
         <span class="fr-sr-only">(Aucune solution référencée)</span>
       </span>
     </h6>
@@ -35,12 +37,15 @@
             'fr-background-contrast--info',
             'fr-text-default--info',
             'fr-ml-1w',
-            badgeIconClass,
+            badgeIconClass
           ]"
         >
           {{ filledBadgeLabel }}
         </span>
-        <span v-if="solutionKind !== 'brique'" class="fr-badge fr-badge--sm fr-badge--new fr-ml-1w">
+        <span
+          v-if="solutionKind !== 'brique'"
+          class="fr-badge fr-badge--sm fr-badge--new fr-ml-1w"
+        >
           Sans développement
         </span>
       </span>
@@ -72,38 +77,51 @@ type SolutionKind = 'brique' | 'logiciel' | 'portail'
 const props = defineProps<{
   title: string
   solutions: SolutionRecord[]
-  integrationScorePerSolution: Map<number, { integratedCount: number; totalCount: number }>
+  integrationScorePerSolution: Map<
+    number,
+    { integratedCount: number; totalCount: number }
+  >
   nomFournisseur: string
   typeLabel: string
   solutionKind: SolutionKind
 }>()
 
-const badgeIconClass = computed(() => {
-  const icons: Record<SolutionKind, string> = {
-    brique: 'fr-icon-code-box-fill',
-    logiciel: 'fr-icon-mac-fill',
-    portail: 'fr-icon-seo-fill',
+const SOLUTION_KIND_CONFIG: Record<
+  SolutionKind,
+  { icon: string; emptyLabel: string; singular: string; plural: string }
+> = {
+  brique: {
+    icon: 'fr-icon-code-box-fill',
+    emptyLabel: 'Aucune brique',
+    singular: 'brique',
+    plural: 'briques'
+  },
+  logiciel: {
+    icon: 'fr-icon-mac-fill',
+    emptyLabel: 'Aucun logiciel',
+    singular: 'logiciel',
+    plural: 'logiciels'
+  },
+  portail: {
+    icon: 'fr-icon-seo-fill',
+    emptyLabel: 'Aucun portail',
+    singular: 'portail',
+    plural: 'portails'
   }
-  return icons[props.solutionKind]
-})
+}
 
-const emptyBadgeLabel = computed(() => {
-  const labels: Record<SolutionKind, string> = {
-    brique: 'Aucune brique',
-    logiciel: 'Aucun logiciel',
-    portail: 'Aucun portail',
-  }
-  return labels[props.solutionKind]
-})
+const badgeIconClass = computed(
+  () => SOLUTION_KIND_CONFIG[props.solutionKind].icon
+)
+
+const emptyBadgeLabel = computed(
+  () => SOLUTION_KIND_CONFIG[props.solutionKind].emptyLabel
+)
 
 const filledBadgeLabel = computed(() => {
   const count = props.solutions.length
-  const labels: Record<SolutionKind, string> = {
-    brique: count > 1 ? 'briques' : 'brique',
-    logiciel: count > 1 ? 'logiciels' : 'logiciel',
-    portail: count > 1 ? 'portails' : 'portail',
-  }
-  return `${count} ${labels[props.solutionKind]}`
+  const { singular, plural } = SOLUTION_KIND_CONFIG[props.solutionKind]
+  return `${count} ${count > 1 ? plural : singular}`
 })
 </script>
 
