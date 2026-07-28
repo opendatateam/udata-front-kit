@@ -6,7 +6,7 @@ import { useRoute } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
 import TopicCard from '@/components/topics/TopicCard.vue'
-import VIconCustom from '@/components/VIconCustom.vue'
+import VIconDsfr from '@/components/VIconDsfr.vue'
 import { useTopicStore } from '@/store/TopicStore'
 import { debounceWait, usePageConf } from '@/utils/config'
 import { useLabels } from '@/utils/labels'
@@ -82,7 +82,7 @@ useMeta({
       <h1 class="fr-mb-0">Mes brouillons</h1>
       <div class="fr-col-auto">
         <router-link :to="createUrl" class="fr-btn">
-          <VIconCustom name="add-circle-line" class="fr-mr-1w" align="middle" />
+          <VIconDsfr name="add-circle-line" class="fr-mr-1w" align="middle" />
           Ajouter {{ labels.articles.un }} {{ labels.singular }}
         </router-link>
       </div>

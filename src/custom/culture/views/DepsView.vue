@@ -128,9 +128,11 @@ onMounted(() => {
     <section class="fr-container fr-pt-12v">
       <h1 class="main-title-v2">Les données du DEPS</h1>
       <p class="fr-text--lead fr-mb-6w text-center">
-        culture.data.gouv.fr vise à référencer, héberger et diffuser les données
-        publiques relatives à la culture en France. Vous y trouverez des données
-        téléchargeables et utilisables de manière libre et gratuite.
+        Le Département des études, de la prospective, des statistiques et de la
+        documentation (DEPS) est le service statistique ministériel de la
+        Culture. Cet espace vous permet de découvrir, de consulter et de
+        télécharger librement les jeux de données publiés par le DEPS en lien
+        avec ses études et ses enquêtes.
       </p>
 
       <div class="big-search">
@@ -275,7 +277,7 @@ onMounted(() => {
                 <h4 class="fr-h6 fr-mb-2w">{{ item.fields.title }}</h4>
                 <div class="fr-text--sm fr-mb-3w">
                   <!-- eslint-disable-next-line vue/no-v-html -->
-                  <div v-html="fromMarkdown(item.fields.content)"></div>
+                  <div v-html="fromMarkdown(item.fields.content).html"></div>
                 </div>
                 <a
                   v-if="item.fields.ctaLink && item.fields.ctaLabel"
@@ -303,7 +305,7 @@ onMounted(() => {
             :key="item.id"
           >
             <!-- eslint-disable-next-line vue/no-v-html -->
-            <div v-html="fromMarkdown(item.fields.content)"></div>
+            <div v-html="fromMarkdown(item.fields.content).html"></div>
           </div>
         </section>
 
@@ -321,7 +323,7 @@ onMounted(() => {
                   :key="item.id"
                 >
                   <!-- eslint-disable-next-line vue/no-v-html -->
-                  <div v-html="fromMarkdown(item.fields.content)"></div>
+                  <div v-html="fromMarkdown(item.fields.content).html"></div>
                 </div>
                 <br />
                 <a

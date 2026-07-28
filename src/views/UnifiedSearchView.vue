@@ -2,7 +2,7 @@
 import SearchOrganizationFilter from '@/components/search/SearchOrganizationFilter.vue'
 import SearchSelectFilter from '@/components/search/SearchSelectFilter.vue'
 import TopicCard from '@/components/topics/TopicCard.vue'
-import VIconCustom from '@/components/VIconCustom.vue'
+import VIconDsfr from '@/components/VIconDsfr.vue'
 import { useUserStore } from '@/store/UserStore'
 import { fromMarkdown } from '@/utils'
 import { useAsyncComponent } from '@/utils/component'
@@ -44,20 +44,15 @@ const createUrl = computed(() => ({
   query: route.query
 }))
 
-// localType is needed because pageKey is read-only (derived from route), but
-// GlobalSearch needs a writable ref to track the active type (v-model:type).
-// When the user switches type, localType changes and the watch below navigates.
-// This watch keeps localType in sync when the route changes externally.
-const localType = ref(pageKey.value)
-watch(pageKey, (newKey) => {
-  localType.value = newKey
-})
-
-// When the user switches type, navigate to the new route. The guard prevents
-// a loop: when pageKey changes externally and syncs localType (watch above),
-// this fires but newType === pageKey.value so the push is skipped.
-watch(localType, async (newType) => {
-  if (newType !== pageKey.value) {
+// pageKey is read-only (derived from the route) so we need a writable computed
+// for v-model:type. A ref + watch doesn't work here: the watch fires after the
+// Vue flush, by which point GlobalSearch has already reacted to the type change
+// and issued a competing navigation that cancels ours. The computed setter runs
+// synchronously, so our router.push() starts before any watchers fire.
+const localType = computed({
+  get: () => pageKey.value,
+  set: async (newType) => {
+    if (newType === pageKey.value) return
     const scrollY = window.scrollY
     const { page, ...allQuery } = route.query
     // Org filter values are type-specific (different list per type) — don't carry them over
@@ -107,11 +102,7 @@ onMounted(() => {
       >
         <div class="fr-col-auto">
           <router-link :to="createUrl" class="fr-btn fr-mb-1w">
-            <VIconCustom
-              name="add-circle-line"
-              class="fr-mr-1w"
-              align="middle"
-            />
+            <VIconDsfr name="add-circle-line" class="fr-mr-1w" align="middle" />
             Ajouter {{ labels.articles.un }} {{ labels.singular }}
           </router-link>
         </div>
@@ -133,19 +124,19 @@ onMounted(() => {
   >
     <div class="fr-container fr-py-12v">
       <!-- eslint-disable vue/no-v-html -->
-      <h2
+      <p
         :class="!pageConf.banner.content ? 'fr-mb-0' : ''"
         v-html="pageConf.banner.title"
       />
       <div
         v-if="pageConf.banner.content"
-        v-html="fromMarkdown(pageConf.banner.content)"
+        v-html="fromMarkdown(pageConf.banner.content).html"
       />
       <!-- eslint-enable vue/no-v-html -->
     </div>
   </section>
 
-  <div class="fr-container fr-mb-4w">
+  <section class="fr-container fr-mb-4w">
     <h2 v-if="pageConf.search?.input" class="fr-mb-2w">
       {{ pageConf.search.input }}
     </h2>
@@ -215,5 +206,5 @@ onMounted(() => {
         </template>
       </GlobalSearch>
     </Suspense>
-  </div>
+  </section>
 </template>

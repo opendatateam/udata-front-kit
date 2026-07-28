@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import {
-  OrganizationNameWithCertificate,
-  ReadMore
-} from '@datagouv/components-next'
+import { ReadMore } from '@datagouv/components-next'
 import { storeToRefs } from 'pinia'
 import type { Ref } from 'vue'
 import { capitalize, computed, nextTick, ref, watch, watchEffect } from 'vue'
@@ -12,7 +9,9 @@ import { useRouter } from 'vue-router'
 import ContentPlaceholder from '@/components/ContentPlaceholder.vue'
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
-import OrganizationLogo from '@/components/OrganizationLogo.vue'
+import SidebarItem from '@/components/SidebarItem.vue'
+import SidebarList from '@/components/SidebarList.vue'
+import SidebarOwner from '@/components/SidebarOwner.vue'
 import TagComponent from '@/components/TagComponent.vue'
 import TopicActivityList from '@/components/topics/TopicActivityList.vue'
 import TopicFactorsList from '@/components/topics/TopicFactorsList.vue'
@@ -29,7 +28,6 @@ import {
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
-import { getOwnerAvatar } from '@/utils/avatar'
 import { useAsyncComponent } from '@/utils/component'
 import { useLabels } from '@/utils/labels'
 import { useCanonicalUrl, useMeta } from '@/utils/seo'
@@ -379,66 +377,34 @@ watch(
         <div v-if="!canEdit && topic.private" class="fr-mb-2w">
           <DsfrTag label="Brouillon" />
         </div>
-        <div v-if="props.displayMetadata">
-          <h2 id="producer" class="subtitle fr-mb-1v">Auteur</h2>
-          <div
-            v-if="topic.organization"
-            class="fr-grid-row fr-grid-row--middle"
-          >
-            <div class="fr-col-auto fr-mr-1w">
-              <OrganizationLogo :object="topic" />
-            </div>
-            <p class="fr-col fr-m-0 min-width-0">
-              <a class="fr-link" :href="topic.organization.page">
-                <OrganizationNameWithCertificate
-                  :organization="topic.organization"
-                />
-              </a>
-            </p>
-          </div>
-          <div v-else class="fr-grid-row fr-grid-row--middle">
-            <div class="fr-col-auto">
-              <div class="border fr-p-1-5v fr-mr-1-5v">
-                <img
-                  :src="getOwnerAvatar(topic)"
-                  alt=""
-                  loading="lazy"
-                  class="owner-avatar"
-                  height="32"
-                  width="32"
-                />
-              </div>
-            </div>
-            <p class="fr-col fr-m-0">
-              {{ topic.owner.first_name }} {{ topic.owner.last_name }}
-            </p>
-          </div>
-          <h2 class="subtitle fr-mt-3v fr-mb-1v">Création</h2>
-          <time :datetime="topic.created_at">{{
-            formatDate(topic.created_at)
-          }}</time>
-          <h2 class="subtitle fr-mt-3v fr-mb-1v">Dernière mise à jour</h2>
-          <time :datetime="topic.last_modified">{{
-            formatDate(topic.last_modified)
-          }}</time>
-          <div v-if="spatialCoverage">
-            <h2 class="subtitle fr-mt-3v fr-mb-1v">Couverture territoriale</h2>
-            <p>{{ spatialCoverage.name }}</p>
-          </div>
-          <div v-if="clonedFrom">
-            <h2 class="subtitle fr-mt-3v fr-mb-1v">Cloné depuis</h2>
-            <p>
-              <RouterLink
-                :to="{
-                  name: `${pageKey}_detail`,
-                  params: { item_id: clonedFrom.slug }
-                }"
-              >
-                {{ clonedFrom.name }}
-              </RouterLink>
-            </p>
-          </div>
-        </div>
+        <SidebarList v-if="props.displayMetadata">
+          <SidebarItem id="producer" term="Auteur">
+            <SidebarOwner :object="topic" />
+          </SidebarItem>
+          <SidebarItem term="Création">
+            <time :datetime="topic.created_at">{{
+              formatDate(topic.created_at)
+            }}</time>
+          </SidebarItem>
+          <SidebarItem term="Dernière mise à jour">
+            <time :datetime="topic.last_modified">{{
+              formatDate(topic.last_modified)
+            }}</time>
+          </SidebarItem>
+          <SidebarItem v-if="spatialCoverage" term="Couverture territoriale">
+            {{ spatialCoverage.name }}
+          </SidebarItem>
+          <SidebarItem v-if="clonedFrom" term="Cloné depuis">
+            <RouterLink
+              :to="{
+                name: `${pageKey}_detail`,
+                params: { item_id: clonedFrom.slug }
+              }"
+            >
+              {{ clonedFrom.name }}
+            </RouterLink>
+          </SidebarItem>
+        </SidebarList>
       </div>
     </div>
 
@@ -521,8 +487,5 @@ watch(
 .flex-reverse {
   display: flex;
   flex-direction: row-reverse;
-}
-.owner-avatar {
-  margin-bottom: -6px;
 }
 </style>

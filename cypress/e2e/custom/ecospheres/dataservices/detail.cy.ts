@@ -109,7 +109,7 @@ describe('Dataservices (API) - Detail Page', () => {
     })
 
     it('should display producer section', () => {
-      cy.contains('h2', 'Producteur').should('be.visible')
+      cy.contains('dt', 'Producteur').should('be.visible')
     })
 
     it('should display organization name', () => {

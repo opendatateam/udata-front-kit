@@ -1,5 +1,5 @@
 import type { AxiosResponseData } from '@/model/api'
-import type { GenericElement } from '@/model/topic'
+import type { GenericElement, TopicSearchParams } from '@/model/topic'
 import DatagouvfrAPI from '@/services/api/DatagouvfrAPI'
 
 export default class TopicsAPI extends DatagouvfrAPI {
@@ -42,7 +42,7 @@ export default class TopicsAPI extends DatagouvfrAPI {
     })
   }
 
-  async search(params: object): Promise<AxiosResponseData> {
+  async search(params: TopicSearchParams): Promise<AxiosResponseData> {
     return await this.request({
       url: `${this.url()}/search/`,
       method: 'get',

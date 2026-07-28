@@ -112,9 +112,12 @@ const routerPromise = siteRoutesPromise.then((siteRoutes) => {
         return false
       }
       if (to.hash !== '') {
-        return {
-          el: to.hash
+        // Only scroll if the element is already in the DOM. If it isn't (async content),
+        // useHashScroll in the target component can take over if wired.
+        if (document.querySelector(to.hash)) {
+          return { el: to.hash }
         }
+        return false
       }
       // Preserve scroll when switching between search list pages (e.g. datasets ↔ indicators)
       if (to.meta.searchConfig && from.meta.searchConfig) {

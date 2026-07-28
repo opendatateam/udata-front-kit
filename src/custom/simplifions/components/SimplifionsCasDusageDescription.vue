@@ -90,7 +90,7 @@
         <!-- eslint-disable vue/no-v-html -->
         <p
           v-if="casUsage.Contexte"
-          v-html="fromMarkdown(casUsage.Contexte)"
+          v-html="fromMarkdown(casUsage.Contexte).html"
         ></p>
         <!-- eslint-enable vue/no-v-html -->
 
@@ -109,7 +109,7 @@
         <!-- eslint-disable vue/no-v-html -->
         <p
           v-if="casUsage.Cadre_juridique"
-          v-html="fromMarkdown(casUsage.Cadre_juridique)"
+          v-html="fromMarkdown(casUsage.Cadre_juridique).html"
         ></p>
         <!-- eslint-enable vue/no-v-html -->
         <p v-else class="fr-text--sm">
@@ -168,6 +168,7 @@ import { OrganizationNameWithCertificate } from '@datagouv/components-next'
 import { grist } from '../grist.ts'
 import type { CasUsage, Recommandation } from '../model/grist'
 import type { TopicCasUsage } from '../model/topics'
+import { useHashScroll } from '../useHashScroll'
 import DraftTag from './DraftTag.vue'
 import SimplifionsRecoDataApi from './SimplifionsRecoDataApi.vue'
 import SimplifionsRecoSolutions from './SimplifionsRecoSolutions.vue'
@@ -183,6 +184,10 @@ const casUsageId = props.topic.extras['simplifions-v2-cas-d-usages'].id
 
 const casUsage = ref<CasUsage | undefined>(undefined)
 const recommandations = ref<Recommandation[] | undefined>(undefined)
+
+useHashScroll({
+  ready: () => !!casUsage.value
+})
 
 grist.getRecord('Cas_d_usages', casUsageId).then((data) => {
   casUsage.value = data.fields as CasUsage
@@ -207,7 +212,7 @@ grist.getRecord('Cas_d_usages', casUsageId).then((data) => {
 <style scoped>
 .h2-cas-usage {
   color: black;
-  background-color: rgb(167, 212, 205);
+  background-color: var(--simplifions-h2-highlight);
   padding: 2px 4px;
   display: inline-block;
 }
