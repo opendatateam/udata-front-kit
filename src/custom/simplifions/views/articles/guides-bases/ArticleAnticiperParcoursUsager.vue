@@ -440,19 +440,54 @@
         des usagers.
       </p>
 
-      <div class="fr-highlight fr-highlight--green-menthe fr-mt-4w">
-        <p class="fr-mb-0">
-          ⚠️
-          <strong
-            >Quel que soit le parcours retenu, prévoyez toujours des parcours
-            alternatifs.</strong
-          >
-          Aucune API ne garantit une disponibilité à 100 % : en cas de panne ou
-          de donnée manquante, l'usager doit pouvoir saisir l'information
-          manuellement ou déposer le document lui-même, sans que sa démarche
-          soit bloquée.
-        </p>
-      </div>
+    </ArticleSection>
+
+    <ArticleSection id="parcours-alternatifs" label="Parcours alternatifs">
+      <template #heading>Parcours alternatifs</template>
+
+      <p class="fr-text--lg">
+        
+        <strong
+          >Quel que soit le parcours retenu, prévoyez toujours des parcours
+          alternatifs.</strong
+        >
+        Aucune API n'est fiable à 100% : en cas de panne,
+        de donnée manquante ou erronné, l'usager doit pouvoir saisir l'information
+        manuellement ou déposer le document lui-même, sans que sa démarche
+        soit bloquée.
+      </p>
+
+      <h3>Pallier une panne ou une indisponibilité de l'API</h3>
+      <p>
+        Une API peut être indisponible, retourner une erreur, ou ne pas avoir
+        la donnée recherchée. Le parcours doit alors permettre à l'usager de
+        continuer sa démarche autrement : saisie manuelle de l'information, ou
+        dépôt du justificatif par ses soins. Un incident technique ne doit
+        jamais bloquer l'usager.
+      </p>
+      <h3 class="fr-mt-3w">Pallier une erreur de donnée</h3>
+      <p>
+        Un usager peut aussi constater que la donnée récupérée par API est
+        erronée ou périmée. Le parcours alternatif à proposer dépend alors de
+        la fiabilité de l'API.
+      </p>
+      <p>
+        <strong
+          >Pour les API dont la fraîcheur ou la qualité de la donnée n'est
+          pas garantie</strong
+        >, il peut être utile de permettre à l'usager de saisir directement
+        l'information. 
+      </p>
+      <p>
+        <strong
+          >Pour les API très fiables en termes de qualité et de fraîcheur de
+          données</strong
+        >, il est préférable de ne pas proposer à l'usager de "corriger" la donnée récupérée par API, mais plutôt de lui proposer un
+        parcours alternatif dans lequel il peut
+        suggérer sa correction, en déposant un élément qui justifie sa demande de correction.
+      </p>
+      <p>Dans les deux situations, assurez-vous de toujours indiquer à l'agent d'où provient l'information : est-elle récupérée par API ou indiquée par l'usager ? Pour lui permettre d'arbitrer, fournissez-lui les deux informations.
+      </p>
     </ArticleSection>
 
     <ArticleSection id="recapitulatif" label="Pour résumer">
@@ -473,10 +508,7 @@
           (compte usager ou FranceConnect).
         </li>
         <li>
-          <strong>Prévoyez toujours un parcours alternatif.</strong> Aucune API
-          ne garantit une disponibilité à 100 % : en cas de panne ou de donnée
-          manquante, l'usager doit pouvoir saisir l'information manuellement ou
-          déposer le document lui-même.
+          <strong>Prévoyez toujours un parcours alternatif.</strong> En cas de panne, de donnée obsolète ou erronnée, l'usager doit pouvoir saisir l'information et déposer un justificatif.
         </li>
       </SimplifionsArticleChecklist>
     </ArticleSection>
