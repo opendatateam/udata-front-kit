@@ -25,7 +25,7 @@ const skipLinks: SkipLinksProps['links'] = [
     text: 'Aller au contenu'
   },
   {
-    id: 'header-navigation',
+    id: 'main-nav',
     text: 'Aller au menu principal'
   },
   {
@@ -101,15 +101,24 @@ onMounted(() => {
 const { footer, rf_title, title } = useWebsiteConfig()
 const { logo, phrase, external_links, mandatory_links } = footer
 
+const skipLinksComp =
+  useTemplateRef<InstanceType<typeof SkipLinks>>('skipLinksComp')
+
 const setAccessibilityProperties: AccessibilityPropertiesType = (
   title,
+  focus = true,
   messages = []
 ): void => {
+  // announce page title to screen reader
   if (title) {
     liveInfos.value = [
       { text: `Page ${title} | ${config.website.title}` },
       ...messages
     ]
+  }
+  // focus skip link container
+  if (focus && skipLinksComp.value?.skipLinkList) {
+    skipLinksComp.value.skipLinkList.focus()
   }
 }
 
@@ -120,7 +129,7 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
   <Toaster rich-colors />
   <div id="tooltips" />
 
-  <SkipLinks :links="skipLinks" />
+  <SkipLinks ref="skipLinksComp" :links="skipLinks" />
 
   <LiveRegion v-if="liveInfos" :infos="liveInfos" aria-live-mode="assertive" />
   <DsfrNotice
@@ -158,6 +167,7 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
   />
 </template>
 
+<!-- global styles -->
 <style>
 .es__tiles__list {
   list-style-type: none;
@@ -172,7 +182,8 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
 .fr-footer__logo {
   max-width: 100%;
 }
-.simplifions.fr-mt-16w {
+.simplifions.fr-mt-16w,
+.culture.fr-mt-16w {
   margin-top: 0 !important;
 }
 </style>

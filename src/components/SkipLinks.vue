@@ -59,7 +59,7 @@ const handleSkipLink = (event: Event, id: string) => {
       role="navigation"
       aria-label="Accès rapides"
     >
-      <ul class="fr-skiplinks__list">
+      <ul class="fr-skiplinks__list" role="list">
         <li v-for="link of links" :key="link.id">
           <a
             class="fr-link"
