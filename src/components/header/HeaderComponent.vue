@@ -127,15 +127,18 @@ const { logo, title_image, description, beta, search } = header
   }
 
   @media (max-width: 62em) {
-    .fr-header__operator {
-      flex: 1 1 100%;
-      padding-top: 0;
-      order: 3;
-    }
-    .fr-header__navbar {
-      margin-right: 0;
-      align-self: center;
-      order: 2;
+    /* only reorder when an operator block actually exists */
+    &:has(.fr-header__operator) {
+      .fr-header__operator {
+        flex: 1 1 100%;
+        padding-top: 0;
+        order: 3;
+      }
+      .fr-header__navbar {
+        margin-right: 0;
+        align-self: center;
+        order: 2;
+      }
     }
   }
 }
@@ -144,13 +147,25 @@ const { logo, title_image, description, beta, search } = header
   background-color: var(--background-contrast-blue-cumulus);
   color: var(--text-label-blue-cumulus);
 }
-:deep(.fr-header__tools-links) {
-  flex-wrap: wrap;
-  align-items: center;
 
-  & > :last-child.custom-search {
-    flex: 1 0 100%;
-    max-inline-size: min(24rem, 100%);
+/* desktop only: on mobile the DSFR moves tools into the modal, don't override its display */
+@media (min-width: 62em) {
+  :deep(.fr-header__tools-links) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+
+    & > div {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    & > :last-child.custom-search {
+      flex: 0 0 auto;
+      inline-size: 100%;
+      max-inline-size: min(24rem, 100%);
+    }
   }
 }
 :deep(.custom-search) input + .fr-btn {
