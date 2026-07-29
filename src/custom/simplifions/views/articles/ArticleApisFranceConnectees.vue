@@ -8,9 +8,6 @@
     :hero-panel-background="articleMeta.heroPanelBackground"
     :breadcrumb-links="breadcrumbLinks"
   >
-    <template #badges>
-      <p class="fr-badge fr-badge--md fr-badge--green-menthe fr-m-0">Liste</p>
-    </template>
     <ArticleSection id="definition" label="Définition">
       <p class="fr-text--lead fr-text--center">
         Dans l'administration, on parle d'<i
