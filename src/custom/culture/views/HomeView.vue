@@ -267,6 +267,7 @@ onMounted(() => {
           </div>
         </section>
 
+        <!-- Section Highlight : Image à la même hauteur exacte que le texte -->
         <section
           v-else-if="section.fields.type === 'highlight'"
           class="fr-container--fluid fr-py-8w"
@@ -276,20 +277,15 @@ onMounted(() => {
             <div
               v-for="item in getContentForSection(section.fields.section)"
               :key="item.id"
-              class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle highlight-section"
+              class="highlight-card-wrapper"
             >
-              <div v-if="item.fields.imageUrl" class="fr-col-12 fr-col-md-6">
-                <img
-                  :src="item.fields.imageUrl"
-                  :alt="item.fields.title"
-                  class="fr-responsive-img"
-                />
-              </div>
-              <div class="fr-col-12 fr-col-md-6">
-                <h3 class="fr-h5 fr-mb-2w">
+              <div class="highlight-text-col">
+                <h3 v-if="section.fields.section_title" class="fr-h4 fr-mb-2w">
                   {{ section.fields.section_title }}
                 </h3>
-                <h4 class="fr-h6 fr-mb-2w">{{ item.fields.title }}</h4>
+                <h4 v-if="item.fields.title" class="fr-h6 fr-mb-2w">
+                  {{ item.fields.title }}
+                </h4>
                 <div class="fr-text--sm fr-mb-3w">
                   <!-- eslint-disable-next-line vue/no-v-html -->
                   <div v-html="fromMarkdown(item.fields.content).html"></div>
@@ -568,19 +564,54 @@ section h2 {
   background-color: #a9c8fb;
 }
 
-.highlight-section {
-  align-items: center;
+/* --- Bloc Highlight DSFR (Image restreinte à la hauteur exacte du texte) --- */
+.highlight-card-wrapper {
+  display: flex;
+  align-items: stretch;
+  gap: 2.5rem;
+  position: relative;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
 }
 
-.highlight-section .fr-responsive-img {
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.highlight-text-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.highlight-img-col {
+  flex: 0 0 320px;
+  width: 320px;
+  max-width: 320px;
+  position: relative;
+  overflow: hidden;
+
+  @media (max-width: 768px) {
+    flex: auto;
+    width: 100%;
+    max-width: 100%;
+    height: 250px;
+  }
+}
+
+.highlight-img {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: auto;
-}
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
 
-.highlight-section .fr-btn {
-  margin-top: 1rem;
+  @media (max-width: 768px) {
+    position: static;
+  }
 }
 
 @media (max-width: 768px) {
