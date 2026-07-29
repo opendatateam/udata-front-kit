@@ -46,8 +46,9 @@ import ArticleCard from '../../components/article/ArticleCard.vue'
 import { ARTICLE_KEYWORD_CATEGORIES, ARTICLE_KEYWORDS, articles } from '../../model/articles'
 
 useMeta({
-  title: 'Articles',
-  description: 'Guides et explications pour comprendre et intégrer les API utiles à la simplification de vos démarches.',
+  title: () => 'Articles',
+  description: () =>
+    'Guides et explications pour comprendre et intégrer les API utiles à la simplification de vos démarches.',
   canonicalUrl: useCanonicalUrl()
 })
 
