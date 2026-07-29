@@ -73,7 +73,7 @@ export const articleQuestCeQuUneAPI: ArticleMeta = {
 
 export const articleApisFranceConnectees: ArticleMeta = {
   slug: 'apis-franceconnectees',
-  h1: 'Les APIs FranceConnectées',
+  h1: 'Les API FranceConnectées',
   title: `Administrations, pré-remplissez les démarches FranceConnectées`,
   description: `Les API FranceConnectées donnent accès à diverses données administratives des particuliers en proposant FranceConnect comme modalité d'appel. Elles permettent de simplifier les démarches d'un particulier utilisant FranceConnect en récupérant automatiquement d'autres informations administratives le concernant.`,
   articleKeywords: [ARTICLE_KEYWORDS.api, ARTICLE_KEYWORDS.guideMetier, ARTICLE_KEYWORDS.apiFranceConnectees, ARTICLE_KEYWORDS.dsi, ARTICLE_KEYWORDS.moa, ARTICLE_KEYWORDS.editeurDeLogiciels, ARTICLE_KEYWORDS.definition],

@@ -52,7 +52,18 @@ useMeta({
   canonicalUrl: useCanonicalUrl()
 })
 
-const selectedKeywords = ref<string[]>([])
+const route = useRoute()
+const router = useRouter()
+
+const selectedKeywords = ref<string[]>(
+  typeof route.query.keywords === 'string' ? route.query.keywords.split(',') : []
+)
+
+watch(selectedKeywords, (keywords) => {
+  router.replace({
+    query: { ...route.query, keywords: keywords.length ? keywords.join(',') : undefined }
+  })
+})
 
 const keywordGroups = computed(() => {
   const counts = new Map<string, number>()
