@@ -207,7 +207,34 @@ onMounted(() => {
           >
             <h2>{{ section.fields.section_title }}</h2>
 
-            <div class="cards-container">
+            <div
+              v-if="section.fields.section === 'communaute'"
+              class="fr-grid-row fr-grid-row--gutters"
+            >
+              <div
+                v-for="item in getContentForSection(section.fields.section)"
+                :key="item.id"
+                class="fr-col-12 fr-col-md-4"
+              >
+                <div
+                  :id="`tile-${item.id}`"
+                  class="fr-tile fr-tile--horizontal fr-enlarge-link"
+                >
+                  <div class="fr-tile__body">
+                    <div class="fr-tile__content">
+                      <h3 class="fr-tile__title">
+                        <RouterLink :to="item.fields.ctaLink">
+                          {{ item.fields.title }}
+                        </RouterLink>
+                      </h3>
+                      <p class="fr-tile__detail">{{ item.fields.content }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div v-else class="cards-container">
               <div
                 v-for="item in getContentForSection(section.fields.section)"
                 :key="item.id"
