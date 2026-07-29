@@ -10,11 +10,6 @@ export type { SkipLinksProps }
 
 defineProps<SkipLinksProps>()
 
-const skipLinkList = useTemplateRef<HTMLElement>('skipLinkList')
-
-defineExpose({
-  skipLinkList
-})
 </script>
 
 <template>
