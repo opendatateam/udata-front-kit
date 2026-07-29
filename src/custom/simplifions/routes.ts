@@ -48,6 +48,11 @@ export const routes: RouteRecordRaw[] = [
     },
     component: articleComponentLoaders[meta.slug]
   })),
+  // Anciennes URLs à plat des articles, conservées pour ne pas casser les liens externes/SEO existants
+  ...articles.map((meta) => ({
+    path: `/${meta.slug}`,
+    redirect: `/articles/${meta.slug}`
+  })),
   useGlobalSearchPageRoutes({
     pageKey: 'cas-d-usages',
     topicConf,
