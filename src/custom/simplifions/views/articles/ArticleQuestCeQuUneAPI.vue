@@ -4,8 +4,6 @@
     :title="articleMeta.title"
     :lead="articleMeta.description"
     :article-keywords="articleMeta.articleKeywords"
-    :article-category="articleMeta.articleCategory"
-    :show-no-development-badge="articleMeta.showNoDevelopmentBadge"
     :hero-backdrop-gradient="articleMeta.heroBackdropGradient"
     :hero-panel-background="articleMeta.heroPanelBackground"
     :breadcrumb-links="breadcrumbLinks"

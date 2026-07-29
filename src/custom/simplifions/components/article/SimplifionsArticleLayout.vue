@@ -27,12 +27,6 @@
         >
           <div v-if="hasMeta" class="article-hero__meta fr-mb-3v fr-mb-md-4v">
             <ul
-              v-if="slots.badges"
-              class="article-hero__badge-list fr-p-0 fr-m-0"
-            >
-              <li><slot name="badges" /></li>
-            </ul>
-            <ul
               v-if="groupedKeywords.articleTypeKeywords.length || groupedKeywords.dataTypeKeywords.length"
               class="article-hero__badge-list fr-p-0 fr-m-0"
             >
@@ -146,7 +140,7 @@
 <script setup lang="ts">
 import type { BreadcrumbItem } from '@/model/breadcrumb'
 import { useCanonicalUrl, useMeta } from '@/utils/seo'
-import { provide, useSlots } from 'vue'
+import { provide } from 'vue'
 import { provideArticleTopicsRegistry } from '../../composables/useArticleTopicsRegistry'
 import { groupArticleKeywords, type ArticleKeyword } from '../../model/articles'
 import { articleSectionKey } from './articleSectionKey'
@@ -185,7 +179,6 @@ const props = withDefaults(
   }
 )
 
-const slots = useSlots()
 const metaTitle = computed(() => props.title ?? props.h1)
 
 const groupedKeywords = computed(() => groupArticleKeywords([...props.articleKeywords]))
@@ -224,7 +217,7 @@ const heroPanelStyle = computed(() => ({
   backgroundColor: props.heroPanelBackground
 }))
 
-const hasMeta = computed(() => props.articleKeywords.length > 0 || !!slots.badges)
+const hasMeta = computed(() => props.articleKeywords.length > 0)
 
 onMounted(() => {
   activeSection.value = sections.value[0]?.id ?? ''

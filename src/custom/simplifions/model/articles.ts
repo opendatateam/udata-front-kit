@@ -51,8 +51,6 @@ export interface ArticleMeta {
   title: string
   description: string
   imageSrc?: string
-  articleCategory?: 'guide'
-  showNoDevelopmentBadge?: boolean
   articleKeywords: ArticleKeyword[]
   heroBackdropGradient: string
   heroPanelBackground: string
@@ -64,8 +62,6 @@ export const articleQuestCeQuUneAPI: ArticleMeta = {
   title: "Qu'est-ce qu'une API ? Explication simple pour les non-techniciens",
   description:
     "Comprendre ce qu'est une API sans vocabulaire technique : comment ces outils permettent aux administrations d'échanger des données pour simplifier les démarches des entreprises, associations et particuliers.",
-  articleCategory: 'guide',
-  showNoDevelopmentBadge: false,
   articleKeywords: [ARTICLE_KEYWORDS.api, ARTICLE_KEYWORDS.definition, ARTICLE_KEYWORDS.petiteCollectivite, ARTICLE_KEYWORDS.moa],
   heroBackdropGradient: 'linear-gradient(135deg, #decdbd 0%, #d2e2f6 100%)',
   heroPanelBackground: 'var(--background-alt-beige-gris-galet)'
@@ -90,8 +86,6 @@ export const articleGuideBasePetitesCollectivites: ArticleMeta = {
   imageSrc:
     '/static/simplifions/assets/image-guide-de-base-collectivites-guichet-mairie-2.jpg',
   articleKeywords: [ARTICLE_KEYWORDS.guideDeBase, ARTICLE_KEYWORDS.petiteCollectivite],
-  articleCategory: 'guide',
-  showNoDevelopmentBadge: true,
   heroBackdropGradient: 'linear-gradient(135deg, #34BAB5 0%, #d2e2f6 100%)',
   heroPanelBackground: 'var(--background-alt-beige-gris-galet)'
 }
