@@ -1,9 +1,26 @@
 import { useGlobalSearchPageRoutes } from '@/router/utils'
+import type { Component } from 'vue'
 import type { RouteRecordRaw } from 'vue-router'
+import { articles } from './model/articles'
 
 const topicConf = {
   displayMetadata: false,
   enableReadMore: false
+}
+
+const articleComponentLoaders: Record<string, () => Promise<Component>> = {
+  'qu-est-ce-qu-une-api': async () =>
+    await import('./views/articles/ArticleQuestCeQuUneAPI.vue'),
+  'apis-franceconnectees': async () =>
+    await import('./views/articles/ArticleApisFranceConnectees.vue'),
+  'guide-base-petites-collectivites': async () =>
+    await import('./views/articles/ArticleGuideBasePetitesCollectivites.vue'),
+  'prerequis-et-etapes-integration-api': async () =>
+    await import('./views/articles/ArticlePrerequisEtapesIntegrationAPI.vue'),
+  'vos-interlocuteurs-selon-le-type-d-api': async () =>
+    await import('./views/articles/ArticleVosInterlocuteursSelonTypeAPI.vue'),
+  'anticiper-le-parcours-usager-avant-d-integrer-vos-api': async () =>
+    await import('./views/articles/ArticleAnticiperParcoursUsager.vue')
 }
 
 export const routes: RouteRecordRaw[] = [
@@ -16,71 +33,21 @@ export const routes: RouteRecordRaw[] = [
     component: async () => await import('./views/HomeView.vue')
   },
   {
-    path: '/apis-franceconnectees',
-    name: 'apis-franceconnectees',
+    path: '/articles',
+    name: 'articles',
     meta: {
-      title: 'APIs FranceConnectées'
+      title: 'Articles'
     },
-    component: async () =>
-      await import(
-        './views/articles/apis-france-connectees/ArticleApisFranceConnectees.vue'
-      )
+    component: async () => await import('./views/articles/ArticlesListView.vue')
   },
-  {
-    path: '/guide-base-petites-collectivites',
-    name: 'guide-base-petites-collectivites',
+  ...articles.map((meta) => ({
+    path: `/articles/${meta.slug}`,
+    name: meta.slug,
     meta: {
-      title: 'Guide de base pour les petites collectivités'
+      title: meta.title
     },
-    component: async () =>
-      await import(
-        './views/articles/guides-bases/ArticleGuideBasePetitesCollectivites.vue'
-      )
-  },
-  {
-    path: '/qu-est-ce-qu-une-api',
-    name: 'qu-est-ce-qu-une-api',
-    meta: {
-      title: "Qu'est-ce qu'une API ?"
-    },
-    component: async () =>
-      await import(
-        './views/articles/guides-bases/ArticleGuideBaseQuestCeQuUneAPI.vue'
-      )
-  },
-  {
-    path: '/prerequis-et-etapes-integration-api',
-    name: 'prerequis-et-etapes-integration-api',
-    meta: {
-      title: "Prérequis et étapes d'intégration d'une API"
-    },
-    component: async () =>
-      await import(
-        './views/articles/guides-bases/ArticlePrerequisEtapesIntegrationAPI.vue'
-      )
-  },
-  {
-    path: '/vos-interlocuteurs-selon-le-type-d-api',
-    name: 'vos-interlocuteurs-selon-le-type-d-api',
-    meta: {
-      title: "Vos interlocuteurs selon le type d'API"
-    },
-    component: async () =>
-      await import(
-        './views/articles/guides-bases/ArticleVosInterlocuteursSelonTypeAPI.vue'
-      )
-  },
-  {
-    path: '/anticiper-le-parcours-usager-avant-d-integrer-vos-api',
-    name: 'anticiper-le-parcours-usager-avant-d-integrer-vos-api',
-    meta: {
-      title: "Anticiper le parcours usager avant d'intégrer vos API"
-    },
-    component: async () =>
-      await import(
-        './views/articles/guides-bases/ArticleAnticiperParcoursUsager.vue'
-      )
-  },
+    component: articleComponentLoaders[meta.slug]
+  })),
   useGlobalSearchPageRoutes({
     pageKey: 'cas-d-usages',
     topicConf,

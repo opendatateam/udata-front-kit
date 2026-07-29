@@ -3,9 +3,10 @@
     :h1="articleMeta.h1"
     :title="articleMeta.title"
     :lead="articleMeta.description"
-    :article-tags="articleMeta.articleTags"
+    :article-keywords="articleMeta.articleKeywords"
     :hero-backdrop-gradient="articleMeta.heroBackdropGradient"
     :hero-panel-background="articleMeta.heroPanelBackground"
+    :breadcrumb-links="breadcrumbLinks"
   >
     <p class="fr-text--lg">
       Avant d'intégrer une API, il faut décider à quel endroit et comment vous
@@ -17,7 +18,7 @@
     </p>
 
     <SimplifionsArticleReadMore
-      to="/prerequis-et-etapes-integration-api"
+      to="/articles/prerequis-et-etapes-integration-api"
       description="Découvrir les autres prérequis avant d'intégrer une API :"
     />
 
@@ -452,7 +453,7 @@
       </p>
 
     <SimplifionsArticleReadMore
-      to="/prerequis-et-etapes-integration-api#limites"
+      to="/articles/prerequis-et-etapes-integration-api#limites"
       description="En savoir plus sur les limites des API :"
       section-title="Les limites des API"
     />
@@ -515,20 +516,16 @@
 </template>
 
 <script setup lang="ts">
-import SimplifionsArticleChecklist from '../../../components/article/SimplifionsArticleChecklist.vue'
-import SimplifionsArticleLayout from '../../../components/article/SimplifionsArticleLayout.vue'
-import SimplifionsArticleReadMore from '../../../components/article/SimplifionsArticleReadMore.vue'
-import ArticleSection from '../../../components/article/SimplifionsArticleSection.vue'
+import SimplifionsArticleChecklist from '../../components/article/SimplifionsArticleChecklist.vue'
+import SimplifionsArticleLayout from '../../components/article/SimplifionsArticleLayout.vue'
+import SimplifionsArticleReadMore from '../../components/article/SimplifionsArticleReadMore.vue'
+import ArticleSection from '../../components/article/SimplifionsArticleSection.vue'
+import {
+  articleAnticiperParcoursUsager as articleMeta,
+  getArticleBreadcrumbLinks
+} from '../../model/articles'
 
-const articleMeta = {
-  h1: "Anticiper le parcours usager avant d'intégrer vos API",
-  title: "Anticiper le parcours usager avant d'intégrer vos API",
-  description:
-    'API délivrant des données publiques ou protégées : ce guide détaille les parcours usager possibles pour intégrer une API.',
-  articleTags: [{ label: 'API' }, { label: 'Parcours usagers' }, { label: 'Guide métier' }],
-  heroBackdropGradient: 'linear-gradient(135deg, #decdbd 0%, #cfe0ef 100%)',
-  heroPanelBackground: 'var(--background-alt-beige-gris-galet)'
-}
+const breadcrumbLinks = getArticleBreadcrumbLinks(articleMeta.h1)
 </script>
 
 <style scoped>
