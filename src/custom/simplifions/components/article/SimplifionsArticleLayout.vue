@@ -33,20 +33,25 @@
               <li><slot name="badges" /></li>
             </ul>
             <ul
-              v-if="articleTags.length"
+              v-if="groupedKeywords.articleTypeKeywords.length || groupedKeywords.dataTypeKeywords.length"
+              class="article-hero__badge-list fr-p-0 fr-m-0"
+            >
+              <li v-for="keyword in groupedKeywords.articleTypeKeywords" :key="keyword.label">
+                <p class="fr-badge fr-badge--sm fr-m-0">{{ keyword.label }}</p>
+              </li>
+              <li v-for="keyword in groupedKeywords.dataTypeKeywords" :key="keyword.label">
+                <p class="fr-badge fr-badge--sm fr-badge--blue-ecume fr-m-0">
+                  {{ keyword.label }}
+                </p>
+              </li>
+            </ul>
+
+            <ul
+              v-if="groupedKeywords.otherKeywords.length"
               class="article-hero__tag-list fr-p-0 fr-m-0"
             >
-              <li v-for="tag in articleTags" :key="tag.label">
-                <a
-                  v-if="tag.href"
-                  class="fr-tag fr-tag--sm fr-m-0"
-                  :href="tag.href"
-                >
-                  {{ tag.label }}
-                </a>
-                <p v-else class="fr-tag fr-tag--sm fr-m-0">
-                  {{ tag.label }}
-                </p>
+              <li v-for="keyword in groupedKeywords.otherKeywords" :key="keyword.label">
+                <p class="fr-tag fr-tag--sm fr-m-0">{{ keyword.label }}</p>
               </li>
             </ul>
           </div>
@@ -59,6 +64,12 @@
           <h1 class="article-hero__title fr-m-0">{{ h1 }}</h1>
           <p v-if="lead" class="article-hero__lead fr-mt-4v">
             {{ lead }}
+          </p>
+          <p
+            v-if="groupedKeywords.audienceKeywords.length"
+            class="article-hero__audience fr-text--sm fr-text-mention--grey fr-icon-user-line fr-icon--sm fr-m-0"
+          >
+            Cet article s'adresse principalement à : {{ audienceDetail }}
           </p>
         </div>
       </div>
@@ -137,17 +148,13 @@ import type { BreadcrumbItem } from '@/model/breadcrumb'
 import { useCanonicalUrl, useMeta } from '@/utils/seo'
 import { provide, useSlots } from 'vue'
 import { provideArticleTopicsRegistry } from '../../composables/useArticleTopicsRegistry'
+import { groupArticleKeywords, type ArticleKeyword } from '../../model/articles'
 import { articleSectionKey } from './articleSectionKey'
 import SimplifionsArticleRelatedTopics from './SimplifionsArticleRelatedTopics.vue'
 
 type ArticleSection = {
   id: string
   label: string
-}
-
-type ArticleAudienceTag = {
-  label: string
-  href?: string
 }
 
 const props = withDefaults(
@@ -157,7 +164,7 @@ const props = withDefaults(
     lead?: string
     kicker?: string
     heroImageSrc?: string
-    articleTags?: readonly ArticleAudienceTag[]
+    articleKeywords?: readonly ArticleKeyword[]
     breadcrumbLinks?: readonly BreadcrumbItem[]
     // CSS gradient or image url() for the hero backdrop when no image is provided.
     // Example: 'linear-gradient(135deg, #1b1b35 0%, #1e1e1e 100%)'
@@ -171,7 +178,7 @@ const props = withDefaults(
     lead: undefined,
     kicker: '',
     heroImageSrc: '',
-    articleTags: () => [],
+    articleKeywords: () => [],
     heroBackdropGradient: 'linear-gradient(135deg, var(--background-action-low-blue-ecume) 0%, var(--background-contrast-blue-ecume) 100%)',
     heroPanelBackground: 'var(--background-alt-beige-gris-galet)',
     breadcrumbLinks: () => []
@@ -180,6 +187,11 @@ const props = withDefaults(
 
 const slots = useSlots()
 const metaTitle = computed(() => props.title ?? props.h1)
+
+const groupedKeywords = computed(() => groupArticleKeywords([...props.articleKeywords]))
+const audienceDetail = computed(() =>
+  groupedKeywords.value.audienceKeywords.map((keyword) => keyword.label).join(' · ')
+)
 
 useMeta({
   title: metaTitle,
@@ -212,7 +224,7 @@ const heroPanelStyle = computed(() => ({
   backgroundColor: props.heroPanelBackground
 }))
 
-const hasMeta = computed(() => props.articleTags.length > 0 || !!slots.badges)
+const hasMeta = computed(() => props.articleKeywords.length > 0 || !!slots.badges)
 
 onMounted(() => {
   activeSection.value = sections.value[0]?.id ?? ''
@@ -317,6 +329,10 @@ onBeforeUnmount(() => {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
+}
+
+.article-hero__audience::before {
+  margin-right: 0.375rem;
 }
 
 .article-hero__tag-list,
