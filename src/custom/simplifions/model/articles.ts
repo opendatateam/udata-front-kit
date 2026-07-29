@@ -29,6 +29,10 @@ export function groupArticleKeywords(keywords: ArticleKeyword[]) {
   }
 }
 
+export function joinKeywordLabels(keywords: ArticleKeyword[]) {
+  return keywords.map((keyword) => keyword.label).join(' · ')
+}
+
 export const ARTICLE_KEYWORDS = {
   guideDeBase: { label: 'Guide de base', category: "Type d'article" },
   guideMetier: { label: 'Guide métier', category: "Type d'article" },

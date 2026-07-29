@@ -142,7 +142,7 @@ import type { BreadcrumbItem } from '@/model/breadcrumb'
 import { useCanonicalUrl, useMeta } from '@/utils/seo'
 import { provide } from 'vue'
 import { provideArticleTopicsRegistry } from '../../composables/useArticleTopicsRegistry'
-import { groupArticleKeywords, type ArticleKeyword } from '../../model/articles'
+import { groupArticleKeywords, joinKeywordLabels, type ArticleKeyword } from '../../model/articles'
 import { articleSectionKey } from './articleSectionKey'
 import SimplifionsArticleRelatedTopics from './SimplifionsArticleRelatedTopics.vue'
 
@@ -182,9 +182,7 @@ const props = withDefaults(
 const metaTitle = computed(() => props.title ?? props.h1)
 
 const groupedKeywords = computed(() => groupArticleKeywords([...props.articleKeywords]))
-const audienceDetail = computed(() =>
-  groupedKeywords.value.audienceKeywords.map((keyword) => keyword.label).join(' · ')
-)
+const audienceDetail = computed(() => joinKeywordLabels(groupedKeywords.value.audienceKeywords))
 
 useMeta({
   title: metaTitle,

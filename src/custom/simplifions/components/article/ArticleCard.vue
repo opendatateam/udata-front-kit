@@ -61,14 +61,12 @@
 </template>
 
 <script setup lang="ts">
-import { groupArticleKeywords, type ArticleMeta } from '../../model/articles'
+import { groupArticleKeywords, joinKeywordLabels, type ArticleMeta } from '../../model/articles'
 
 const props = defineProps<{ article: ArticleMeta }>()
 
 const groupedKeywords = computed(() => groupArticleKeywords(props.article.articleKeywords))
-const audienceDetail = computed(() =>
-  groupedKeywords.value.audienceKeywords.map((keyword) => keyword.label).join(' · ')
-)
+const audienceDetail = computed(() => joinKeywordLabels(groupedKeywords.value.audienceKeywords))
 </script>
 
 <style scoped>
