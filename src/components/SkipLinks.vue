@@ -24,6 +24,7 @@ defineExpose({
       class="fr-container"
       role="navigation"
       aria-label="Accès rapides"
+      tabindex="-1"
     >
       <ul class="fr-skiplinks__list" role="list">
         <li v-for="link of links" :key="link.id">
