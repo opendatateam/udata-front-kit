@@ -31,17 +31,6 @@ const closeModal = () => {
   }
 }
 
-// give the DsfrHeader's nav a stable id/tabindex for the "aller au menu principal" skip link
-onMounted(() => {
-  const navEl: HTMLElement | null | undefined =
-    headerRef.value?.$el.querySelector(
-      '#header-navigation, .fr-header__navbar nav'
-    )
-  if (navEl) {
-    navEl.id = 'main-nav'
-    navEl.setAttribute('tabindex', '-1')
-  }
-})
 
 const { header, rf_title, title } = useWebsiteConfig()
 const { logo, title_image, description, beta, search } = header
