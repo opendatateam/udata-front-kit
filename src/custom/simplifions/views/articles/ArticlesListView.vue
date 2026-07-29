@@ -43,6 +43,7 @@
 <script setup lang="ts">
 import { useCanonicalUrl, useMeta } from '@/utils/seo'
 import ArticleCard from '../../components/article/ArticleCard.vue'
+import type { ArticleKeywordCategory } from '../../model/articles'
 import { ARTICLE_KEYWORD_CATEGORIES, ARTICLE_KEYWORDS, articles } from '../../model/articles'
 
 useMeta({
@@ -65,25 +66,47 @@ watch(selectedKeywords, (keywords) => {
   })
 })
 
-const keywordGroups = computed(() => {
-  const counts = new Map<string, number>()
-  for (const keyword of articles.flatMap((article) => article.articleKeywords)) {
-    counts.set(keyword.label, (counts.get(keyword.label) ?? 0) + 1)
+const selectedKeywordsByCategory = computed(() => {
+  const byCategory = new Map<ArticleKeywordCategory, string[]>()
+  for (const label of selectedKeywords.value) {
+    const keyword = Object.values(ARTICLE_KEYWORDS).find((k) => k.label === label)
+    if (!keyword) continue
+    byCategory.set(keyword.category, [...(byCategory.get(keyword.category) ?? []), label])
   }
-  return ARTICLE_KEYWORD_CATEGORIES.map((category) => ({
-    category,
-    keywords: Object.values(ARTICLE_KEYWORDS)
-      .filter((keyword) => keyword.category === category)
-      .map((keyword) => ({ label: keyword.label, count: counts.get(keyword.label) ?? 0 }))
-  })).filter((group) => group.keywords.length > 0)
+  return byCategory
 })
 
+function matchesSelectedCategories(
+  article: (typeof articles)[number],
+  excludedCategory?: ArticleKeywordCategory
+) {
+  for (const [category, labels] of selectedKeywordsByCategory.value) {
+    if (category === excludedCategory) continue
+    if (!article.articleKeywords.some((keyword) => labels.includes(keyword.label))) return false
+  }
+  return true
+}
+
 const filteredArticles = computed(() =>
-  selectedKeywords.value.length === 0
-    ? articles
-    : articles.filter((article) =>
-        article.articleKeywords.some((keyword) => selectedKeywords.value.includes(keyword.label))
-      )
+  articles.filter((article) => matchesSelectedCategories(article))
+)
+
+const keywordGroups = computed(() =>
+  ARTICLE_KEYWORD_CATEGORIES.map((category) => {
+    const relevantArticles = articles.filter((article) =>
+      matchesSelectedCategories(article, category)
+    )
+    const counts = new Map<string, number>()
+    for (const keyword of relevantArticles.flatMap((article) => article.articleKeywords)) {
+      counts.set(keyword.label, (counts.get(keyword.label) ?? 0) + 1)
+    }
+    return {
+      category,
+      keywords: Object.values(ARTICLE_KEYWORDS)
+        .filter((keyword) => keyword.category === category)
+        .map((keyword) => ({ label: keyword.label, count: counts.get(keyword.label) ?? 0 }))
+    }
+  }).filter((group) => group.keywords.length > 0)
 )
 
 function toggleKeyword(keyword: string) {
