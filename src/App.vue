@@ -19,6 +19,9 @@ import { useWebsiteConfig } from './utils/config'
 const userStore = useUserStore()
 const isNoticeClosed = ref(false)
 
+const { footer, header, rf_title, title } = useWebsiteConfig()
+const { logo, phrase, external_links, mandatory_links } = footer
+
 const skipLinks: SkipLinksProps['links'] = [
   {
     id: 'main-content',
@@ -28,15 +31,15 @@ const skipLinks: SkipLinksProps['links'] = [
     id: 'main-nav',
     text: 'Aller au menu principal'
   },
-  {
-    id: 'header-select-search',
-    text: 'Aller à la recherche'
-  },
+  ...(header.search.display
+    ? [{ id: 'header-select-search', text: 'Aller à la recherche' }]
+    : []),
   {
     id: 'main-footer',
     text: 'Aller au pied de page'
   }
 ]
+
 const liveInfos: Ref<InfoToAnnounce[] | undefined> = ref()
 
 const noticeContent = computed(() => {
@@ -98,9 +101,6 @@ onMounted(() => {
   userStore.init()
 })
 
-const { footer, rf_title, title } = useWebsiteConfig()
-const { logo, phrase, external_links, mandatory_links } = footer
-
 const skipLinksComp =
   useTemplateRef<InstanceType<typeof SkipLinks>>('skipLinksComp')
 
@@ -147,12 +147,13 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
     :custom-search="true"
   />
 
-  <main id="main-content" :class="siteID" role="main">
+  <main id="main-content" tabindex="-1" :class="siteID" role="main">
     <RouterView />
   </main>
 
   <DsfrFooter
     id="main-footer"
+    tabindex="-1"
     :class="[siteID, 'fr-mt-16w']"
     :logo-text="rf_title"
     :operator-img-src="logo?.src"
