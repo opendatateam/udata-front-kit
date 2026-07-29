@@ -339,7 +339,7 @@ const articleMeta = {
   // title: recommended ≤ 60 characters for search engines
   title: `Administrations, pré-remplissez les démarches FranceConnectées`,
   description: `Les API FranceConnectées donnent accès à diverses données administratives des particuliers en proposant FranceConnect comme modalité d'appel. Elles permettent de simplifier les démarches d'un particulier utilisant FranceConnect en récupérant automatiquement d'autres informations administratives le concernant.`,
-  articleTags: [{ label: 'Toutes les administrations' }],
+  articleTags: [{ label: 'API' }, { label: 'API FranceConnectées' }, { label: 'Guide métier' }],
   heroBackdropGradient: 'linear-gradient(135deg, #a19237 0%, #fddede 100%)',
   heroPanelBackground: 'var(--background-alt-beige-gris-galet)'
 }

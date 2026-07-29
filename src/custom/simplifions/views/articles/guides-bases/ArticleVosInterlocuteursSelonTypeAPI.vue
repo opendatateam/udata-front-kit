@@ -242,7 +242,7 @@ const articleMeta = {
   title: "Vos interlocuteurs selon le type d'API",
   description:
     "Identifiez votre interlocuteur selon le type d'API que vous intégrez et selon votre situation.",
-  articleTags: [],
+  articleTags: [{ label: 'API' }, { label: 'Guide métier' }],
   heroBackdropGradient: 'linear-gradient(135deg, #decdbd 0%, #e3e3fd 100%)',
   heroPanelBackground: 'var(--background-alt-beige-gris-galet)'
 }

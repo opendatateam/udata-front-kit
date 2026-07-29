@@ -500,7 +500,7 @@ const articleMeta = {
     "Petites collectivités, simplifiez vos démarches administratives sans développement : portails publics gratuits et logiciels éditeurs déjà raccordés aux données vous permettent d'éviter de les redemander aux usagers.",
   imageSrc:
     '/static/simplifions/assets/image-guide-de-base-collectivites-guichet-mairie-2.jpg',
-  articleTags: [{ label: 'Petites collectivités' }],
+  articleTags: [{ label: 'Guide de base' }, { label: 'Petites collectivités' }],
   articleCategory: 'guide' as const,
   showNoDevelopmentBadge: true,
   heroBackdropGradient: 'linear-gradient(135deg, #34BAB5 0%, #d2e2f6 100%)',

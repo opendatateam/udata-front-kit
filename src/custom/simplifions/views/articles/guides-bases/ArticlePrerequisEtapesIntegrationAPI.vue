@@ -602,7 +602,7 @@ const articleMeta = {
   title: "Prérequis et étapes d'intégration d'une API",
   description:
     "Prérequis techniques, juridiques et d'usage, étapes d'intégration, limites à connaître : Acteurs publics, ce guide vous aide à comprendre ce qui vous attend lorsque vous vous engagez dans la simplification de vos démarches grâce aux API.",
-  articleTags: [],
+  articleTags: [{ label: 'API' }, { label: 'Guide technique' }, { label: 'Guide métier' }],
   heroBackdropGradient: 'linear-gradient(135deg, #decdbd 0%, #a3afce 100%)',
   heroPanelBackground: 'var(--background-alt-beige-gris-galet)'
 }

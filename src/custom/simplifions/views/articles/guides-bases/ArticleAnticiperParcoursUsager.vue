@@ -525,7 +525,7 @@ const articleMeta = {
   title: "Anticiper le parcours usager avant d'intégrer vos API",
   description:
     'API délivrant des données publiques ou protégées : ce guide détaille les parcours usager possibles pour intégrer une API.',
-  articleTags: [],
+  articleTags: [{ label: 'API' }, { label: 'Parcours usagers' }, { label: 'Guide métier' }],
   heroBackdropGradient: 'linear-gradient(135deg, #decdbd 0%, #cfe0ef 100%)',
   heroPanelBackground: 'var(--background-alt-beige-gris-galet)'
 }
