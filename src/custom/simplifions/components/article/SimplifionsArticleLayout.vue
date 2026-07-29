@@ -41,6 +41,20 @@
             </ul>
 
             <ul
+              v-if="groupedKeywords.articleTypeKeywords.length || groupedKeywords.dataTypeKeywords.length"
+              class="article-hero__badge-list fr-p-0 fr-m-0"
+            >
+              <li v-for="keyword in groupedKeywords.articleTypeKeywords" :key="keyword.label">
+                <p class="fr-badge fr-badge--sm fr-m-0">{{ keyword.label }}</p>
+              </li>
+              <li v-for="keyword in groupedKeywords.dataTypeKeywords" :key="keyword.label">
+                <p class="fr-badge fr-badge--sm fr-badge--blue-ecume fr-m-0">
+                  {{ keyword.label }}
+                </p>
+              </li>
+            </ul>
+
+            <ul
               v-if="groupedKeywords.otherKeywords.length"
               class="article-hero__tag-list fr-p-0 fr-m-0"
             >
