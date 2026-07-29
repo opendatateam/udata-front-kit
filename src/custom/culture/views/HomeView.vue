@@ -217,8 +217,8 @@ onMounted(() => {
                 class="fr-col-12 fr-col-md-4"
               >
                 <div
-                  class="fr-tile fr-tile--horizontal fr-enlarge-link"
                   :id="`tile-${item.id}`"
+                  class="fr-tile fr-tile--horizontal fr-enlarge-link"
                 >
                   <div class="fr-tile__body">
                     <div class="fr-tile__content">
