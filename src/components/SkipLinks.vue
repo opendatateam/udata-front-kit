@@ -10,6 +10,12 @@ export type { SkipLinksProps }
 
 defineProps<SkipLinksProps>()
 
+const skipLinkList = useTemplateRef<HTMLElement>('skipLinkList')
+
+// Expose l'élément HTML <nav> à App.vue (utilisé pour forcer le focus clavier lors de la navigation)
+defineExpose({
+  skipLinkList
+})
 </script>
 
 <template>
