@@ -31,7 +31,6 @@ const closeModal = () => {
   }
 }
 
-
 const { header, rf_title, title } = useWebsiteConfig()
 const { logo, title_image, description, beta, search } = header
 </script>
