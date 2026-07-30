@@ -53,6 +53,9 @@ const contentItems = ref<ContentItem[]>([])
 const topItems = ref<TopItem[]>([])
 const loading = ref(true)
 
+const openLink = (href: string) =>
+  window.open(href, '_blank', 'noopener,noreferrer')
+
 const typeLabel: Record<string, string> = {
   'top-datasets': 'Jeux les plus consultés',
   'top-reuses': 'Jeux les plus réutilisés',
@@ -352,11 +355,8 @@ onMounted(() => {
               button-title="S'abonner à l'infolettre - nouvel onglet"
               :button-action="
                 () =>
-                  window.open(
-                    getContentForSection(section.fields.section)[0]?.fields
-                      .ctaLink,
-                    '_blank',
-                    'noopener,noreferrer'
+                  openLink(
+                    getContentForSection(section.fields.section)[0]?.fields.ctaLink
                   )
               "
               :only-callout="true"
