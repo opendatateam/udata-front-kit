@@ -9,7 +9,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
 
   it('should retain filters when switching to solutions (filters are shared via applies_to_pages)', () => {
     cy.selectFilterValue(
-      'À destination de :',
+      'Démarches gérées par :',
       'Communes et groupements de communes'
     )
     cy.url().should('include', 'fournisseurs-de-service=')
@@ -62,7 +62,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
 
   it('should be able to filter by fournisseurs de service ', () => {
     cy.expectActionToCallApi(
-      () => cy.selectFilterValue('À destination de :', 'Communes'),
+      () => cy.selectFilterValue('Démarches gérées par :', 'Communes'),
       'topics',
       {
         tag: [
@@ -77,7 +77,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
     cy.expectActionToCallApi(
       () =>
         cy.selectFilterValue(
-          'Pour simplifier les démarches de :',
+          'Démarches à destination des :',
           'Particuliers'
         ),
       'topics',
@@ -157,7 +157,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
     cy.get('div.topic-card').should('have.length', 20)
 
     cy.mockDatagouvObjectList('topics', topicCasUsageFactory.many(3))
-    cy.selectFilterValue('À destination de :', 'Communes')
+    cy.selectFilterValue('Démarches gérées par :', 'Communes')
 
     cy.get('p[role="status"]').should('contain.text', '3 résultats')
     cy.get('div.topic-card').should('have.length', 3)

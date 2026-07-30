@@ -50,7 +50,7 @@ describe('Simplifions Solutions Page', () => {
 
   it('should be able to filter by fournisseurs de service ', () => {
     cy.expectActionToCallApi(
-      () => cy.selectFilterValue('À destination de :', 'Communes'),
+      () => cy.selectFilterValue('Démarches gérées par :', 'Communes'),
       'topics',
       {
         tag: [
@@ -65,7 +65,7 @@ describe('Simplifions Solutions Page', () => {
     cy.expectActionToCallApi(
       () =>
         cy.selectFilterValue(
-          'Pour simplifier les démarches de :',
+          'Démarches à destination des :',
           'Particuliers'
         ),
       'topics',
@@ -145,7 +145,7 @@ describe('Simplifions Solutions Page', () => {
     cy.get('div.topic-card').should('have.length', 20)
 
     cy.mockDatagouvObjectList('topics', topicSolutionFactory.many(3))
-    cy.selectFilterValue('À destination de :', 'Communes')
+    cy.selectFilterValue('Démarches gérées par :', 'Communes')
 
     cy.get('p[role="status"]').should('contain.text', '3 résultats')
     cy.get('div.topic-card').should('have.length', 3)
