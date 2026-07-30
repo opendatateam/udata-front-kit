@@ -305,6 +305,11 @@
       </div>
     </ArticleSection>
 
+    <SimplifionsArticleReadMore
+      to="/vos-interlocuteurs-selon-le-type-d-api"
+      description="Bouquet d'API, API à l'unité, API FranceConnectée : identifier qui contacter selon le type d'API."
+    />
+
     <ArticleSection id="recapitulatif" label="Récapitulatif">
       <SimplifionsArticleChecklist>
         <li>
@@ -342,6 +347,7 @@ import ArticleSection from '../../../components/article/SimplifionsArticleSectio
 import SimplifionsArticleChecklist from '../../../components/article/SimplifionsArticleChecklist.vue'
 import SimplifionsArticleTopicSpotlight from '../../../components/article/SimplifionsArticleTopicSpotlight.vue'
 import SimplifionsArticleFigure from '../../../components/article/SimplifionsArticleFigure.vue'
+import SimplifionsArticleReadMore from '../../../components/article/SimplifionsArticleReadMore.vue'
 import ApiSireneDemo from './ApiSireneDemo.vue'
 
 const articleMeta = {
@@ -352,7 +358,7 @@ const articleMeta = {
   articleCategory: 'guide' as const,
   showNoDevelopmentBadge: false,
   articleTags: [],
-  heroBackdropGradient: 'linear-gradient(135deg, #5770be 0%, #d2e2f6 100%)',
+  heroBackdropGradient: 'linear-gradient(135deg, #decdbd 0%, #d2e2f6 100%)',
   heroPanelBackground: 'var(--background-alt-beige-gris-galet)'
 }
 </script>

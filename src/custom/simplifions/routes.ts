@@ -48,6 +48,39 @@ export const routes: RouteRecordRaw[] = [
         './views/articles/guides-bases/ArticleGuideBaseQuestCeQuUneAPI.vue'
       )
   },
+  {
+    path: '/prerequis-et-etapes-integration-api',
+    name: 'prerequis-et-etapes-integration-api',
+    meta: {
+      title: "Prérequis et étapes d'intégration d'une API"
+    },
+    component: async () =>
+      await import(
+        './views/articles/guides-bases/ArticlePrerequisEtapesIntegrationAPI.vue'
+      )
+  },
+  {
+    path: '/vos-interlocuteurs-selon-le-type-d-api',
+    name: 'vos-interlocuteurs-selon-le-type-d-api',
+    meta: {
+      title: "Vos interlocuteurs selon le type d'API"
+    },
+    component: async () =>
+      await import(
+        './views/articles/guides-bases/ArticleVosInterlocuteursSelonTypeAPI.vue'
+      )
+  },
+  {
+    path: '/anticiper-le-parcours-usager-avant-d-integrer-vos-api',
+    name: 'anticiper-le-parcours-usager-avant-d-integrer-vos-api',
+    meta: {
+      title: "Anticiper le parcours usager avant d'intégrer vos API"
+    },
+    component: async () =>
+      await import(
+        './views/articles/guides-bases/ArticleAnticiperParcoursUsager.vue'
+      )
+  },
   useGlobalSearchPageRoutes({
     pageKey: 'cas-d-usages',
     topicConf,
