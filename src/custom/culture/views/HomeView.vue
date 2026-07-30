@@ -6,7 +6,7 @@ import config from '@/config'
 import CultureDatasetCard from '@/custom/culture/components/CultureDatasetCard.vue'
 import { fromMarkdown } from '@/utils'
 import { useMeta } from '@/utils/seo'
-import { DsfrFollow, DsfrNewsLetter } from '@gouvminint/vue-dsfr'
+import { DsfrCard, DsfrFollow, DsfrNewsLetter } from '@gouvminint/vue-dsfr'
 
 useMeta({
   description: () => config.website.homepage.meta_description,
@@ -165,26 +165,24 @@ onMounted(() => {
             :key="card.link"
             class="fr-col-12 fr-col-md-4"
           >
-            <div class="fr-card fr-enlarge-link fr-card--shadow">
-              <div class="fr-card__body">
-                <div class="fr-card__content">
-                  <h3 class="fr-card__title">
-                    <a :href="card.link">{{ card.title }}</a>
-                  </h3>
-                  <div class="fr-card__start">
-                    <ul class="fr-badges-group">
-                      <li>
-                        <span
-                          class="fr-badge fr-badge--sm fr-badge--purple-glycine fr-badge--no-icon"
-                        >
-                          {{ typeLabel[card.type] }}
-                        </span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <DsfrCard
+              :title="card.title"
+              :link="card.link"
+              :enlarge="true"
+              title-tag="h3"
+            >
+              <template #start>
+                <ul class="fr-badges-group">
+                  <li>
+                    <span
+                      class="fr-badge fr-badge--sm fr-badge--purple-glycine fr-badge--no-icon"
+                    >
+                      {{ typeLabel[card.type] }}
+                    </span>
+                  </li>
+                </ul>
+              </template>
+            </DsfrCard>
           </div>
         </div>
       </section>
@@ -354,9 +352,11 @@ onMounted(() => {
               button-title="S'abonner à l'infolettre - nouvel onglet"
               :button-action="
                 () =>
-                  openLink(
+                  window.open(
                     getContentForSection(section.fields.section)[0]?.fields
-                      .ctaLink
+                      .ctaLink,
+                    '_blank',
+                    'noopener,noreferrer'
                   )
               "
               :only-callout="true"
