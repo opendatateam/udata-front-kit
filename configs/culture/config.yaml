@@ -271,19 +271,29 @@ pages:
     filters:
       - name: Thématique
         default_option: Toutes les catégories
-        id: tag
+        id: thematique
+        api_param: tag
         type: select
         use_filter_prefix: false
         values:
-          - name: 'Suivi conjoncturel des secteurs culturels marchands'
-            id: suivi-conjoncturel-des-secteurs-culturels-marchands
-          - name: 'Poids économique direct'
-            id: poids-economique-direct
-          - name: 'Financement'
-            id: financement
+          - name: '📊 Économie du champ culturel'
+            id: economie-culturelle
+          - name: '🎓 Formation, emploi et revenus'
+            id: formation-emploi-revenus
+          - name: '🗺️ Géographie des activités culturelles'
+            id: geographie-activites-culturelles
+          - name: '👥 Pratiques, usages et consommations'
+            id: pratiques-usages-consommations
+          - name: '🏛️ Patrimoines'
+            id: patrimoines
+          - name: '🎨 Création artistique'
+            id: creation-artistique
+          - name: '🎬 Médias et industries culturelles'
+            id: medias-industries-culturelles
       - name: Sous-thématique
         default_option: Toutes les catégories
-        id: tag
+        id: sous-thematique
+        api_param: tag
         type: select
         use_filter_prefix: false
         values:
