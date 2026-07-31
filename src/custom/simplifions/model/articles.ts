@@ -47,7 +47,7 @@ export const ARTICLE_KEYWORDS = {
   parcoursUsager: { label: 'Parcours usager', category: 'Thématique' },
   integrationTechnique: { label: 'Intégration technique', category: 'Thématique' },
   apiFranceConnectees: { label: 'API FranceConnectées', category: 'Thématique' }
-} as const satisfies Record<string, ArticleKeyword>
+} satisfies Record<string, ArticleKeyword>
 
 export interface ArticleMeta {
   slug: string
