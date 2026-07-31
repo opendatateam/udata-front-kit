@@ -3,9 +3,10 @@
     :h1="articleMeta.h1"
     :title="articleMeta.title"
     :lead="articleMeta.description"
-    :article-tags="articleMeta.articleTags"
+    :article-keywords="articleMeta.articleKeywords"
     :hero-backdrop-gradient="articleMeta.heroBackdropGradient"
     :hero-panel-background="articleMeta.heroPanelBackground"
+    :breadcrumb-links="breadcrumbLinks"
   >
     <p class="fr-text--lg">
       Selon le type d'API que vous intégrez — <em>bouquet mono ou
@@ -16,7 +17,7 @@
     </p>
 
      <SimplifionsArticleReadMore
-      to="/qu-est-ce-qu-une-api"
+      to="/articles/qu-est-ce-qu-une-api"
       description="Comprendre ce qu'est une API sans vocabulaire technique."
     />
 
@@ -111,7 +112,7 @@
       </p>
 
       <SimplifionsArticleReadMore
-        to="/apis-franceconnectees"
+        to="/articles/apis-franceconnectees"
         description="Consulter la liste de toutes les API FranceConnectées"
       />
     </ArticleSection>
@@ -231,19 +232,15 @@
 </template>
 
 <script setup lang="ts">
-import SimplifionsArticleLayout from '../../../components/article/SimplifionsArticleLayout.vue'
-import ArticleSection from '../../../components/article/SimplifionsArticleSection.vue'
-import SimplifionsArticleChecklist from '../../../components/article/SimplifionsArticleChecklist.vue'
-import SimplifionsArticleTopicSpotlight from '../../../components/article/SimplifionsArticleTopicSpotlight.vue'
-import SimplifionsArticleReadMore from '../../../components/article/SimplifionsArticleReadMore.vue'
+import SimplifionsArticleLayout from '../../components/article/SimplifionsArticleLayout.vue'
+import ArticleSection from '../../components/article/SimplifionsArticleSection.vue'
+import SimplifionsArticleChecklist from '../../components/article/SimplifionsArticleChecklist.vue'
+import SimplifionsArticleTopicSpotlight from '../../components/article/SimplifionsArticleTopicSpotlight.vue'
+import SimplifionsArticleReadMore from '../../components/article/SimplifionsArticleReadMore.vue'
+import {
+  articleVosInterlocuteursSelonTypeAPI as articleMeta,
+  getArticleBreadcrumbLinks
+} from '../../model/articles'
 
-const articleMeta = {
-  h1: "Vos interlocuteurs selon le type d'API",
-  title: "Vos interlocuteurs selon le type d'API",
-  description:
-    "Identifiez votre interlocuteur selon le type d'API que vous intégrez et selon votre situation.",
-  articleTags: [],
-  heroBackdropGradient: 'linear-gradient(135deg, #decdbd 0%, #e3e3fd 100%)',
-  heroPanelBackground: 'var(--background-alt-beige-gris-galet)'
-}
+const breadcrumbLinks = getArticleBreadcrumbLinks(articleMeta.h1)
 </script>
