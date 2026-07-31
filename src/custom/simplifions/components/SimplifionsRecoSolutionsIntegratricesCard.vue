@@ -14,21 +14,6 @@
           <h3 class="solution-integratrice-card__title fr-text--lg">
             {{ solution.fields.Nom }}
           </h3>
-          <!-- Simplification tags (diamonds) with tag styling -->
-          <div
-            v-if="simplificationTags.length"
-            class="fr-tags-group simplification-diamonds"
-          >
-            <p
-              v-for="tag in simplificationTags"
-              :key="tag.id"
-              class="fr-tag fr-tag--sm fr-m-0"
-              :aria-label="tag.name"
-              :title="tag.name"
-            >
-              {{ getShortLabelSimplificationTag(tag.name) }}
-            </p>
-          </div>
         </div>
         <SimplifionsSolutionOperateurTag :grist-solution="solution.fields" />
       </div>
@@ -99,7 +84,6 @@
 <script setup lang="ts">
 import TooltipWrapper from '@/components/TooltipWrapper.vue'
 import type { Topic } from '@/model/topic'
-import { useTagsByRef } from '@/utils/tags'
 import type { SolutionRecord } from '../model/grist'
 import TopicsAPI from '../simplifionsTopicsApi'
 import SimplifionsSolutionOperateurTag from './SimplifionsSolutionOperateurTag.vue'
@@ -121,12 +105,6 @@ topicsAPI.getTopicByTag(solutionTag).then((topic) => {
 
 const datagouvSlug = computed(() => solutionTopic.value?.slug)
 
-const topicTags = useTagsByRef('solutions', solutionTopic)
-
-const simplificationTags = computed(() => {
-  return topicTags.value.filter((tag) => tag.type === 'types-de-simplification')
-})
-
 const colorClass = computed(() => {
   if (!props.integrationScore) return ''
   const { integratedCount, totalCount } = props.integrationScore
@@ -137,12 +115,6 @@ const colorClass = computed(() => {
   return 'indicator--red'
 })
 
-const getShortLabelSimplificationTag = (name: string) => {
-  if (name.includes('Accès facile')) return '💠'
-  if (name.includes('Dites-le nous une fois')) return '💠💠'
-  if (name.toLowerCase().includes('proactivité')) return '💠💠💠'
-  return name
-}
 </script>
 
 <style scoped>
@@ -187,10 +159,6 @@ const getShortLabelSimplificationTag = (name: string) => {
   margin: 0;
 }
 
-.simplification-diamonds {
-  margin-left: auto;
-}
-
 .solution-integratrice-card__arrow {
   position: absolute;
   bottom: 1rem;
@@ -204,15 +172,6 @@ const getShortLabelSimplificationTag = (name: string) => {
 .integration-indicator__label {
   line-height: 0.1;
   margin-bottom: 0;
-}
-
-.fr-tags-group {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
 }
 
 @media (max-width: 767px) {

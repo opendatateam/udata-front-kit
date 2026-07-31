@@ -22,32 +22,10 @@
         <HumanReadableList :items="orderedFournisseursDeService" />
       </p>
     </div>
-    <!-- Tags indiquant le type de simplification et de budget -->
-    <div
-      v-if="!props.hideSimplification && groupedTags['types-de-simplification']"
-      class="simplification-group fr-mt-2w"
-    >
-      <ul class="fr-badges-group">
-        <li v-for="t in groupedTags['types-de-simplification']" :key="t.id">
-          <TagComponent :tag="t" />
-        </li>
-      </ul>
-    </div>
-    <div
-      v-if="showCategorieDeSolution && groupedTags['categorie-de-solution']"
-      class="categorie-de-solution-group"
-    >
-      <ul class="fr-badges-group">
-        <li v-for="t in groupedTags['categorie-de-solution']" :key="t.id">
-          <TagComponent :tag="t" />
-        </li>
-      </ul>
-    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import TagComponent from '@/components/TagComponent.vue'
 import { useTagsByRef } from '@/utils/tags'
 import type { TopicCasUsage, TopicSolution } from '../model/topics'
 import HumanReadableList from './HumanReadableList.vue'
@@ -56,13 +34,10 @@ const props = withDefaults(
   defineProps<{
     topic: TopicCasUsage | TopicSolution
     pageKey: string
-    showCategorieDeSolution?: boolean
-    hideSimplification?: boolean
     showTargetUsers?: boolean
     showFournisseurs?: boolean
   }>(),
   {
-    showCategorieDeSolution: true,
     showTargetUsers: true,
     showFournisseurs: true
   }
