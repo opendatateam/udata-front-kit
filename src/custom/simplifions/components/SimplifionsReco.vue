@@ -106,6 +106,7 @@
 
       <SimplifionsRecoIntegratingSolutionsAccordion
         title="Via une brique logicielle à intégrer"
+        solution-kind="brique"
         :solutions="integratingSolutionsBriquesTechniques"
         :integration-score-per-solution="integrationScorePerSolution"
         :nom-fournisseur="recommandation.Nom_de_la_recommandation"
@@ -120,6 +121,7 @@
 
       <SimplifionsRecoIntegratingSolutionsAccordion
         title="Via un logiciel métier « clé en main »"
+        solution-kind="logiciel"
         :solutions="integratingSolutionsLogicielsMetiers"
         :integration-score-per-solution="integrationScorePerSolution"
         :nom-fournisseur="recommandation.Nom_de_la_recommandation"
@@ -133,6 +135,7 @@
 
       <SimplifionsRecoIntegratingSolutionsAccordion
         title="Via un portail de consultation"
+        solution-kind="portail"
         :solutions="integratingSolutionsPortailsConsultation"
         :integration-score-per-solution="integrationScorePerSolution"
         :nom-fournisseur="recommandation.Nom_de_la_recommandation"
