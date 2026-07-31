@@ -253,9 +253,9 @@ describe('Solutions intégratrices block', () => {
     })
 
     cy.contains('button[role="tab"]', 'Logiciels métiers').should('exist')
-    cy.contains('button[role="tab"]', 'Briques techniques').should('exist')
+    cy.contains('button[role="tab"]', 'API, base de donnée ou brique logicielle').should('exist')
 
-    cy.contains('button[role="tab"]', 'Briques techniques').click()
+    cy.contains('button[role="tab"]', 'API, base de donnée ou brique logicielle').click()
     cy.get('.fr-tabs__panel')
       .filter(':visible')
       .find('.integrateur-card')
@@ -282,13 +282,13 @@ describe('Solutions intégratrices block', () => {
     })
 
     // Navigate to the second tab
-    cy.contains('button[role="tab"]', 'Briques techniques').click()
+    cy.contains('button[role="tab"]', 'API, base de donnée ou brique logicielle').click()
     cy.get('.integrateur-card').should('contain.text', 'Brique A')
 
     // Apply a filter that removes all solutions with fewer APIs, hiding Logiciel métier tab
     cy.get('#min-apis').select('Au moins 3')
 
-    // First (and only) tab should now be Briques techniques
+    // First (and only) tab should now be API, base de donnée ou brique logicielle
     cy.contains('button[role="tab"]', 'Logiciels métiers').should('not.exist')
     cy.get('.fr-tabs__panel')
       .filter(':visible')
