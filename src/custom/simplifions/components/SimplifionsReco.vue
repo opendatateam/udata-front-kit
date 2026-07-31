@@ -131,6 +131,31 @@
           <strong>Liste des logiciels métier, sur étagère</strong> conçus pour
           le cas d'usage «<i>&nbsp;{{ recommandation.Nom_complet_du_cas_d_usage }}&nbsp;</i>» :
         </p>
+
+        <template #demande-acces>
+          <div v-if="access_url" class="fr-mt-2w">
+            <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle">
+              <p class="fr-col fr-mb-0">
+                Vous êtes déjà client d'un de ces éditeurs ? Demandez un accès
+                à «&nbsp;{{ recommandation.Nom_de_la_recommandation }}&nbsp;»
+                pour votre logiciel :
+              </p>
+              <a
+                rel="noopener noreferrer"
+                :href="access_url"
+                class="fr-btn test__access-link-logiciel"
+                target="_blank"
+              >
+                Demander un accès
+              </a>
+            </div>
+            <p class="fr-text--sm fr-mb-0 fr-mt-1w">
+              Si vous n'êtes pas déjà client, contactez d'abord l'éditeur avant
+              de demander un accès à
+              «&nbsp;{{ recommandation.Nom_de_la_recommandation }}&nbsp;».
+            </p>
+          </div>
+        </template>
       </SimplifionsRecoIntegratingSolutionsAccordion>
 
       <SimplifionsRecoIntegratingSolutionsAccordion

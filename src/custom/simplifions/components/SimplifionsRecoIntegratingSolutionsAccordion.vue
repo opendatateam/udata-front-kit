@@ -65,6 +65,7 @@
         />
       </div>
     </div>
+    <slot name="demande-acces" />
   </DsfrAccordion>
 </template>
 
