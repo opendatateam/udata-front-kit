@@ -3,11 +3,10 @@
     :h1="articleMeta.h1"
     :title="articleMeta.title"
     :lead="articleMeta.description"
-    :article-tags="articleMeta.articleTags"
-    :article-category="articleMeta.articleCategory"
-    :show-no-development-badge="articleMeta.showNoDevelopmentBadge"
+    :article-keywords="articleMeta.articleKeywords"
     :hero-backdrop-gradient="articleMeta.heroBackdropGradient"
     :hero-panel-background="articleMeta.heroPanelBackground"
+    :breadcrumb-links="breadcrumbLinks"
   >
     <ArticleSection id="definition" label="Qu'est-ce qu'une API ?">
       <p class="fr-text--lead">
@@ -261,7 +260,7 @@
 
         <router-link
           class="fr-btn fr-btn--secondary fr-icon-arrow-right-line fr-btn--icon-right"
-          to="/apis-franceconnectees"
+          to="/articles/apis-franceconnectees"
         >
           Les API FranceConnectées
         </router-link>
@@ -306,7 +305,7 @@
     </ArticleSection>
 
     <SimplifionsArticleReadMore
-      to="/vos-interlocuteurs-selon-le-type-d-api"
+      to="/articles/vos-interlocuteurs-selon-le-type-d-api"
       description="Bouquet d'API, API à l'unité, API FranceConnectée : identifier qui contacter selon le type d'API."
     />
 
@@ -334,7 +333,7 @@
         <li>
           D'autres API spécialisées existent : <router-link to="/solutions/api-impot-particulier"><strong>l'API Impôt Particulier</strong></router-link> et
           <router-link to="/solutions/api-service-finances-publiques-sfip"><strong>l'API SFIP</strong></router-link> (DGFiP) pour les données fiscales,
-          <router-link to="/solutions/franceconnect-2"><strong>FranceConnect</strong></router-link> pour utiliser une connexion usager comme donnée d'appel et accéder aux <router-link to="/apis-franceconnectees">API FranceConnectées</router-link>.
+          <router-link to="/solutions/franceconnect-2"><strong>FranceConnect</strong></router-link> pour utiliser une connexion usager comme donnée d'appel et accéder aux <router-link to="/articles/apis-franceconnectees">API FranceConnectées</router-link>.
         </li>
       </SimplifionsArticleChecklist>
     </ArticleSection>
@@ -342,25 +341,19 @@
 </template>
 
 <script setup lang="ts">
-import SimplifionsArticleLayout from '../../../components/article/SimplifionsArticleLayout.vue'
-import ArticleSection from '../../../components/article/SimplifionsArticleSection.vue'
-import SimplifionsArticleChecklist from '../../../components/article/SimplifionsArticleChecklist.vue'
-import SimplifionsArticleTopicSpotlight from '../../../components/article/SimplifionsArticleTopicSpotlight.vue'
-import SimplifionsArticleFigure from '../../../components/article/SimplifionsArticleFigure.vue'
-import SimplifionsArticleReadMore from '../../../components/article/SimplifionsArticleReadMore.vue'
+import SimplifionsArticleLayout from '../../components/article/SimplifionsArticleLayout.vue'
+import ArticleSection from '../../components/article/SimplifionsArticleSection.vue'
+import SimplifionsArticleChecklist from '../../components/article/SimplifionsArticleChecklist.vue'
+import SimplifionsArticleTopicSpotlight from '../../components/article/SimplifionsArticleTopicSpotlight.vue'
+import SimplifionsArticleFigure from '../../components/article/SimplifionsArticleFigure.vue'
+import SimplifionsArticleReadMore from '../../components/article/SimplifionsArticleReadMore.vue'
 import ApiSireneDemo from './ApiSireneDemo.vue'
+import {
+  articleQuestCeQuUneAPI as articleMeta,
+  getArticleBreadcrumbLinks
+} from '../../model/articles'
 
-const articleMeta = {
-  h1: "Qu'est-ce qu'une API ?",
-  title: "Qu'est-ce qu'une API ? Explication simple pour les non-techniciens",
-  description:
-    "Comprendre ce qu'est une API sans vocabulaire technique : comment ces outils permettent aux administrations d'échanger des données pour simplifier les démarches des entreprises, associations et particuliers.",
-  articleCategory: 'guide' as const,
-  showNoDevelopmentBadge: false,
-  articleTags: [],
-  heroBackdropGradient: 'linear-gradient(135deg, #decdbd 0%, #d2e2f6 100%)',
-  heroPanelBackground: 'var(--background-alt-beige-gris-galet)'
-}
+const breadcrumbLinks = getArticleBreadcrumbLinks(articleMeta.h1)
 </script>
 
 <style scoped>

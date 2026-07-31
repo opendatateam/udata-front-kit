@@ -3,14 +3,11 @@
     :h1="articleMeta.h1"
     :title="articleMeta.title"
     :lead="articleMeta.description"
-    :article-tags="articleMeta.articleTags"
+    :article-keywords="articleMeta.articleKeywords"
     :hero-backdrop-gradient="articleMeta.heroBackdropGradient"
     :hero-panel-background="articleMeta.heroPanelBackground"
     :breadcrumb-links="breadcrumbLinks"
   >
-    <template #badges>
-      <p class="fr-badge fr-badge--md fr-badge--green-menthe fr-m-0">Liste</p>
-    </template>
     <ArticleSection id="definition" label="Définition">
       <p class="fr-text--lead fr-text--center">
         Dans l'administration, on parle d'<i
@@ -327,24 +324,18 @@
 </template>
 
 <script setup lang="ts">
-import SimplifionsArticleLayout from '../../../components/article/SimplifionsArticleLayout.vue'
-import ArticleSection from '../../../components/article/SimplifionsArticleSection.vue'
-import SimplifionsArticleTopicSpotlight from '../../../components/article/SimplifionsArticleTopicSpotlight.vue'
-import SimplifionsDataApi from '../../../components/SimplifionsDataApi.vue'
-import { grist } from '../../../grist'
-import type { ApiOrDataset } from '../../../model/grist'
+import SimplifionsArticleLayout from '../../components/article/SimplifionsArticleLayout.vue'
+import ArticleSection from '../../components/article/SimplifionsArticleSection.vue'
+import SimplifionsArticleTopicSpotlight from '../../components/article/SimplifionsArticleTopicSpotlight.vue'
+import SimplifionsDataApi from '../../components/SimplifionsDataApi.vue'
+import { grist } from '../../grist'
+import type { ApiOrDataset } from '../../model/grist'
+import {
+  articleApisFranceConnectees as articleMeta,
+  getArticleBreadcrumbLinks
+} from '../../model/articles'
 
-const articleMeta = {
-  h1: 'Les APIs FranceConnectées',
-  // title: recommended ≤ 60 characters for search engines
-  title: `Administrations, pré-remplissez les démarches FranceConnectées`,
-  description: `Les API FranceConnectées donnent accès à diverses données administratives des particuliers en proposant FranceConnect comme modalité d'appel. Elles permettent de simplifier les démarches d'un particulier utilisant FranceConnect en récupérant automatiquement d'autres informations administratives le concernant.`,
-  articleTags: [{ label: 'Toutes les administrations' }],
-  heroBackdropGradient: 'linear-gradient(135deg, #a19237 0%, #fddede 100%)',
-  heroPanelBackground: 'var(--background-alt-beige-gris-galet)'
-}
-
-const breadcrumbLinks = [{ to: '/', text: 'Accueil' }, { text: articleMeta.h1 }]
+const breadcrumbLinks = getArticleBreadcrumbLinks(articleMeta.h1)
 
 const apisLoading = ref(true)
 const apisError = ref(false)
