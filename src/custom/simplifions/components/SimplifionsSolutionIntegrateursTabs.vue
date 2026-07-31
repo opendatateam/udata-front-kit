@@ -128,14 +128,14 @@ const tabTitles = computed(() => {
   const titles = []
   if (filteredLogicielsMetiers.value.length > 0) {
     titles.push({
-      title: `Logiciels métiers (${filteredLogicielsMetiers.value.length}) 💠💠💠`,
+      title: `Logiciels métiers (${filteredLogicielsMetiers.value.length})`,
       tabId: 'tab-logiciel-metier',
       panelId: 'tab-content-logiciel-metier'
     })
   }
   if (filteredBriquesTechniques.value.length > 0) {
     titles.push({
-      title: `Briques techniques (${filteredBriquesTechniques.value.length}) 💠💠💠`,
+      title: `API, base de donnée ou brique logicielle (${filteredBriquesTechniques.value.length})`,
       tabId: 'tab-brique-technique',
       panelId: 'tab-content-brique-technique'
     })
