@@ -589,6 +589,24 @@ describe("Simplifions Cas d'usages Show page - accordions behaviour", () => {
     })
   })
 
+  it('should display a "Demander un accès" button in the "logiciel métier" accordion when an access link exists', () => {
+    setupWithTwoAccordions({
+      access_link_with_fallback: 'https://example.com/access'
+    })
+
+    cy.get('button.fr-accordion__btn').eq(1).click()
+    cy.get('.test__access-link-logiciel')
+      .should('contain.text', 'Demander un accès')
+      .and('have.attr', 'href', 'https://example.com/access')
+  })
+
+  it('should not display the "logiciel métier" access button when no access link is provided', () => {
+    setupWithTwoAccordions()
+
+    cy.get('button.fr-accordion__btn').eq(1).click()
+    cy.get('.test__access-link-logiciel').should('not.exist')
+  })
+
   it("should not affect another reco-card's accordion when one is opened", () => {
     cy.baseMocksForSimplifions()
 

@@ -170,7 +170,8 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
 .fr-footer__logo {
   max-width: 100%;
 }
-.simplifions.fr-mt-16w {
+.simplifions.fr-mt-16w,
+.culture.fr-mt-16w {
   margin-top: 0 !important;
 }
 </style>
