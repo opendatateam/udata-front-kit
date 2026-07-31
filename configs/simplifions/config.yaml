@@ -98,6 +98,8 @@ website:
       to: /
     - text: Cas d'usages
       to: /cas-d-usages
+    - text: Articles
+      to: /articles
     - text: À propos
       to: /about
   router:
@@ -163,6 +165,8 @@ website:
       path: /
     - name: Cas d'usages
       path: /cas-d-usages
+    - name: Articles
+      path: /articles
     - name: Solutions
       path: /solutions
     - name: Jeux de données
