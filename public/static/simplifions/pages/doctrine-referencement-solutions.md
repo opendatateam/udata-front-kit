@@ -58,7 +58,7 @@
                         <li><span style="background-color: #bfd9e3ff; padding: 2px; border-radius: 4px;"><b>OUI</b></span> <span style="background-color: #e7e7e7ff; padding: 2px; border-radius: 4px;">⬇️ Question suivante</span>
                         <br/>
                         <p class="fr-text--sm ">
-                        Si ce produit remplit les critères de référencement suivants, le niveau de simplification indiqué sera <b>Accès facile</b>, et non les niveaux supérieurs DLNUF ou proactivité. Il s'agit souvent de portails de consultation de données.
+                        Si ce produit remplit les critères de référencement suivants, le niveau de simplification indiqué sera <b>Accès facile</b>, et non les niveaux supérieurs DLNUF ou proactivité. Il s'agit souvent de sites de consultation de données.
                         </p>
                         </li>
                     </ul>

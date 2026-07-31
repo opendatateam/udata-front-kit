@@ -142,7 +142,7 @@ const tabTitles = computed(() => {
   }
   if (filteredPortailsConsultation.value.length > 0) {
     titles.push({
-      title: `Portails de consultation (${filteredPortailsConsultation.value.length})`,
+      title: `Sites de consultation (${filteredPortailsConsultation.value.length})`,
       tabId: 'tab-portail-consultation',
       panelId: 'tab-content-portail-consultation'
     })

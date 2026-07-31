@@ -225,7 +225,7 @@ shared_filter_values:
     - id: logiciel-metier
       name: Logiciel métier "clé en main"
     - id: portail-consultation
-      name: Portail de consultation
+      name: Site de consultation
 
   types_de_simplification: &types_de_simplification_values
     - id: proactivite
