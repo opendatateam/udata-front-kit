@@ -133,7 +133,10 @@
         class="fr-mb-4w"
       >
         <SimplifionsReco
-          v-if="recommandation.Solution_recommandee || recommandation.API_ou_datasets_recommandes"
+          v-if="
+            recommandation.Solution_recommandee ||
+            recommandation.API_ou_datasets_recommandes
+          "
           :recommandation="recommandation"
         />
       </div>

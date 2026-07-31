@@ -329,11 +329,11 @@ import ArticleSection from '../../components/article/SimplifionsArticleSection.v
 import SimplifionsArticleTopicSpotlight from '../../components/article/SimplifionsArticleTopicSpotlight.vue'
 import SimplifionsDataApi from '../../components/SimplifionsDataApi.vue'
 import { grist } from '../../grist'
-import type { ApiOrDataset } from '../../model/grist'
 import {
   articleApisFranceConnectees as articleMeta,
   getArticleBreadcrumbLinks
 } from '../../model/articles'
+import type { ApiOrDataset } from '../../model/grist'
 
 const breadcrumbLinks = getArticleBreadcrumbLinks(articleMeta.h1)
 

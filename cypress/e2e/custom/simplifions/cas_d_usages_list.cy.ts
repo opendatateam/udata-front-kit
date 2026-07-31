@@ -76,10 +76,7 @@ describe("Simplifions Cas d'usages Listing Page", () => {
   it('should be able to filter by target users ', () => {
     cy.expectActionToCallApi(
       () =>
-        cy.selectFilterValue(
-          'Démarches à destination des :',
-          'Particuliers'
-        ),
+        cy.selectFilterValue('Démarches à destination des :', 'Particuliers'),
       'topics',
       {
         tag: [
