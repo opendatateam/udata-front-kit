@@ -2,16 +2,24 @@
   <div class="fr-card fr-enlarge-link fr-card--shadow">
     <div class="fr-card__body">
       <div class="fr-card__content fr-px-2w fr-pt-3w">
-        <div v-if="groupedKeywords.audienceKeywords.length" class="fr-card__start">
+        <div
+          v-if="groupedKeywords.audienceKeywords.length"
+          class="fr-card__start"
+        >
           <p class="fr-card__detail fr-icon-user-line">{{ audienceDetail }}</p>
         </div>
         <h3 class="fr-card__title fr-text--lead fr-mb-0">
-          <router-link :to="`/articles/${article.slug}`">{{ article.h1 }}</router-link>
+          <router-link :to="`/articles/${article.slug}`">{{
+            article.h1
+          }}</router-link>
         </h3>
         <p class="fr-card__desc fr-text--md">{{ article.description }}</p>
         <div class="fr-card__end">
           <ul class="fr-tags-group">
-            <li v-for="keyword in groupedKeywords.otherKeywords" :key="keyword.label">
+            <li
+              v-for="keyword in groupedKeywords.otherKeywords"
+              :key="keyword.label"
+            >
               <p class="fr-tag fr-tag--sm">{{ keyword.label }}</p>
             </li>
           </ul>
@@ -33,7 +41,10 @@
         ></div>
       </div>
       <div
-        v-if="groupedKeywords.articleTypeKeywords.length || groupedKeywords.dataTypeKeywords.length"
+        v-if="
+          groupedKeywords.articleTypeKeywords.length ||
+          groupedKeywords.dataTypeKeywords.length
+        "
         class="fr-badges-group"
       >
         <p
@@ -44,7 +55,10 @@
           {{ keyword.label }}
         </p>
         <span
-          v-if="groupedKeywords.articleTypeKeywords.length && groupedKeywords.dataTypeKeywords.length"
+          v-if="
+            groupedKeywords.articleTypeKeywords.length &&
+            groupedKeywords.dataTypeKeywords.length
+          "
           class="badge-group-break"
           aria-hidden="true"
         ></span>
@@ -61,12 +75,20 @@
 </template>
 
 <script setup lang="ts">
-import { groupArticleKeywords, joinKeywordLabels, type ArticleMeta } from '../../model/articles'
+import {
+  groupArticleKeywords,
+  joinKeywordLabels,
+  type ArticleMeta
+} from '../../model/articles'
 
 const props = defineProps<{ article: ArticleMeta }>()
 
-const groupedKeywords = computed(() => groupArticleKeywords(props.article.articleKeywords))
-const audienceDetail = computed(() => joinKeywordLabels(groupedKeywords.value.audienceKeywords))
+const groupedKeywords = computed(() =>
+  groupArticleKeywords(props.article.articleKeywords)
+)
+const audienceDetail = computed(() =>
+  joinKeywordLabels(groupedKeywords.value.audienceKeywords)
+)
 </script>
 
 <style scoped>

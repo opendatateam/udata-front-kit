@@ -1,5 +1,9 @@
 <template>
-  <ul ref="track" class="carousel__track fr-m-0 fr-p-0" @scroll.passive="onScroll">
+  <ul
+    ref="track"
+    class="carousel__track fr-m-0 fr-p-0"
+    @scroll.passive="onScroll"
+  >
     <slot />
   </ul>
   <div

@@ -22,6 +22,7 @@
     "lint": "eslint . --max-warnings 0",
     "hint": "tsc --project tsconfig.vitest.json",
     "format": "prettier --write src/",
+    "format:check": "prettier --check \"**/*.{js,ts,mjs,mts,vue,yml,yaml,json,md,css}\"",
     "prepare": "husky",
     "generate-robots-txt": "node scripts/generate-robots-txt.mjs",
     "type-check": "pnpm run type-check:app && pnpm run type-check:cypress",
