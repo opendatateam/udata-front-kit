@@ -28,7 +28,6 @@
         class="no-margins dataset-card"
         :dataset="datagouvResource as DatasetV2"
         :dataset-url="datagouvLink"
-        dataset-url-in-new-tab
         :title-tag="props.titleTag"
       />
       <DataserviceCard
@@ -44,10 +43,10 @@
 </template>
 
 <script setup lang="ts">
+import DatasetCard from '@/custom/simplifions/components/SimplifionsDatasetCard.vue'
 import DataserviceCard from '@/custom/simplifions/components/SimplifionsDataserviceCard.vue'
 import DatagouvfrAPI from '@/services/api/DatagouvfrAPI'
 import type { Dataservice, DatasetV2 } from '@datagouv/components-next'
-import { DatasetCard } from '@datagouv/components-next'
 import * as Sentry from '@sentry/vue'
 import type { ApiOrDataset } from '../model/grist'
 
