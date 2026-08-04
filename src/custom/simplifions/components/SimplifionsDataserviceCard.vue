@@ -20,7 +20,7 @@
           <Placeholder v-else type="Organization" class="size-10" />
         </div>
       </div>
-      <div class="fr-col-12 fr-col-sm">
+      <div class="fr-col">
         <component :is="props.titleTag" class="fr-text--md fr-mb-0 fr-grid-row">
           <!-- External link (string URL) -->
           <a
@@ -30,12 +30,7 @@
             rel="noopener noreferrer"
             class="text-default-grey fr-grid-row"
           >
-            <TextClamp
-              class="fr-col"
-              :auto-resize="true"
-              :text="dataservice.title"
-              :max-lines="1"
-            />
+            <span class="fr-col">{{ dataservice.title }}</span>
           </a>
           <!-- Internal link (router object) -->
           <RouterLink
@@ -43,17 +38,12 @@
             :to="dataserviceUrl"
             class="text-default-grey fr-grid-row"
           >
-            <TextClamp
-              class="fr-col"
-              :auto-resize="true"
-              :text="dataservice.title"
-              :max-lines="1"
-            />
+            <span class="fr-col">{{ dataservice.title }}</span>
           </RouterLink>
         </component>
         <div
           v-if="dataservice.organization"
-          class="fr-text--sm fr-m-0 inline-flex"
+          class="fr-text--sm fr-m-0 fr-grid-row fr-grid-row--middle"
         >
           <span class="not-enlarged fr-mr-1v">
             <OrganizationNameWithCertificate
@@ -193,9 +183,14 @@ const formatAvailability = (availability: number): string => {
   transform: none !important;
 }
 
-.inline-flex {
-  display: inline-flex;
-  align-items: center;
+/* @datagouv/components-next defines .truncate with !important inside @layer utilities (Tailwind).
+   Unlayered !important loses to layered !important, so we must be in the same layer to win the cascade. */
+@layer utilities {
+  .not-enlarged :deep(.truncate) {
+    overflow: visible !important;
+    white-space: normal !important;
+    text-overflow: clip !important;
+  }
 }
 
 .absolute {
