@@ -180,28 +180,29 @@
         >
           <p>
             <b
-              >Ces sites vous permettent de consulter certaines des données utiles
-              pour ce cas d'usage :</b
+              >Ces sites vous permettent de consulter certaines des données
+              utiles pour ce cas d'usage :</b
             >
           </p>
           <div class="fr-m-2w fr-highlight--orange-terre-battue fr-highlight">
             <p class="fr-mb-0">
               💡 Pour vraiment simplifier la vie des usagers, l'intégration
-              directe de cette API ou de jeu de données dans vos logiciels métiers
-              est à privilégier car elle permet de mettre en oeuvre le
+              directe de cette API ou de jeu de données dans vos logiciels
+              métiers est à privilégier car elle permet de mettre en oeuvre le
               <i>dites-le-nous une fois</i> et la proactivité !
             </p>
           </div>
         </SimplifionsRecoIntegratingSolutionsAccordion>
       </DsfrAccordionsGroup>
 
-    <p class="fr-text--sm fr-mx-2w fr-mt-2w">
-      <i
-        >Une solution intégrant
-        «&nbsp;{{ recommandation.Nom_de_la_recommandation }}&nbsp;», n'est pas listée ?
-      </i>
-      <a href="#modification-contenu">✒️ Proposez-nous de l'ajouter</a>.
-    </p>
+      <p class="fr-text--sm fr-mx-2w fr-mt-2w">
+        <i
+          >Une solution intégrant «&nbsp;{{
+            recommandation.Nom_de_la_recommandation
+          }}&nbsp;», n'est pas listée ?
+        </i>
+        <a href="#modification-contenu">✒️ Proposez-nous de l'ajouter</a>.
+      </p>
     </div>
   </div>
 </template>

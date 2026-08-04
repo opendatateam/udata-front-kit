@@ -114,7 +114,6 @@ const colorClass = computed(() => {
   if (pct >= 25) return 'indicator--orange'
   return 'indicator--red'
 })
-
 </script>
 
 <style scoped>
