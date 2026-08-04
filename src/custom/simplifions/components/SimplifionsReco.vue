@@ -170,30 +170,30 @@
           </template>
         </SimplifionsRecoIntegratingSolutionsAccordion>
 
-      <SimplifionsRecoIntegratingSolutionsAccordion
-        title="Via un site de consultation"
-        solution-kind="portail"
-        :solutions="integratingSolutionsPortailsConsultation"
-        :integration-score-per-solution="integrationScorePerSolution"
-        :nom-fournisseur="recommandation.Nom_de_la_recommandation"
-        :type-label="typeLabel"
-      >
-        <p>
-          <b
-            >Ces sites vous permettent de consulter certaines des données utiles
-            pour ce cas d'usage :</b
-          >
-        </p>
-        <div class="fr-m-2w fr-highlight--orange-terre-battue fr-highlight">
-          <p class="fr-mb-0">
-            💡 Pour vraiment simplifier la vie des usagers, l'intégration
-            directe de cette API ou de jeu de données dans vos logiciels métiers
-            est à privilégier car elle permet de mettre en oeuvre le
-            <i>dites-le-nous une fois</i> et la proactivité !
+        <SimplifionsRecoIntegratingSolutionsAccordion
+          title="Via un site de consultation"
+          solution-kind="portail"
+          :solutions="integratingSolutionsPortailsConsultation"
+          :integration-score-per-solution="integrationScorePerSolution"
+          :nom-fournisseur="recommandation.Nom_de_la_recommandation"
+          :type-label="typeLabel"
+        >
+          <p>
+            <b
+              >Ces sites vous permettent de consulter certaines des données utiles
+              pour ce cas d'usage :</b
+            >
           </p>
-        </div>
-      </SimplifionsRecoIntegratingSolutionsAccordion>
-    </DsfrAccordionsGroup>
+          <div class="fr-m-2w fr-highlight--orange-terre-battue fr-highlight">
+            <p class="fr-mb-0">
+              💡 Pour vraiment simplifier la vie des usagers, l'intégration
+              directe de cette API ou de jeu de données dans vos logiciels métiers
+              est à privilégier car elle permet de mettre en oeuvre le
+              <i>dites-le-nous une fois</i> et la proactivité !
+            </p>
+          </div>
+        </SimplifionsRecoIntegratingSolutionsAccordion>
+      </DsfrAccordionsGroup>
 
     <p class="fr-text--sm fr-mx-2w fr-mt-2w">
       <i
