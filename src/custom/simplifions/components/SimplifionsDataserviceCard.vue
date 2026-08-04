@@ -4,8 +4,13 @@
       v-if="dataservice.access_type === 'restricted'"
       class="absolute top-0 fr-grid-row fr-grid-row--middle fr-mt-n3v fr-ml-n1v"
     >
-      <p class="fr-badge fr-badge--sm fr-badge--info fr-badge--no-icon fr-mr-1w">
-        <span class="fr-icon-lock-line fr-icon--xs fr-mr-1v" aria-hidden="true"></span> 
+      <p
+        class="fr-badge fr-badge--sm fr-badge--info fr-badge--no-icon fr-mr-1w"
+      >
+        <span
+          class="fr-icon-lock-line fr-icon--xs fr-mr-1v"
+          aria-hidden="true"
+        ></span>
         API restreinte
       </p>
     </div>
@@ -32,7 +37,8 @@
           class="fr-text--sm fr-m-0 fr-grid-row fr-grid-row--middle"
         >
           <span class="not-enlarged fr-mr-1v">
-           Opérateur de l'API :  <OrganizationNameWithCertificate
+            Opérateur de l'API :
+            <OrganizationNameWithCertificate
               :organization="dataservice.organization"
               color-class="text-gray-title"
             />

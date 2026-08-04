@@ -43,8 +43,8 @@
 </template>
 
 <script setup lang="ts">
-import DatasetCard from '@/custom/simplifions/components/SimplifionsDatasetCard.vue'
 import DataserviceCard from '@/custom/simplifions/components/SimplifionsDataserviceCard.vue'
+import DatasetCard from '@/custom/simplifions/components/SimplifionsDatasetCard.vue'
 import DatagouvfrAPI from '@/services/api/DatagouvfrAPI'
 import type { Dataservice, DatasetV2 } from '@datagouv/components-next'
 import * as Sentry from '@sentry/vue'
