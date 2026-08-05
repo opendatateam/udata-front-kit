@@ -96,6 +96,7 @@ const routerPromise = siteRoutesPromise.then((siteRoutes) => {
   siteRoutes.forEach((route) => {
     routesMap.set(route.path, route)
   })
+  // FIXME: remove me when simplifions is out of front-kit (SEO/sitemap hack)
   // static pages never override an already registered route (default or site-specific)
   pages.forEach((route) => {
     if (!routesMap.has(route.path)) {
