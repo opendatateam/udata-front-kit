@@ -44,7 +44,10 @@ export type Indicator = DatasetV2WithFullObject & {
   extras: IndicatorExtras
 }
 
-export type IndicatorMesh = 'fr' | 'region' | 'departement' | 'epci'
+// 'commune' is a dummy value: no resource ever has this maille, it only
+// exists so the mesh select can offer it and IndicatorVizChart can show an
+// explanatory message instead of trying to load data.
+export type IndicatorMesh = 'fr' | 'region' | 'departement' | 'epci' | 'commune'
 
 export type IndicatorResourceExtras = {
   maille: IndicatorMesh

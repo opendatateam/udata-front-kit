@@ -5,7 +5,8 @@ export const DEFAULT_TABULAR_API_URL = 'https://tabular-api.data.gouv.fr'
 export const GEOCOLUMNS: Record<Exclude<IndicatorMesh, 'fr'>, string> = {
   departement: 'geocode_departement',
   region: 'geocode_region',
-  epci: 'geocode_epci'
+  epci: 'geocode_epci',
+  commune: 'geocode_commune' // unused: 'commune' has no resource to query
 }
 
 export const MESHES: [IndicatorMesh, string][] = [

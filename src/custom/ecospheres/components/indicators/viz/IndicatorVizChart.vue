@@ -66,6 +66,11 @@ watch(
   { immediate: true }
 )
 
+// See IndicatorMesh: shows an explanatory message instead of the chart.
+const isCommuneMesh = computed(
+  () => selectedIndicatorVizMesh.value === 'commune'
+)
+
 const tabularApiUrlRef = toRef(props, 'tabularApiUrl')
 const { rawData, availableAxisValues, isLoading, error } = useTabularData(
   tabularApiUrlRef,
@@ -197,7 +202,15 @@ onMounted(() => {
       </div>
 
       <DsfrAlert
-        v-if="error"
+        v-if="isCommuneMesh"
+        type="info"
+        description="Les données communales sont présentes dans les fichiers, mais la prévisualisation des communes n'est pas disponible."
+        :small="true"
+        class="fr-mt-4w"
+      />
+
+      <DsfrAlert
+        v-else-if="error"
         type="error"
         :description="`Erreur lors du chargement : ${error}`"
         :small="true"
