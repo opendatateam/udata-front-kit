@@ -2,9 +2,9 @@
 import { computed, onMounted, ref } from 'vue'
 
 import SearchComponent from '@/components/SearchComponent.vue'
-import HeroSection from '@/components/sections/HeroSection.vue'
 import config from '@/config'
 import CultureDatasetCard from '@/custom/culture/components/CultureDatasetCard.vue'
+import HeroSection from '@/custom/culture/components/HeroSection.vue'
 import { fromMarkdown } from '@/utils'
 import { useMeta } from '@/utils/seo'
 import { DsfrFollow, DsfrNewsLetter } from '@gouvminint/vue-dsfr'
