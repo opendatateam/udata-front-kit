@@ -174,7 +174,7 @@ onMounted(() => {
               :enlarge="true"
               title-tag="h3"
             >
-              <template #start>
+              <template #start-details>
                 <ul class="fr-badges-group">
                   <li>
                     <span
@@ -356,7 +356,8 @@ onMounted(() => {
               :button-action="
                 () =>
                   openLink(
-                    getContentForSection(section.fields.section)[0]?.fields.ctaLink
+                    getContentForSection(section.fields.section)[0]?.fields
+                      .ctaLink
                   )
               "
               :only-callout="true"
