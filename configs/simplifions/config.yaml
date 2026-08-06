@@ -132,6 +132,36 @@ website:
         id: 'terms'
         route: '/terms'
         url: '/static/simplifions/pages/terms.md'
+      # Entrées articles : ces routes sont déjà servies par des composants custom (src/custom/simplifions/routes.ts),
+      # elles ne sont déclarées ici que pour que udata-front-kit-seo les inclue dans sitemap.xml.
+      - title: 'Articles'
+        id: 'sitemap-articles'
+        route: '/articles'
+        url: ''
+      - title: "Qu'est-ce qu'une API ?"
+        id: 'sitemap-articles-qu-est-ce-qu-une-api'
+        route: '/articles/qu-est-ce-qu-une-api'
+        url: ''
+      - title: 'Les API FranceConnectées'
+        id: 'sitemap-articles-apis-franceconnectees'
+        route: '/articles/apis-franceconnectees'
+        url: ''
+      - title: 'Guide de base pour les petites collectivités'
+        id: 'sitemap-articles-guide-base-petites-collectivites'
+        route: '/articles/guide-base-petites-collectivites'
+        url: ''
+      - title: "Prérequis et étapes d'intégration d'une API"
+        id: 'sitemap-articles-prerequis-et-etapes-integration-api'
+        route: '/articles/prerequis-et-etapes-integration-api'
+        url: ''
+      - title: "Vos interlocuteurs selon le type d'API"
+        id: 'sitemap-articles-vos-interlocuteurs-selon-le-type-d-api'
+        route: '/articles/vos-interlocuteurs-selon-le-type-d-api'
+        url: ''
+      - title: "Anticiper le parcours usager avant d'intégrer vos API"
+        id: 'sitemap-articles-anticiper-le-parcours-usager-avant-d-integrer-vos-api'
+        route: '/articles/anticiper-le-parcours-usager-avant-d-integrer-vos-api'
+        url: ''
   show_quality_component: true
   oauth_option: true
   # debounce high enough for accessibility (screen readers will announce results)

@@ -28,7 +28,7 @@ const defaultRoutes: RouteRecordRaw[] = [
 ]
 
 // static pages
-const pages = (config.website.router.static_pages ?? []).map(
+const pages: RouteRecordRaw[] = (config.website.router.static_pages ?? []).map(
   (item: StaticPageConfig) => {
     return {
       path: item.route,
@@ -96,8 +96,14 @@ const routerPromise = siteRoutesPromise.then((siteRoutes) => {
   siteRoutes.forEach((route) => {
     routesMap.set(route.path, route)
   })
+  // FIXME: remove me when simplifions is out of front-kit (SEO/sitemap hack)
+  // static pages never override an already registered route (default or site-specific)
+  pages.forEach((route) => {
+    if (!routesMap.has(route.path)) {
+      routesMap.set(route.path, route)
+    }
+  })
   const routes = Array.from(routesMap.values())
-  routes.push(...pages)
   // catch all 404 (keep at the end of the list)
   routes.push({
     path: '/:pathMatch(.*)',
