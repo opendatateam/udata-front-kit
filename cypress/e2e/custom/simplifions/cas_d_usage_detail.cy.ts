@@ -1,5 +1,5 @@
-import { apiOrDatasetFactory } from '../../../support/factories/custom/simplifions/grist_factory'
 import type { ApiOrDatasetRecord } from '@/custom/simplifions/model/grist'
+import { apiOrDatasetFactory } from '../../../support/factories/custom/simplifions/grist_factory'
 import {
   mockApidatasetRecommandations,
   mockApiOrDatasetUtiles,
