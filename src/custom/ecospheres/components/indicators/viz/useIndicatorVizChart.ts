@@ -2,7 +2,7 @@ import Chart, { type ChartConfiguration } from 'chart.js/auto'
 import type { Ref } from 'vue'
 import type { IndicatorExtrasData } from '../../../model/indicator'
 import { debug } from './debug'
-import { COLORS } from './enums'
+import { getSeriesColor } from './enums'
 import { formatBigNumber, formatNumber } from './format'
 import type { IndicatorVizChartSeries } from './types'
 
@@ -89,8 +89,8 @@ function applyColors(
   series: IndicatorVizChartSeries[]
 ): IndicatorVizChartSeries[] {
   series.forEach((s, idx) => {
-    s.borderColor = COLORS[idx % COLORS.length]
-    s.backgroundColor = COLORS[idx % COLORS.length]
+    s.borderColor = getSeriesColor(idx)
+    s.backgroundColor = getSeriesColor(idx)
   })
   return series
 }

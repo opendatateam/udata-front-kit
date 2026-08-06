@@ -57,10 +57,4 @@ watch(
 :deep(.multiselect-clear) {
   display: none;
 }
-
-:deep(.multiselect-single-label),
-:deep(.multiselect-search),
-:deep(.multiselect-option) {
-  font-size: 0.8rem;
-}
 </style>

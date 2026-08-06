@@ -7,11 +7,13 @@ import type {
   IndicatorResource
 } from '../../../model/indicator'
 import { debug } from './debug'
+import { getSeriesColor } from './enums'
 import IndicatorVizAxesFilter from './IndicatorVizAxesFilter.vue'
 import IndicatorVizMeshSelect from './IndicatorVizMeshSelect.vue'
 import IndicatorVizOneYearValue from './IndicatorVizOneYearValue.vue'
 import IndicatorVizTerritorySelect from './IndicatorVizTerritorySelect.vue'
 import { makeSeries } from './series'
+import type { AxisValueDisplay } from './types'
 import { useIndicatorVizChart } from './useIndicatorVizChart'
 import { useIndicatorVizParams } from './useIndicatorVizParams'
 import { useTabularData } from './useTabularData'
@@ -83,19 +85,60 @@ watch(availableAxisValues, (axisValues) => {
   )
 })
 
-// Uses axisFilters keys (not availableAxisValues) to avoid series depending on
-// availableAxisValues, which creates a new object reference on every recompute.
-const series = computed(() =>
-  makeSeries(
+// The axis currently split into its own series (as opposed to summed away).
+// There is at most one, since splitting by more than one axis at a time
+// isn't exposed in the UI.
+const activeAxis = computed(
+  () =>
+    Object.keys(groupedAxis.value).find(
+      (axis) => groupedAxis.value[axis] === false
+    ) ?? null
+)
+
+// Uses axisFilters keys (not availableAxisValues, which creates a new object
+// reference on every recompute) to build series. When one axis is active,
+// its series are built from every available value (not just the checked
+// ones) so each value keeps a stable array position - and thus a stable
+// color, since colors are assigned by array index - no matter what else
+// gets checked/unchecked. Checked-off values are hidden on the chart.js
+// dataset instead of removed, the same mechanism a legend click uses, so
+// hiding one line never reshuffles the others' colors.
+const series = computed(() => {
+  const axisNames = Object.keys(axisFilters.value)
+  const filtersForSeries = activeAxis.value
+    ? {
+        ...axisFilters.value,
+        [activeAxis.value]: availableAxisValues.value[activeAxis.value] ?? []
+      }
+    : axisFilters.value
+
+  const built = makeSeries(
     rawData.value,
-    Object.keys(axisFilters.value),
-    axisFilters.value,
+    axisNames,
+    filtersForSeries,
     groupedAxis.value
   )
-)
+
+  if (!activeAxis.value) return built
+
+  const checked = new Set(axisFilters.value[activeAxis.value] ?? [])
+  return built.map((s) => ({ ...s, hidden: !checked.has(s.label) }))
+})
 
 const isOneYear = computed(
   () => series.value.length === 1 && series.value[0].data.length === 1
+)
+
+// The chart assigns each series a color by its position in this same array
+// (see useIndicatorVizChart's applyColors), so reusing it here guarantees
+// the filter checkboxes always show exactly the chart's own color and order.
+const activeAxisValues = computed<AxisValueDisplay[]>(() =>
+  activeAxis.value
+    ? series.value.map((s, idx) => ({
+        value: s.label,
+        color: getSeriesColor(idx)
+      }))
+    : []
 )
 
 const hasNoAxisSelected = computed(
@@ -139,6 +182,7 @@ onMounted(() => {
           v-model:grouped="groupedAxis"
           :available-axis-values="availableAxisValues"
           :summable="summable"
+          :active-axis-values="activeAxisValues"
         />
       </div>
 
@@ -191,9 +235,19 @@ onMounted(() => {
   width: 100%;
 }
 
+/* Fixed 3-column grid, not flex: with flex, the number of visible blocks
+   changes (2 in "Regroupé" mode, 3 once an axis is picked), so equal flex
+   shares would resize existing columns whenever the 3rd one appears/disappears.
+   Grid tracks exist whether or not their cell is filled, so nothing reflows.
+   The first two columns are "auto": their content (selects, radio options)
+   doesn't change between states, so they keep a stable, minimal width in
+   both. The values column is capped rather than "1fr": "1fr" would stretch
+   it across all remaining space in a wide container, visually detaching it
+   from the radios column - minmax(auto, 420px) gives long labels room to
+   wrap without ever stretching past what the content needs. */
 .dropdowns {
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: auto auto minmax(auto, 420px);
   width: 100%;
   gap: 1rem;
   padding: 16px;
@@ -204,26 +258,13 @@ onMounted(() => {
 .geo-dropdowns {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 0;
   align-items: start;
-  flex: 1;
+  min-width: 0;
 }
 
 :deep(.geo-dropdowns .fr-select-group) {
   width: 220px;
-}
-
-:deep(.axis-filters) {
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
-  flex: 2;
-}
-
-:deep(.axis-column) {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
 }
 
 .canvas-container {
@@ -256,31 +297,8 @@ onMounted(() => {
   color: #666;
 }
 
-:deep(label) {
-  font-size: 0.7rem;
-  margin-bottom: 0;
-}
-
-:deep(select) {
-  margin-top: 0 !important;
-  font-size: 0.8rem !important;
-}
-
-:deep(.fr-fieldset) {
-  margin-top: 1rem;
-  margin-bottom: 0;
-}
-
-:deep(.fr-fieldset__element) {
-  margin-bottom: 0.5rem;
-}
-
-:deep(summary) {
-  font-size: 0.7rem;
-}
-
-:deep(.fr-toggle label::before) {
-  margin-right: 0.5rem;
+:deep(.geo-dropdowns .fr-label) {
+  font-weight: 700;
 }
 
 .help {
