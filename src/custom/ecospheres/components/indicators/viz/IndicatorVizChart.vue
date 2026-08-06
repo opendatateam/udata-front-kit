@@ -86,13 +86,17 @@ watch(availableAxisValues, (axisValues) => {
 })
 
 // The axis currently split into its own series (as opposed to summed away).
-// There is at most one, since splitting by more than one axis at a time
-// isn't exposed in the UI.
-const activeAxis = computed(
-  () =>
-    Object.keys(groupedAxis.value).find(
-      (axis) => groupedAxis.value[axis] === false
-    ) ?? null
+// Only meaningful when the indicator is summable: for a non-summable
+// indicator every axis is simultaneously ungrouped (see the watch above),
+// so there's no single "active" axis - splitting by more than one axis at a
+// time isn't something summable indicators expose in the UI, but it's the
+// default (only) state for non-summable ones.
+const activeAxis = computed(() =>
+  summable.value
+    ? (Object.keys(groupedAxis.value).find(
+        (axis) => groupedAxis.value[axis] === false
+      ) ?? null)
+    : null
 )
 
 // Uses axisFilters keys (not availableAxisValues, which creates a new object
@@ -147,15 +151,21 @@ const hasNoAxisSelected = computed(
     Object.values(axisFilters.value).some((v) => v.length === 0)
 )
 
+// activeAxis is already only non-null for a summable indicator (see above),
+// which is exactly the filter checkboxes' colored branch: displaying a
+// single axis's values renders as a stacked area instead of plain lines.
+const isStackedArea = computed(() => !!activeAxis.value)
+
 const chartCanvas = useTemplateRef<HTMLCanvasElement>('chartCanvas')
 const chartTitle = computed(() => props.indicator.title ?? '')
 
-const { hasNoData } = useIndicatorVizChart(
-  chartCanvas,
+const { hasNoData } = useIndicatorVizChart({
+  canvasRef: chartCanvas,
   series,
-  indicatorExtras,
-  chartTitle
-)
+  extras: indicatorExtras,
+  chartTitle,
+  stacked: isStackedArea
+})
 
 onMounted(() => {
   debug.log(`🔍 Indicator ${props.indicator.id} extras:`, indicatorExtras.value)

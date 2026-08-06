@@ -13,6 +13,9 @@ export interface IndicatorVizChartSeries {
   // removing it from the array, so dataset indices (and thus colors) stay
   // stable regardless of which values are currently checked.
   hidden?: boolean
+  // Set when displaying a single axis's values (see useIndicatorVizChart's
+  // applyColors): renders as a stacked area rather than plain lines.
+  fill?: boolean
 }
 
 export interface AxisValueDisplay {
