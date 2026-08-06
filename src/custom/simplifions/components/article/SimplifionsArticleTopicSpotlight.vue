@@ -106,7 +106,12 @@ onMounted(async () => {
   if (cancelled) return
   results
     .filter((r) => r.status === 'rejected')
-    .forEach((r) => console.warn('SimplifionsArticleTopicSpotlight: failed to load topic', (r as PromiseRejectedResult).reason))
+    .forEach((r) =>
+      console.warn(
+        'SimplifionsArticleTopicSpotlight: failed to load topic',
+        (r as PromiseRejectedResult).reason
+      )
+    )
   topics.value = results
     .filter((r): r is PromiseFulfilledResult<Topic> => r.status === 'fulfilled')
     .map((r) => r.value)
