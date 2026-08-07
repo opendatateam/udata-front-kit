@@ -1,11 +1,11 @@
 <template>
-  <div class="fr-my-2w fr-p-2w border border-default-grey relative">
+  <div class="fr-my-2w fr-p-2w border border-default-grey">
     <div
       v-if="accessTypeBadge"
-      class="badge-wrapper absolute top-0 fr-grid-row fr-grid-row--middle fr-ml-n1v"
+      class="fr-grid-row fr-mt-n6v fr-mb-2w fr-ml-n1v"
     >
       <p
-        :class="`fr-badge fr-badge--sm ${accessTypeBadge.colorClass} fr-badge--no-icon fr-mr-1w`"
+        :class="`fr-badge fr-badge--sm ${accessTypeBadge.colorClass} fr-badge--no-icon`"
       >
         <span
           :class="`${accessTypeBadge.icon} fr-icon--sm fr-mr-1v`"
@@ -14,10 +14,7 @@
         {{ accessTypeBadge.label }}
       </p>
     </div>
-    <div
-      class="fr-grid-row fr-grid-row--gutters fr-grid-row--top"
-      :class="{ 'fr-mt-2w': accessTypeBadge }"
-    >
+    <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--top">
       <div class="fr-col-auto">
         <div class="logo">
           <OrganizationLogo
@@ -149,19 +146,5 @@ const accessTypeBadge = computed(() =>
     white-space: normal !important;
     text-overflow: clip !important;
   }
-}
-
-.absolute {
-  position: absolute;
-}
-
-.top-0 {
-  top: 0;
-}
-
-/* Keeps the badge centered on the card's top border regardless of how many
-   lines it wraps to, instead of a fixed negative margin sized for one line. */
-.badge-wrapper {
-  transform: translateY(-50%);
 }
 </style>
