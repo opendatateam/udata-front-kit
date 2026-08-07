@@ -171,7 +171,7 @@
         </SimplifionsRecoIntegratingSolutionsAccordion>
 
         <SimplifionsRecoIntegratingSolutionsAccordion
-          title="Via un portail de consultation"
+          title="Via un site de consultation"
           solution-kind="portail"
           :solutions="integratingSolutionsPortailsConsultation"
           :integration-score-per-solution="integrationScorePerSolution"
