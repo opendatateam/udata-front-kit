@@ -258,19 +258,14 @@ onMounted(() => {
   width: 100%;
 }
 
-/* Fixed 3-column grid, not flex: with flex, the number of visible blocks
-   changes (2 in "Regroupé" mode, 3 once an axis is picked), so equal flex
-   shares would resize existing columns whenever the 3rd one appears/disappears.
-   Grid tracks exist whether or not their cell is filled, so nothing reflows.
-   The first two columns are "auto": their content (selects, radio options)
-   doesn't change between states, so they keep a stable, minimal width in
-   both. The values column is capped rather than "1fr": "1fr" would stretch
-   it across all remaining space in a wide container, visually detaching it
-   from the radios column - minmax(auto, 420px) gives long labels room to
-   wrap without ever stretching past what the content needs. */
+/* Plain flex row. Each column's own flex value (not a shared rule here)
+   decides its behavior: .geo-dropdowns/.axis-mode-block are flex:0 0 auto
+   (sized to content, stable whether or not .axis-values-block is present -
+   see IndicatorVizAxesFilter.vue), .axis-values-block is flex:1 1 0 (takes
+   the rest). */
 .dropdowns {
-  display: grid;
-  grid-template-columns: auto auto minmax(auto, 420px);
+  display: flex;
+  flex-direction: row;
   width: 100%;
   gap: 1rem;
   padding: 16px;
@@ -281,9 +276,8 @@ onMounted(() => {
 .geo-dropdowns {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  flex: 0 0 auto;
   align-items: start;
-  min-width: 0;
 }
 
 :deep(.geo-dropdowns .fr-select-group) {
