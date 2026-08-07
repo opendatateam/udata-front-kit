@@ -3,6 +3,7 @@
     :href="datagouvLink"
     target="_blank"
     rel="noopener noreferrer"
+    :title="`${props.apiOrDataset.Nom} - ouvre une nouvelle fenêtre`"
     :class="`api-or-dataset-card ${datagouvType}-card`"
   >
     <div class="api-or-dataset-header">
