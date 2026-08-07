@@ -87,7 +87,7 @@ function toggleValue(axis: string, value: string, checked: boolean) {
   <fieldset v-if="summable && activeAxis" class="axis-values-block">
     <legend class="fr-sr-only">Valeurs de l'axe "{{ activeAxis }}"</legend>
     <p aria-hidden="true" class="axis-filters-title axis-filters-title--spacer">
-      Afficher le graphe
+      Valeur des axes
     </p>
     <div class="axis-options">
       <div
@@ -127,7 +127,7 @@ function toggleValue(axis: string, value: string, checked: boolean) {
         aria-hidden="true"
         class="axis-filters-title axis-filters-title--spacer"
       >
-        Afficher le graphe
+        Valeur des axes
       </p>
       <div class="axis-options">
         <div
@@ -166,15 +166,23 @@ function toggleValue(axis: string, value: string, checked: boolean) {
   border: 0;
 }
 
-/* Sized to content, doesn't grow even if the values column is absent
-   (Regroupé mode) - see .dropdowns in IndicatorVizChart.vue. */
+/* Starts at content size, then gets a small share of any leftover row width
+   as breathing room - most of it goes to .axis-values-block below - see
+   .dropdowns in IndicatorVizChart.vue for the row this shares space in.
+   That leftover share varies with how many columns are competing for it
+   (bigger alone in "Regroupé" mode than once .axis-values-block appears),
+   so a fixed margin-left is used for visual separation from the first
+   column instead of centering: centering content within a width that
+   changes size made it visibly jump between modes, a fixed margin doesn't. */
 .axis-mode-block {
-  flex: 0 0 auto;
+  flex: 0.2 1 auto;
+  margin-left: 2rem;
 }
 
-/* Takes whatever width is left over after the other columns. min-width:0
-   lets it shrink below its content's natural width so long labels wrap
-   instead of overflowing (flex items default to min-width:auto). */
+/* Starts from nothing (flex-basis:0) and claims the rest of the leftover
+   width, at 5x the rate of .axis-mode-block above. min-width:0 lets it
+   shrink below its content's natural width so long labels wrap instead of
+   overflowing (flex items default to min-width:auto). */
 .axis-values-block {
   flex: 1 1 0;
   min-width: 0;
@@ -190,6 +198,21 @@ function toggleValue(axis: string, value: string, checked: boolean) {
 
 .axis-filters-title--spacer {
   visibility: hidden;
+}
+
+/* Both only make sense in the row layout: the margin-left is separation
+   from the first column, and the spacer only reserves height to line up
+   with .axis-mode-block's title when columns sit side by side. Stacked
+   below the breakpoint, neither applies - the spacer is removed from flow
+   entirely (not just hidden) so it doesn't waste vertical space. */
+@media (max-width: 768px) {
+  .axis-mode-block {
+    margin-left: 0;
+  }
+
+  .axis-filters-title--spacer {
+    display: none;
+  }
 }
 
 .axis-options {

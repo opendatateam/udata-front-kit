@@ -259,10 +259,13 @@ onMounted(() => {
 }
 
 /* Plain flex row. Each column's own flex value (not a shared rule here)
-   decides its behavior: .geo-dropdowns/.axis-mode-block are flex:0 0 auto
-   (sized to content, stable whether or not .axis-values-block is present -
-   see IndicatorVizAxesFilter.vue), .axis-values-block is flex:1 1 0 (takes
-   the rest). */
+   decides its behavior - see IndicatorVizAxesFilter.vue for
+   .axis-mode-block/.axis-values-block. .geo-dropdowns stays flex:0 0 auto:
+   its selects have a fixed 220px width, so there's no content to grow into.
+   Below 768px (matches the breakpoint used elsewhere in this codebase, e.g.
+   HomeAboutNews/HomeCollections), columns stack: flex-direction:column
+   makes each block's cross-axis (width) stretch to fill the row by default,
+   so no extra per-block override is needed for the stacked layout. */
 .dropdowns {
   display: flex;
   flex-direction: row;
@@ -271,6 +274,12 @@ onMounted(() => {
   padding: 16px;
   background-color: #fafafa;
   border: 1px solid #f5f5f5;
+}
+
+@media (max-width: 768px) {
+  .dropdowns {
+    flex-direction: column;
+  }
 }
 
 .geo-dropdowns {
