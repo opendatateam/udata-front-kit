@@ -109,16 +109,23 @@ const setAccessibilityProperties: AccessibilityPropertiesType = (
   focus = true,
   messages = []
 ): void => {
-  // announce page title to screen reader
+  // Announce page title to screen reader
   if (title) {
     liveInfos.value = [
       { text: `Page ${title} | ${config.website.title}` },
       ...messages
     ]
   }
-  // focus skip link container
-  if (focus && skipLinksComp.value?.skipLinkList) {
-    skipLinksComp.value.skipLinkList.focus()
+
+  // Reset keyboard focus to the top of the body on navigation
+  // so the next Tab press natively reaches the skip links
+  if (focus) {
+    nextTick(() => {
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur()
+      }
+      document.body.focus({ preventScroll: true })
+    })
   }
 }
 
