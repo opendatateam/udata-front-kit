@@ -243,7 +243,7 @@
           class="fr-btn fr-btn--secondary fr-icon-arrow-right-line fr-btn--icon-right"
           to="/solutions?categorie-de-solution=portail-consultation"
         >
-          Tous les portails de consultation référencés
+          Tous les sites de consultation référencés
         </router-link>
       </div>
     </ArticleSection>

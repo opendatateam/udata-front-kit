@@ -13,7 +13,6 @@ export type CasUsage = {
   Nom_complet: string
   Pour_simplifier_les_demarches_de: number[]
   Recommandations: number[]
-  Types_de_simplification: number[]
   Visible_sur_simplifions: boolean
 }
 export type CasUsageRecord = GristRecord & {
@@ -110,7 +109,6 @@ export type Solution = {
   Prix: string
   Public_ou_prive: string
   Site_internet: string
-  Types_de_simplification: number[]
   Visible_sur_simplifions: boolean
   Recommande_pour_les_cas_d_usages: number[] | null
   Type_de_solution: string[]

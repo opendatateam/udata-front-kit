@@ -59,7 +59,6 @@
             :slugs="['bouquet-api-entreprise', 'bouquet-api-particulier']"
             page-key="solutions"
             :show-operateur-tag="true"
-            :show-categorie-de-solution="true"
             :show-target-users="true"
             :show-arrow="true"
           >
@@ -97,7 +96,6 @@
         :slugs="['api-impot-particulier']"
         page-key="solutions"
         :show-operateur-tag="true"
-        :show-categorie-de-solution="true"
         :show-target-users="true"
         :show-arrow="true"
       >

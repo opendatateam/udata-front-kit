@@ -16,11 +16,7 @@
           {{ topic.description }}
         </p>
 
-        <SimplifionsTags
-          :topic="topic"
-          :page-key="pageKey"
-          :hide-simplification="true"
-        />
+        <SimplifionsTags :topic="topic" :page-key="pageKey" />
 
         <ul class="fr-mt-4w">
           <li>
