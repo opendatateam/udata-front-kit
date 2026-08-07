@@ -37,7 +37,6 @@
           class="fr-text--sm fr-m-0 fr-grid-row fr-grid-row--middle"
         >
           <span class="not-enlarged fr-mr-1v">
-            Opérateur de l'API :
             <OrganizationNameWithCertificate
               :organization="dataservice.organization"
               color-class="text-gray-title"
