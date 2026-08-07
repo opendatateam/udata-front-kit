@@ -30,8 +30,6 @@
           :page-key="pageKey"
           :show-target-users="showTargetUsers"
           :show-fournisseurs="showFournisseurs"
-          :hide-simplification="!showSimplificationTags"
-          :show-categorie-de-solution="showCategorieDeSolution"
         />
         <div v-if="showArrow" class="card-arrow" aria-hidden="true">
           <span class="fr-icon-arrow-right-line" />
@@ -55,8 +53,6 @@ const props = withDefaults(
     showDescription?: boolean
     showTargetUsers?: boolean
     showFournisseurs?: boolean
-    showSimplificationTags?: boolean
-    showCategorieDeSolution?: boolean
     showArrow?: boolean
   }>(),
   {
@@ -64,8 +60,6 @@ const props = withDefaults(
     showDescription: true,
     showTargetUsers: true,
     showFournisseurs: true,
-    showSimplificationTags: true,
-    showCategorieDeSolution: true,
     showArrow: false
   }
 )
@@ -79,11 +73,7 @@ const pageKey = computed(
 )
 
 const hasDetails = computed(
-  () =>
-    props.showTargetUsers ||
-    props.showFournisseurs ||
-    props.showSimplificationTags ||
-    props.showCategorieDeSolution
+  () => props.showTargetUsers || props.showFournisseurs
 )
 </script>
 

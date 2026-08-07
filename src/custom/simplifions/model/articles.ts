@@ -40,12 +40,21 @@ export const ARTICLE_KEYWORDS = {
   definition: { label: 'Définition', category: "Type d'article" },
   api: { label: 'API', category: 'Type de données' },
   jeuxDeDonnees: { label: 'Jeux de données', category: 'Type de données' },
-  petiteCollectivite: { label: 'Petite collectivité', category: 'Vous êtes ...' },
+  petiteCollectivite: {
+    label: 'Petite collectivité',
+    category: 'Vous êtes ...'
+  },
   dsi: { label: 'DSI', category: 'Vous êtes ...' },
   moa: { label: 'MOA', category: 'Vous êtes ...' },
-  editeurDeLogiciels: { label: 'Éditeur de logiciels', category: 'Vous êtes ...' },
+  editeurDeLogiciels: {
+    label: 'Éditeur de logiciels',
+    category: 'Vous êtes ...'
+  },
   parcoursUsager: { label: 'Parcours usager', category: 'Thématique' },
-  integrationTechnique: { label: 'Intégration technique', category: 'Thématique' },
+  integrationTechnique: {
+    label: 'Intégration technique',
+    category: 'Thématique'
+  },
   apiFranceConnectees: { label: 'API FranceConnectées', category: 'Thématique' }
 } satisfies Record<string, ArticleKeyword>
 
@@ -66,7 +75,12 @@ export const articleQuestCeQuUneAPI: ArticleMeta = {
   title: "Qu'est-ce qu'une API ? Explication simple pour les non-techniciens",
   description:
     "Comprendre ce qu'est une API sans vocabulaire technique : comment ces outils permettent aux administrations d'échanger des données pour simplifier les démarches des entreprises, associations et particuliers.",
-  articleKeywords: [ARTICLE_KEYWORDS.api, ARTICLE_KEYWORDS.definition, ARTICLE_KEYWORDS.petiteCollectivite, ARTICLE_KEYWORDS.moa],
+  articleKeywords: [
+    ARTICLE_KEYWORDS.api,
+    ARTICLE_KEYWORDS.definition,
+    ARTICLE_KEYWORDS.petiteCollectivite,
+    ARTICLE_KEYWORDS.moa
+  ],
   heroBackdropGradient: 'linear-gradient(135deg, #decdbd 0%, #d2e2f6 100%)',
   heroPanelBackground: 'var(--background-alt-beige-gris-galet)'
 }
@@ -76,7 +90,15 @@ export const articleApisFranceConnectees: ArticleMeta = {
   h1: 'Les API FranceConnectées',
   title: `Administrations, pré-remplissez les démarches FranceConnectées`,
   description: `Les API FranceConnectées donnent accès à diverses données administratives des particuliers en proposant FranceConnect comme modalité d'appel. Elles permettent de simplifier les démarches d'un particulier utilisant FranceConnect en récupérant automatiquement d'autres informations administratives le concernant.`,
-  articleKeywords: [ARTICLE_KEYWORDS.api, ARTICLE_KEYWORDS.guideMetier, ARTICLE_KEYWORDS.apiFranceConnectees, ARTICLE_KEYWORDS.dsi, ARTICLE_KEYWORDS.moa, ARTICLE_KEYWORDS.editeurDeLogiciels, ARTICLE_KEYWORDS.definition],
+  articleKeywords: [
+    ARTICLE_KEYWORDS.api,
+    ARTICLE_KEYWORDS.guideMetier,
+    ARTICLE_KEYWORDS.apiFranceConnectees,
+    ARTICLE_KEYWORDS.dsi,
+    ARTICLE_KEYWORDS.moa,
+    ARTICLE_KEYWORDS.editeurDeLogiciels,
+    ARTICLE_KEYWORDS.definition
+  ],
   heroBackdropGradient: 'linear-gradient(135deg, #a19237 0%, #fddede 100%)',
   heroPanelBackground: 'var(--background-alt-beige-gris-galet)'
 }
@@ -89,7 +111,10 @@ export const articleGuideBasePetitesCollectivites: ArticleMeta = {
     "Petites collectivités, simplifiez vos démarches administratives sans développement : portails publics gratuits et logiciels éditeurs déjà raccordés aux données vous permettent d'éviter de les redemander aux usagers.",
   imageSrc:
     '/static/simplifions/assets/image-guide-de-base-collectivites-guichet-mairie-2.jpg',
-  articleKeywords: [ARTICLE_KEYWORDS.guideDeBase, ARTICLE_KEYWORDS.petiteCollectivite],
+  articleKeywords: [
+    ARTICLE_KEYWORDS.guideDeBase,
+    ARTICLE_KEYWORDS.petiteCollectivite
+  ],
   heroBackdropGradient: 'linear-gradient(135deg, #34BAB5 0%, #d2e2f6 100%)',
   heroPanelBackground: 'var(--background-alt-beige-gris-galet)'
 }
@@ -104,7 +129,10 @@ export const articlePrerequisEtapesIntegrationAPI: ArticleMeta = {
     ARTICLE_KEYWORDS.api,
     ARTICLE_KEYWORDS.guideTechnique,
     ARTICLE_KEYWORDS.guideMetier,
-    ARTICLE_KEYWORDS.integrationTechnique, ARTICLE_KEYWORDS.dsi, ARTICLE_KEYWORDS.moa, ARTICLE_KEYWORDS.editeurDeLogiciels
+    ARTICLE_KEYWORDS.integrationTechnique,
+    ARTICLE_KEYWORDS.dsi,
+    ARTICLE_KEYWORDS.moa,
+    ARTICLE_KEYWORDS.editeurDeLogiciels
   ],
   heroBackdropGradient: 'linear-gradient(135deg, #decdbd 0%, #a3afce 100%)',
   heroPanelBackground: 'var(--background-alt-beige-gris-galet)'
@@ -116,7 +144,13 @@ export const articleVosInterlocuteursSelonTypeAPI: ArticleMeta = {
   title: "Vos interlocuteurs selon le type d'API",
   description:
     "Identifiez votre interlocuteur selon le type d'API que vous intégrez et selon votre situation.",
-  articleKeywords: [ARTICLE_KEYWORDS.api, ARTICLE_KEYWORDS.guideMetier, ARTICLE_KEYWORDS.dsi, ARTICLE_KEYWORDS.moa, ARTICLE_KEYWORDS.editeurDeLogiciels],
+  articleKeywords: [
+    ARTICLE_KEYWORDS.api,
+    ARTICLE_KEYWORDS.guideMetier,
+    ARTICLE_KEYWORDS.dsi,
+    ARTICLE_KEYWORDS.moa,
+    ARTICLE_KEYWORDS.editeurDeLogiciels
+  ],
   heroBackdropGradient: 'linear-gradient(135deg, #decdbd 0%, #e3e3fd 100%)',
   heroPanelBackground: 'var(--background-alt-beige-gris-galet)'
 }
@@ -127,7 +161,14 @@ export const articleAnticiperParcoursUsager: ArticleMeta = {
   title: "Anticiper le parcours usager avant d'intégrer vos API",
   description:
     'API délivrant des données publiques ou protégées : ce guide détaille les parcours usager possibles pour intégrer une API.',
-  articleKeywords: [ARTICLE_KEYWORDS.api, ARTICLE_KEYWORDS.parcoursUsager, ARTICLE_KEYWORDS.guideMetier, ARTICLE_KEYWORDS.dsi, ARTICLE_KEYWORDS.moa, ARTICLE_KEYWORDS.editeurDeLogiciels],
+  articleKeywords: [
+    ARTICLE_KEYWORDS.api,
+    ARTICLE_KEYWORDS.parcoursUsager,
+    ARTICLE_KEYWORDS.guideMetier,
+    ARTICLE_KEYWORDS.dsi,
+    ARTICLE_KEYWORDS.moa,
+    ARTICLE_KEYWORDS.editeurDeLogiciels
+  ],
   heroBackdropGradient: 'linear-gradient(135deg, #decdbd 0%, #cfe0ef 100%)',
   heroPanelBackground: 'var(--background-alt-beige-gris-galet)'
 }

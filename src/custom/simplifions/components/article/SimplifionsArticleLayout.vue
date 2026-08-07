@@ -27,13 +27,22 @@
         >
           <div v-if="hasMeta" class="article-hero__meta fr-mb-3v fr-mb-md-4v">
             <ul
-              v-if="groupedKeywords.articleTypeKeywords.length || groupedKeywords.dataTypeKeywords.length"
+              v-if="
+                groupedKeywords.articleTypeKeywords.length ||
+                groupedKeywords.dataTypeKeywords.length
+              "
               class="article-hero__badge-list fr-p-0 fr-m-0"
             >
-              <li v-for="keyword in groupedKeywords.articleTypeKeywords" :key="keyword.label">
+              <li
+                v-for="keyword in groupedKeywords.articleTypeKeywords"
+                :key="keyword.label"
+              >
                 <p class="fr-badge fr-badge--sm fr-m-0">{{ keyword.label }}</p>
               </li>
-              <li v-for="keyword in groupedKeywords.dataTypeKeywords" :key="keyword.label">
+              <li
+                v-for="keyword in groupedKeywords.dataTypeKeywords"
+                :key="keyword.label"
+              >
                 <p class="fr-badge fr-badge--sm fr-badge--blue-ecume fr-m-0">
                   {{ keyword.label }}
                 </p>
@@ -44,7 +53,10 @@
               v-if="groupedKeywords.otherKeywords.length"
               class="article-hero__tag-list fr-p-0 fr-m-0"
             >
-              <li v-for="keyword in groupedKeywords.otherKeywords" :key="keyword.label">
+              <li
+                v-for="keyword in groupedKeywords.otherKeywords"
+                :key="keyword.label"
+              >
                 <p class="fr-tag fr-tag--sm fr-m-0">{{ keyword.label }}</p>
               </li>
             </ul>
@@ -142,7 +154,11 @@ import type { BreadcrumbItem } from '@/model/breadcrumb'
 import { useCanonicalUrl, useMeta } from '@/utils/seo'
 import { provide } from 'vue'
 import { provideArticleTopicsRegistry } from '../../composables/useArticleTopicsRegistry'
-import { groupArticleKeywords, joinKeywordLabels, type ArticleKeyword } from '../../model/articles'
+import {
+  groupArticleKeywords,
+  joinKeywordLabels,
+  type ArticleKeyword
+} from '../../model/articles'
 import { articleSectionKey } from './articleSectionKey'
 import SimplifionsArticleRelatedTopics from './SimplifionsArticleRelatedTopics.vue'
 
@@ -173,7 +189,8 @@ const props = withDefaults(
     kicker: '',
     heroImageSrc: '',
     articleKeywords: () => [],
-    heroBackdropGradient: 'linear-gradient(135deg, var(--background-action-low-blue-ecume) 0%, var(--background-contrast-blue-ecume) 100%)',
+    heroBackdropGradient:
+      'linear-gradient(135deg, var(--background-action-low-blue-ecume) 0%, var(--background-contrast-blue-ecume) 100%)',
     heroPanelBackground: 'var(--background-alt-beige-gris-galet)',
     breadcrumbLinks: () => []
   }
@@ -181,8 +198,12 @@ const props = withDefaults(
 
 const metaTitle = computed(() => props.title ?? props.h1)
 
-const groupedKeywords = computed(() => groupArticleKeywords([...props.articleKeywords]))
-const audienceDetail = computed(() => joinKeywordLabels(groupedKeywords.value.audienceKeywords))
+const groupedKeywords = computed(() =>
+  groupArticleKeywords([...props.articleKeywords])
+)
+const audienceDetail = computed(() =>
+  joinKeywordLabels(groupedKeywords.value.audienceKeywords)
+)
 
 useMeta({
   title: metaTitle,
