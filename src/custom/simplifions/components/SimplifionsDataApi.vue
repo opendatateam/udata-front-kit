@@ -1,8 +1,5 @@
 <template>
-  <div
-    v-if="isDisabled"
-    :class="`api-or-dataset-card ${datagouvType}-card`"
-  >
+  <div v-if="isDisabled" :class="`api-or-dataset-card ${datagouvType}-card`">
     <div class="api-or-dataset-header">
       <div class="disabled-card fr-p-2w">
         <h3 class="fr-text--md fr-col-12">
