@@ -1,5 +1,10 @@
 <template>
-  <a :href="datagouvLink" :class="`api-or-dataset-card ${datagouvType}-card`">
+  <a
+    :href="datagouvLink"
+    target="_blank"
+    rel="noopener noreferrer"
+    :class="`api-or-dataset-card ${datagouvType}-card`"
+  >
     <div class="api-or-dataset-header">
       <div
         v-if="hasEmptyUid || resourceNotFound || !datagouvResource"
@@ -27,14 +32,12 @@
         v-else-if="datagouvType == 'datasets' && datagouvLink"
         class="no-margins dataset-card"
         :dataset="datagouvResource as DatasetV2"
-        :dataset-url="datagouvLink"
         :title-tag="props.titleTag"
       />
       <DataserviceCard
         v-else-if="datagouvType == 'dataservices' && datagouvLink"
         class="no-margins dataservice-card"
         :dataservice="datagouvResource as Dataservice"
-        :dataservice-url="datagouvLink"
         :title-tag="props.titleTag"
       />
       <div v-else>{{ datagouvType }} | {{ datagouvResource.title }}</div>
@@ -148,6 +151,10 @@ if (!hasEmptyUid.value) {
 
 a.api-or-dataset-card {
   color: inherit;
+}
+
+a.api-or-dataset-card[target='_blank']::after {
+  content: none;
 }
 
 a.api-or-dataset-card:hover .api-or-dataset-description,

@@ -1,5 +1,5 @@
 <template>
-  <div class="fr-my-2w fr-p-2w border border-default-grey fr-enlarge-link">
+  <div class="fr-my-2w fr-p-2w border border-default-grey">
     <div
       v-if="dataservice.access_type === 'restricted'"
       class="absolute top-0 fr-grid-row fr-grid-row--middle fr-mt-n3v fr-ml-n1v"
@@ -47,24 +47,12 @@
       </div>
     </div>
     <div class="fr-grid-row fr-grid-row--right fr-mt-1w">
-      <!-- External link (string URL) -->
-      <a
-        v-if="typeof dataserviceUrl === 'string'"
-        :href="dataserviceUrl"
-        target="_blank"
-        rel="noopener noreferrer"
+      <!-- Non-interactive: the clickable link is the ancestor <a> in SimplifionsDataApi.vue -->
+      <span
         class="fr-link fr-link--sm fr-icon-external-link-line fr-link--icon-right"
       >
         Voir l'API sur Data.gouv.fr
-      </a>
-      <!-- Internal link (router object) -->
-      <RouterLink
-        v-else
-        :to="dataserviceUrl"
-        class="fr-link fr-link--sm fr-icon-external-link-line fr-link--icon-right"
-      >
-        Voir l'API sur Data.gouv.fr
-      </RouterLink>
+      </span>
     </div>
   </div>
 </template>
@@ -76,11 +64,9 @@ import {
   Placeholder,
   type Dataservice
 } from '@datagouv/components-next'
-import type { RouteLocationRaw } from 'vue-router'
 
 interface Props {
   dataservice: Dataservice
-  dataserviceUrl: string | RouteLocationRaw
   titleTag?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
 }
 
