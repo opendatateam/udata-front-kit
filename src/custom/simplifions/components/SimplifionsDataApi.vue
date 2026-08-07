@@ -37,6 +37,7 @@
         class="no-margins dataset-card"
         :title="datagouvResource!.title"
         :organization="datagouvResource!.organization"
+        :owner="datagouvResource!.owner"
         :access-type="datagouvResource!.access_type"
         link-label="Voir le jeu de données sur Data.gouv.fr"
         :title-tag="props.titleTag"
@@ -46,6 +47,7 @@
         class="no-margins dataservice-card"
         :title="datagouvResource!.title"
         :organization="datagouvResource!.organization"
+        :owner="datagouvResource!.owner"
         :access-type="datagouvResource!.access_type"
         link-label="Voir l'API sur Data.gouv.fr"
         :title-tag="props.titleTag"
@@ -127,8 +129,8 @@ if (!hasEmptyUid.value) {
       params: {
         fields:
           datagouvType.value == 'dataservices'
-            ? 'title,organization,access_type'
-            : 'title,organization'
+            ? 'title,organization,access_type,owner'
+            : 'title,organization,owner'
       }
     })
     .then((data) => {

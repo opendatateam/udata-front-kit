@@ -22,6 +22,13 @@
             :organization="organization"
             size-class="size-10"
           />
+          <img
+            v-else-if="owner"
+            :src="ownerAvatarUrl!"
+            alt=""
+            loading="lazy"
+            class="size-10 border owner-avatar"
+          />
           <Placeholder v-else type="Organization" class="size-10" />
         </div>
       </div>
@@ -33,14 +40,22 @@
           {{ title }}
         </component>
         <div
-          v-if="organization"
+          v-if="organization || owner"
           class="fr-text--sm fr-m-0 fr-grid-row fr-grid-row--middle"
         >
           <span class="org-name fr-mr-1v">
             <OrganizationNameWithCertificate
+              v-if="organization"
               :organization="organization"
               color-class="text-gray-title"
             />
+            <template v-else>{{ ownerName }}</template>
+          </span>
+          <span
+            v-if="owner && !organization"
+            class="fr-text--xs text-mention-grey fr-m-0"
+          >
+            · Producteur individuel
           </span>
         </div>
       </div>
@@ -57,16 +72,20 @@
 </template>
 
 <script setup lang="ts">
+import { getOwnerAvatar } from '@/utils/avatar'
 import {
+  getOwnerName,
   OrganizationLogo,
   OrganizationNameWithCertificate,
   Placeholder,
-  type OrganizationReference
+  type OrganizationReference,
+  type UserReference
 } from '@datagouv/components-next'
 
 interface Props {
   title: string
   organization?: OrganizationReference | null
+  owner?: UserReference | null
   accessType?: string
   linkLabel: string
   titleTag?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
@@ -74,8 +93,19 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   organization: undefined,
+  owner: undefined,
   accessType: undefined,
   titleTag: 'h4'
+})
+
+const ownerName = computed(() => {
+  if (!props.owner) return ''
+  return getOwnerName({ organization: null, owner: props.owner })
+})
+
+const ownerAvatarUrl = computed(() => {
+  if (!props.owner) return null
+  return getOwnerAvatar({ organization: null, owner: props.owner }, 40)
 })
 </script>
 
@@ -84,6 +114,10 @@ const props = withDefaults(defineProps<Props>(), {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.owner-avatar {
+  background-color: var(--background-default-grey);
 }
 
 .border-default-grey {
