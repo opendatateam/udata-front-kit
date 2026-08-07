@@ -261,13 +261,16 @@ onMounted(() => {
 
         <section
           v-else-if="section.fields.type === 'tags'"
-          class="fr-container--fluid fr-py-10w"
+          class="fr-container--fluid fr-py-8w"
           style="background-color: #e9f9dd"
         >
           <div class="fr-container">
             <h2 class="fr-h2">{{ section.fields.section_title }}</h2>
 
-            <ul class="fr-tags-group" aria-label="Liste des tags">
+            <ul
+              class="fr-tags-group"
+              aria-label="Liste des thématiques culturelles"
+            >
               <li
                 v-for="item in getContentForSection(section.fields.section)"
                 :key="item.id"
