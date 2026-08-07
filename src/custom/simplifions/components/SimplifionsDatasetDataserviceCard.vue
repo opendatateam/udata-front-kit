@@ -1,5 +1,5 @@
 <template>
-  <div class="fr-my-2w fr-p-2w border border-default-grey">
+  <div class="fr-my-2w fr-p-2w border border-default-grey relative">
     <div
       v-if="accessType === 'restricted'"
       class="absolute top-0 fr-grid-row fr-grid-row--middle fr-mt-n3v fr-ml-n1v"
