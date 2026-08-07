@@ -52,7 +52,7 @@
         link-label="Voir l'API sur Data.gouv.fr"
         :title-tag="props.titleTag"
       />
-      <div v-else>{{ datagouvType }} | {{ datagouvResource.title }}</div>
+      <div v-else>{{ datagouvType }} | {{ datagouvResource!.title }}</div>
     </div>
   </a>
 </template>
