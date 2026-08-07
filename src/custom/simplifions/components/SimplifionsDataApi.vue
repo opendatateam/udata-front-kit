@@ -1,16 +1,10 @@
 <template>
-  <a
-    :href="datagouvLink"
-    target="_blank"
-    rel="noopener noreferrer"
-    :title="`${props.apiOrDataset.Nom} - ouvre une nouvelle fenêtre`"
+  <div
+    v-if="isDisabled"
     :class="`api-or-dataset-card ${datagouvType}-card`"
   >
     <div class="api-or-dataset-header">
-      <div
-        v-if="hasEmptyUid || resourceNotFound || !datagouvResource"
-        class="disabled-card fr-p-2w"
-      >
+      <div class="disabled-card fr-p-2w">
         <h3 class="fr-text--md fr-col-12">
           {{ props.apiOrDataset.Nom }}
         </h3>
@@ -21,16 +15,25 @@
 
           <span v-if="hasEmptyUid"> ⚠️ Datagouv UID missing </span>
           <span v-else-if="resourceNotFound">
-            ⚠️ {{ props.apiOrDataset.Type }} non trouvé{{
-              props.apiOrDataset.Type == 'API' ? 'e' : ''
-            }}
+            ⚠️ {{ props.apiOrDataset.Type }} introuvable sur data.gouv.fr
           </span>
           <span v-else> Chargement du lien en cours... </span>
         </p>
       </div>
+    </div>
+  </div>
 
+  <a
+    v-else
+    :href="datagouvLink"
+    target="_blank"
+    rel="noopener noreferrer"
+    :title="`${props.apiOrDataset.Nom} - ouvre une nouvelle fenêtre`"
+    :class="`api-or-dataset-card ${datagouvType}-card`"
+  >
+    <div class="api-or-dataset-header">
       <DatasetCard
-        v-else-if="datagouvType == 'datasets' && datagouvLink"
+        v-if="datagouvType == 'datasets' && datagouvLink"
         class="no-margins dataset-card"
         :dataset="datagouvResource as DatasetV2"
         :title-tag="props.titleTag"
@@ -77,6 +80,10 @@ const hasEmptyUid = computed(() => {
     props.apiOrDataset.UID_datagouv.trim() === ''
   )
 })
+
+const isDisabled = computed(
+  () => hasEmptyUid.value || resourceNotFound.value || !datagouvResource.value
+)
 
 const datagouvType = computed(() => {
   switch (props.apiOrDataset.Type) {
