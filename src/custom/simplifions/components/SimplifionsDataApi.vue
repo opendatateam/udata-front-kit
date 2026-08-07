@@ -114,7 +114,9 @@ if (!hasEmptyUid.value) {
       method: 'get',
       params: {
         fields:
-          'title,description,organization,resources,tags,created_at,updated_at'
+          datagouvType.value == 'dataservices'
+            ? 'title,organization,access_type'
+            : 'title,organization'
       }
     })
     .then((data) => {
