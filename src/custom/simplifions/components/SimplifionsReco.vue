@@ -223,6 +223,7 @@ import type {
   ApiOrDataset,
   ApiOrDatasetCardData,
   ApiOrDatasetRecord,
+  ApiOrDatasetType,
   ApiOrDatasetUtiles,
   ApiOrDatasetUtilesRecord,
   Recommandation,
@@ -241,6 +242,18 @@ const props = defineProps<{
 const recommandation = props.recommandation
 const isSolution = !!recommandation.Solution_recommandee
 
+// "Type de recommandation" tells whether the recommended resource is an API or a
+// dataset. "Type de solution" describes the kind of offer instead (Éditeur,
+// Logiciel métier…), so it cannot be used to pick the data.gouv.fr endpoint.
+const isApiOrDatasetType = (type: string | null): type is ApiOrDatasetType =>
+  type === 'API' || type === 'Jeu de données'
+
+const recommandationType = isApiOrDatasetType(
+  recommandation.Type_de_recommandation
+)
+  ? recommandation.Type_de_recommandation
+  : undefined
+
 // === Solution-specific ===
 const topicSlug = ref<string | undefined>(undefined)
 const usefulDataApiFourniesParLaSolution = ref<
@@ -256,27 +269,26 @@ if (isSolution) {
     topicSlug.value = topic?.slug
   })
 
-  grist
-    .getRecord('Solutions', recommandation.Solution_recommandee)
-    .then((data) => {
-      const solution = data.fields as Solution
-      const type = solution.Type_de_solution?.includes('API')
-        ? 'API'
-        : solution.Type_de_solution?.includes('Jeu de données')
-          ? 'Jeu de données'
-          : undefined
+  // Only worth fetching when the recommandation designates an API or a dataset:
+  // otherwise no card can be built out of the solution record.
+  if (recommandationType) {
+    grist
+      .getRecord('Solutions', recommandation.Solution_recommandee)
+      .then((data) => {
+        const solution = data.fields as Solution
 
-      if (solution.UID_datagouv && type) {
-        solutionApiOrDataset.value = {
-          UID_datagouv: solution.UID_datagouv,
-          Nom: solution.Nom,
-          Type: type
+        if (solution.UID_datagouv) {
+          solutionApiOrDataset.value = {
+            UID_datagouv: solution.UID_datagouv,
+            Nom: solution.Nom,
+            Type: recommandationType
+          }
         }
-      }
-    })
-    .catch((error) => {
-      console.error('Failed to fetch solution:', error)
-    })
+      })
+      .catch((error) => {
+        console.error('Failed to fetch solution:', error)
+      })
+  }
 
   if (recommandation.API_et_datasets_utiles_fournis?.length) {
     grist
