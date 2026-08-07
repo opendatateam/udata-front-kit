@@ -50,10 +50,12 @@ export type RecommandationRecord = GristRecord & {
   fields: Recommandation
 }
 
+export type ApiOrDatasetType = 'API' | 'Jeu de données'
+
 export type ApiOrDataset = {
   UID_datagouv: string
   Nom: string
-  Type: string
+  Type: ApiOrDatasetType
   Fourni_par: number
   Integre_par: number[]
   Visible_sur_simplifions: boolean
@@ -64,6 +66,15 @@ export type ApiOrDataset = {
 }
 export type ApiOrDatasetRecord = GristRecord & {
   fields: ApiOrDataset
+}
+
+export type ApiOrDatasetCardData = Pick<
+  ApiOrDataset,
+  'UID_datagouv' | 'Nom'
+> & {
+  // Le type peut aussi provenir de Solution.Type_de_solution ("Base de données"),
+  // qui n'a pas le même libellé que le champ Grist ApiOrDataset.Type ("Jeu de données")
+  Type: ApiOrDatasetType | 'Base de données'
 }
 
 export type ApiOrDatasetUtiles = {
@@ -115,6 +126,7 @@ export type Solution = {
   URL_demande_d_acces: string
   solutions_integratrices: number[] | null
   liste_categories_de_solution: string[]
+  UID_datagouv: string
 }
 export type SolutionRecord = GristRecord & {
   fields: Solution

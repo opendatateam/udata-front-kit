@@ -1,20 +1,23 @@
 <template>
   <div class="fr-my-2w fr-p-2w border border-default-grey relative">
     <div
-      v-if="accessType === 'restricted'"
-      class="absolute top-0 fr-grid-row fr-grid-row--middle fr-mt-n3v fr-ml-n1v"
+      v-if="accessTypeBadge"
+      class="badge-wrapper absolute top-0 fr-grid-row fr-grid-row--middle fr-ml-n1v"
     >
       <p
-        class="fr-badge fr-badge--sm fr-badge--info fr-badge--no-icon fr-mr-1w"
+        :class="`fr-badge fr-badge--sm ${accessTypeBadge.colorClass} fr-badge--no-icon fr-mr-1w`"
       >
         <span
-          class="fr-icon-lock-line fr-icon--xs fr-mr-1v"
+          :class="`${accessTypeBadge.icon} fr-icon--sm fr-mr-1v`"
           aria-hidden="true"
         ></span>
-        API restreinte
+        {{ accessTypeBadge.label }}
       </p>
     </div>
-    <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--top">
+    <div
+      class="fr-grid-row fr-grid-row--gutters fr-grid-row--top"
+      :class="{ 'fr-mt-2w': accessTypeBadge }"
+    >
       <div class="fr-col-auto">
         <div class="logo">
           <OrganizationLogo
@@ -78,15 +81,20 @@ import {
   OrganizationLogo,
   OrganizationNameWithCertificate,
   Placeholder,
+  type AccessAudience,
+  type AccessType,
   type OrganizationReference,
   type UserReference
 } from '@datagouv/components-next'
+import { getAccessTypeBadge } from '../utils/accessTypeBadge'
 
 interface Props {
   title: string
   organization?: OrganizationReference | null
   owner?: UserReference | null
-  accessType?: string
+  accessType?: AccessType
+  accessAudiences?: Array<AccessAudience>
+  resourceLabel: 'API' | 'Base de données'
   linkLabel: string
   titleTag?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
 }
@@ -95,6 +103,7 @@ const props = withDefaults(defineProps<Props>(), {
   organization: undefined,
   owner: undefined,
   accessType: undefined,
+  accessAudiences: undefined,
   titleTag: 'h4'
 })
 
@@ -107,6 +116,14 @@ const ownerAvatarUrl = computed(() => {
   if (!props.owner) return null
   return getOwnerAvatar({ organization: null, owner: props.owner }, 40)
 })
+
+const accessTypeBadge = computed(() =>
+  getAccessTypeBadge(
+    props.accessType,
+    props.accessAudiences,
+    props.resourceLabel
+  )
+)
 </script>
 
 <style scoped>
@@ -140,5 +157,11 @@ const ownerAvatarUrl = computed(() => {
 
 .top-0 {
   top: 0;
+}
+
+/* Keeps the badge centered on the card's top border regardless of how many
+   lines it wraps to, instead of a fixed negative margin sized for one line. */
+.badge-wrapper {
+  transform: translateY(-50%);
 }
 </style>

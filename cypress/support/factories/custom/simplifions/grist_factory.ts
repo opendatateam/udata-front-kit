@@ -1,6 +1,7 @@
 import type {
   ApiEtDatasetsIntegresRecord,
   ApiOrDatasetRecord,
+  ApiOrDatasetType,
   ApiOrDatasetUtilesRecord,
   CasUsageRecord,
   RecommandationRecord,
@@ -95,7 +96,8 @@ export const solutionFactory = build<SolutionRecord>({
       Type_de_solution: ['Éditeur'],
       URL_demande_d_acces: '',
       solutions_integratrices: null,
-      liste_categories_de_solution: ['Logiciel métier']
+      liste_categories_de_solution: ['Logiciel métier'],
+      UID_datagouv: ''
     }
   }
 })
@@ -123,7 +125,9 @@ export const apiOrDatasetFactory = build<ApiOrDatasetRecord>({
       Nom: sequence(
         (x) => ['API n°' + x, 'Jeu de données n°' + x][x % 2] as string
       ),
-      Type: sequence((x) => ['API', 'Jeu de données'][x % 2] as string),
+      Type: sequence(
+        (x) => ['API', 'Jeu de données'][x % 2] as ApiOrDatasetType
+      ),
       Fourni_par: 1,
       Integre_par: [1, 2],
       Visible_sur_simplifions: true,
