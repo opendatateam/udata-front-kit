@@ -1,7 +1,7 @@
 <template>
   <div class="fr-my-2w fr-p-2w border border-default-grey">
     <div
-      v-if="dataservice.access_type === 'restricted'"
+      v-if="accessType === 'restricted'"
       class="absolute top-0 fr-grid-row fr-grid-row--middle fr-mt-n3v fr-ml-n1v"
     >
       <p
@@ -18,8 +18,8 @@
       <div class="fr-col-auto">
         <div class="logo">
           <OrganizationLogo
-            v-if="dataservice.organization"
-            :organization="dataservice.organization"
+            v-if="organization"
+            :organization="organization"
             size-class="size-10"
           />
           <Placeholder v-else type="Organization" class="size-10" />
@@ -30,15 +30,15 @@
           :is="props.titleTag"
           class="fr-text--md fr-mb-0 fr-text-title--grey"
         >
-          {{ dataservice.title }}
+          {{ title }}
         </component>
         <div
-          v-if="dataservice.organization"
+          v-if="organization"
           class="fr-text--sm fr-m-0 fr-grid-row fr-grid-row--middle"
         >
           <span class="org-name fr-mr-1v">
             <OrganizationNameWithCertificate
-              :organization="dataservice.organization"
+              :organization="organization"
               color-class="text-gray-title"
             />
           </span>
@@ -50,7 +50,7 @@
       <span
         class="fr-link fr-link--sm fr-icon-external-link-line fr-link--icon-right"
       >
-        Voir l'API sur Data.gouv.fr
+        {{ linkLabel }}
       </span>
     </div>
   </div>
@@ -61,15 +61,20 @@ import {
   OrganizationLogo,
   OrganizationNameWithCertificate,
   Placeholder,
-  type Dataservice
+  type OrganizationReference
 } from '@datagouv/components-next'
 
 interface Props {
-  dataservice: Dataservice
+  title: string
+  organization?: OrganizationReference | null
+  accessType?: string
+  linkLabel: string
   titleTag?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  organization: undefined,
+  accessType: undefined,
   titleTag: 'h4'
 })
 </script>

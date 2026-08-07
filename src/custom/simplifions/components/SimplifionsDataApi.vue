@@ -32,16 +32,22 @@
     :class="`api-or-dataset-card ${datagouvType}-card`"
   >
     <div class="api-or-dataset-header">
-      <DatasetCard
+      <SimplifionsDatasetDataserviceCard
         v-if="datagouvType == 'datasets' && datagouvLink"
         class="no-margins dataset-card"
-        :dataset="datagouvResource as DatasetV2"
+        :title="datagouvResource!.title"
+        :organization="datagouvResource!.organization"
+        :access-type="datagouvResource!.access_type"
+        link-label="Voir le jeu de données sur Data.gouv.fr"
         :title-tag="props.titleTag"
       />
-      <DataserviceCard
+      <SimplifionsDatasetDataserviceCard
         v-else-if="datagouvType == 'dataservices' && datagouvLink"
         class="no-margins dataservice-card"
-        :dataservice="datagouvResource as Dataservice"
+        :title="datagouvResource!.title"
+        :organization="datagouvResource!.organization"
+        :access-type="datagouvResource!.access_type"
+        link-label="Voir l'API sur Data.gouv.fr"
         :title-tag="props.titleTag"
       />
       <div v-else>{{ datagouvType }} | {{ datagouvResource.title }}</div>
@@ -50,8 +56,7 @@
 </template>
 
 <script setup lang="ts">
-import DataserviceCard from '@/custom/simplifions/components/SimplifionsDataserviceCard.vue'
-import DatasetCard from '@/custom/simplifions/components/SimplifionsDatasetCard.vue'
+import SimplifionsDatasetDataserviceCard from '@/custom/simplifions/components/SimplifionsDatasetDataserviceCard.vue'
 import DatagouvfrAPI from '@/services/api/DatagouvfrAPI'
 import type { Dataservice, DatasetV2 } from '@datagouv/components-next'
 import * as Sentry from '@sentry/vue'
