@@ -30,26 +30,15 @@
   >
     <div class="api-or-dataset-header">
       <SimplifionsDatasetDataserviceCard
-        v-if="datagouvType == 'datasets' && datagouvLink"
-        class="no-margins dataset-card"
+        v-if="datagouvLink"
+        :class="`no-margins ${cardClass}`"
         :title="datagouvResource!.title"
         :organization="datagouvResource!.organization"
         :owner="datagouvResource!.owner"
         :access-type="datagouvResource!.access_type"
-        link-label="Voir le jeu de données sur Data.gouv.fr"
+        :link-label="cardLinkLabel"
         :title-tag="props.titleTag"
       />
-      <SimplifionsDatasetDataserviceCard
-        v-else-if="datagouvType == 'dataservices' && datagouvLink"
-        class="no-margins dataservice-card"
-        :title="datagouvResource!.title"
-        :organization="datagouvResource!.organization"
-        :owner="datagouvResource!.owner"
-        :access-type="datagouvResource!.access_type"
-        link-label="Voir l'API sur Data.gouv.fr"
-        :title-tag="props.titleTag"
-      />
-      <div v-else>{{ datagouvType }} | {{ datagouvResource!.title }}</div>
     </div>
   </a>
 </template>
@@ -99,6 +88,16 @@ const datagouvType = computed(() => {
       throw new Error(`Unknown api or dataset type: ${props.apiOrDataset.Type}`)
   }
 })
+
+const cardClass = computed(() =>
+  datagouvType.value == 'datasets' ? 'dataset-card' : 'dataservice-card'
+)
+
+const cardLinkLabel = computed(() =>
+  datagouvType.value == 'datasets'
+    ? 'Voir le jeu de données sur Data.gouv.fr'
+    : "Voir l'API sur Data.gouv.fr"
+)
 
 const datagouvApiVersion = computed(() => {
   if (datagouvType.value == 'dataservices') {
