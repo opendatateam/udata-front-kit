@@ -36,7 +36,7 @@
           v-if="dataservice.organization"
           class="fr-text--sm fr-m-0 fr-grid-row fr-grid-row--middle"
         >
-          <span class="not-enlarged fr-mr-1v">
+          <span class="org-name fr-mr-1v">
             <OrganizationNameWithCertificate
               :organization="dataservice.organization"
               color-class="text-gray-title"
@@ -85,14 +85,10 @@ const props = withDefaults(defineProps<Props>(), {
   border: 1px solid var(--border-default-grey);
 }
 
-.not-enlarged {
-  transform: none !important;
-}
-
 /* @datagouv/components-next defines .truncate with !important inside @layer utilities (Tailwind).
    Unlayered !important loses to layered !important, so we must be in the same layer to win the cascade. */
 @layer utilities {
-  .not-enlarged :deep(.truncate) {
+  .org-name :deep(.truncate) {
     overflow: visible !important;
     white-space: normal !important;
     text-overflow: clip !important;
