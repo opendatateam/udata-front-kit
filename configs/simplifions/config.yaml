@@ -251,7 +251,7 @@ shared_filter_values:
 
   categorie_de_solution: &categorie_de_solution_values
     - id: brique-technique
-      name: API, base de donnée ou brique logicielle
+      name: API, jeu de données ou brique logicielle
     - id: logiciel-metier
       name: Logiciel métier "clé en main"
     - id: portail-consultation

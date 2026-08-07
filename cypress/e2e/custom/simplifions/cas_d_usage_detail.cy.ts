@@ -8,6 +8,7 @@ import {
   mockSolution,
   mockSolutionRecommandation
 } from '../../../support/factories/custom/simplifions/simplifions_mocks'
+import { dataserviceFactory } from '../../../support/factories/dataservices_factory'
 
 import './support'
 
@@ -624,5 +625,114 @@ describe("Simplifions Cas d'usages Show page - accordions behaviour", () => {
       .eq(1)
       .find('button.fr-accordion__btn')
       .should('have.attr', 'aria-expanded', 'false')
+  })
+})
+
+describe("Simplifions Cas d'usages Show page for a solution published on data.gouv.fr", () => {
+  const DATASERVICE_SLUG = 'api-recommandee'
+
+  const setup = ({
+    recommandationFields = {},
+    solutionFields = {},
+    dataserviceFields = {}
+  } = {}) => {
+    cy.baseMocksForSimplifions()
+    cy.mockStaticDatagouv()
+
+    const dataservice = dataserviceFactory.one({
+      overrides: {
+        slug: DATASERVICE_SLUG,
+        title: 'API Recommandée',
+        ...dataserviceFields
+      }
+    })
+    cy.mockDatagouvObject('dataservices', dataservice.slug, dataservice)
+
+    const { gristRecommandation } = mockSolutionRecommandation(
+      {
+        API_et_datasets_utiles_fournis: [],
+        Descriptions_des_API_et_datasets_utiles_fournis: [],
+        Ces_logiciels_l_integrent_deja: [],
+        Type_de_recommandation: 'API',
+        ...recommandationFields
+      },
+      { UID_datagouv: DATASERVICE_SLUG, ...solutionFields }
+    )
+
+    const { topicCasUsage } = mockCasUsage({}, [gristRecommandation])
+    cy.visit(`/cas-d-usages/${topicCasUsage.slug}`)
+    cy.get('.reco-card button.fr-accordion__btn').first().click()
+
+    return { dataservice }
+  }
+
+  it('should display the data.gouv.fr card of the recommended solution', () => {
+    setup()
+
+    cy.get('.reco-card .api-or-dataset-card')
+      .should('have.length', 1)
+      .and('contain.text', 'API Recommandée')
+      .and(
+        'have.attr',
+        'href',
+        `https://www.data.gouv.fr/fr/dataservices/${DATASERVICE_SLUG}`
+      )
+  })
+
+  it('should badge an open API as "ouverte"', () => {
+    setup()
+
+    cy.get('.reco-card .api-or-dataset-card .fr-badge')
+      .should('contain.text', 'API ouverte')
+      .and('have.class', 'fr-badge--info')
+  })
+
+  it('should badge a restricted API that public actors can access under condition', () => {
+    setup({
+      dataserviceFields: {
+        access_type: 'restricted',
+        access_audiences: [
+          {
+            role: 'local_authority_and_administration',
+            condition: 'under_condition'
+          }
+        ]
+      }
+    })
+
+    cy.get('.reco-card .api-or-dataset-card .fr-badge')
+      .should('contain.text', 'accessible aux acteurs publics sous conditions')
+      .and('have.class', 'fr-badge--green-tilleul-verveine')
+  })
+
+  it('should badge a restricted API that public actors cannot access', () => {
+    setup({
+      dataserviceFields: {
+        access_type: 'restricted',
+        access_audiences: [
+          { role: 'local_authority_and_administration', condition: 'no' }
+        ]
+      }
+    })
+
+    cy.get('.reco-card .api-or-dataset-card .fr-badge')
+      .should('contain.text', 'API en accès restreint')
+      .and('have.class', 'fr-badge--orange-terre-battue')
+  })
+
+  it('should not display the card when the recommandation type is not set', () => {
+    setup({ recommandationFields: { Type_de_recommandation: null } })
+
+    // The solution link resolves through its own request, so reaching it means
+    // the card would have had time to appear had it been built.
+    cy.get('.reco-card .test__solution-link').should('exist')
+    cy.get('.reco-card .api-or-dataset-card').should('not.exist')
+  })
+
+  it('should not display the card when the solution has no data.gouv.fr UID', () => {
+    setup({ solutionFields: { UID_datagouv: '' } })
+
+    cy.get('.reco-card .test__solution-link').should('exist')
+    cy.get('.reco-card .api-or-dataset-card').should('not.exist')
   })
 })
