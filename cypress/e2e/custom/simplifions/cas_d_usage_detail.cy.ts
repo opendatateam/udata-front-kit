@@ -539,18 +539,18 @@ describe("Simplifions Cas d'usages Show page - accordions behaviour", () => {
       .should('contain.text', "Par l'API directement")
   })
 
-  it('should title the direct-access accordion "Par la base de données directement" when Type_de_recommandation is Jeu de données', () => {
+  it('should title the direct-access accordion "Par le jeu de données directement" when Type_de_recommandation is Jeu de données', () => {
     setupWithTwoAccordions({ Type_de_recommandation: 'Jeu de données' })
     cy.get('button.fr-accordion__btn')
       .eq(0)
-      .should('contain.text', 'Par la base de données directement')
+      .should('contain.text', 'Par le jeu de données directement')
   })
 
-  it('should fall back to "Par la base de données ou l\'API directement" for the accordion title when Type_de_recommandation is null', () => {
+  it('should fall back to "Par le jeu de données ou l\'API directement" for the accordion title when Type_de_recommandation is null', () => {
     setupWithTwoAccordions({ Type_de_recommandation: null })
     cy.get('button.fr-accordion__btn')
       .eq(0)
-      .should('contain.text', "Par la base de données ou l'API directement")
+      .should('contain.text', "Par le jeu de données ou l'API directement")
   })
 
   it('should collapse the previously open accordion when another one is opened', () => {

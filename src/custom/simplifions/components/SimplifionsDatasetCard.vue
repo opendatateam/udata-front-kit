@@ -36,7 +36,7 @@
       <span
         class="fr-link fr-link--sm fr-icon-external-link-line fr-link--icon-right"
       >
-        Voir la base de données sur Data.gouv.fr
+        Voir le jeu de données sur Data.gouv.fr
       </span>
     </div>
   </div>
