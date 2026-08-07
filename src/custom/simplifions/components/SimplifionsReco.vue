@@ -262,8 +262,8 @@ if (isSolution) {
       const solution = data.fields as Solution
       const type = solution.Type_de_solution?.includes('API')
         ? 'API'
-        : solution.Type_de_solution?.includes('Base de données')
-          ? 'Base de données'
+        : solution.Type_de_solution?.includes('Jeu de données')
+          ? 'Jeu de données'
           : undefined
 
       if (solution.UID_datagouv && type) {

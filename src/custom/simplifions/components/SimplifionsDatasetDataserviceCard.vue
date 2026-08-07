@@ -94,7 +94,7 @@ interface Props {
   owner?: UserReference | null
   accessType?: AccessType
   accessAudiences?: Array<AccessAudience>
-  resourceLabel: 'API' | 'Base de données'
+  resourceLabel: 'API' | 'Jeu de données'
   linkLabel: string
   titleTag?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
 }

@@ -13,20 +13,23 @@ export type AccessTypeBadge = {
 export function getAccessTypeBadge(
   accessType: AccessType | undefined,
   accessAudiences: Array<AccessAudience> | undefined,
-  resourceLabel: 'API' | 'Base de données'
+  resourceLabel: 'API' | 'Jeu de données'
 ): AccessTypeBadge | null {
+  const ouvert = resourceLabel === 'API' ? 'ouverte' : 'ouvert'
+  const restreint = resourceLabel === 'API' ? 'restreinte' : 'restreint'
+
   switch (accessType) {
     case 'open':
       return {
-        label: `${resourceLabel} ouverte`,
+        label: `${resourceLabel} ${ouvert}`,
         icon: 'fr-icon-arrow-left-right-line',
         colorClass: 'fr-badge--info'
       }
     case 'open_with_account':
-      // Ce statut d'accès n'existe pas pour les bases de données, pas de badge dans ce cas
+      // Ce statut d'accès n'existe pas pour les jeux de données, pas de badge dans ce cas
       return resourceLabel === 'API'
         ? {
-            label: `${resourceLabel} ouverte avec compte`,
+            label: `${resourceLabel} ${ouvert} avec compte`,
             icon: 'fr-icon-user-line',
             colorClass: 'fr-badge--info'
           }
@@ -38,7 +41,7 @@ export function getAccessTypeBadge(
 
       if (publicActorsAccess === 'yes') {
         return {
-          label: `${resourceLabel} restreinte · accessible aux acteurs publics`,
+          label: `${resourceLabel} ${restreint} · accessible aux acteurs publics`,
           icon: 'fr-icon-lock-unlock-line',
           colorClass: 'fr-badge--success'
         }
@@ -46,7 +49,7 @@ export function getAccessTypeBadge(
 
       if (publicActorsAccess === 'under_condition') {
         return {
-          label: `${resourceLabel} restreinte · accessible aux acteurs publics sous conditions`,
+          label: `${resourceLabel} ${restreint} · accessible aux acteurs publics sous conditions`,
           icon: 'fr-icon-lock-line',
           colorClass: 'fr-badge--green-tilleul-verveine'
         }

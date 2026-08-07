@@ -72,9 +72,7 @@ export type ApiOrDatasetCardData = Pick<
   ApiOrDataset,
   'UID_datagouv' | 'Nom'
 > & {
-  // Le type peut aussi provenir de Solution.Type_de_solution ("Base de données"),
-  // qui n'a pas le même libellé que le champ Grist ApiOrDataset.Type ("Jeu de données")
-  Type: ApiOrDatasetType | 'Base de données'
+  Type: ApiOrDatasetType
 }
 
 export type ApiOrDatasetUtiles = {

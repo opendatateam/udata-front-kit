@@ -11,7 +11,7 @@ describe('getAccessTypeBadge', () => {
       colorClass: 'fr-badge--info'
     })
     expect(
-      getAccessTypeBadge('open', undefined, 'Base de données')
+      getAccessTypeBadge('open', undefined, 'Jeu de données')
     ).toMatchObject({
       colorClass: 'fr-badge--info'
     })
@@ -24,7 +24,7 @@ describe('getAccessTypeBadge', () => {
       colorClass: 'fr-badge--info'
     })
     expect(
-      getAccessTypeBadge('open_with_account', undefined, 'Base de données')
+      getAccessTypeBadge('open_with_account', undefined, 'Jeu de données')
     ).toBeNull()
   })
 
@@ -32,7 +32,7 @@ describe('getAccessTypeBadge', () => {
     const badge = getAccessTypeBadge(
       'restricted',
       [{ role: 'local_authority_and_administration', condition: 'yes' }],
-      'Base de données'
+      'Jeu de données'
     )
     expect(badge).toMatchObject({ colorClass: 'fr-badge--success' })
   })

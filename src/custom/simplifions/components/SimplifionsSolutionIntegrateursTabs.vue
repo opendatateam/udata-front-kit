@@ -135,7 +135,7 @@ const tabTitles = computed(() => {
   }
   if (filteredBriquesTechniques.value.length > 0) {
     titles.push({
-      title: `API, base de donnée ou brique logicielle (${filteredBriquesTechniques.value.length})`,
+      title: `API, jeu de données ou brique logicielle (${filteredBriquesTechniques.value.length})`,
       tabId: 'tab-brique-technique',
       panelId: 'tab-content-brique-technique'
     })

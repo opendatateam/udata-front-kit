@@ -85,7 +85,6 @@ const datagouvType = computed(() => {
     case 'API':
       return 'dataservices'
     case 'Jeu de données':
-    case 'Base de données':
       return 'datasets'
     default:
       throw new Error(`Unknown api or dataset type: ${props.apiOrDataset.Type}`)
@@ -97,7 +96,7 @@ const cardClass = computed(() =>
 )
 
 const cardResourceLabel = computed(() =>
-  datagouvType.value == 'datasets' ? 'Base de données' : 'API'
+  datagouvType.value == 'datasets' ? 'Jeu de données' : 'API'
 )
 
 const cardLinkLabel = computed(() =>
