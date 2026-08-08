@@ -20,13 +20,19 @@ const grouped = defineModel<Record<string, boolean>>('grouped', {
 
 const axisNames = computed(() => Object.keys(props.availableAxisValues))
 
+// "Regroupé" (summing all axes into one total) isn't valid when the
+// indicator isn't summable.
 const modeOptions = computed(() => [
-  { value: GROUPED_MODE, label: 'Regroupé' },
+  ...(props.summable ? [{ value: GROUPED_MODE, label: 'Regroupé' }] : []),
   ...axisNames.value.map((axis) => ({ value: axis, label: `Par "${axis}"` }))
 ])
 
-const activeAxis = computed(
-  () => axisNames.value.find((axis) => grouped.value[axis] === false) ?? null
+// Not summable means every axis is always ungrouped (see the parent's watch
+// on availableAxisValues), so there's no single "active" one to report here.
+const activeAxis = computed(() =>
+  props.summable
+    ? (axisNames.value.find((axis) => grouped.value[axis] === false) ?? null)
+    : null
 )
 
 const mode = computed<string>({
@@ -57,7 +63,7 @@ function toggleValue(axis: string, value: string, checked: boolean) {
   <fieldset v-if="axisNames.length > 0" class="axis-mode-block">
     <legend class="fr-sr-only">Afficher le graphe</legend>
     <p aria-hidden="true" class="axis-filters-title">Afficher le graphe</p>
-    <div v-if="summable" class="axis-options">
+    <div class="axis-options">
       <div
         v-for="option in modeOptions"
         :key="option.value"
@@ -69,6 +75,7 @@ function toggleValue(axis: string, value: string, checked: boolean) {
           type="radio"
           name="axis-display-mode"
           :value="option.value"
+          :disabled="!summable"
         />
         <label class="fr-label" :for="`axis-mode-${option.value}`">{{
           option.label
