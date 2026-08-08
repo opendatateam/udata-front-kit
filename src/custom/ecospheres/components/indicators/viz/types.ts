@@ -10,7 +10,7 @@ export interface IndicatorVizChartSeries {
   borderColor?: string
   backgroundColor?: string
   hidden?: boolean
-  // Renders as a stacked area instead of a plain line.
+  // "fill" is chart.js version of our "stacked" attribute
   fill?: boolean
 }
 
