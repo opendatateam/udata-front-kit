@@ -12,7 +12,7 @@ const territoryOptions = ref<SelectOption[]>([])
 watch(
   () => props.mesh,
   async (mesh) => {
-    if (mesh === 'fr') {
+    if (mesh === 'fr' || mesh === 'commune') {
       territoryOptions.value = []
       return
     }
@@ -40,7 +40,7 @@ watch(
 </script>
 
 <template>
-  <div v-if="mesh !== 'fr'" class="territory-select">
+  <div v-if="mesh !== 'fr' && mesh !== 'commune'" class="territory-select">
     <FilterSelectComponent
       v-model="selectedTerritory"
       :options="territoryOptions"
@@ -56,11 +56,5 @@ watch(
 
 :deep(.multiselect-clear) {
   display: none;
-}
-
-:deep(.multiselect-single-label),
-:deep(.multiselect-search),
-:deep(.multiselect-option) {
-  font-size: 0.8rem;
 }
 </style>

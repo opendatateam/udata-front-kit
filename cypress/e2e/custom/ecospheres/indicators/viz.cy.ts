@@ -53,5 +53,26 @@ describe('Indicator Viz', () => {
       ).should('be.visible')
       cy.get('canvas').should('not.exist')
     })
+
+    it('should display an info message instead of data for the dummy Commune maille', () => {
+      const indicatorWithViz = createIndicator(
+        {},
+        { enable_visualization: true }
+      )
+      const vizResource = createIndicatorResource('region')
+      cy.mockDatasetAndRelatedObjects(indicatorWithViz, [vizResource])
+      cy.intercept(
+        'GET',
+        `https://tabular-api*.data.gouv.fr/api/resources/${vizResource.id}/data/**`,
+        { statusCode: 200, body: { data: [] } }
+      )
+      cy.visit(`/indicators/${indicatorWithViz.id}`)
+      cy.contains('Prévisualisation').click()
+      cy.get('#viz-mesh-select').select('commune')
+      cy.contains(
+        "Les données communales sont présentes dans les fichiers, mais la prévisualisation des communes n'est pas disponible."
+      ).should('be.visible')
+      cy.get('canvas').should('not.exist')
+    })
   })
 })

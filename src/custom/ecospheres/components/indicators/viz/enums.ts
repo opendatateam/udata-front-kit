@@ -2,7 +2,10 @@ import type { IndicatorMesh } from '../../../model/indicator'
 
 export const DEFAULT_TABULAR_API_URL = 'https://tabular-api.data.gouv.fr'
 
-export const GEOCOLUMNS: Record<Exclude<IndicatorMesh, 'fr'>, string> = {
+export const GEOCOLUMNS: Record<
+  Exclude<IndicatorMesh, 'fr' | 'commune'>,
+  string
+> = {
   departement: 'geocode_departement',
   region: 'geocode_region',
   epci: 'geocode_epci'
@@ -58,3 +61,7 @@ export const COLORS = [
   '#6A6156',
   '#C9191E'
 ]
+
+export function getSeriesColor(index: number): string {
+  return COLORS[index % COLORS.length]
+}

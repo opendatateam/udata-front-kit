@@ -66,13 +66,13 @@ export function useTabularData(
     )
     if (!resource) return
 
-    if (mesh !== 'fr' && !selectedTerritory.value) return
+    if (mesh !== 'fr' && mesh !== 'commune' && !selectedTerritory.value) return
 
     isLoading.value = true
     error.value = null
 
     const geoCondition =
-      mesh !== 'fr'
+      mesh !== 'fr' && mesh !== 'commune'
         ? `${GEOCOLUMNS[mesh]}__exact=${selectedTerritory.value}&`
         : ''
 
