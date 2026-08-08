@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 import SearchComponent from '@/components/SearchComponent.vue'
 import config from '@/config'
 import CultureDatasetCard from '@/custom/culture/components/CultureDatasetCard.vue'
+import HeroSection from '@/custom/culture/components/HeroSection.vue'
 import { fromMarkdown } from '@/utils'
 import { useMeta } from '@/utils/seo'
 import { DsfrFollow, DsfrNewsLetter } from '@gouvminint/vue-dsfr'
@@ -98,6 +99,19 @@ const getContentForSection = (sectionName: string) => {
   )
 }
 
+const hero = computed(() => {
+  const item = contentItems.value.find(
+    (i) => i.fields.section === 'hero'
+  )?.fields
+  return {
+    title: item?.title || 'Les données ouvertes de la Culture',
+    description:
+      item?.content ||
+      'culture.data.gouv.fr vise à référencer, héberger et diffuser les données publiques relatives à la culture en France. Vous y trouverez des données téléchargeables et utilisables de manière libre et gratuite.',
+    imageUrl: item?.imageUrl || ''
+  }
+})
+
 const getTopItemsByType = (
   type: 'top-datasets' | 'top-reuses' | 'new-datasets'
 ) => {
@@ -121,30 +135,33 @@ const getBackgroundClass = (backgroundColor: string) => {
 }
 
 onMounted(() => {
-  Promise.all([fetchSections(), fetchContent(), fetchTopItems()]).then(() => {
-    loading.value = false
-  })
+  Promise.all([fetchSections(), fetchContent(), fetchTopItems()]).finally(
+    () => {
+      loading.value = false
+    }
+  )
 })
 </script>
 
 <template>
   <div>
-    <section class="fr-container fr-pt-12v">
-      <h1 class="main-title-v2">Les données ouvertes de la Culture</h1>
-      <p class="fr-text--lead fr-mb-6w text-center">
-        culture.data.gouv.fr vise à référencer, héberger et diffuser les données
-        publiques relatives à la culture en France. Vous y trouverez des données
-        téléchargeables et utilisables de manière libre et gratuite.
-      </p>
-
-      <div class="big-search">
-        <SearchComponent
-          id="big-select-search"
-          :placeholder="config.website.header.search.placeholder"
-          search-label="Rechercher"
-        />
-      </div>
-    </section>
+    <HeroSection
+      :title="hero.title"
+      :description="hero.description"
+      :image-url="hero.imageUrl"
+      alt-img=""
+      :colors="config.website.home_banner_colors"
+    >
+      <template #search>
+        <div class="big-search">
+          <SearchComponent
+            id="big-select-search"
+            :placeholder="config.website.header.search.placeholder"
+            search-label="Rechercher"
+          />
+        </div>
+      </template>
+    </HeroSection>
 
     <div v-if="loading" class="fr-container fr-py-8w">
       <p>Chargement...</p>
@@ -192,6 +209,7 @@ onMounted(() => {
           </div>
         </div>
       </section>
+
       <template v-for="section in sections" :key="section.id">
         <section
           v-if="section.fields.type === 'cards'"
@@ -303,26 +321,16 @@ onMounted(() => {
                   <!-- eslint-disable-next-line vue/no-v-html -->
                   <div v-html="fromMarkdown(item.fields.content).html"></div>
                 </div>
-                <div>
-                  <a
-                    v-if="item.fields.ctaLink && item.fields.ctaLabel"
-                    :href="item.fields.ctaLink"
-                    class="fr-btn fr-btn--secondary"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    :title="`${item.fields.ctaLabel} - nouvelle fenêtre`"
-                  >
-                    {{ item.fields.ctaLabel }}
-                  </a>
-                </div>
-              </div>
 
-              <div v-if="item.fields.imageUrl" class="highlight-img-col">
-                <img
-                  :src="item.fields.imageUrl"
-                  :alt="item.fields.title || 'Illustration'"
-                  class="highlight-img"
-                />
+                <a
+                  v-if="item.fields.ctaLink && item.fields.ctaLabel"
+                  :href="item.fields.ctaLink"
+                  class="fr-btn"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  {{ item.fields.ctaLabel }}
+                </a>
               </div>
             </div>
           </div>
@@ -442,19 +450,15 @@ onMounted(() => {
   background-color: var(--background-default-grey);
 }
 
-.main-title-v2 {
-  text-align: center;
-  font-size: clamp(1.375rem, 0.4698rem + 4.5259vw, 4rem);
-  margin-bottom: 1.5rem;
-
-  @media (max-width: 768px) {
-    text-align: inherit;
-  }
+.big-search {
+  display: flex;
+  width: 588px;
+  max-width: 100%;
+  align-items: flex-start;
 }
 
-.big-search {
-  max-width: 792px;
-  margin: 0 auto;
+.big-search > * {
+  flex: 1;
 }
 
 section h2 {
