@@ -44,9 +44,7 @@ export type Indicator = DatasetV2WithFullObject & {
   extras: IndicatorExtras
 }
 
-// 'commune' is a dummy value: no resource ever has this maille, it only
-// exists so the mesh select can offer it and IndicatorVizChart can show an
-// explanatory message instead of trying to load data.
+// 'commune' is a dummy value with no backing resource (see IndicatorVizChart).
 export type IndicatorMesh = 'fr' | 'region' | 'departement' | 'epci' | 'commune'
 
 export type IndicatorResourceExtras = {

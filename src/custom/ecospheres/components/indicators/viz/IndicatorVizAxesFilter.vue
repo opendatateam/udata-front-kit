@@ -6,10 +6,8 @@ const GROUPED_MODE = '__grouped__'
 const props = defineProps<{
   availableAxisValues: Record<string, string[]>
   summable: boolean
-  // The active axis's values with the exact color and order the chart gives
-  // them (see IndicatorVizChart.vue's series/activeAxisValues). The chart
-  // hides rather than removes unchecked values, so this list - and its
-  // colors - stay stable no matter what's currently checked.
+  // Active axis's values, colors/order matching the chart (see
+  // IndicatorVizChart.vue's activeAxisValues).
   activeAxisValues: AxisValueDisplay[]
 }>()
 
@@ -50,15 +48,12 @@ function toggleValue(axis: string, value: string, checked: boolean) {
 </script>
 
 <template>
-  <!-- Each top-level block below is its own flex item in the parent's
-       .dropdowns row (see IndicatorVizChart.vue), so selects/radios/values
-       share the available width evenly instead of the values list wrapping
-       under the radios when its labels are long.
-       Plain <fieldset>/<input>/<label> throughout, not DsfrRadioButtonSet/
-       DsfrCheckboxSet: DSFR's own .fr-fieldset ships with flex-wrap and
-       percentage flex-basis on its rows, which made width unpredictable in
-       a flex/grid column context. Only the simple visual classes
-       (.fr-radio-group/.fr-checkbox-group, no layout of their own) are kept. -->
+  <!-- Each top-level block is its own flex item in the parent's .dropdowns
+       row (see IndicatorVizChart.vue). Plain <fieldset>/<input>/<label>, not
+       DsfrRadioButtonSet/DsfrCheckboxSet: their .fr-fieldset made width
+       unpredictable in a flex column (flex-wrap + percentage flex-basis
+       rows). Only the plain visual classes (.fr-radio-group/.fr-checkbox-group)
+       are kept. -->
   <fieldset v-if="axisNames.length > 0" class="axis-mode-block">
     <legend class="fr-sr-only">Afficher le graphe</legend>
     <p aria-hidden="true" class="axis-filters-title">Afficher le graphe</p>
@@ -167,22 +162,14 @@ function toggleValue(axis: string, value: string, checked: boolean) {
 }
 
 /* Starts at content size, then gets a small share of any leftover row width
-   as breathing room - most of it goes to .axis-values-block below - see
-   .dropdowns in IndicatorVizChart.vue for the row this shares space in.
-   That leftover share varies with how many columns are competing for it
-   (bigger alone in "Regroupé" mode than once .axis-values-block appears),
-   so a fixed margin-left is used for visual separation from the first
-   column instead of centering: centering content within a width that
-   changes size made it visibly jump between modes, a fixed margin doesn't. */
+   as breathing room (0.1) */
 .axis-mode-block {
-  flex: 0.2 1 auto;
+  flex: 0.1 1 auto;
   margin-left: 2rem;
 }
 
-/* Starts from nothing (flex-basis:0) and claims the rest of the leftover
-   width, at 5x the rate of .axis-mode-block above. min-width:0 lets it
-   shrink below its content's natural width so long labels wrap instead of
-   overflowing (flex items default to min-width:auto). */
+/* Claims the rest of the leftover width (5x .axis-mode-block's share).
+   min-width:0 so long labels wrap instead of overflowing. */
 .axis-values-block {
   flex: 1 1 0;
   min-width: 0;
@@ -200,11 +187,7 @@ function toggleValue(axis: string, value: string, checked: boolean) {
   visibility: hidden;
 }
 
-/* Both only make sense in the row layout: the margin-left is separation
-   from the first column, and the spacer only reserves height to line up
-   with .axis-mode-block's title when columns sit side by side. Stacked
-   below the breakpoint, neither applies - the spacer is removed from flow
-   entirely (not just hidden) so it doesn't waste vertical space. */
+/* Both are row-layout-only concerns; not needed once columns stack. */
 @media (max-width: 768px) {
   .axis-mode-block {
     margin-left: 0;
@@ -221,12 +204,9 @@ function toggleValue(axis: string, value: string, checked: boolean) {
   gap: 0.5rem;
 }
 
-/* DSFR's own label rule (.fr-checkbox-group input[type=checkbox] + label)
-   sets align-items:center, right for a single-line label but it pushes the
-   swatch to the vertical middle of a wrapped multi-line one. Matching that
-   selector's shape (rather than just ".axis-value-label") makes ours the
-   more specific of the two, so it actually wins instead of silently losing
-   to DSFR's default. */
+/* Overrides DSFR's align-items:center, which centers the swatch on a
+   wrapped multi-line label instead of aligning it to the first line. Matches
+   DSFR's own selector shape to win on specificity. */
 .axis-values-block .fr-checkbox-group input[type='checkbox'] + label {
   align-items: flex-start;
 }

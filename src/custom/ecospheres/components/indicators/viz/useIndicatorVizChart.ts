@@ -98,9 +98,7 @@ function applyColors(
   series.forEach((s, idx) => {
     s.borderColor = getSeriesColor(idx)
     s.backgroundColor = getSeriesColor(idx)
-    // fill:true turns the line chart into an area chart; combined with the
-    // y scale's stacked:true (see buildConfig) it stacks each axis value on
-    // top of the previous one instead of overlapping from the x-axis.
+    // Turns the line into a stacked area (paired with y.stacked in buildConfig).
     s.fill = stacked
   })
   return series

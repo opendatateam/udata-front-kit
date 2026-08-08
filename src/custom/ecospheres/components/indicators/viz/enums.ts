@@ -60,9 +60,7 @@ export const COLORS = [
   '#C9191E'
 ]
 
-// Single source for series-index -> color, so the chart (useIndicatorVizChart's
-// applyColors) and the axis filter checkboxes (IndicatorVizChart's
-// activeAxisValues) can never drift apart from each other.
+// Shared by the chart and the filter checkboxes so their colors can't drift.
 export function getSeriesColor(index: number): string {
   return COLORS[index % COLORS.length]
 }

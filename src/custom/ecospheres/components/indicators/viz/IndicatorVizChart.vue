@@ -90,12 +90,8 @@ watch(availableAxisValues, (axisValues) => {
   )
 })
 
-// The axis currently split into its own series (as opposed to summed away).
-// Only meaningful when the indicator is summable: for a non-summable
-// indicator every axis is simultaneously ungrouped (see the watch above),
-// so there's no single "active" axis - splitting by more than one axis at a
-// time isn't something summable indicators expose in the UI, but it's the
-// default (only) state for non-summable ones.
+// The axis currently split into its own series; null when not summable
+// (every axis is ungrouped simultaneously then, so none is "the" active one).
 const activeAxis = computed(() =>
   summable.value
     ? (Object.keys(groupedAxis.value).find(
@@ -104,14 +100,10 @@ const activeAxis = computed(() =>
     : null
 )
 
-// Uses axisFilters keys (not availableAxisValues, which creates a new object
-// reference on every recompute) to build series. When one axis is active,
-// its series are built from every available value (not just the checked
-// ones) so each value keeps a stable array position - and thus a stable
-// color, since colors are assigned by array index - no matter what else
-// gets checked/unchecked. Checked-off values are hidden on the chart.js
-// dataset instead of removed, the same mechanism a legend click uses, so
-// hiding one line never reshuffles the others' colors.
+// Uses axisFilters keys, not availableAxisValues (new ref every recompute).
+// The active axis's series always include every value (not just checked
+// ones), hidden via chart.js's dataset.hidden instead of removed, so
+// indices - and colors, assigned by index - stay stable across toggles.
 const series = computed(() => {
   const axisNames = Object.keys(axisFilters.value)
   const filtersForSeries = activeAxis.value
@@ -138,9 +130,8 @@ const isOneYear = computed(
   () => series.value.length === 1 && series.value[0].data.length === 1
 )
 
-// The chart assigns each series a color by its position in this same array
-// (see useIndicatorVizChart's applyColors), so reusing it here guarantees
-// the filter checkboxes always show exactly the chart's own color and order.
+// Same array, same index -> color as the chart (useIndicatorVizChart's
+// applyColors), so the filter checkboxes always match it exactly.
 const activeAxisValues = computed<AxisValueDisplay[]>(() =>
   activeAxis.value
     ? series.value.map((s, idx) => ({
@@ -156,9 +147,7 @@ const hasNoAxisSelected = computed(
     Object.values(axisFilters.value).some((v) => v.length === 0)
 )
 
-// activeAxis is already only non-null for a summable indicator (see above),
-// which is exactly the filter checkboxes' colored branch: displaying a
-// single axis's values renders as a stacked area instead of plain lines.
+// A single axis's values render as a stacked area instead of plain lines.
 const isStackedArea = computed(() => !!activeAxis.value)
 
 const chartCanvas = useTemplateRef<HTMLCanvasElement>('chartCanvas')
@@ -258,14 +247,8 @@ onMounted(() => {
   width: 100%;
 }
 
-/* Plain flex row. Each column's own flex value (not a shared rule here)
-   decides its behavior - see IndicatorVizAxesFilter.vue for
-   .axis-mode-block/.axis-values-block. .geo-dropdowns stays flex:0 0 auto:
-   its selects have a fixed 220px width, so there's no content to grow into.
-   Below 768px (matches the breakpoint used elsewhere in this codebase, e.g.
-   HomeAboutNews/HomeCollections), columns stack: flex-direction:column
-   makes each block's cross-axis (width) stretch to fill the row by default,
-   so no extra per-block override is needed for the stacked layout. */
+/* Column flex values: .axis-mode-block/.axis-values-block in
+   IndicatorVizAxesFilter.vue, .geo-dropdowns below. */
 .dropdowns {
   display: flex;
   flex-direction: row;
