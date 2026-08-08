@@ -44,7 +44,6 @@ export type Indicator = DatasetV2WithFullObject & {
   extras: IndicatorExtras
 }
 
-// 'commune' is a dummy value with no backing resource (see IndicatorVizChart).
 export type IndicatorMesh = 'fr' | 'region' | 'departement' | 'epci' | 'commune'
 
 export type IndicatorResourceExtras = {

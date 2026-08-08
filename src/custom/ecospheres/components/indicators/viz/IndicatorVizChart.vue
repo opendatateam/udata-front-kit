@@ -66,7 +66,6 @@ watch(
   { immediate: true }
 )
 
-// See IndicatorMesh: shows an explanatory message instead of the chart.
 const isCommuneMesh = computed(
   () => selectedIndicatorVizMesh.value === 'commune'
 )
