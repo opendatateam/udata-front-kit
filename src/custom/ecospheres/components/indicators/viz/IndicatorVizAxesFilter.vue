@@ -6,8 +6,6 @@ const GROUPED_MODE = '__grouped__'
 const props = defineProps<{
   availableAxisValues: Record<string, string[]>
   summable: boolean
-  // Active axis's values, colors/order matching the chart (see
-  // IndicatorVizChart.vue's activeAxisValues).
   activeAxisValues: AxisValueDisplay[]
 }>()
 
@@ -20,15 +18,14 @@ const grouped = defineModel<Record<string, boolean>>('grouped', {
 
 const axisNames = computed(() => Object.keys(props.availableAxisValues))
 
-// "Regroupé" (summing all axes into one total) isn't valid when the
-// indicator isn't summable.
+// "Regroupé" isn't valid when the indicator isn't summable.
 const modeOptions = computed(() => [
   ...(props.summable ? [{ value: GROUPED_MODE, label: 'Regroupé' }] : []),
   ...axisNames.value.map((axis) => ({ value: axis, label: `Par "${axis}"` }))
 ])
 
-// Not summable means every axis is always ungrouped (see the parent's watch
-// on availableAxisValues), so there's no single "active" one to report here.
+// Not summable means every axis is always ungrouped, so there's
+// no single "active" one to report here.
 const activeAxis = computed(() =>
   props.summable
     ? (axisNames.value.find((axis) => grouped.value[axis] === false) ?? null)
@@ -54,12 +51,7 @@ function toggleValue(axis: string, value: string, checked: boolean) {
 </script>
 
 <template>
-  <!-- Each top-level block is its own flex item in the parent's .dropdowns
-       row (see IndicatorVizChart.vue). Plain <fieldset>/<input>/<label>, not
-       DsfrRadioButtonSet/DsfrCheckboxSet: their .fr-fieldset made width
-       unpredictable in a flex column (flex-wrap + percentage flex-basis
-       rows). Only the plain visual classes (.fr-radio-group/.fr-checkbox-group)
-       are kept. -->
+  <!-- Not using vue-dsfr components because fieldset styles will fight our layout -->
   <fieldset v-if="axisNames.length > 0" class="axis-mode-block">
     <legend class="fr-sr-only">Afficher le graphe</legend>
     <p aria-hidden="true" class="axis-filters-title">Afficher le graphe</p>
@@ -175,7 +167,7 @@ function toggleValue(axis: string, value: string, checked: boolean) {
   margin-left: 2rem;
 }
 
-/* Claims the rest of the leftover width (5x .axis-mode-block's share).
+/* Claims the rest of the leftover width (10x .axis-mode-block's share).
    min-width:0 so long labels wrap instead of overflowing. */
 .axis-values-block {
   flex: 1 1 0;
@@ -223,8 +215,6 @@ function toggleValue(axis: string, value: string, checked: boolean) {
   width: 1rem;
   height: 1rem;
   margin-right: 0.5rem;
-  /* Matches DSFR's own --sm checkbox glyph margin-top, so the swatch lines
-     up visually with the check icon instead of the (taller) text line. */
   margin-top: 0.25rem;
   border-radius: 2px;
   flex-shrink: 0;
