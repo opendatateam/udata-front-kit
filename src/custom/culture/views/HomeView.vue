@@ -262,12 +262,15 @@ onMounted(() => {
         <section
           v-else-if="section.fields.type === 'tags'"
           class="fr-container--fluid fr-py-8w"
-          :class="getBackgroundClass(section.fields.background_color)"
+          style="background-color: #e9f9dd"
         >
           <div class="fr-container">
-            <h2>{{ section.fields.section_title }}</h2>
+            <h2 class="fr-h2">{{ section.fields.section_title }}</h2>
 
-            <ul class="fr-tags-group">
+            <ul
+              class="fr-tags-group"
+              aria-label="Liste des thématiques culturelles"
+            >
               <li
                 v-for="item in getContentForSection(section.fields.section)"
                 :key="item.id"
@@ -488,33 +491,8 @@ section h2 {
   height: 100%;
 }
 
-.fr-tags-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  justify-content: center;
-  margin: 2rem 0;
-  list-style: none;
-  padding: 0;
-}
-
 .list-none {
   list-style-type: none !important;
-}
-
-.fr-tags-group .fr-tag {
-  margin: 0;
-  font-size: 0.875rem;
-  padding: 0.5rem 1rem;
-  border-radius: 1rem;
-  text-decoration: none;
-  transition: all 0.2s ease;
-  background-color: var(--background-action-low-blue-france);
-  color: #3a5da6;
-}
-
-.fr-tags-group .fr-tag:hover {
-  background-color: #a9c8fb;
 }
 
 /* --- Bloc Highlight DSFR (Image restreinte à la hauteur exacte du texte) --- */
