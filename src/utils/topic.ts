@@ -22,12 +22,13 @@ export const isAvailable = (availability: Availability): boolean => {
 }
 
 /**
- * Extract a dataset id from a URI if it points to a dataset page on one of
- * the given base URLs, matching hostnames regardless of a "www" prefix
+ * Extract an id/slug from a URI if it points to a `resourceName` page on one
+ * of the given base URLs, matching hostnames regardless of a "www" prefix
  * (e.g. a `data.gouv.fr` base URL also matches `www.data.gouv.fr` URIs).
  */
-export const getDatasetIdFromUri = (
+export const getSlugFromUri = (
   uri: string,
+  resourceName: string,
   baseUrls: (string | undefined)[]
 ): string | null => {
   let url: URL
@@ -53,8 +54,10 @@ export const getDatasetIdFromUri = (
     return null
   }
 
-  const match = url.pathname.match(/\/datasets\/(?<datasetName>[a-zA-Z0-9_-]+)/)
-  return match?.groups?.datasetName ?? null
+  const match = url.pathname.match(
+    new RegExp(`/${resourceName}/(?<slug>[a-zA-Z0-9_-]+)`)
+  )
+  return match?.groups?.slug ?? null
 }
 
 /**

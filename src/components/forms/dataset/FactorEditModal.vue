@@ -17,7 +17,7 @@ import { useTopicElementStore } from '@/store/TopicElementStore'
 import { useSiteId } from '@/utils/config'
 import { useForm, type AllowedInput } from '@/utils/form'
 import { useLabels } from '@/utils/labels'
-import { getDatasetIdFromUri } from '@/utils/topic'
+import { getSlugFromUri } from '@/utils/topic'
 import ErrorSummary from '../ErrorSummary.vue'
 import FactorFields from './FactorFields.vue'
 
@@ -159,7 +159,7 @@ const submit = async (modalData: DatasetModalData) => {
       siteExtras?.uri &&
       siteExtras?.availability === Availability.URL_AVAILABLE
     ) {
-      const datasetName = getDatasetIdFromUri(siteExtras.uri, [
+      const datasetName = getSlugFromUri(siteExtras.uri, 'datasets', [
         config.datagouvfr.base_url,
         config.website.seo?.canonical_url
       ])
