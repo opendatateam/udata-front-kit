@@ -67,8 +67,13 @@ function toggleValue(axis: string, value: string, checked: boolean) {
   </fieldset>
 
   <!-- Summable: only the axis picked above is filterable, in the chart's
-       own order and colors, since the others are summed into the total. -->
-  <fieldset v-if="summable && activeAxis" class="axis-values-block">
+       own order and colors, since the others are summed into the total.
+       axisNames.includes guards against a stale activeAxis from a mesh
+       switch that leaves no axes at all (e.g. commune). -->
+  <fieldset
+    v-if="summable && activeAxis && axisNames.includes(activeAxis)"
+    class="axis-values-block"
+  >
     <legend class="fr-sr-only">Valeurs de l'axe "{{ activeAxis }}"</legend>
     <p aria-hidden="true" class="axis-filters-title axis-filters-title--spacer">
       &nbsp;
