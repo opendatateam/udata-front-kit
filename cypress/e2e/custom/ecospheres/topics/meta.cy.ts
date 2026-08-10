@@ -6,9 +6,44 @@ import {
   visitTopic
 } from './support'
 
-describe('Topic meta tags', () => {
+describe('Topic detail page meta', () => {
   beforeEach(() => {
     setupElementTest()
+  })
+
+  it('should set window title with topic name', () => {
+    const topic = createTestTopic({ name: 'Test Topic Name' })
+    mockTopicAndRelatedObjects(topic)
+    mockTopicElementsByClass(topic.id, [], [], [])
+    visitTopic(topic.slug)
+
+    const { pages, website } = Cypress.env('siteConfig')
+    const singular = pages.bouquets.labels.singular
+    const capitalizedSingular =
+      singular.charAt(0).toUpperCase() + singular.slice(1)
+    cy.title().should(
+      'eq',
+      `${capitalizedSingular} - Test Topic Name | ${website.title}`
+    )
+  })
+
+  it('should announce page title in live region', () => {
+    const topic = createTestTopic({ name: 'Test Topic Name' })
+    mockTopicAndRelatedObjects(topic)
+    mockTopicElementsByClass(topic.id, [], [], [])
+    visitTopic(topic.slug)
+
+    const { pages, website } = Cypress.env('siteConfig')
+    const singular = pages.bouquets.labels.singular
+    const capitalizedSingular =
+      singular.charAt(0).toUpperCase() + singular.slice(1)
+    cy.get('[aria-live="assertive"]')
+      .find('li')
+      .first()
+      .should(
+        'have.text',
+        `Page ${capitalizedSingular} - Test Topic Name | ${website.title}`
+      )
   })
 
   describe('global metas from index.html', () => {
@@ -54,7 +89,7 @@ describe('Topic meta tags', () => {
       cy.get('head meta[property="og:title"]').should(
         'have.attr',
         'content',
-        `Test Topic Name | ${siteTitle}`
+        `Collection - Test Topic Name | ${siteTitle}`
       )
       cy.get('head meta[property="og:description"]').should(
         'have.attr',
@@ -105,5 +140,32 @@ describe('Topic meta tags', () => {
         'exist'
       )
     })
+  })
+})
+
+describe('Topic list page meta', () => {
+  beforeEach(() => {
+    cy.mockMatomo()
+    cy.mockStaticDatagouv()
+    cy.mockSpatialLevels()
+    cy.mockSpatialZone()
+    cy.mockSpatialZonesSuggest()
+    cy.mockListApis('topics', [])
+    cy.visit('/bouquets')
+  })
+
+  it('should set window title from page meta config', () => {
+    const { pages, website } = Cypress.env('siteConfig')
+    const title = pages.bouquets.meta?.title
+    cy.title().should('eq', `${title} | ${website.title}`)
+  })
+
+  it('should announce page title in live region', () => {
+    const { pages, website } = Cypress.env('siteConfig')
+    const title = pages.bouquets.meta?.title
+    cy.get('[aria-live="assertive"]')
+      .find('li')
+      .first()
+      .should('have.text', `Page ${title} | ${website.title}`)
   })
 })

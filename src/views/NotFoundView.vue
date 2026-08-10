@@ -5,6 +5,7 @@ import { useRoute, useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
 import config from '@/config'
+import { useMeta } from '@/utils/seo'
 
 const route = useRoute()
 const router = useRouter()
@@ -12,6 +13,12 @@ const router = useRouter()
 if (route.name !== 'not_found') {
   router.push({ name: 'not_found' })
 }
+
+useMeta({
+  description: () => undefined,
+  canonicalUrl: () => null,
+  noIndex: () => true
+})
 </script>
 
 <template>

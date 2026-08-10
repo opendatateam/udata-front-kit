@@ -9,12 +9,11 @@
 </template>
 
 <script setup lang="ts">
-import type { Topic } from '@/model/topic'
 import type { Solution } from '../model/grist'
-import type { TopicSolutionsExtras } from '../model/topics'
+import type { TopicSolution } from '../model/topics'
 
 const props = defineProps<{
-  topicSolution?: Topic
+  topicSolution?: TopicSolution
   gristSolution?: Solution
 }>()
 
@@ -23,9 +22,7 @@ const solutionData = computed(() => {
     return props.gristSolution
   }
   if (props.topicSolution) {
-    return (props.topicSolution.extras as TopicSolutionsExtras | undefined)?.[
-      'simplifions-v2-solutions'
-    ]
+    return props.topicSolution.extras?.['simplifions-v2-solutions']
   }
   console.warn('No solution passed to SimplifionsSolutionTag')
   return undefined

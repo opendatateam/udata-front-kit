@@ -1,22 +1,17 @@
 <script setup lang="ts">
+import { useCanonicalUrl, useMeta } from '@/utils/seo'
 import { ReadMore } from '@datagouv/components-next'
-import { useHead } from '@unhead/vue'
-import { computed, inject, onMounted, ref } from 'vue'
+import { capitalize, computed, onMounted, ref } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
 import DatasetAddToTopicModal from '@/components/datasets/DatasetAddToTopicModal.vue'
 import DatasetDataservicesList from '@/components/datasets/DatasetDataservicesList.vue'
-import DatasetInformationPanel from '@/components/datasets/DatasetInformationPanel.vue'
 import DatasetReusesList from '@/components/datasets/DatasetReusesList.vue'
 import DatasetSidebar from '@/components/datasets/DatasetSidebar.vue'
 import ResourcesList from '@/components/datasets/ResourcesList.vue'
 import config from '@/config'
-import IndicatorVisualisation from '@/custom/ecospheres/views/indicators/IndicatorVisualisation.vue'
-import {
-  AccessibilityPropertiesKey,
-  type AccessibilityPropertiesType
-} from '@/model/injectionKeys'
+import IndicatorVizChart from '@/custom/ecospheres/components/indicators/viz/IndicatorVizChart.vue'
 import { useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/DatasetStore'
 import { useUserStore } from '@/store/UserStore'
@@ -25,10 +20,12 @@ import { usePageConf } from '@/utils/config'
 import { useLabels } from '@/utils/labels'
 import IndicatorInformationPanel from '../../components/indicators/IndicatorInformationPanel.vue'
 import IndicatorSourcesList from '../../components/indicators/IndicatorSourcesList.vue'
+import IndicatorTags from '../../components/indicators/IndicatorTags.vue'
 import type { Indicator } from '../../model/indicator'
 
 const route = useRouteParamsAsString()
 const indicatorId = route.params.item_id
+const router = useRouter()
 
 const datasetStore = useDatasetStore()
 const userStore = useUserStore()
@@ -38,12 +35,10 @@ const indicator = computed(() => datasetStore.get(indicatorId) as Indicator)
 const tabularApiUrl = config.datagouvfr?.tabular_api_url
 
 const showAddToTopicModal = ref(false)
+const indicatorConf = usePageConf('indicators')
+const labels = useLabels(indicatorConf.labels)
 const topicConf = usePageConf('bouquets')
 const topicsLabels = useLabels(topicConf.labels)
-
-const setAccessibilityProperties = inject(
-  AccessibilityPropertiesKey
-) as AccessibilityPropertiesType
 
 const links = computed(() => [
   { to: '/', text: 'Accueil' },
@@ -52,12 +47,6 @@ const links = computed(() => [
 ])
 
 const tabTitles = computed(() => [
-  { title: 'Informations', tabId: 'tab-info', panelId: 'tab-content-info' },
-  {
-    title: 'Fichiers',
-    tabId: 'tab-files',
-    panelId: 'tab-content-files'
-  },
   // only display the visualization tab if the indicator has visualization enabled
   ...(indicator.value?.extras['ecospheres-indicateurs'].enable_visualization
     ? [
@@ -68,6 +57,11 @@ const tabTitles = computed(() => [
         }
       ]
     : []),
+  {
+    title: 'Fichiers',
+    tabId: 'tab-files',
+    panelId: 'tab-content-files'
+  },
   { title: 'Sources', tabId: 'tab-sources', panelId: 'tab-content-sources' },
   {
     title: 'Réutilisations et API',
@@ -80,9 +74,9 @@ const tabTitles = computed(() => [
     panelId: 'tab-content-discussions'
   },
   {
-    title: 'Détails techniques',
-    tabId: 'tab-details',
-    panelId: 'tab-content-details'
+    title: 'Informations',
+    tabId: 'tab-infos',
+    panelId: 'tab-content-infos'
   }
 ])
 
@@ -90,30 +84,28 @@ const activeTab = ref(0)
 
 const description = computed(() => descriptionFromMarkdown(indicator))
 
-const metaDescription = (): string | undefined => {
-  return indicator.value?.description ?? ''
-}
-
-const metaTitle = computed(() => {
-  return indicator.value?.title
-})
-
-useHead({
-  meta: [
-    {
-      property: 'og:title',
-      content: () => `${metaTitle.value} | ${config.website.title}`
-    },
-    { name: 'description', content: metaDescription },
-    { property: 'og:description', content: metaDescription }
-  ]
+useMeta({
+  title: () =>
+    indicator.value?.title &&
+    `${capitalize(labels.singular)} - ${indicator.value.title}`,
+  description: () => indicator.value?.description,
+  canonicalUrl: useCanonicalUrl(() => {
+    const slug = indicator.value?.slug
+    if (!slug) return null
+    return { name: 'indicators_detail', params: { item_id: slug } }
+  })
 })
 
 onMounted(() => {
   datasetStore
     .load(indicatorId, { toasted: false, redirectNotFound: true })
     .then(() => {
-      setAccessibilityProperties(indicator.value?.title)
+      if (indicator.value?.slug && indicator.value.slug !== indicatorId) {
+        router.push({
+          name: 'indicators_detail',
+          params: { item_id: indicator.value.slug }
+        })
+      }
     })
 })
 </script>
@@ -130,7 +122,7 @@ onMounted(() => {
       <DsfrButton
         secondary
         size="sm"
-        :label="`Ajouter à ${topicsLabels.articles.un} ${topicsLabels.plural}`"
+        :label="`Ajouter à ${topicsLabels.articles.un} ${topicsLabels.singular}`"
         icon="fr-icon-file-add-line"
         @click="showAddToTopicModal = true"
       />
@@ -145,7 +137,10 @@ onMounted(() => {
   <GenericContainer v-if="indicator">
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-1w">
       <div class="fr-col-12 fr-col-md-8">
-        <h1 class="fr-mb-2v">{{ indicator.title }}</h1>
+        <div class="fr-mb-4v">
+          <h1 class="fr-mb-1v fr-mr-2v">{{ indicator.title }}</h1>
+          <IndicatorTags :indicator="indicator" />
+        </div>
         <ReadMore max-height="600">
           <!-- eslint-disable-next-line vue/no-v-html -->
           <div v-html="description"></div>
@@ -160,11 +155,6 @@ onMounted(() => {
       tab-list-name="Groupes d'attributs du jeu de données"
       :tab-titles="tabTitles"
     >
-      <!-- Informations -->
-      <DsfrTabContent panel-id="tab-content-info" tab-id="tab-info">
-        <IndicatorInformationPanel :indicator="indicator" />
-      </DsfrTabContent>
-
       <!-- Fichiers -->
       <DsfrTabContent panel-id="tab-content-files" tab-id="tab-files">
         <ResourcesList
@@ -175,7 +165,7 @@ onMounted(() => {
 
       <!-- Prévisualisation -->
       <DsfrTabContent panel-id="tab-content-viz" tab-id="tab-viz">
-        <IndicatorVisualisation
+        <IndicatorVizChart
           v-if="tabularApiUrl"
           :indicator="indicator"
           :tabular-api-url="tabularApiUrl"
@@ -211,9 +201,9 @@ onMounted(() => {
         <IndicatorSourcesList :indicator="indicator" />
       </DsfrTabContent>
 
-      <!-- Détails techniques -->
-      <DsfrTabContent panel-id="tab-content-details" tab-id="tab-details">
-        <DatasetInformationPanel :dataset="indicator" />
+      <!-- Informations -->
+      <DsfrTabContent panel-id="tab-content-infos" tab-id="tab-infos">
+        <IndicatorInformationPanel :indicator="indicator" />
       </DsfrTabContent>
     </DsfrTabs>
   </GenericContainer>

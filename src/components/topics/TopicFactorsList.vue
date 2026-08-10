@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import SearchComponent from '@/components/SearchComponent.vue'
 import type { DatasetV2 } from '@datagouv/components-next'
+import { toast } from '@datagouv/components-next'
 import { capitalize, computed, nextTick, ref, type Ref } from 'vue'
 
 import { useAnimationConstants } from '@/utils/constants'
@@ -248,6 +249,18 @@ const navigateToElement = (elementId: string) => {
   })
 }
 
+const copyPermalink = async (factorId: string, event: MouseEvent) => {
+  event.preventDefault()
+  const url = new URL(window.location.href)
+  url.hash = `factor-${factorId}`
+  try {
+    await navigator.clipboard.writeText(url.toString())
+    toast.success('Lien copié dans le presse-papiers')
+  } catch {
+    toast.error('Impossible de copier le lien')
+  }
+}
+
 defineExpose({
   navigateToElement,
   hasOgcResources,
@@ -320,29 +333,38 @@ defineExpose({
               @edit-group-name="handleRenameGroup"
               @delete-group="handleDeleteGroup"
             >
-              <template v-if="isEdit" #factorActions="{ factor, index }">
-                <DsfrButton
-                  size="sm"
-                  icon="fr-icon-edit-line"
-                  label="Éditer"
-                  tertiary
-                  icon-only
-                  :on-click="() => editFactor(factor, index, group)"
-                  class="test__edit_factor_btn"
+              <template #factorActions="{ factor, index }">
+                <a
+                  v-if="factor.id"
+                  :href="`#factor-${factor.id}`"
+                  class="fr-btn fr-btn--sm fr-btn--tertiary fr-icon-links-line test__permalink_factor_btn"
+                  :title="`Copier le lien permanent vers ${factor.title}`"
+                  @click="copyPermalink(factor.id, $event)"
                 />
-                <DsfrButton
-                  size="sm"
-                  icon="fr-icon-delete-line"
-                  label="Supprimer"
-                  tertiary
-                  icon-only
-                  :on-click="() => handleRemoveFactor(group, index)"
-                  class="test__delete_factor_btn"
-                />
+                <template v-if="isEdit">
+                  <DsfrButton
+                    size="sm"
+                    icon="fr-icon-edit-line"
+                    label="Éditer"
+                    tertiary
+                    icon-only
+                    :on-click="() => editFactor(factor, index, group)"
+                    class="test__edit_factor_btn"
+                  />
+                  <DsfrButton
+                    size="sm"
+                    icon="fr-icon-delete-line"
+                    label="Supprimer"
+                    tertiary
+                    icon-only
+                    :on-click="() => handleRemoveFactor(group, index)"
+                    class="test__delete_factor_btn"
+                  />
+                </template>
               </template>
               <template #factorContent="{ factor }">
                 <!-- eslint-disable-next-line vue/no-v-html -->
-                <div v-html="fromMarkdown(factor.description)"></div>
+                <div v-html="fromMarkdown(factor.description).html" />
                 <DatasetInTopicCard
                   v-if="getDatasetForFactor(factor)"
                   :factor="factor"

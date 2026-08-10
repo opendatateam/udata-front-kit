@@ -24,6 +24,13 @@ export const organizationFactory = build<Organization>({
     extras: {},
     deleted: null,
     members: [],
+    permissions: {
+      delete: false,
+      edit: false,
+      harvest: false,
+      members: false,
+      private: false
+    },
     metrics: {
       dataservices: 42,
       dataservices_by_months: {},

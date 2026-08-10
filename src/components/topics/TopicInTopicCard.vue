@@ -3,10 +3,12 @@ import {
   OrganizationNameWithCertificate,
   useFormatDate
 } from '@datagouv/components-next'
+import { RiBookShelfLine } from '@remixicon/vue'
 import type { RouteLocationRaw } from 'vue-router'
 
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
-import VIconCustom from '@/components/VIconCustom.vue'
+import VIconDsfr from '@/components/VIconDsfr.vue'
+import VIconRi from '@/components/VIconRi.vue'
 import type { Topic } from '@/model/topic'
 import { useCurrentPageConf } from '@/router/utils'
 import { getOwnerAvatar } from '@/utils/avatar'
@@ -38,7 +40,7 @@ const topicLink: RouteLocationRaw = {
       class="absolute top-0 fr-grid-row fr-grid-row--middle fr-mt-n3v fr-ml-n1v"
     >
       <p class="fr-badge fr-badge--sm fr-badge--mention-grey fr-mr-1w">
-        <span class="fr-icon-plant-line fr-icon--sm" aria-hidden="true"></span>
+        <VIconRi :icon="RiBookShelfLine" small />
         {{ labels.singular }}
       </p>
     </div>
@@ -78,10 +80,7 @@ const topicLink: RouteLocationRaw = {
     </div>
 
     <p class="fr-mb-2v fr-text--sm flex align-center fr-pt-3v text-grey-425">
-      <VIconCustom
-        name="time-line"
-        class="fr-mr-1w text-grey-425 fr-icon--sm"
-      />
+      <VIconDsfr name="time-line" class="fr-mr-1w text-grey-425 fr-icon--sm" />
       Mis à jour {{ formatRelativeIfRecentDate(topic.last_modified) }}
     </p>
   </article>

@@ -5,13 +5,11 @@ describe('Topics - Empty List and Reset Filters', () => {
     cy.mockSpatialLevels()
     cy.mockSpatialZone()
     cy.mockSpatialZonesSuggest()
-    cy.mockUniverseOrganizations()
+    cy.mockListApis('topics')
   })
 
   describe('Reset Filters', () => {
     it('should clear all filter values when clicking "Réinitialiser les filtres"', () => {
-      // Start with empty results
-      cy.mockDatagouvObjectList('topics', [])
       cy.visit('/bouquets')
       cy.wait('@get_topics_list')
 
@@ -20,27 +18,26 @@ describe('Topics - Empty List and Reset Filters', () => {
 
       // Navigate away and come back with all filters applied to test the reset
       cy.visit(
-        '/bouquets?theme=mieux-consommer&organization=534fff4ca3a7292c64a77c95'
+        '/bouquets?theme=ecospheres-theme-mieux-consommer&org=534fff4ca3a7292c64a77c95'
       )
       cy.wait('@get_topics_list')
+      cy.wait('@get_universe_organizations')
 
       // Verify all filters are in the URL
-      cy.url().should('include', 'theme=mieux-consommer')
-      cy.url().should('include', 'organization=534fff4ca3a7292c64a77c95')
+      cy.url().should('include', 'theme=ecospheres-theme-mieux-consommer')
+      cy.url().should('include', 'org=534fff4ca3a7292c64a77c95')
 
-      // Verify the theme filter is visually selected in the UI
+      // Verify the theme filter is visually selected
       cy.contains('label.fr-label', 'Thématique')
-        .parent('.fr-select-group')
-        .within(() => {
-          cy.get('.multiselect-single-label').should('be.visible')
-        })
+        .closest('.fr-input-group')
+        .find('input')
+        .should('have.value', 'Mieux consommer')
 
-      // Verify the organization filter is visually selected in the UI
+      // Verify the organization filter is visually selected
       cy.contains('label.fr-label', 'Organisation')
-        .parent('.fr-select-group')
-        .within(() => {
-          cy.get('.multiselect-single-label').should('be.visible')
-        })
+        .closest('.fr-input-group')
+        .find('input')
+        .should('have.value', 'ADEME')
 
       // Click "Réinitialiser les filtres" button
       cy.contains('button', 'Réinitialiser les filtres').click()
@@ -50,25 +47,19 @@ describe('Topics - Empty List and Reset Filters', () => {
 
       // Verify URL no longer contains filter parameters
       cy.url().should('not.include', 'theme=')
-      cy.url().should('not.include', 'organization=')
+      cy.url().should('not.include', 'org=')
 
-      // Verify the theme filter is actually cleared (not just the URL)
+      // Verify the theme filter is actually cleared (input is empty)
       cy.contains('label.fr-label', 'Thématique')
-        .parent('.fr-select-group')
-        .within(() => {
-          // The multiselect should show the placeholder, not the selected value
-          cy.get('.multiselect-placeholder').should('be.visible')
-          cy.get('.multiselect-single-label').should('not.exist')
-        })
+        .closest('.fr-input-group')
+        .find('input')
+        .should('have.value', '')
 
-      // Verify the organization filter is actually cleared (not just the URL)
+      // Verify the organization filter is actually cleared (input is empty)
       cy.contains('label.fr-label', 'Organisation')
-        .parent('.fr-select-group')
-        .within(() => {
-          // The multiselect should show the placeholder, not the selected value
-          cy.get('.multiselect-placeholder').should('be.visible')
-          cy.get('.multiselect-single-label').should('not.exist')
-        })
+        .closest('.fr-input-group')
+        .find('input')
+        .should('have.value', '')
     })
   })
 })

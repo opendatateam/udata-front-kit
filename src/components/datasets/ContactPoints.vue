@@ -40,7 +40,7 @@ onMounted(() => {
   >
     <a
       :href="getLink(contactPoint)"
-      rel="ugc nofollow noopener"
+      rel="ugc noopener"
       target="_blank"
       class="fr-text--sm fr-link text-grey-50 text-overflow-ellipsis overflow-hidden"
     >

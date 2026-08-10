@@ -203,13 +203,13 @@ cmd_prepare() {
 
     # Merge source into merge branch
     info "Merging $source_branch into $merge_branch..."
-    if ! git merge "origin/$source_branch" --no-edit; then
+    if ! git merge "origin/$source_branch" --no-edit --no-verify; then
       error "Merge conflicts detected!
 
 Please resolve conflicts manually:
   1. Edit conflicted files
   2. Stage resolved files: git add <files>
-  3. Complete merge: git commit
+  3. Complete merge: git commit --no-verify
   4. Re-run: $0 prepare $site $env $version$source_arg
 
 Or abort: git merge --abort"
@@ -315,10 +315,12 @@ cmd_deploy() {
   info "Deploying: $merge_branch → $target_branch"
   info "Site: $site, Env: $env, Version: $version"
 
-  # Translate site name for commit message (ecospheres -> ecologie)
+  # Translate site name for commit message (ecospheres -> ecologie, meteo-france -> meteo)
   local site_for_infra="$site"
   if [[ "$site" == "ecospheres" ]]; then
     site_for_infra="ecologie"
+  elif [[ "$site" == "meteo-france" ]]; then
+    site_for_infra="meteo"
   fi
 
   # Merge PR and delete merge branches locally and remotely

@@ -3,16 +3,24 @@
     <span class="tooltip-trigger">
       <slot name="trigger" />
     </span>
-    <span class="tooltip-content">
+    <span
+      :class="[
+        'tooltip-content',
+        isTop ? 'tooltip-content--top' : 'tooltip-content--bottom'
+      ]"
+    >
       <slot />
     </span>
   </span>
 </template>
 
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
   maxWidth?: string
+  placement?: 'top' | 'bottom'
 }>()
+
+const isTop = computed(() => props.placement === 'top')
 </script>
 
 <style scoped>
@@ -28,7 +36,6 @@ defineProps<{
 .tooltip-content {
   display: none;
   position: absolute;
-  top: calc(100% + 0.5rem);
   left: 50%;
   transform: translateX(-50%);
   background: white;
@@ -45,7 +52,15 @@ defineProps<{
   line-height: 1.4;
 }
 
-.tooltip-content::before {
+.tooltip-content--bottom {
+  top: calc(100% + 0.5rem);
+}
+
+.tooltip-content--top {
+  bottom: calc(100% + 0.5rem);
+}
+
+.tooltip-content--bottom::before {
   content: '';
   position: absolute;
   bottom: 100%;
@@ -53,6 +68,16 @@ defineProps<{
   transform: translateX(-50%);
   border: 6px solid transparent;
   border-bottom-color: white;
+}
+
+.tooltip-content--top::before {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: white;
 }
 
 .tooltip-wrapper:hover .tooltip-content {

@@ -1,4 +1,8 @@
-import type { Dataservice, DatasetV2 } from '@datagouv/components-next'
+import type {
+  Dataservice,
+  DatasetV2,
+  DatasetV2WithFullObject
+} from '@datagouv/components-next'
 import { dataserviceFactory } from '../../../../support/factories/dataservices_factory'
 import { datasetFactory } from '../../../../support/factories/datasets_factory'
 import { createIndicator } from '../indicators/support'
@@ -8,7 +12,7 @@ import { createIndicator } from '../indicators/support'
  */
 function createMockedDataservice(
   overrides: Partial<Dataservice> = {},
-  datasets: DatasetV2[] = []
+  datasets: (DatasetV2 | DatasetV2WithFullObject)[] = []
 ): Dataservice {
   const dataservice = dataserviceFactory.one({ overrides })
 
@@ -105,7 +109,7 @@ describe('Dataservices (API) - Detail Page', () => {
     })
 
     it('should display producer section', () => {
-      cy.contains('h2', 'Producteur').should('be.visible')
+      cy.contains('dt', 'Producteur').should('be.visible')
     })
 
     it('should display organization name', () => {

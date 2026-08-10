@@ -16,11 +16,7 @@
           {{ topic.description }}
         </p>
 
-        <SimplifionsTags
-          :topic="topic"
-          :page-key="pageKey"
-          :show-simplification="false"
-        />
+        <SimplifionsTags :topic="topic" :page-key="pageKey" />
 
         <ul class="fr-mt-4w">
           <li>
@@ -179,7 +175,7 @@
         </h3>
         <p
           v-if="solution.Cette_solution_permet"
-          v-html="fromMarkdown(solution.Cette_solution_permet)"
+          v-html="fromMarkdown(solution.Cette_solution_permet).html"
         ></p>
         <p v-else class="fr-text--sm">
           <i>Aucun contenu actuellement.</i>
@@ -197,7 +193,7 @@
         </h3>
         <p
           v-if="solution.Cette_solution_ne_permet_pas"
-          v-html="fromMarkdown(solution.Cette_solution_ne_permet_pas)"
+          v-html="fromMarkdown(solution.Cette_solution_ne_permet_pas).html"
         ></p>
         <p v-else class="fr-text--sm">
           <i>Aucun contenu actuellement.</i>
@@ -332,7 +328,6 @@
 
 <script setup lang="ts">
 import ContentPlaceholder from '@/components/ContentPlaceholder.vue'
-import type { Topic } from '@/model/topic'
 import { formatDate, fromMarkdown } from '@/utils'
 import { OrganizationNameWithCertificate } from '@datagouv/components-next'
 import { grist } from '../grist'
@@ -344,7 +339,8 @@ import type {
   Solution,
   SolutionRecord
 } from '../model/grist'
-import type { TopicSolutionsExtras } from '../model/topics'
+import type { TopicSolution } from '../model/topics'
+import { useHashScroll } from '../useHashScroll'
 import DraftTag from './DraftTag.vue'
 import HumanReadableList from './HumanReadableList.vue'
 import SimplifionsCasDusageRelatedCard from './SimplifionsCasDusageRelatedCard.vue'
@@ -357,14 +353,12 @@ import SimplifionsSolutionOperateurTag from './SimplifionsSolutionOperateurTag.v
 import SimplifionsTags from './SimplifionsTags.vue'
 
 const props = defineProps<{
-  topic: Topic
+  topic: TopicSolution
   pageKey: string
   hideLoader: (() => void) | null
 }>()
 
-const solutionId = (props.topic.extras as TopicSolutionsExtras)[
-  'simplifions-v2-solutions'
-].id
+const solutionId = props.topic.extras['simplifions-v2-solutions'].id
 
 const solution = ref<Solution | undefined>(undefined)
 const apiOrDatasets = ref<ApiOrDataset[] | undefined>(undefined)
@@ -553,12 +547,19 @@ const filteredAndSortedSolutions = computed(() => {
 const onFiltersUpdate = (filters: IntegrateursFilters) => {
   integrateursFilters.value = filters
 }
+
+useHashScroll({
+  ready: () => !!solution.value,
+  hashConditions: {
+    '#solutions-integratices': () => solutionsIntegratices.value.length > 0
+  }
+})
 </script>
 
 <style scoped>
 h2.colored-title {
   color: black;
-  background-color: rgb(167, 212, 205);
+  background-color: var(--simplifions-h2-highlight);
   padding: 2px 4px;
   display: inline-block;
 }

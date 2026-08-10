@@ -11,7 +11,7 @@ import '@datagouv/components-next/dist/components.css'
 import 'vue-sonner/style.css'
 
 import * as Sentry from '@sentry/vue'
-import { createHead } from '@unhead/vue'
+import { createHead } from '@unhead/vue/client'
 import type { InternalAxiosRequestConfig } from 'axios'
 import axios from 'axios'
 import { createPinia } from 'pinia'
@@ -105,10 +105,6 @@ routerPromise
       if (to.meta.requiresAuth === true && !store.$state.isLoggedIn) {
         LocalStorageService.setItem('lastRoute', to.fullPath)
         void router.push({ name: 'login' })
-      }
-      // set page title where needed
-      if (to.meta.title != null) {
-        document.title = to.meta.title + ' | ' + config.website.title
       }
     })
 

@@ -4,7 +4,7 @@ import { dinumOrganization } from './organizations_factory'
 
 export const dataserviceFactory = build<Dataservice>({
   // ensures slug and id are synchronized to urls, sometimes sequence() are out of sync.
-  postBuild: (obj) => ({
+  postBuild: (obj): Dataservice => ({
     ...obj,
     self_web_url: `https://www.data.gouv.fr/dataservices/${obj.slug}/`,
     self_api_url: `https://www.data.gouv.fr/api/1/dataservices/${obj.slug}/`,
@@ -14,9 +14,10 @@ export const dataserviceFactory = build<Dataservice>({
     }
   }),
   fields: {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- mimicry-js FieldType doesn't support the Owned discriminated union
+    /* eslint-disable @typescript-eslint/no-explicit-any -- mimicry-js FieldType doesn't support the Owned discriminated union */
     organization: dinumOrganization as any,
-    owner: null,
+    owner: null as any,
+    /* eslint-enable @typescript-eslint/no-explicit-any */
     acronym: sequence((x) => `ACRO${x}`),
     title: sequence((x) => `Sample Dataservice ${x}`),
     description: 'Sample dataservice description',
@@ -59,6 +60,7 @@ export const dataserviceFactory = build<Dataservice>({
       edit: true
     },
     rate_limiting: 'No rate limiting',
+    rate_limiting_url: null,
     self_api_url: sequence(
       (x) =>
         `https://www.data.gouv.fr/api/1/dataservices/dataservice_slug_${x}/`

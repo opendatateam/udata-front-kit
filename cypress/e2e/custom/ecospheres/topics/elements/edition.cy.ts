@@ -1,4 +1,4 @@
-import type { Factor, Topic } from '@/model/topic'
+import type { Factor, SiteId, Topic } from '@/model/topic'
 import {
   expandDisclosureGroup,
   setupTopicWithExistingFactors,
@@ -78,8 +78,8 @@ describe('Topic Elements - Factor Edition', () => {
             ...factor,
             extras: {
               ...factor.extras,
-              ecospheres: {
-                ...factor.extras.ecospheres,
+              ['ecospheres' as SiteId]: {
+                ...factor.extras['ecospheres' as SiteId],
                 group: newGroupName
               }
             }

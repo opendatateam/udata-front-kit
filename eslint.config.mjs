@@ -47,7 +47,8 @@ export default [
       '**/dist/**',
       '**/dist-ssr/**',
       '**/coverage/**',
-      '**/*.d.ts'
+      '**/*.d.ts',
+      '**/.yalc/**'
     ]
   },
   eslintConfigPrettier,

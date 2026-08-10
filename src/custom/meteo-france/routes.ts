@@ -1,4 +1,4 @@
-import { useDatasetSearchPageRoutes } from '@/router/utils'
+import { useGlobalSearchPageRoutes } from '@/router/utils'
 
 export const routes = [
   {
@@ -9,8 +9,7 @@ export const routes = [
     },
     component: async () => await import('./views/FormMF.vue')
   },
-  useDatasetSearchPageRoutes({
-    pageKey: 'datasets',
-    metaTitle: 'Données'
+  useGlobalSearchPageRoutes({
+    pageKey: 'datasets'
   })
 ]

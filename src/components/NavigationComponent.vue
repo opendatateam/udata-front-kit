@@ -15,6 +15,8 @@ const props = defineProps({
 })
 
 const isActive = (link: string) => {
+  // highlight the parent section nav item for routes that share a pageKey but live outside /:pageKey (e.g. /admin/:pageKey/drafts)
+  if (route.meta.pageKey && link === `/${route.meta.pageKey}`) return true
   return route.matched.some(({ path }) => {
     if (path === '/') return link === path
     return link.indexOf(path) === 0
