@@ -250,20 +250,20 @@ shared_filter_values:
       name: Associations
 
   categorie_de_solution: &categorie_de_solution_values
+    - id: brique-technique
+      name: API, base de donnée ou brique logicielle
     - id: logiciel-metier
       name: Logiciel métier "clé en main"
-    - id: brique-technique
-      name: Brique technique
     - id: portail-consultation
-      name: Portail de consultation
+      name: Site de consultation
 
   types_de_simplification: &types_de_simplification_values
     - id: proactivite
-      name: 💠💠💠 Proactivité | L'usager n'a plus de démarche à faire
+      name: Proactivité
     - id: dlnuf
-      name: 💠💠 Dites-le nous une fois | L'usager n'a plus à fournir de justificatifs
+      name: Dites-le nous une fois
     - id: acces-facile
-      name: 💠 Accès facile | L'usager ou l'agent trouve l'information
+      name: Accès facile
 
 pages:
   # CAS D'USAGES

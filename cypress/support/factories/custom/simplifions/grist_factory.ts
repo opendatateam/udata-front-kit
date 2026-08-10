@@ -25,7 +25,6 @@ export const gristCasUsageFactory = build<CasUsageRecord>({
       Nom_complet: sequence((x) => `🧑‍💼 Cas d'usage ${x}`),
       Pour_simplifier_les_demarches_de: [1, 2],
       Recommandations: [1, 2, 3],
-      Types_de_simplification: [1, 2],
       Visible_sur_simplifions: true
     }
   }
@@ -91,7 +90,6 @@ export const solutionFactory = build<SolutionRecord>({
       Prix: '',
       Public_ou_prive: sequence((x) => (x % 2 === 0 ? 'Public' : 'Privé')),
       Site_internet: sequence((x) => `https://solution${x}.example.com`),
-      Types_de_simplification: [1, 2],
       Visible_sur_simplifions: true,
       Recommande_pour_les_cas_d_usages: [1, 2],
       Type_de_solution: ['Éditeur'],
