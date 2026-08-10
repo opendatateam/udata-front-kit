@@ -70,6 +70,11 @@ describe('Indicator Viz', () => {
         `https://tabular-api*.data.gouv.fr/api/resources/${vizResource.id}/data/**`,
         { statusCode: 200, body: { data: [] } }
       )
+      cy.intercept(
+        'GET',
+        `https://tabular-api*.data.gouv.fr/api/resources/${communeResource.id}/data/**`,
+        { statusCode: 200, body: { data: [] } }
+      )
       cy.visit(`/indicators/${indicatorWithViz.id}`)
       cy.contains('Prévisualisation').click()
       cy.get('#viz-mesh-select').select('commune')
