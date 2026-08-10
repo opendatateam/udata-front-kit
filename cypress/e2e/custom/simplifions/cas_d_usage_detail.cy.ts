@@ -1,5 +1,5 @@
-import { apiOrDatasetFactory } from '../../../support/factories/custom/simplifions/grist_factory'
 import type { ApiOrDatasetRecord } from '@/custom/simplifions/model/grist'
+import { apiOrDatasetFactory } from '../../../support/factories/custom/simplifions/grist_factory'
 import {
   mockApidatasetRecommandations,
   mockApiOrDatasetUtiles,
@@ -539,18 +539,18 @@ describe("Simplifions Cas d'usages Show page - accordions behaviour", () => {
       .should('contain.text', "Par l'API directement")
   })
 
-  it('should title the direct-access accordion "Par la base de données directement" when Type_de_recommandation is Jeu de données', () => {
+  it('should title the direct-access accordion "Par le jeu de données directement" when Type_de_recommandation is Jeu de données', () => {
     setupWithTwoAccordions({ Type_de_recommandation: 'Jeu de données' })
     cy.get('button.fr-accordion__btn')
       .eq(0)
-      .should('contain.text', 'Par la base de données directement')
+      .should('contain.text', 'Par le jeu de données directement')
   })
 
-  it('should fall back to "Par la base de données ou l\'API directement" for the accordion title when Type_de_recommandation is null', () => {
+  it('should fall back to "Par le jeu de données ou l\'API directement" for the accordion title when Type_de_recommandation is null', () => {
     setupWithTwoAccordions({ Type_de_recommandation: null })
     cy.get('button.fr-accordion__btn')
       .eq(0)
-      .should('contain.text', "Par la base de données ou l'API directement")
+      .should('contain.text', "Par le jeu de données ou l'API directement")
   })
 
   it('should collapse the previously open accordion when another one is opened', () => {
@@ -587,6 +587,24 @@ describe("Simplifions Cas d'usages Show page - accordions behaviour", () => {
       expect($el.prop('tagName')).to.eq('SPAN')
       expect($el.attr('aria-expanded')).to.eq(undefined)
     })
+  })
+
+  it('should display a "Demander un accès" button in the "logiciel métier" accordion when an access link exists', () => {
+    setupWithTwoAccordions({
+      access_link_with_fallback: 'https://example.com/access'
+    })
+
+    cy.get('button.fr-accordion__btn').eq(1).click()
+    cy.get('.test__access-link-logiciel')
+      .should('contain.text', 'Demander un accès')
+      .and('have.attr', 'href', 'https://example.com/access')
+  })
+
+  it('should not display the "logiciel métier" access button when no access link is provided', () => {
+    setupWithTwoAccordions()
+
+    cy.get('button.fr-accordion__btn').eq(1).click()
+    cy.get('.test__access-link-logiciel').should('not.exist')
   })
 
   it("should not affect another reco-card's accordion when one is opened", () => {

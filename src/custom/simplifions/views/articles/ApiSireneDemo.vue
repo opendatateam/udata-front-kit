@@ -27,13 +27,19 @@
       />
     </form>
 
-    <div v-if="loading" class="fr-mt-3w sirene-demo__loading" aria-live="polite">
+    <div
+      v-if="loading"
+      class="fr-mt-3w sirene-demo__loading"
+      aria-live="polite"
+    >
       <div class="sirene-demo__spinner" aria-hidden="true" />
       <p class="fr-text--sm fr-mb-0">Interrogation de l'API en cours…</p>
     </div>
 
     <div v-if="result" class="fr-mt-3w fr-p-5v sirene-demo__result">
-      <p class="fr-text--bold fr-text--lg fr-mb-1v sirene-demo__company-name">{{ denomination }}</p>
+      <p class="fr-text--bold fr-text--lg fr-mb-1v sirene-demo__company-name">
+        {{ denomination }}
+      </p>
       <p class="fr-text--sm fr-mb-2w sirene-demo__siret-display">
         SIRET : {{ formatSiret(result.siege?.siret ?? siretInput) }}
       </p>
@@ -45,7 +51,10 @@
             <dd>{{ adresse }}</dd>
           </div>
         </div>
-        <div v-if="result.siege?.activite_principale" class="fr-col-12 fr-col-sm-6">
+        <div
+          v-if="result.siege?.activite_principale"
+          class="fr-col-12 fr-col-sm-6"
+        >
           <div class="sirene-demo__field fr-p-3v">
             <dt class="fr-mb-1v fr-text--xs">Activité principale (Code NAF)</dt>
             <dd>{{ result.siege.activite_principale }}</dd>
@@ -72,9 +81,11 @@
         </div>
       </dl>
 
-      <p class="fr-text--xs fr-mt-2w fr-pt-3v fr-mb-0 ">
-        <i>Ces données ont été récupérées en temps réel auprès de l'API SIRENE,
-        sans que vous ayez eu à les saisir manuellement.</i>
+      <p class="fr-text--xs fr-mt-2w fr-pt-3v fr-mb-0">
+        <i
+          >Ces données ont été récupérées en temps réel auprès de l'API SIRENE,
+          sans que vous ayez eu à les saisir manuellement.</i
+        >
       </p>
     </div>
   </div>
@@ -129,20 +140,24 @@ const search = async () => {
     }
     result.value = data.results[0]
   } catch {
-    error.value = 'Une erreur est survenue lors de la requête. Vérifiez le numéro et réessayez.'
+    error.value =
+      'Une erreur est survenue lors de la requête. Vérifiez le numéro et réessayez.'
   } finally {
     loading.value = false
   }
 }
 
-const denomination = computed(() =>
-  result.value?.nom_complet || result.value?.nom_raison_sociale || '—'
+const denomination = computed(
+  () => result.value?.nom_complet || result.value?.nom_raison_sociale || '—'
 )
 
 const adresse = computed(() => result.value?.siege?.adresse ?? '')
 
 const categorieJuridique = computed(
-  () => result.value?.siege?.libelle_nature_juridique ?? result.value?.nature_juridique ?? ''
+  () =>
+    result.value?.siege?.libelle_nature_juridique ??
+    result.value?.nature_juridique ??
+    ''
 )
 
 const estActif = computed(() => result.value?.etat_administratif === 'A')
@@ -205,8 +220,4 @@ const formatSiret = (s: string) =>
   height: 100%;
   box-sizing: border-box;
 }
-
-
-
-
 </style>
