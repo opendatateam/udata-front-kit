@@ -17,6 +17,7 @@ import { useTopicElementStore } from '@/store/TopicElementStore'
 import { useSiteId } from '@/utils/config'
 import { useForm, type AllowedInput } from '@/utils/form'
 import { useLabels } from '@/utils/labels'
+import { getDatasetIdFromUri } from '@/utils/topic'
 import ErrorSummary from '../ErrorSummary.vue'
 import FactorFields from './FactorFields.vue'
 
@@ -158,18 +159,15 @@ const submit = async (modalData: DatasetModalData) => {
       siteExtras?.uri &&
       siteExtras?.availability === Availability.URL_AVAILABLE
     ) {
-      const pattern = new RegExp(
-        `^${config.datagouvfr.base_url}(?:/.*)?/datasets/(?<datasetName>[a-zA-Z0-9_-]+)(?:/|#|$)`
-      )
-      const match = pattern.exec(siteExtras.uri)
-      if (match?.groups?.datasetName) {
+      const datasetName = getDatasetIdFromUri(siteExtras.uri, [
+        config.datagouvfr.base_url,
+        config.website.seo?.canonical_url
+      ])
+      if (datasetName) {
         try {
-          const dataset = await useDatasetStore().load(
-            match.groups.datasetName,
-            {
-              toasted: false
-            }
-          )
+          const dataset = await useDatasetStore().load(datasetName, {
+            toasted: false
+          })
           if (dataset !== undefined) {
             siteExtras.availability = Availability.LOCAL_AVAILABLE
             const resolved = router.resolve({
