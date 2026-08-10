@@ -12,9 +12,9 @@ const props = defineProps<{
 const filters = defineModel<Record<string, string[]>>('filters', {
   required: true
 })
-const grouped = defineModel<Record<string, boolean>>('grouped', {
-  required: true
-})
+// The axis currently split into its own series; null when not summable
+// (guaranteed by the parent, which owns the summable check).
+const activeAxis = defineModel<string | null>('activeAxis', { required: true })
 
 const axisNames = computed(() => Object.keys(props.availableAxisValues))
 
@@ -24,20 +24,10 @@ const modeOptions = computed(() => [
   ...axisNames.value.map((axis) => ({ value: axis, label: `Par "${axis}"` }))
 ])
 
-// Not summable means every axis is always ungrouped, so there's
-// no single "active" one to report here.
-const activeAxis = computed(() =>
-  props.summable
-    ? (axisNames.value.find((axis) => grouped.value[axis] === false) ?? null)
-    : null
-)
-
 const mode = computed<string>({
   get: () => activeAxis.value ?? GROUPED_MODE,
   set: (value) => {
-    grouped.value = Object.fromEntries(
-      axisNames.value.map((axis) => [axis, axis !== value])
-    )
+    activeAxis.value = value === GROUPED_MODE ? null : value
   }
 })
 

@@ -79,25 +79,17 @@ const { rawData, availableAxisValues, isLoading, error } = useTabularData(
 )
 
 const axisFilters = ref<Record<string, string[]>>({})
-const groupedAxis = ref<Record<string, boolean>>({})
+// The axis currently split into its own series. Stays null while not
+// summable: IndicatorVizAxesFilter disables the axis-picker radios in that
+// case, so nothing ever writes a value here. Used directly as
+// IndicatorVizAxesFilter's v-model.
+const activeAxis = ref<string | null>(null)
 
 watch(availableAxisValues, (axisValues) => {
   if (Object.keys(axisValues).length === 0) return
   axisFilters.value = { ...axisValues }
-  groupedAxis.value = Object.fromEntries(
-    Object.keys(axisValues).map((axis) => [axis, summable.value])
-  )
+  activeAxis.value = null
 })
-
-// The axis currently split into its own series; null when not summable
-// (every axis is ungrouped simultaneously then, so none is "the" active one).
-const activeAxis = computed(() =>
-  summable.value
-    ? (Object.keys(groupedAxis.value).find(
-        (axis) => groupedAxis.value[axis] === false
-      ) ?? null)
-    : null
-)
 
 // Uses axisFilters keys, not availableAxisValues (new ref every recompute).
 // The active axis's series always include every value (not just checked
@@ -116,7 +108,8 @@ const series = computed(() => {
     rawData.value,
     axisNames,
     filtersForSeries,
-    groupedAxis.value
+    summable.value,
+    activeAxis.value
   )
 
   if (!activeAxis.value) return built
@@ -182,7 +175,7 @@ onMounted(() => {
         </div>
         <IndicatorVizAxesFilter
           v-model:filters="axisFilters"
-          v-model:grouped="groupedAxis"
+          v-model:active-axis="activeAxis"
           :available-axis-values="availableAxisValues"
           :summable="summable"
           :active-axis-values="activeAxisValues"

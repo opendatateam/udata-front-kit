@@ -8,7 +8,7 @@ describe('makeSeries', () => {
         { year: 2020, value: 100 },
         { year: 2021, value: 150 }
       ]
-      const result = makeSeries(rows, [], {}, {})
+      const result = makeSeries(rows, [], {}, true, null)
       expect(result).toHaveLength(1)
       expect(result[0].label).toBe('')
       expect(result[0].data).toEqual([
@@ -29,7 +29,8 @@ describe('makeSeries', () => {
         rows,
         ['secteur'],
         { secteur: ['transport', 'energie'] },
-        { secteur: false }
+        true,
+        'secteur'
       )
       expect(result).toHaveLength(2)
 
@@ -52,7 +53,8 @@ describe('makeSeries', () => {
         rows,
         ['secteur'],
         { secteur: ['transport'] },
-        { secteur: false }
+        true,
+        'secteur'
       )
       expect(result).toHaveLength(1)
       expect(result[0].label).toBe('transport')
@@ -71,7 +73,8 @@ describe('makeSeries', () => {
         rows,
         ['secteur'],
         { secteur: ['transport', 'energie'] },
-        { secteur: true }
+        true,
+        null
       )
       expect(result).toHaveLength(1)
       expect(result[0].label).toBe('Total')
@@ -94,7 +97,8 @@ describe('makeSeries', () => {
         rows,
         ['secteur', 'region'],
         { secteur: ['transport', 'energie'], region: ['idf'] },
-        { secteur: false, region: false }
+        false,
+        null
       )
       expect(result).toHaveLength(2)
       expect(result.map((s) => s.label)).toEqual(

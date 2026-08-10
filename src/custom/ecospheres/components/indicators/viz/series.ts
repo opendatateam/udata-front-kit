@@ -33,10 +33,11 @@ function filterDataByAxis(
 function splitDataByAxis(
   data: IndicatorVizFormattedRow[],
   axisNames: string[],
-  groupedAxis: Record<string, boolean>
+  nonGroupedAxisNames: string[]
 ): IndicatorVizChartSeries[] {
-  const groupedAxisNames = axisNames.filter((axis) => groupedAxis[axis])
-  const nonGroupedAxisNames = axisNames.filter((axis) => !groupedAxis[axis])
+  const groupedAxisNames = axisNames.filter(
+    (axis) => !nonGroupedAxisNames.includes(axis)
+  )
 
   const groupsMap = new Map<string, IndicatorVizFormattedRow[]>()
 
@@ -63,7 +64,8 @@ export function makeSeries(
   rawData: IndicatorVizFormattedRow[],
   axisNames: string[],
   axisFilters: Record<string, string[]>,
-  groupedAxis: Record<string, boolean>
+  summable: boolean,
+  activeAxis: string | null
 ): IndicatorVizChartSeries[] {
   if (axisNames.length === 0) {
     return [
@@ -76,5 +78,13 @@ export function makeSeries(
 
   const filtered = filterDataByAxis(rawData, axisNames, axisFilters)
   debug.log(`⚙️ Data filtered: ${rawData.length} → ${filtered.length} items`)
-  return splitDataByAxis(filtered, axisNames, groupedAxis)
+
+  // Not summable: every axis is split into its own series. Summable: only
+  // the active axis is split, the rest are summed into each series.
+  const nonGroupedAxisNames = summable
+    ? activeAxis
+      ? [activeAxis]
+      : []
+    : axisNames
+  return splitDataByAxis(filtered, axisNames, nonGroupedAxisNames)
 }
