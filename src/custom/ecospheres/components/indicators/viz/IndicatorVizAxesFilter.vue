@@ -71,7 +71,7 @@ function toggleValue(axis: string, value: string, checked: boolean) {
   <fieldset v-if="summable && activeAxis" class="axis-values-block">
     <legend class="fr-sr-only">Valeurs de l'axe "{{ activeAxis }}"</legend>
     <p aria-hidden="true" class="axis-filters-title axis-filters-title--spacer">
-      Valeur des axes
+      &nbsp;
     </p>
     <div class="axis-options">
       <div
@@ -111,7 +111,7 @@ function toggleValue(axis: string, value: string, checked: boolean) {
         aria-hidden="true"
         class="axis-filters-title axis-filters-title--spacer"
       >
-        Valeur des axes
+        &nbsp;
       </p>
       <div class="axis-options">
         <div
