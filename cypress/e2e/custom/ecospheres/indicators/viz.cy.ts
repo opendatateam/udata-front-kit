@@ -60,7 +60,11 @@ describe('Indicator Viz', () => {
         { enable_visualization: true }
       )
       const vizResource = createIndicatorResource('region')
-      cy.mockDatasetAndRelatedObjects(indicatorWithViz, [vizResource])
+      const communeResource = createIndicatorResource('commune')
+      cy.mockDatasetAndRelatedObjects(indicatorWithViz, [
+        vizResource,
+        communeResource
+      ])
       cy.intercept(
         'GET',
         `https://tabular-api*.data.gouv.fr/api/resources/${vizResource.id}/data/**`,
@@ -73,6 +77,25 @@ describe('Indicator Viz', () => {
         "Les données communales sont présentes dans les fichiers, mais la prévisualisation des communes n'est pas disponible."
       ).should('be.visible')
       cy.get('canvas').should('not.exist')
+    })
+
+    it('should not offer the Commune maille when no commune-level file exists', () => {
+      const indicatorWithViz = createIndicator(
+        {},
+        { enable_visualization: true }
+      )
+      const vizResource = createIndicatorResource('region')
+      cy.mockDatasetAndRelatedObjects(indicatorWithViz, [vizResource])
+      cy.intercept(
+        'GET',
+        `https://tabular-api*.data.gouv.fr/api/resources/${vizResource.id}/data/**`,
+        { statusCode: 200, body: { data: [] } }
+      )
+      cy.visit(`/indicators/${indicatorWithViz.id}`)
+      cy.contains('Prévisualisation').click()
+      cy.get('#viz-mesh-select')
+        .find('option[value="commune"]')
+        .should('not.exist')
     })
   })
 })
