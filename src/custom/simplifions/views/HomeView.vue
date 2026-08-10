@@ -68,7 +68,7 @@ const fournisseursDeService = [
       </h1>
       <p class="fr-text--alt fr-mb-3w fr-text--lg" style="text-align: center">
         <i>
-          Découvrez les API et bases de données utiles pour chaque démarche<br />
+          Découvrez les API et jeux de données utiles pour chaque démarche<br />
           et les solutions raccordées à ces données</i
         >
       </p>
@@ -196,7 +196,7 @@ const fournisseursDeService = [
                 >aides et subventions, marchés publics, petite enfance, cantine,
                 transport, etc.</em
               >—, le catalogue recense les
-              <strong>API et bases de données</strong> utiles, les
+              <strong>API et jeux de données</strong> utiles, les
               <strong>solutions publiques et privées</strong> raccordées à ces
               données, et les sites de consultation de ces données disponibles
               en ligne.
@@ -273,7 +273,7 @@ const fournisseursDeService = [
               </p>
               <p class="fr-mb-0">
                 Par démarche, Simplifions indique les logiciels métiers
-                raccordés aux API et bases de données utiles.
+                raccordés aux API et jeux de données utiles.
               </p>
             </div>
           </div>
@@ -294,7 +294,7 @@ const fournisseursDeService = [
                 Découvrir les données disponibles par démarche
               </p>
               <p class="fr-mb-0">
-                Savoir quelles API ou bases de données utiliser pour chaque
+                Savoir quelles API ou quels jeux de données utiliser pour chaque
                 démarche afin de récupérer les justificatifs des usagers.
               </p>
             </div>

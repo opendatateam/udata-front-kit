@@ -20,7 +20,6 @@
             :show-description="false"
             :show-image="true"
             :show-fournisseurs="false"
-            :show-simplification-tags="false"
           />
           <SimplifionsCasDusageCard
             v-else
@@ -28,7 +27,6 @@
             :page-key="entry.pageKey"
             :show-description="false"
             :show-fournisseurs="false"
-            :show-simplification-tags="false"
           />
         </li>
       </CarouselTrack>

@@ -171,7 +171,7 @@
         </SimplifionsRecoIntegratingSolutionsAccordion>
 
         <SimplifionsRecoIntegratingSolutionsAccordion
-          title="Via un portail de consultation"
+          title="Via un site de consultation"
           solution-kind="portail"
           :solutions="integratingSolutionsPortailsConsultation"
           :integration-score-per-solution="integrationScorePerSolution"
@@ -325,8 +325,8 @@ const typeLabel = computed(() => {
 const apiAccordionTitle = computed(() => {
   const t = recommandation.Type_de_recommandation
   if (t === 'API') return "Par l'API directement"
-  if (t === 'Jeu de données') return 'Par la base de données directement'
-  return "Par la base de données ou l'API directement"
+  if (t === 'Jeu de données') return 'Par le jeu de données directement'
+  return "Par le jeu de données ou l'API directement"
 })
 
 const fetchSolutionsForCategory = async (ids: number[]) => {
