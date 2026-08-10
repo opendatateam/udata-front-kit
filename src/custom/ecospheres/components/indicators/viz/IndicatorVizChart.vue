@@ -79,10 +79,7 @@ const { rawData, availableAxisValues, isLoading, error } = useTabularData(
 )
 
 const axisFilters = ref<Record<string, string[]>>({})
-// The axis currently split into its own series. Stays null while not
-// summable: IndicatorVizAxesFilter disables the axis-picker radios in that
-// case, so nothing ever writes a value here. Used directly as
-// IndicatorVizAxesFilter's v-model.
+// The axis currently split into its own series (null when not summable)
 const activeAxis = ref<string | null>(null)
 
 watch(availableAxisValues, (axisValues) => {
@@ -91,12 +88,15 @@ watch(availableAxisValues, (axisValues) => {
   activeAxis.value = null
 })
 
-// Uses axisFilters keys, not availableAxisValues (new ref every recompute).
-// The active axis's series always include every value (not just checked
-// ones), hidden via chart.js's dataset.hidden instead of removed, so
-// indices - and colors, assigned by index - stay stable across toggles.
+// Builds the chart series from the current filters, keeping series index-stable
+// across active-axis checkbox toggles so their colors don't shift.
 const series = computed(() => {
+  // axisFilters.value, not availableAxisValues.value: which is a new object on
+  // every recompute.
   const axisNames = Object.keys(axisFilters.value)
+
+  // Include every value of the active axis, not just the checked ones, so
+  // toggling a checkbox never adds/removes a series (see hidden below).
   const filtersForSeries = activeAxis.value
     ? {
         ...axisFilters.value,
@@ -114,6 +114,7 @@ const series = computed(() => {
 
   if (!activeAxis.value) return built
 
+  // Hide unchecked values instead of removing them, so series indices stay stable.
   const checked = new Set(axisFilters.value[activeAxis.value] ?? [])
   return built.map((s) => ({ ...s, hidden: !checked.has(s.label) }))
 })
