@@ -61,18 +61,28 @@ export function useTabularData(
 
   async function fetchData() {
     const mesh = selectedIndicatorVizMesh.value
+
+    // Commune preview isn't supported (see IndicatorVizChart's isCommuneMesh
+    // alert): clear any stale data from a previous mesh instead of fetching.
+    if (mesh === 'commune') {
+      rawData.value = []
+      isLoading.value = false
+      error.value = null
+      return
+    }
+
     const resource = resources.value.find(
       (r) => r.extras['ecospheres-indicateurs']?.maille === mesh
     )
     if (!resource) return
 
-    if (mesh !== 'fr' && mesh !== 'commune' && !selectedTerritory.value) return
+    if (mesh !== 'fr' && !selectedTerritory.value) return
 
     isLoading.value = true
     error.value = null
 
     const geoCondition =
-      mesh !== 'fr' && mesh !== 'commune'
+      mesh !== 'fr'
         ? `${GEOCOLUMNS[mesh]}__exact=${selectedTerritory.value}&`
         : ''
 
