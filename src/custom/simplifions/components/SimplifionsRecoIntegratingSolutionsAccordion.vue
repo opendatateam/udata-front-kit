@@ -105,9 +105,9 @@ const SOLUTION_KIND_CONFIG: Record<
   },
   portail: {
     icon: 'fr-icon-seo-fill',
-    emptyLabel: 'Aucun portail',
-    singular: 'portail',
-    plural: 'portails'
+    emptyLabel: 'Aucun site',
+    singular: 'site',
+    plural: 'sites'
   }
 }
 
