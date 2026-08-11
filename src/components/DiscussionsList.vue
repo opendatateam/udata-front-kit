@@ -141,10 +141,8 @@ watch(
   { immediate: true }
 )
 
-// Used by parent views to deep-link to a discussion (e.g. from a
-// notification email's `#discussion-{id}` fragment, see udata's
-// `Discussion.notification_url`). Only looks at the currently loaded page:
-// discussions on further pages are a known limitation.
+// Used by parent views to deep-link to a discussion
+// Only looks at the currently loaded page: discussions on further pages are a known limitation.
 const navigateToDiscussion = (discussionId: DiscussionId) => {
   let done = false
   const stopWatching = watchEffect(() => {

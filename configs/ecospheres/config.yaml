@@ -250,8 +250,8 @@ definitions: &definitions
 #         display: {bool}             # display discussions tab on detail page
 #         create: {bool}              # create discussions tab on detail page
 #         notify_external_url: {bool} # on discussion creation, send extras.notification.external_url (this site's page for the subject)
-#                                      # so udata notification emails link back here instead of the subject's canonical udata page.
-#                                      # requires the site's domain to be allow-listed on the udata side (DISCUSSION_ALLOWED_EXTERNAL_DOMAINS). defaults to false.
+#                                     # so udata notification emails link back here instead of the subject's canonical udata page.
+#                                     # requires the site's domain to be allow-listed on the udata side (DISCUSSION_ALLOWED_EXTERNAL_DOMAINS).
 #       datasets:
 #         display: {bool}             # display datasets tab on detail page
 #       reuses:

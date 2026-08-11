@@ -215,52 +215,55 @@ useMeta({
   noIndex: () => topic.value?.private
 })
 
-// Handle factor deeplinks: #factor-{id} switches to Données tab and scrolls to factor
+// Wait until `ready()` is true (e.g. a child component is mounted and its
+// data has loaded), then run `action()` once.
+const runWhenReady = (ready: () => boolean, action: () => void) => {
+  let done = false
+  const stop = watchEffect(() => {
+    if (done || !ready()) return
+    done = true
+    action()
+    stop()
+  })
+}
+
+// Clear the hash immediately using replaceState to avoid adding a history
+// entry and to avoid interfering with the deeplink's own scroll behavior.
+// TODO: proper way would be to implement deeplinking for tabs
+const clearHash = () => {
+  const url = new URL(window.location.href)
+  url.hash = ''
+  window.history.replaceState(window.history.state, '', url.toString())
+}
+
+// Handle deeplinks: #factor-{id} switches to Données tab and scrolls to the
+// factor; #discussion-{id} switches to the Discussions tab and
+// scrolls to the discussion.
 watch(
   () => router.currentRoute.value.hash,
   (hash) => {
     if (hash.startsWith('#factor-')) {
       activeTab.value = 0
       const elementId = hash.replace('#factor-', '')
-
-      // Wait for component and data to be ready before navigating
-      let stopWatching: (() => void) | undefined = undefined
-      stopWatching = watchEffect(() => {
-        if (topicFactorsListRef.value && factors.value.length > 0) {
-          nextTick(() => {
+      runWhenReady(
+        () => !!topicFactorsListRef.value && factors.value.length > 0,
+        () =>
+          nextTick(() =>
             topicFactorsListRef.value?.navigateToElement(elementId)
-          })
-          stopWatching?.()
-        }
-      })
-
-      // Clear hash immediately using replaceState to avoid adding history entry
-      // and to avoid interfering with navigateToElement's scroll behavior
-      // TODO: proper way would be implement deeplinking for tabs
-      const url = new URL(window.location.href)
-      url.hash = ''
-      window.history.replaceState(window.history.state, '', url.toString())
+          )
+      )
+      clearHash()
     } else if (hash.startsWith('#discussion-')) {
-      // Deeplink from a discussion notification email (udata's
-      // `Discussion.notification_url` appends `#discussion-{id}`):
-      // switch to the Discussions tab and scroll to it.
       const tabIndex = tabTitles.value.findIndex(
         (t) => t.tabId === 'tab-discussions'
       )
       if (tabIndex !== -1) activeTab.value = tabIndex
       const discussionId = hash.replace('#discussion-', '')
-
-      let done = false
-      const stopWatching = watchEffect(() => {
-        if (done || !discussionsListRef.value) return
-        done = true
-        discussionsListRef.value.navigateToDiscussion(discussionId)
-        stopWatching()
-      })
-
-      const url = new URL(window.location.href)
-      url.hash = ''
-      window.history.replaceState(window.history.state, '', url.toString())
+      runWhenReady(
+        () => !!discussionsListRef.value,
+        () => discussionsListRef.value?.navigateToDiscussion(discussionId)
+      )
+      clearHash()
     }
   },
   { immediate: true }
