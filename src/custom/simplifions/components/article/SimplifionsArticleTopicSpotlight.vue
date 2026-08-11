@@ -21,8 +21,6 @@
           :show-operateur-tag="showOperateurTag"
           :show-target-users="showTargetUsers"
           :show-fournisseurs="showFournisseurs"
-          :show-simplification-tags="showSimplificationTags"
-          :show-categorie-de-solution="showCategorieDeSolution"
           :show-arrow="showArrow"
         />
         <SimplifionsCasDusageCard
@@ -33,8 +31,6 @@
           :show-description="showDescription"
           :show-target-users="showTargetUsers"
           :show-fournisseurs="showFournisseurs"
-          :show-simplification-tags="showSimplificationTags"
-          :show-categorie-de-solution="showCategorieDeSolution"
           :show-arrow="showArrow"
         />
       </template>
@@ -59,8 +55,6 @@ const props = withDefaults(
     showOperateurTag?: boolean
     showTargetUsers?: boolean
     showFournisseurs?: boolean
-    showSimplificationTags?: boolean
-    showCategorieDeSolution?: boolean
     showArrow?: boolean
   }>(),
   {
@@ -69,8 +63,6 @@ const props = withDefaults(
     showOperateurTag: true,
     showTargetUsers: false,
     showFournisseurs: false,
-    showSimplificationTags: false,
-    showCategorieDeSolution: false,
     showArrow: false
   }
 )
