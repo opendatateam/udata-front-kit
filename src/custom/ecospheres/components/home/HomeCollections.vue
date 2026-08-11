@@ -203,7 +203,7 @@ onMounted(() => {
   .fr-tags-group {
     flex-wrap: wrap;
     margin: 0;
-    gap: 0.5rem 0.25rem;
+    gap: 0.5rem;
 
     > li {
       line-height: 1.5rem;
