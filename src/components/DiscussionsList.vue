@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import type { ComputedRef, Ref } from 'vue'
-import { computed, nextTick, ref, watch, watchEffect } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import BlankState from '@/components/BlankState.vue'
@@ -143,22 +143,18 @@ watch(
 
 // Used by parent views to deep-link to a discussion
 // Only looks at the currently loaded page: discussions on further pages are a known limitation.
-const navigateToDiscussion = (discussionId: DiscussionId) => {
-  let done = false
-  const stopWatching = watchEffect(() => {
-    if (done || discussions.value === undefined) return
-    done = true
-    nextTick(() => {
-      const el = document.getElementById(`discussion-${discussionId}`)
-      if (!el) {
-        console.warn(
-          `Trying to scroll to discussion ${discussionId}, not found.`
-        )
-        return
-      }
-      el.scrollIntoView({ block: 'start' })
-    })
-    stopWatching()
+const navigateToDiscussion = async (discussionId: DiscussionId) => {
+  await discussionStore.loadDiscussionsForSubject(
+    props.subject.id,
+    currentPage.value
+  )
+  nextTick(() => {
+    const el = document.getElementById(`discussion-${discussionId}`)
+    if (!el) {
+      console.warn(`Trying to scroll to discussion ${discussionId}, not found.`)
+      return
+    }
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
   })
 }
 
