@@ -96,17 +96,13 @@ onMounted(() => {
           <div class="card-footer">
             <ul class="fr-tags-group">
               <li>
-                <p
-                  class="fr-tag fr-icon-database-line fr-tag--icon-left fr-mb-0"
-                >
+                <p class="fr-tag fr-icon-database-line fr-tag--icon-left">
                   {{ nbDatasetsPerCollection[collection.slug] || '...' }} jeux
                   de données
                 </p>
               </li>
               <li>
-                <p
-                  class="fr-tag fr-icon-map-pin-2-line fr-tag--icon-left fr-mb-0"
-                >
+                <p class="fr-tag fr-icon-map-pin-2-line fr-tag--icon-left">
                   {{ collection.maille }}
                 </p>
               </li>
@@ -206,8 +202,15 @@ onMounted(() => {
 
   .fr-tags-group {
     flex-wrap: wrap;
+    margin: 0;
+    gap: 0.5rem 0.25rem;
+
     > li {
       line-height: 1.5rem;
+    }
+
+    .fr-tag {
+      margin: 0;
     }
   }
 }
