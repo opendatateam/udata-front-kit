@@ -307,7 +307,6 @@
         page-key="solutions"
         :show-image="false"
         :show-operateur-tag="true"
-        :show-categorie-de-solution="true"
         :show-target-users="true"
         :show-arrow="true"
       >
@@ -329,7 +328,6 @@
         page-key="solutions"
         :show-image="false"
         :show-operateur-tag="true"
-        :show-categorie-de-solution="true"
         :show-target-users="true"
         :show-arrow="true"
       >
@@ -351,7 +349,6 @@
         page-key="solutions"
         :show-image="false"
         :show-operateur-tag="true"
-        :show-categorie-de-solution="true"
         :show-target-users="true"
         :show-arrow="true"
       >

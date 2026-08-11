@@ -100,7 +100,7 @@
 
     <ArticleSection id="actions-rapides" label="À vérifier dès maintenant">
       <p class="fr-text--lead guide-section-lead">
-        Pour s'assurer que votre collectivité utilise déjà bien les bases dont
+        Pour s'assurer que votre collectivité utilise déjà bien les données dont
         toute collectivité peut bénéficier, commencez par ces deux points :
       </p>
 
@@ -243,7 +243,7 @@
           class="fr-btn fr-btn--secondary fr-icon-arrow-right-line fr-btn--icon-right"
           to="/solutions?categorie-de-solution=portail-consultation"
         >
-          Tous les portails de consultation référencés
+          Tous les sites de consultation référencés
         </router-link>
       </div>
     </ArticleSection>
@@ -285,7 +285,7 @@
       </div>
 
       <p>
-        La liste des API et bases de données intégrées par logiciel éditeur se
+        La liste des API et jeux de données intégrées par logiciel éditeur se
         trouve, comme pour chaque solution, en bas de la page simplifions de la
         solution. Cette liste n'est pas exhaustive et sera complétée au fur et
         mesure.
@@ -468,7 +468,7 @@
           identifier de nouveaux logiciels métiers que vous pourriez utiliser ;
         </li>
         <li>
-          vous familiariser avec les API et bases de données et peut-être en
+          vous familiariser avec les API et jeux de données et peut-être en
           intégrer certaines directement dans votre système d'information.
         </li>
       </ul>
