@@ -36,6 +36,8 @@
         :organization="datagouvResource!.organization"
         :owner="datagouvResource!.owner"
         :access-type="datagouvResource!.access_type"
+        :access-audiences="datagouvResource!.access_audiences"
+        :resource-label="cardResourceLabel"
         :link-label="cardLinkLabel"
         :title-tag="props.titleTag"
       />
@@ -48,11 +50,11 @@ import SimplifionsDatasetDataserviceCard from '@/custom/simplifions/components/S
 import DatagouvfrAPI from '@/services/api/DatagouvfrAPI'
 import type { Dataservice, DatasetV2 } from '@datagouv/components-next'
 import * as Sentry from '@sentry/vue'
-import type { ApiOrDataset } from '../model/grist'
+import type { ApiOrDatasetCardData } from '../model/grist'
 
 const props = withDefaults(
   defineProps<{
-    apiOrDataset: ApiOrDataset
+    apiOrDataset: ApiOrDatasetCardData
     titleTag?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
   }>(),
   {
@@ -93,6 +95,10 @@ const cardClass = computed(() =>
   datagouvType.value == 'datasets' ? 'dataset-card' : 'dataservice-card'
 )
 
+const cardResourceLabel = computed(() =>
+  datagouvType.value == 'datasets' ? 'Jeu de données' : 'API'
+)
+
 const cardLinkLabel = computed(() =>
   datagouvType.value == 'datasets'
     ? 'Voir le jeu de données sur Data.gouv.fr'
@@ -123,10 +129,7 @@ if (!hasEmptyUid.value) {
       url: `${api.url()}/${props.apiOrDataset.UID_datagouv}`,
       method: 'get',
       params: {
-        fields:
-          datagouvType.value == 'dataservices'
-            ? 'title,organization,access_type,owner'
-            : 'title,organization,owner'
+        fields: 'title,organization,owner,access_type,access_audiences'
       }
     })
     .then((data) => {
