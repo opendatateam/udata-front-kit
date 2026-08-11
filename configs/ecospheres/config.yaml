@@ -249,6 +249,9 @@ definitions: &definitions
 #       discussions:
 #         display: {bool}             # display discussions tab on detail page
 #         create: {bool}              # create discussions tab on detail page
+#         notify_external_url: {bool} # on discussion creation, send extras.notification.external_url (this site's page for the subject)
+#                                      # so udata notification emails link back here instead of the subject's canonical udata page.
+#                                      # requires the site's domain to be allow-listed on the udata side (DISCUSSION_ALLOWED_EXTERNAL_DOMAINS). defaults to false.
 #       datasets:
 #         display: {bool}             # display datasets tab on detail page
 #       reuses:
@@ -298,6 +301,7 @@ pages:
       discussions:
         display: true
         create: true
+        notify_external_url: false
       datasets:
         display: true
       reuses:
@@ -417,6 +421,7 @@ pages:
       discussions:
         display: true
         create: true
+        notify_external_url: false
       datasets:
         display: true
       reuses:
@@ -565,6 +570,7 @@ pages:
       discussions:
         display: true
         create: true
+        notify_external_url: false
       datasets:
         display: true
     editable: false
@@ -605,6 +611,7 @@ pages:
       discussions:
         display: true
         create: true
+        notify_external_url: true
       datasets:
         display: true
       reuses:

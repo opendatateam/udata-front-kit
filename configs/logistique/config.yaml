@@ -176,6 +176,7 @@ pages:
       discussions:
         display: true
         create: true
+        notify_external_url: false
       datasets:
         display: true
       reuses:
@@ -203,6 +204,7 @@ pages:
       discussions:
         display: true
         create: true
+        notify_external_url: false
       datasets:
         display: true
       reuses:

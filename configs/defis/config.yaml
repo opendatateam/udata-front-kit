@@ -329,6 +329,7 @@ pages:
       discussions:
         display: false
         create: false
+        notify_external_url: false
       datasets:
         display: true
       reuses:
@@ -372,6 +373,7 @@ pages:
       discussions:
         display: false
         create: false
+        notify_external_url: false
       datasets:
         display: true
       reuses:

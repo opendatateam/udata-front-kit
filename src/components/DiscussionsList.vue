@@ -73,16 +73,9 @@ const pages = computed(() => {
 
 const allowDiscussionCreation = pageConf.resources_tabs.discussions.create
 
-// Topics don't have a canonical page on data.gouv.fr that makes sense to
-// notify users on, so we ask udata to link back to this site's own page
-// instead, via the discussion's `extras.notification.external_url`.
-// See https://github.com/ecolabdata/ecospheres/issues/263.
-// The site's public URL (not `window.location.origin`) is used since this
-// value is persisted on the discussion and reused later in emails: it must
-// stay stable and match the domain udata allow-lists, unlike a dev/preview
-// origin.
+// If configured, construct an external notification url from canonical_url for udata to use
 const getNotificationExternalUrl = (): string | null => {
-  if (props.subjectClass !== 'Topic') return null
+  if (!pageConf.resources_tabs.discussions.notify_external_url) return null
   const canonicalUrl = config.website.seo?.canonical_url
   if (!canonicalUrl) return null
   const slug = (props.subject as { slug?: string }).slug

@@ -98,6 +98,7 @@ export type PageConf = {
     discussions: {
       display: boolean
       create: boolean
+      notify_external_url?: boolean
     }
     datasets: {
       display: boolean
