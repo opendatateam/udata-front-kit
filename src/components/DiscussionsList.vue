@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import type { ComputedRef, Ref } from 'vue'
-import { computed, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import BlankState from '@/components/BlankState.vue'
@@ -26,7 +26,7 @@ const router = useRouter()
 const discussionStore = useDiscussionStore()
 const userStore = useUserStore()
 
-const { pageConf } = useCurrentPageConf()
+const { pageKey, pageConf } = useCurrentPageConf()
 
 const { loggedIn } = storeToRefs(userStore)
 const currentPage: Ref<number> = ref(1)
@@ -73,6 +73,27 @@ const pages = computed(() => {
 
 const allowDiscussionCreation = pageConf.resources_tabs.discussions.create
 
+// Topics don't have a canonical page on data.gouv.fr that makes sense to
+// notify users on, so we ask udata to link back to this site's own page
+// instead, via the discussion's `extras.notification.external_url`.
+// See https://github.com/ecolabdata/ecospheres/issues/263.
+// The site's public URL (not `window.location.origin`) is used since this
+// value is persisted on the discussion and reused later in emails: it must
+// stay stable and match the domain udata allow-lists, unlike a dev/preview
+// origin.
+const getNotificationExternalUrl = (): string | null => {
+  if (props.subjectClass !== 'Topic') return null
+  const canonicalUrl = config.website.seo?.canonical_url
+  if (!canonicalUrl) return null
+  const slug = (props.subject as { slug?: string }).slug
+  if (!slug) return null
+  const path = router.resolve({
+    name: `${pageKey}_detail`,
+    params: { item_id: slug }
+  }).href
+  return `${canonicalUrl}${path}`
+}
+
 const getUserAvatar = (post: Post) => {
   if (post.posted_by.avatar_thumbnail) {
     return post.posted_by.avatar_thumbnail
@@ -86,7 +107,14 @@ const triggerLogin = () => {
 }
 
 const createDiscussion = () => {
-  discussionStore.createDiscussion(discussionForm.value).then((d) => {
+  const externalUrl = getNotificationExternalUrl()
+  const payload: DiscussionForm = {
+    ...discussionForm.value,
+    ...(externalUrl
+      ? { extras: { notification: { external_url: externalUrl } } }
+      : {})
+  }
+  discussionStore.createDiscussion(payload).then((d) => {
     if (d !== undefined) {
       discussionForm.value.title = ''
       discussionForm.value.comment = ''
@@ -119,6 +147,31 @@ watch(
   },
   { immediate: true }
 )
+
+// Used by parent views to deep-link to a discussion (e.g. from a
+// notification email's `#discussion-{id}` fragment, see udata's
+// `Discussion.notification_url`). Only looks at the currently loaded page:
+// discussions on further pages are a known limitation.
+const navigateToDiscussion = (discussionId: DiscussionId) => {
+  let done = false
+  const stopWatching = watchEffect(() => {
+    if (done || discussions.value === undefined) return
+    done = true
+    nextTick(() => {
+      const el = document.getElementById(`discussion-${discussionId}`)
+      if (!el) {
+        console.warn(
+          `Trying to scroll to discussion ${discussionId}, not found.`
+        )
+        return
+      }
+      el.scrollIntoView({ block: 'start' })
+    })
+    stopWatching()
+  })
+}
+
+defineExpose({ navigateToDiscussion })
 </script>
 
 <template>
@@ -196,7 +249,7 @@ watch(
       :key="discussion.id"
       class="fr-mb-6w"
     >
-      <p :id="discussion.id" class="discussion-title fr-mb-3v">
+      <p :id="`discussion-${discussion.id}`" class="discussion-title fr-mb-3v">
         {{ discussion.title }}
       </p>
       <div class="discussion-subtitle">
@@ -262,7 +315,7 @@ watch(
           type="button"
           class="fr-btn fr-btn--sm fr-btn--secondary fr-icon-chat-3-line fr-btn--icon-left"
           aria-label="Répondre à la discussion"
-          :aria-describedby="discussion.id"
+          :aria-describedby="`discussion-${discussion.id}`"
           @click.stop.prevent="
             () => {
               postForm.comment = ''

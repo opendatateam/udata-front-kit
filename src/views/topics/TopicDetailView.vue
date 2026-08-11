@@ -74,6 +74,9 @@ const { factors } = useTopicFactors(topic)
 const topicFactorsListRef = ref<InstanceType<typeof TopicFactorsList> | null>(
   null
 )
+const discussionsListRef = ref<InstanceType<typeof DiscussionsList> | null>(
+  null
+)
 const topicActivityListRef = ref<InstanceType<typeof TopicActivityList> | null>(
   null
 )
@@ -234,6 +237,27 @@ watch(
       // Clear hash immediately using replaceState to avoid adding history entry
       // and to avoid interfering with navigateToElement's scroll behavior
       // TODO: proper way would be implement deeplinking for tabs
+      const url = new URL(window.location.href)
+      url.hash = ''
+      window.history.replaceState(window.history.state, '', url.toString())
+    } else if (hash.startsWith('#discussion-')) {
+      // Deeplink from a discussion notification email (udata's
+      // `Discussion.notification_url` appends `#discussion-{id}`):
+      // switch to the Discussions tab and scroll to it.
+      const tabIndex = tabTitles.value.findIndex(
+        (t) => t.tabId === 'tab-discussions'
+      )
+      if (tabIndex !== -1) activeTab.value = tabIndex
+      const discussionId = hash.replace('#discussion-', '')
+
+      let done = false
+      const stopWatching = watchEffect(() => {
+        if (done || !discussionsListRef.value) return
+        done = true
+        discussionsListRef.value.navigateToDiscussion(discussionId)
+        stopWatching()
+      })
+
       const url = new URL(window.location.href)
       url.hash = ''
       window.history.replaceState(window.history.state, '', url.toString())
@@ -447,6 +471,7 @@ watch(
         tab-id="tab-discussions"
       >
         <DiscussionsList
+          ref="discussionsListRef"
           :subject="topic"
           subject-class="Topic"
           :empty-message="`Il n'y a pas encore de discussion pour ${labels.articles.ce} ${labels.singular}.`"
