@@ -1,7 +1,10 @@
 <template>
   <div>
     <!--Texte pour préciser les usagers et les fournisseurs de service-->
-    <div v-if="groupedTags['target-users']" class="fr-card__detail">
+    <div
+      v-if="showTargetUsers && groupedTags['target-users']"
+      class="fr-card__detail"
+    >
       <p class="fr-mb-1w white-space-normal">
         Pour simplifier les démarches des
         <HumanReadableList
@@ -10,7 +13,7 @@
       </p>
     </div>
     <div
-      v-if="orderedFournisseursDeService.length > 0"
+      v-if="showFournisseurs && orderedFournisseursDeService.length > 0"
       class="fr-card__detail fr-text--right"
     >
       <p class="fr-mb-1w white-space-normal">
@@ -19,32 +22,10 @@
         <HumanReadableList :items="orderedFournisseursDeService" />
       </p>
     </div>
-    <!-- Tags indiquant le type de simplification et de budget -->
-    <div
-      v-if="!hideSimplification && groupedTags['types-de-simplification']"
-      class="simplification-group fr-mt-2w"
-    >
-      <ul class="fr-badges-group">
-        <li v-for="t in groupedTags['types-de-simplification']" :key="t.id">
-          <TagComponent :tag="t" />
-        </li>
-      </ul>
-    </div>
-    <div
-      v-if="showCategorieDeSolution && groupedTags['categorie-de-solution']"
-      class="categorie-de-solution-group"
-    >
-      <ul class="fr-badges-group">
-        <li v-for="t in groupedTags['categorie-de-solution']" :key="t.id">
-          <TagComponent :tag="t" />
-        </li>
-      </ul>
-    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import TagComponent from '@/components/TagComponent.vue'
 import { useTagsByRef } from '@/utils/tags'
 import type { TopicCasUsage, TopicSolution } from '../model/topics'
 import HumanReadableList from './HumanReadableList.vue'
@@ -53,11 +34,12 @@ const props = withDefaults(
   defineProps<{
     topic: TopicCasUsage | TopicSolution
     pageKey: string
-    showCategorieDeSolution?: boolean
-    hideSimplification?: boolean
+    showTargetUsers?: boolean
+    showFournisseurs?: boolean
   }>(),
   {
-    showCategorieDeSolution: true
+    showTargetUsers: true,
+    showFournisseurs: true
   }
 )
 
@@ -74,8 +56,6 @@ const groupedTags = computed(() => {
   }
   return groups
 })
-
-const hideSimplification = computed(() => props.hideSimplification)
 
 const orderedFournisseursDeService = computed(() => {
   const extras = props.topic.extras
