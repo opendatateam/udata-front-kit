@@ -128,9 +128,11 @@ onMounted(() => {
     <section class="fr-container fr-pt-12v">
       <h1 class="main-title-v2">Les données du DEPS</h1>
       <p class="fr-text--lead fr-mb-6w text-center">
-        culture.data.gouv.fr vise à référencer, héberger et diffuser les données
-        publiques relatives à la culture en France. Vous y trouverez des données
-        téléchargeables et utilisables de manière libre et gratuite.
+        Le Département des études, de la prospective, des statistiques et de la
+        documentation (DEPS) est le service statistique ministériel de la
+        Culture. Cet espace vous permet de découvrir, de consulter et de
+        télécharger librement les jeux de données publiés par le DEPS en lien
+        avec ses études et ses enquêtes.
       </p>
 
       <div class="big-search">

@@ -1,10 +1,7 @@
 <template>
-  <a :href="datagouvLink" :class="`api-or-dataset-card ${datagouvType}-card`">
+  <div v-if="isDisabled" :class="`api-or-dataset-card ${datagouvType}-card`">
     <div class="api-or-dataset-header">
-      <div
-        v-if="hasEmptyUid || resourceNotFound || !datagouvResource"
-        class="disabled-card fr-p-2w"
-      >
+      <div class="disabled-card fr-p-2w">
         <h3 class="fr-text--md fr-col-12">
           {{ props.apiOrDataset.Nom }}
         </h3>
@@ -15,48 +12,55 @@
 
           <span v-if="hasEmptyUid"> ⚠️ Datagouv UID missing </span>
           <span v-else-if="resourceNotFound">
-            ⚠️ {{ props.apiOrDataset.Type }} non trouvé{{
-              props.apiOrDataset.Type == 'API' ? 'e' : ''
-            }}
+            ⚠️ {{ props.apiOrDataset.Type }} introuvable sur data.gouv.fr
           </span>
           <span v-else> Chargement du lien en cours... </span>
         </p>
       </div>
+    </div>
+  </div>
 
-      <DatasetCard
-        v-else-if="datagouvType == 'datasets' && datagouvLink"
-        class="no-margins dataset-card"
-        :dataset="datagouvResource as DatasetV2"
-        :dataset-url="datagouvLink"
-        dataset-url-in-new-tab
+  <a
+    v-else
+    :href="datagouvLink"
+    target="_blank"
+    rel="noopener noreferrer"
+    :title="`${props.apiOrDataset.Nom} - ouvre une nouvelle fenêtre`"
+    :class="`api-or-dataset-card ${datagouvType}-card`"
+  >
+    <div class="api-or-dataset-header">
+      <SimplifionsDatasetDataserviceCard
+        v-if="datagouvLink"
+        :class="`no-margins ${cardClass}`"
+        :title="datagouvResource!.title"
+        :organization="datagouvResource!.organization"
+        :owner="datagouvResource!.owner"
+        :access-type="datagouvResource!.access_type"
+        :access-audiences="datagouvResource!.access_audiences"
+        :resource-label="cardResourceLabel"
+        :link-label="cardLinkLabel"
         :title-tag="props.titleTag"
       />
-      <DataserviceCard
-        v-else-if="datagouvType == 'dataservices' && datagouvLink"
-        class="no-margins dataservice-card"
-        :dataservice="datagouvResource as Dataservice"
-        :dataservice-url="datagouvLink"
-        :title-tag="props.titleTag"
-      />
-      <div v-else>{{ datagouvType }} | {{ datagouvResource.title }}</div>
     </div>
   </a>
 </template>
 
 <script setup lang="ts">
-import DataserviceCard from '@/custom/simplifions/components/SimplifionsDataserviceCard.vue'
+import SimplifionsDatasetDataserviceCard from '@/custom/simplifions/components/SimplifionsDatasetDataserviceCard.vue'
 import DatagouvfrAPI from '@/services/api/DatagouvfrAPI'
 import type { Dataservice, DatasetV2 } from '@datagouv/components-next'
-import { DatasetCard } from '@datagouv/components-next'
 import * as Sentry from '@sentry/vue'
-import type { ApiOrDataset } from '../model/grist'
+import type { ApiOrDatasetCardData } from '../model/grist'
 
-const props = withDefaults(defineProps<{
-  apiOrDataset: ApiOrDataset
-  titleTag?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
-}>(), {
-  titleTag: 'h3'
-})
+const props = withDefaults(
+  defineProps<{
+    apiOrDataset: ApiOrDatasetCardData
+    titleTag?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
+  }>(),
+  {
+    titleTag: 'h3'
+  }
+)
 
 const emit = defineEmits<{
   resourceFetched: [resource: DatasetV2 | Dataservice]
@@ -72,6 +76,10 @@ const hasEmptyUid = computed(() => {
   )
 })
 
+const isDisabled = computed(
+  () => hasEmptyUid.value || resourceNotFound.value || !datagouvResource.value
+)
+
 const datagouvType = computed(() => {
   switch (props.apiOrDataset.Type) {
     case 'API':
@@ -82,6 +90,20 @@ const datagouvType = computed(() => {
       throw new Error(`Unknown api or dataset type: ${props.apiOrDataset.Type}`)
   }
 })
+
+const cardClass = computed(() =>
+  datagouvType.value == 'datasets' ? 'dataset-card' : 'dataservice-card'
+)
+
+const cardResourceLabel = computed(() =>
+  datagouvType.value == 'datasets' ? 'Jeu de données' : 'API'
+)
+
+const cardLinkLabel = computed(() =>
+  datagouvType.value == 'datasets'
+    ? 'Voir le jeu de données sur Data.gouv.fr'
+    : "Voir l'API sur Data.gouv.fr"
+)
 
 const datagouvApiVersion = computed(() => {
   if (datagouvType.value == 'dataservices') {
@@ -107,8 +129,7 @@ if (!hasEmptyUid.value) {
       url: `${api.url()}/${props.apiOrDataset.UID_datagouv}`,
       method: 'get',
       params: {
-        fields:
-          'title,description,organization,resources,tags,created_at,updated_at'
+        fields: 'title,organization,owner,access_type,access_audiences'
       }
     })
     .then((data) => {
@@ -146,6 +167,10 @@ if (!hasEmptyUid.value) {
 
 a.api-or-dataset-card {
   color: inherit;
+}
+
+a.api-or-dataset-card[target='_blank']::after {
+  content: none;
 }
 
 a.api-or-dataset-card:hover .api-or-dataset-description,
