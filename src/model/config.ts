@@ -30,6 +30,7 @@ export interface StaticPageConfig {
 export interface MenuConfig {
   text: string
   to: string
+  external?: boolean
 }
 
 export interface PageFilterValueConf {
