@@ -98,6 +98,8 @@ website:
       to: /
     - text: Cas d'usages
       to: /cas-d-usages
+    - text: Articles
+      to: /articles
     - text: À propos
       to: /about
   router:
@@ -130,6 +132,36 @@ website:
         id: 'terms'
         route: '/terms'
         url: '/static/simplifions/pages/terms.md'
+      # Entrées articles : ces routes sont déjà servies par des composants custom (src/custom/simplifions/routes.ts),
+      # elles ne sont déclarées ici que pour que udata-front-kit-seo les inclue dans sitemap.xml.
+      - title: 'Articles'
+        id: 'sitemap-articles'
+        route: '/articles'
+        url: ''
+      - title: "Qu'est-ce qu'une API ?"
+        id: 'sitemap-articles-qu-est-ce-qu-une-api'
+        route: '/articles/qu-est-ce-qu-une-api'
+        url: ''
+      - title: 'Les API FranceConnectées'
+        id: 'sitemap-articles-apis-franceconnectees'
+        route: '/articles/apis-franceconnectees'
+        url: ''
+      - title: 'Guide de base pour les petites collectivités'
+        id: 'sitemap-articles-guide-base-petites-collectivites'
+        route: '/articles/guide-base-petites-collectivites'
+        url: ''
+      - title: "Prérequis et étapes d'intégration d'une API"
+        id: 'sitemap-articles-prerequis-et-etapes-integration-api'
+        route: '/articles/prerequis-et-etapes-integration-api'
+        url: ''
+      - title: "Vos interlocuteurs selon le type d'API"
+        id: 'sitemap-articles-vos-interlocuteurs-selon-le-type-d-api'
+        route: '/articles/vos-interlocuteurs-selon-le-type-d-api'
+        url: ''
+      - title: "Anticiper le parcours usager avant d'intégrer vos API"
+        id: 'sitemap-articles-anticiper-le-parcours-usager-avant-d-integrer-vos-api'
+        route: '/articles/anticiper-le-parcours-usager-avant-d-integrer-vos-api'
+        url: ''
   show_quality_component: true
   oauth_option: true
   # debounce high enough for accessibility (screen readers will announce results)
@@ -163,6 +195,8 @@ website:
       path: /
     - name: Cas d'usages
       path: /cas-d-usages
+    - name: Articles
+      path: /articles
     - name: Solutions
       path: /solutions
     - name: Jeux de données
@@ -216,20 +250,20 @@ shared_filter_values:
       name: Associations
 
   categorie_de_solution: &categorie_de_solution_values
+    - id: brique-technique
+      name: API, jeu de données ou brique logicielle
     - id: logiciel-metier
       name: Logiciel métier "clé en main"
-    - id: brique-technique
-      name: Brique technique
     - id: portail-consultation
-      name: Portail de consultation
+      name: Site de consultation
 
   types_de_simplification: &types_de_simplification_values
     - id: proactivite
-      name: 💠💠💠 Proactivité | L'usager n'a plus de démarche à faire
+      name: Proactivité
     - id: dlnuf
-      name: 💠💠 Dites-le nous une fois | L'usager n'a plus à fournir de justificatifs
+      name: Dites-le nous une fois
     - id: acces-facile
-      name: 💠 Accès facile | L'usager ou l'agent trouve l'information
+      name: Accès facile
 
 pages:
   # CAS D'USAGES
@@ -258,14 +292,14 @@ pages:
         display: false
     editable: false
     filters: # ATTENTION : Ces filtres ont des ids qui correspondent à des valeurs dans Grist
-      - name: 'À destination de :'
+      - name: 'Démarches gérées par :'
         id: fournisseurs-de-service
         type: select
         default_option: Tous les types d'acteurs
         use_filter_prefix: true
         applies_to_pages: [cas-d-usages, solutions]
         values: *fournisseurs_de_service_values
-      - name: 'Pour simplifier les démarches de :'
+      - name: 'Démarches à destination des :'
         id: target-users
         type: select
         default_option: Tous les usagers
@@ -314,14 +348,14 @@ pages:
         display: false
     editable: false
     filters: # ATTENTION : Ces filtres ont des ids qui correspondent à des valeurs dans Grist
-      - name: 'À destination de :'
+      - name: 'Démarches gérées par :'
         id: fournisseurs-de-service
         type: select
         default_option: Tous les types d'acteurs
         use_filter_prefix: true
         applies_to_pages: [cas-d-usages, solutions]
         values: *fournisseurs_de_service_values
-      - name: 'Pour simplifier les démarches de :'
+      - name: 'Démarches à destination des :'
         id: target-users
         type: select
         default_option: Tous les usagers

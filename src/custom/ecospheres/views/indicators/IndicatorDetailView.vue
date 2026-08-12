@@ -42,7 +42,7 @@ const topicsLabels = useLabels(topicConf.labels)
 
 const links = computed(() => [
   { to: '/', text: 'Accueil' },
-  { to: '/indicators', text: 'Indicateurs' },
+  { to: '/indicators', text: indicatorConf.breadcrumb_title },
   { text: indicator.value?.title || '' }
 ])
 
