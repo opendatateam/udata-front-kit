@@ -28,9 +28,11 @@ function buildConfig(
   const maxValue = Math.max(...series.flatMap((s) => s.data.map((p) => p.y)))
   const years = series.flatMap((s) => s.data.map((p) => p.x))
   const [minYear, maxYear] = getMinMaxYear(years)
+  const type = series.every((s) => s.data.length <= 1) ? 'bar' : 'line'
+  const effectiveStacked = type === 'bar' ? false : stacked
 
   return {
-    type: series.every((s) => s.data.length <= 1) ? 'bar' : 'line',
+    type,
     data: { datasets: series },
     options: {
       responsive: true,
@@ -76,7 +78,7 @@ function buildConfig(
           }
         },
         y: {
-          stacked,
+          stacked: effectiveStacked,
           title: { display: true, text: extras.unite },
           beginAtZero: extras.y_start_at_zero ?? false,
           ticks: {
