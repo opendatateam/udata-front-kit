@@ -249,6 +249,9 @@ definitions: &definitions
 #       discussions:
 #         display: {bool}             # display discussions tab on detail page
 #         create: {bool}              # create discussions tab on detail page
+#         notify_url_override: {bool} # when true, email notifications will link back to this site's pages instead of the canonical udata pages.
+#                                     # website.seo.canonical_url must be set and the site domain must be allowed in the udata config
+#                                     # (DISCUSSION_ALLOWED_EXTERNAL_DOMAINS).
 #       datasets:
 #         display: {bool}             # display datasets tab on detail page
 #       reuses:
@@ -298,6 +301,7 @@ pages:
       discussions:
         display: true
         create: true
+        notify_url_override: false
       datasets:
         display: true
       reuses:
@@ -417,6 +421,7 @@ pages:
       discussions:
         display: true
         create: true
+        notify_url_override: false
       datasets:
         display: true
       reuses:
@@ -565,6 +570,7 @@ pages:
       discussions:
         display: true
         create: true
+        notify_url_override: false
       datasets:
         display: true
     editable: false
@@ -605,6 +611,7 @@ pages:
       discussions:
         display: true
         create: true
+        notify_url_override: true
       datasets:
         display: true
       reuses:

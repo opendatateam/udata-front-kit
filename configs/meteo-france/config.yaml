@@ -208,6 +208,7 @@ pages:
       discussions:
         display: true
         create: false
+        notify_url_override: false
       datasets:
         display: true
       reuses:
