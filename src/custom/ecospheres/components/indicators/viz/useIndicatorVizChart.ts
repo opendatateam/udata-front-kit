@@ -93,7 +93,7 @@ function buildConfig(
   }
 }
 
-function applyColors(
+function applyStyles(
   series: IndicatorVizChartSeries[],
   { stacked }: { stacked: boolean }
 ): IndicatorVizChartSeries[] {
@@ -147,15 +147,15 @@ export function useIndicatorVizChart({
     }
     debug.log(`⚙️ Computing chart`, { datasetsCount: newSeries.length })
 
-    const colored = applyColors(
+    const styled = applyStyles(
       newSeries.map((s) => ({ ...s })),
       {
         stacked: stacked.value
       }
     )
 
-    const newType = colored.every((s) => s.data.length <= 1) ? 'bar' : 'line'
-    const newIsMultiSeries = colored.length > 1
+    const newType = styled.every((s) => s.data.length <= 1) ? 'bar' : 'line'
+    const newIsMultiSeries = styled.length > 1
 
     if (
       chartInstance &&
@@ -163,7 +163,7 @@ export function useIndicatorVizChart({
       currentIsMultiSeries === newIsMultiSeries &&
       currentStacked === stacked.value
     ) {
-      chartInstance.data.datasets = colored
+      chartInstance.data.datasets = styled
       chartInstance.update()
     } else {
       destroyChart()
@@ -172,7 +172,7 @@ export function useIndicatorVizChart({
       currentStacked = stacked.value
       chartInstance = new Chart(
         canvasRef.value,
-        buildConfig(colored, {
+        buildConfig(styled, {
           extras: extras.value,
           chartTitle: chartTitle.value,
           stacked: stacked.value
