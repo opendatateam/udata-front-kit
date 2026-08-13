@@ -38,8 +38,16 @@ const navItems = computed(() => {
   <!-- pass a dummy nav-items to satisfy props check, we're overriding the slot anyway -->
   <DsfrNavigation id="main-nav" tabindex="-1" :nav-items="[]">
     <DsfrNavigationItem v-for="(navItem, idx) of navItems" :key="idx">
+      <a
+        v-if="navItem.to && navItem.text && navItem.external"
+        class="fr-nav__link"
+        :href="navItem.to"
+        target="_blank"
+        rel="noopener noreferrer"
+        >{{ navItem.text }}</a
+      >
       <DsfrNavigationMenuLink
-        v-if="navItem.to && navItem.text"
+        v-else-if="navItem.to && navItem.text"
         v-bind="navItem"
         @toggle-id="props.onClick"
       />
