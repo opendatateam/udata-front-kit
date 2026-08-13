@@ -53,7 +53,7 @@ const goToPage = (page: string) => {
       </h1>
       <div class="fr-mt-5w">
         <div class="subtitle fr-text--alt fr-mb-10w">
-          <span v-html="fromMarkdown(homepageSubTitle)" />
+          <span v-html="fromMarkdown(homepageSubTitle).html" />
         </div>
       </div>
       <div v-if="searchConfig.display" class="search-bar">
@@ -84,7 +84,7 @@ const goToPage = (page: string) => {
   <div v-for="(item, index) in sectionsHomePage" :key="index">
     <div class="fr-container hero-text">
       <h4 v-if="item.title">{{ item.title }}</h4>
-      <span v-html="fromMarkdown(item.content || '')"></span>
+      <span v-html="fromMarkdown(item.content).html" />
       <div class="fr-mt-4w fr-col-md-12">
         <SubSectionDatasets
           v-if="item.sub_section_datasets"

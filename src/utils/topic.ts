@@ -22,6 +22,45 @@ export const isAvailable = (availability: Availability): boolean => {
 }
 
 /**
+ * Extract an id/slug from a URI if it points to a `resourceName` page on one
+ * of the given base URLs, matching hostnames regardless of a "www" prefix
+ * (e.g. a `data.gouv.fr` base URL also matches `www.data.gouv.fr` URIs).
+ */
+export const getSlugFromUri = (
+  uri: string,
+  resourceName: string,
+  baseUrls: (string | undefined)[]
+): string | null => {
+  let url: URL
+  try {
+    url = new URL(uri)
+  } catch {
+    return null
+  }
+
+  const normalizeHost = (host: string) => host.replace(/^www\./, '')
+  const recognizedHosts = baseUrls
+    .filter((base): base is string => !!base)
+    .map((base) => {
+      try {
+        return normalizeHost(new URL(base).hostname)
+      } catch {
+        return null
+      }
+    })
+    .filter((host): host is string => !!host)
+
+  if (!recognizedHosts.includes(normalizeHost(url.hostname))) {
+    return null
+  }
+
+  const match = url.pathname.match(
+    new RegExp(`/${resourceName}/(?<slug>[a-zA-Z0-9_-]+)`)
+  )
+  return match?.groups?.slug ?? null
+}
+
+/**
  * Build a fonctionnal Topic from clone source data
  */
 export const cloneTopic = async (

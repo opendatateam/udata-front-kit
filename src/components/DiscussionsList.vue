@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import type { ComputedRef, Ref } from 'vue'
-import { computed, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import BlankState from '@/components/BlankState.vue'
@@ -26,7 +26,7 @@ const router = useRouter()
 const discussionStore = useDiscussionStore()
 const userStore = useUserStore()
 
-const { pageConf } = useCurrentPageConf()
+const { pageKey, pageConf } = useCurrentPageConf()
 
 const { loggedIn } = storeToRefs(userStore)
 const currentPage: Ref<number> = ref(1)
@@ -73,6 +73,20 @@ const pages = computed(() => {
 
 const allowDiscussionCreation = pageConf.resources_tabs.discussions.create
 
+// If configured, construct an external notification url from canonical_url for udata to use
+const getNotificationExternalUrl = (): string | null => {
+  if (!pageConf.resources_tabs.discussions.notify_url_override) return null
+  const canonicalUrl = config.website.seo?.canonical_url
+  if (!canonicalUrl) return null
+  const slug = (props.subject as { slug?: string }).slug
+  if (!slug) return null
+  const path = router.resolve({
+    name: `${pageKey}_detail`,
+    params: { item_id: slug }
+  }).href
+  return `${canonicalUrl}${path}`
+}
+
 const getUserAvatar = (post: Post) => {
   if (post.posted_by.avatar_thumbnail) {
     return post.posted_by.avatar_thumbnail
@@ -86,7 +100,14 @@ const triggerLogin = () => {
 }
 
 const createDiscussion = () => {
-  discussionStore.createDiscussion(discussionForm.value).then((d) => {
+  const externalUrl = getNotificationExternalUrl()
+  const payload: DiscussionForm = {
+    ...discussionForm.value,
+    ...(externalUrl
+      ? { extras: { notification: { external_url: externalUrl } } }
+      : {})
+  }
+  discussionStore.createDiscussion(payload).then((d) => {
     if (d !== undefined) {
       discussionForm.value.title = ''
       discussionForm.value.comment = ''
@@ -119,6 +140,25 @@ watch(
   },
   { immediate: true }
 )
+
+// Used by parent views to deep-link to a discussion
+// Only looks at the currently loaded page: discussions on further pages are a known limitation.
+const navigateToDiscussion = async (discussionId: DiscussionId) => {
+  await discussionStore.loadDiscussionsForSubject(
+    props.subject.id,
+    currentPage.value
+  )
+  nextTick(() => {
+    const el = document.getElementById(`discussion-${discussionId}`)
+    if (!el) {
+      console.warn(`Trying to scroll to discussion ${discussionId}, not found.`)
+      return
+    }
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  })
+}
+
+defineExpose({ navigateToDiscussion })
 </script>
 
 <template>
@@ -196,9 +236,9 @@ watch(
       :key="discussion.id"
       class="fr-mb-6w"
     >
-      <h3 :id="discussion.id" class="discussion-title fr-mb-3v">
+      <p :id="`discussion-${discussion.id}`" class="discussion-title fr-mb-3v">
         {{ discussion.title }}
-      </h3>
+      </p>
       <div class="discussion-subtitle">
         <div class="avatar">
           <img
@@ -262,7 +302,7 @@ watch(
           type="button"
           class="fr-btn fr-btn--sm fr-btn--secondary fr-icon-chat-3-line fr-btn--icon-left"
           aria-label="Répondre à la discussion"
-          :aria-describedby="discussion.id"
+          :aria-describedby="`discussion-${discussion.id}`"
           @click.stop.prevent="
             () => {
               postForm.comment = ''
@@ -330,6 +370,7 @@ watch(
 .discussion-title {
   font-size: 1.125rem;
   font-weight: bold;
+  color: var(--text-title-grey);
 }
 
 .discussion-subtitle {

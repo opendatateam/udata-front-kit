@@ -4,11 +4,11 @@ import HomeAboutNews from '@/custom/ecospheres/components/home/HomeAboutNews.vue
 import HomeCollections from '@/custom/ecospheres/components/home/HomeCollections.vue'
 import HomeContributors from '@/custom/ecospheres/components/home/HomeContributors.vue'
 import HomeHero from '@/custom/ecospheres/components/home/HomeHero.vue'
-import { useMeta } from '@/utils/seo'
+import { useCanonicalUrl, useMeta } from '@/utils/seo'
 
 useMeta({
   description: () => config.website.homepage.meta_description,
-  canonicalUrl: () => window.location.origin
+  canonicalUrl: useCanonicalUrl()
 })
 </script>
 

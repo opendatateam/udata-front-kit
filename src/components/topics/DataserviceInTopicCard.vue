@@ -7,7 +7,7 @@ import {
 import type { RouteLocationRaw } from 'vue-router'
 
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
-import VIconCustom from '@/components/VIconCustom.vue'
+import VIconDsfr from '@/components/VIconDsfr.vue'
 import { getOwnerAvatar } from '@/utils/avatar'
 import { useOwnerName } from '@/utils/owned'
 
@@ -81,10 +81,7 @@ const dataserviceLink: RouteLocationRaw = {
     </div>
 
     <p class="fr-mb-2v fr-text--sm flex align-center fr-pt-3v text-grey-425">
-      <VIconCustom
-        name="time-line"
-        class="fr-mr-1w text-grey-425 fr-icon--sm"
-      />
+      <VIconDsfr name="time-line" class="fr-mr-1w text-grey-425 fr-icon--sm" />
       Mis à jour
       {{ formatRelativeIfRecentDate(dataservice.metadata_modified_at) }}
     </p>

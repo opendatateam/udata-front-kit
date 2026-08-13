@@ -37,6 +37,7 @@ const url = computed(() =>
       :dataset-url="url"
       :organization-url="organizationUrl"
       :show-description="showDescription ?? true"
+      title-tag="p"
     />
   </div>
 </template>
