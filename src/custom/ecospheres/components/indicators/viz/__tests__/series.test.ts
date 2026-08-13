@@ -44,7 +44,7 @@ describe('makeSeries', () => {
       expect(energie.data).toEqual([{ x: 2020, y: 200 }])
     })
 
-    it('excludes rows not present in the axis filter', () => {
+    it('hides, but keeps, series for values unchecked in the axis filter', () => {
       const rows = [
         { year: 2020, value: 100, secteur: 'transport' },
         { year: 2020, value: 200, secteur: 'energie' }
@@ -56,8 +56,14 @@ describe('makeSeries', () => {
         true,
         'secteur'
       )
-      expect(result).toHaveLength(1)
-      expect(result[0].label).toBe('transport')
+      expect(result).toHaveLength(2)
+
+      const transport = result.find((s) => s.label === 'transport')!
+      expect(transport.hidden).toBe(false)
+
+      const energie = result.find((s) => s.label === 'energie')!
+      expect(energie.hidden).toBe(true)
+      expect(energie.data).toEqual([{ x: 2020, y: 200 }])
     })
   })
 
@@ -104,6 +110,27 @@ describe('makeSeries', () => {
       expect(result.map((s) => s.label)).toEqual(
         expect.arrayContaining(['transport - idf', 'energie - idf'])
       )
+    })
+
+    it('not summable: hides, but keeps, series for any unchecked axis value', () => {
+      const rows = [
+        { year: 2020, value: 100, secteur: 'transport', region: 'idf' },
+        { year: 2020, value: 200, secteur: 'energie', region: 'idf' }
+      ]
+      const result = makeSeries(
+        rows,
+        ['secteur', 'region'],
+        { secteur: ['transport'], region: ['idf'] },
+        false,
+        null
+      )
+      expect(result).toHaveLength(2)
+
+      const transport = result.find((s) => s.label === 'transport - idf')!
+      expect(transport.hidden).toBe(false)
+
+      const energie = result.find((s) => s.label === 'energie - idf')!
+      expect(energie.hidden).toBe(true)
     })
   })
 })

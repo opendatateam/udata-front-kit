@@ -88,36 +88,18 @@ watch(availableAxisValues, (axisValues) => {
   activeAxis.value = null
 })
 
-// Builds the chart series from the current filters, keeping series index-stable
-// across active-axis checkbox toggles so their colors don't shift.
-const series = computed(() => {
+// Builds the chart series from the current filters
+const series = computed(() =>
   // axisFilters.value, not availableAxisValues.value: which is a new object on
   // every recompute.
-  const axisNames = Object.keys(axisFilters.value)
-
-  // Include every value of the active axis, not just the checked ones, so
-  // toggling a checkbox never adds/removes a series (see hidden below).
-  const filtersForSeries = activeAxis.value
-    ? {
-        ...axisFilters.value,
-        [activeAxis.value]: availableAxisValues.value[activeAxis.value] ?? []
-      }
-    : axisFilters.value
-
-  const built = makeSeries(
+  makeSeries(
     rawData.value,
-    axisNames,
-    filtersForSeries,
+    Object.keys(axisFilters.value),
+    axisFilters.value,
     summable.value,
     activeAxis.value
   )
-
-  if (!activeAxis.value) return built
-
-  // Hide unchecked values instead of removing them, so series indices stay stable.
-  const checked = new Set(axisFilters.value[activeAxis.value] ?? [])
-  return built.map((s) => ({ ...s, hidden: !checked.has(s.label) }))
-})
+)
 
 const isOneYear = computed(
   () => series.value.length === 1 && series.value[0].data.length === 1
