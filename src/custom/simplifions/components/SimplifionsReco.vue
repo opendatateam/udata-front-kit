@@ -1,7 +1,9 @@
 <template>
   <div class="reco-card fr-p-2w fr-mb-4w">
     <h4 class="fr-h4 fr-mb-2w">
-      ➡️ {{ recommandation.Nom_de_la_recommandation }}
+      <span class="fr-text--alt"><em>Via «</em></span>
+      {{ recommandation.Nom_de_la_recommandation }}
+      <span class="fr-text--alt"><em>»</em></span>
     </h4>
 
     <div class="fr-grid-row fr-grid-row--top fr-mx-2w">
@@ -59,7 +61,7 @@
 
           <template v-if="isSolution">
             <div
-              class="fr-btns-group fr-btns-group--inline fr-btns-group--right fr-mt-2w"
+              class="fr-btns-group fr-btns-group--inline fr-btns-group--right fr-my-2w"
             >
               <router-link
                 v-if="topicSlug"
@@ -82,6 +84,12 @@
                 Demander un accès pour ce cas d'usage
               </a>
             </div>
+
+            <SimplifionsDataApi
+              v-if="solutionApiOrDataset"
+              :api-or-dataset="solutionApiOrDataset"
+              title-tag="h6"
+            />
 
             <SimplifionsRecoUsefulEndpointsTable
               :endpoints="usefulDataApiFourniesParLaSolution"
@@ -213,10 +221,13 @@ import type { Dataservice, DatasetV2 } from '@datagouv/components-next'
 import { grist } from '../grist.ts'
 import type {
   ApiOrDataset,
+  ApiOrDatasetCardData,
   ApiOrDatasetRecord,
+  ApiOrDatasetType,
   ApiOrDatasetUtiles,
   ApiOrDatasetUtilesRecord,
   Recommandation,
+  Solution,
   SolutionRecord
 } from '../model/grist'
 import TopicsAPI from '../simplifionsTopicsApi'
@@ -231,12 +242,25 @@ const props = defineProps<{
 const recommandation = props.recommandation
 const isSolution = !!recommandation.Solution_recommandee
 
+// "Type de recommandation" tells whether the recommended resource is an API or a
+// dataset. "Type de solution" describes the kind of offer instead (Éditeur,
+// Logiciel métier…), so it cannot be used to pick the data.gouv.fr endpoint.
+const isApiOrDatasetType = (type: string | null): type is ApiOrDatasetType =>
+  type === 'API' || type === 'Jeu de données'
+
+const recommandationType = isApiOrDatasetType(
+  recommandation.Type_de_recommandation
+)
+  ? recommandation.Type_de_recommandation
+  : undefined
+
 // === Solution-specific ===
 const topicSlug = ref<string | undefined>(undefined)
 const usefulDataApiFourniesParLaSolution = ref<
   ApiOrDatasetRecord[] | undefined
 >(undefined)
 const customDescriptions = ref<Record<number, ApiOrDatasetUtiles>>({})
+const solutionApiOrDataset = ref<ApiOrDatasetCardData | undefined>(undefined)
 
 if (isSolution) {
   const topicsAPI = new TopicsAPI({ version: 2 })
@@ -244,6 +268,27 @@ if (isSolution) {
   topicsAPI.getTopicByTag(solutionTag).then((topic) => {
     topicSlug.value = topic?.slug
   })
+
+  // Only worth fetching when the recommandation designates an API or a dataset:
+  // otherwise no card can be built out of the solution record.
+  if (recommandationType) {
+    grist
+      .getRecord('Solutions', recommandation.Solution_recommandee)
+      .then((data) => {
+        const solution = data.fields as Solution
+
+        if (solution.UID_datagouv) {
+          solutionApiOrDataset.value = {
+            UID_datagouv: solution.UID_datagouv,
+            Nom: solution.Nom,
+            Type: recommandationType
+          }
+        }
+      })
+      .catch((error) => {
+        console.error('Failed to fetch solution:', error)
+      })
+  }
 
   if (recommandation.API_et_datasets_utiles_fournis?.length) {
     grist
@@ -325,8 +370,8 @@ const typeLabel = computed(() => {
 const apiAccordionTitle = computed(() => {
   const t = recommandation.Type_de_recommandation
   if (t === 'API') return "Par l'API directement"
-  if (t === 'Jeu de données') return 'Par la base de données directement'
-  return "Par la base de données ou l'API directement"
+  if (t === 'Jeu de données') return 'Par le jeu de données directement'
+  return "Par le jeu de données ou l'API directement"
 })
 
 const fetchSolutionsForCategory = async (ids: number[]) => {
@@ -418,6 +463,7 @@ const activeAccordion = ref(-1)
 <style scoped>
 .reco-card {
   background-color: var(--background-alt-beige-gris-galet);
+  border-left: 4px solid var(--border-action-high-grey);
 }
 
 .icon-green {
