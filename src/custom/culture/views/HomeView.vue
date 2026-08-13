@@ -452,13 +452,14 @@ onMounted(() => {
 
 .big-search {
   display: flex;
-  width: 588px;
-  max-width: 100%;
+  width: 100%;
+  max-width: 588px;
   align-items: flex-start;
 }
 
 .big-search > * {
   flex: 1;
+  width: 100%;
 }
 
 section h2 {
