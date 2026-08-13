@@ -249,9 +249,9 @@ definitions: &definitions
 #       discussions:
 #         display: {bool}             # display discussions tab on detail page
 #         create: {bool}              # create discussions tab on detail page
-#         notify_external_url: {bool} # on discussion creation, send extras.notification.external_url (this site's page for the subject)
-#                                     # so udata notification emails link back here instead of the subject's canonical udata page.
-#                                     # requires the site's domain to be allow-listed on the udata side (DISCUSSION_ALLOWED_EXTERNAL_DOMAINS).
+#         notify_external_url: {bool} # when true, email notifications will link back to this site's pages instead of the canonical udata pages.
+#                                     # website.seo.canonical_url must be set and the site domain must be allowed in the udata config 
+#                                     # (DISCUSSION_ALLOWED_EXTERNAL_DOMAINS).
 #       datasets:
 #         display: {bool}             # display datasets tab on detail page
 #       reuses:
