@@ -6,7 +6,7 @@ import config from '@/config'
 import CultureDatasetCard from '@/custom/culture/components/CultureDatasetCard.vue'
 import { fromMarkdown } from '@/utils'
 import { useMeta } from '@/utils/seo'
-import { DsfrFollow, DsfrNewsLetter } from '@gouvminint/vue-dsfr'
+import { DsfrCard, DsfrFollow, DsfrNewsLetter } from '@gouvminint/vue-dsfr'
 
 useMeta({
   description: () => config.website.homepage.meta_description,
@@ -56,6 +56,20 @@ const loading = ref(true)
 const openLink = (href: string) =>
   window.open(href, '_blank', 'noopener,noreferrer')
 
+const typeLabel: Record<string, string> = {
+  'top-datasets': 'Jeux les plus consultés',
+  'top-reuses': 'Jeux les plus réutilisés',
+  'new-datasets': 'Nouveau jeu'
+}
+
+const formatTopItemsAsCards = (items: TopItem[]) => {
+  return items.map((item) => ({
+    title: item.fields.titre,
+    link: `/datasets/${item.fields.slug}`,
+    type: item.fields.type
+  }))
+}
+
 const fetchSections = async () => {
   try {
     const response = await fetch(
@@ -104,15 +118,6 @@ const getTopItemsByType = (
   return topItems.value.filter((item) => item.fields.type === type)
 }
 
-const formatTopItemsAsMarkdown = (items: TopItem[]) => {
-  return items
-    .map((item) => {
-      const url = `${window.location.origin}/datasets/${item.fields.slug}`
-      return `[${item.fields.titre}](${url})`
-    })
-    .join('\n\n')
-}
-
 const getBackgroundClass = (backgroundColor: string) => {
   if (!backgroundColor) return ''
   if (backgroundColor === '#F6F6F6') return 'bg-light'
@@ -153,42 +158,34 @@ onMounted(() => {
     <template v-else>
       <section class="fr-container fr-py-8w">
         <h2 class="section-h2">Découvrez les données phares</h2>
-        <div class="cards-container">
-          <div class="card-wrapper">
-            <CultureDatasetCard
-              class="subsection-card"
-              alt-img="patrimoine"
-              :description="
-                formatTopItemsAsMarkdown(getTopItemsByType('top-datasets'))
-              "
-              img-src="/static/culture/assets/MC_Patrimoine_c6e3a5b33cce.webp"
-              title="🔥 Jeux les plus consultés"
-              :title-link-attrs="{}"
-            />
-          </div>
-          <div class="card-wrapper">
-            <CultureDatasetCard
-              class="subsection-card"
-              alt-img="audiovisuel"
-              :description="
-                formatTopItemsAsMarkdown(getTopItemsByType('top-reuses'))
-              "
-              img-src="/static/culture/assets/MC_Publics_b86a092e27b8.webp"
-              title="♻️ Jeux les plus réutilisés"
-              :title-link-attrs="{}"
-            />
-          </div>
-          <div class="card-wrapper">
-            <CultureDatasetCard
-              class="subsection-card"
-              alt-img="musee"
-              :description="
-                formatTopItemsAsMarkdown(getTopItemsByType('new-datasets'))
-              "
-              img-src="/static/culture/assets/MC_Langues_78627c8ca0c3-20251007.webp"
-              title="🆕 Nouveaux jeux publiés"
-              :title-link-attrs="{}"
-            />
+        <div class="fr-grid-row fr-grid-row--gutters">
+          <div
+            v-for="card in [
+              ...formatTopItemsAsCards(getTopItemsByType('top-datasets')),
+              ...formatTopItemsAsCards(getTopItemsByType('top-reuses')),
+              ...formatTopItemsAsCards(getTopItemsByType('new-datasets'))
+            ]"
+            :key="card.link"
+            class="fr-col-12 fr-col-md-4"
+          >
+            <DsfrCard
+              :title="card.title"
+              :link="card.link"
+              :enlarge="true"
+              title-tag="h3"
+            >
+              <template #start-details>
+                <ul class="fr-badges-group">
+                  <li>
+                    <span
+                      class="fr-badge fr-badge--sm fr-badge--purple-glycine fr-badge--no-icon"
+                    >
+                      {{ typeLabel[card.type] }}
+                    </span>
+                  </li>
+                </ul>
+              </template>
+            </DsfrCard>
           </div>
         </div>
       </section>
@@ -577,9 +574,5 @@ section h2 {
     width: 100%;
     max-width: 400px;
   }
-}
-
-.github-link {
-  list-style: none;
 }
 </style>
