@@ -98,7 +98,7 @@ export type PageConf = {
     discussions: {
       display: boolean
       create: boolean
-      notify_external_url?: boolean
+      notify_url_override?: boolean
     }
     datasets: {
       display: boolean

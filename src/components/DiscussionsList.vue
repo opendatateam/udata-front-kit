@@ -75,7 +75,7 @@ const allowDiscussionCreation = pageConf.resources_tabs.discussions.create
 
 // If configured, construct an external notification url from canonical_url for udata to use
 const getNotificationExternalUrl = (): string | null => {
-  if (!pageConf.resources_tabs.discussions.notify_external_url) return null
+  if (!pageConf.resources_tabs.discussions.notify_url_override) return null
   const canonicalUrl = config.website.seo?.canonical_url
   if (!canonicalUrl) return null
   const slug = (props.subject as { slug?: string }).slug

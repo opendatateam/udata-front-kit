@@ -201,7 +201,7 @@ pages:
       discussions:
         display: true
         create: false
-        notify_external_url: false
+        notify_url_override: false
       datasets:
         display: true
       reuses:
