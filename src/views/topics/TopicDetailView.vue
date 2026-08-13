@@ -218,10 +218,12 @@ useMeta({
 // Wait until `ready()` is true (e.g. a child component is mounted and its
 // data has loaded), then run `action()` once.
 const runWhenReady = (ready: () => boolean, action: () => void) => {
-  let done = false
+  if (ready()) {
+    action()
+    return
+  }
   const stop = watchEffect(() => {
-    if (done || !ready()) return
-    done = true
+    if (!ready()) return
     action()
     stop()
   })
