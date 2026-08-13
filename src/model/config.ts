@@ -30,6 +30,7 @@ export interface StaticPageConfig {
 export interface MenuConfig {
   text: string
   to: string
+  external?: boolean
 }
 
 export interface PageFilterValueConf {
@@ -98,6 +99,7 @@ export type PageConf = {
     discussions: {
       display: boolean
       create: boolean
+      notify_url_override?: boolean
     }
     datasets: {
       display: boolean
