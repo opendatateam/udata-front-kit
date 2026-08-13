@@ -7,8 +7,7 @@ const selectedIndicatorVizMesh = defineModel<IndicatorMesh>({
   required: true
 })
 
-// 'commune' is deliberately excluded from MESHES (no GEOCOLUMNS entry, see
-// enums.ts - the tabular API can't filter by commune), so it's filtered in
+// 'commune' is excluded from MESHES (see enums.ts), so it's added back in
 // separately here, using the same availableMeshes check as the others.
 const meshOptions = computed<[IndicatorMesh, string][]>(() => [
   ...MESHES.filter(([mesh]) => props.availableMeshes.includes(mesh)),
