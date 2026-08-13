@@ -71,14 +71,15 @@ const { logo, title_image, description, beta, search } = header
     </template>
 
     <template #after-quick-links>
-      <SearchComponent
-        v-if="customSearch && search.display"
-        id="header-select-search"
-        class="custom-search"
-        :search-label="searchLabel"
-        :placeholder="searchLabel"
-        @do-search="closeModal"
-      />
+      <div id="header-select-search" tabindex="-1">
+        <SearchComponent
+          v-if="customSearch && search.display"
+          class="custom-search"
+          :search-label="searchLabel"
+          :placeholder="searchLabel"
+          @do-search="closeModal"
+        />
+      </div>
     </template>
 
     <!-- @vue-ignore FIXME: upstream bug, hidemodal is not typed in DsfrHeader slot props -->
