@@ -121,7 +121,11 @@ const hero = computed(() => {
     title: item?.title || 'Les données du DEPS',
     description:
       item?.content ||
-      'Le Département des études, de la prospective, des statistiques et de la documentation (DEPS) est le service statistique ministériel de la Culture. Cet espace vous permet de découvrir, de consulter et de télécharger librement les jeux de données publiés par le DEPS en lien avec ses études et ses enquêtes.',
+      'Le Département des études, de la prospective, des statistiques et de la
+        documentation (DEPS) est le service statistique ministériel de la
+        Culture. Cet espace vous permet de découvrir, de consulter et de
+        télécharger librement les jeux de données publiés par le DEPS en lien
+        avec ses études et ses enquêtes.',
     imageUrl: item?.imageUrl || ''
   }
 })
