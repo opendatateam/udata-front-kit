@@ -74,6 +74,7 @@ const { logo, title_image, description, beta, search } = header
       <div id="header-select-search" tabindex="-1">
         <SearchComponent
           v-if="customSearch && search.display"
+          id="header-select-search-input"
           class="custom-search"
           :search-label="searchLabel"
           :placeholder="searchLabel"
