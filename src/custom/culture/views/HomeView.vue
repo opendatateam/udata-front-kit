@@ -322,15 +322,26 @@ onMounted(() => {
                   <div v-html="fromMarkdown(item.fields.content).html"></div>
                 </div>
 
-                <a
-                  v-if="item.fields.ctaLink && item.fields.ctaLabel"
-                  :href="item.fields.ctaLink"
-                  class="fr-btn"
-                  target="_blank"
-                  rel="noopener"
-                >
-                  {{ item.fields.ctaLabel }}
-                </a>
+                <div>
+                  <a
+                    v-if="item.fields.ctaLink && item.fields.ctaLabel"
+                    :href="item.fields.ctaLink"
+                    class="fr-btn fr-btn--secondary"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    :title="`${item.fields.ctaLabel} - nouvelle fenêtre`"
+                  >
+                    {{ item.fields.ctaLabel }}
+                  </a>
+                </div>
+              </div>
+
+              <div v-if="item.fields.imageUrl" class="highlight-img-col">
+                <img
+                  :src="item.fields.imageUrl"
+                  :alt="item.fields.title || 'Illustration'"
+                  class="highlight-img"
+                />
               </div>
             </div>
           </div>
