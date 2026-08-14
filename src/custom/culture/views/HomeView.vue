@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 import SearchComponent from '@/components/SearchComponent.vue'
 import config from '@/config'
 import CultureDatasetCard from '@/custom/culture/components/CultureDatasetCard.vue'
+import HeroSection from '@/custom/culture/components/HeroSection.vue'
 import { fromMarkdown } from '@/utils'
 import { useMeta } from '@/utils/seo'
 import { DsfrCard, DsfrFollow, DsfrNewsLetter } from '@gouvminint/vue-dsfr'
@@ -112,6 +113,19 @@ const getContentForSection = (sectionName: string) => {
   )
 }
 
+const hero = computed(() => {
+  const item = contentItems.value.find(
+    (i) => i.fields.section === 'hero'
+  )?.fields
+  return {
+    title: item?.title || 'Les données ouvertes de la Culture',
+    description:
+      item?.content ||
+      'culture.data.gouv.fr vise à référencer, héberger et diffuser les données publiques relatives à la culture en France. Vous y trouverez des données téléchargeables et utilisables de manière libre et gratuite.',
+    imageUrl: item?.imageUrl || ''
+  }
+})
+
 const getTopItemsByType = (
   type: 'top-datasets' | 'top-reuses' | 'new-datasets'
 ) => {
@@ -126,30 +140,33 @@ const getBackgroundClass = (backgroundColor: string) => {
 }
 
 onMounted(() => {
-  Promise.all([fetchSections(), fetchContent(), fetchTopItems()]).then(() => {
-    loading.value = false
-  })
+  Promise.all([fetchSections(), fetchContent(), fetchTopItems()]).finally(
+    () => {
+      loading.value = false
+    }
+  )
 })
 </script>
 
 <template>
   <div>
-    <section class="fr-container fr-pt-12v">
-      <h1 class="main-title-v2">Les données ouvertes de la Culture</h1>
-      <p class="fr-text--lead fr-mb-6w text-center">
-        culture.data.gouv.fr vise à référencer, héberger et diffuser les données
-        publiques relatives à la culture en France. Vous y trouverez des données
-        téléchargeables et utilisables de manière libre et gratuite.
-      </p>
-
-      <div class="big-search">
-        <SearchComponent
-          id="big-select-search"
-          :placeholder="config.website.header.search.placeholder"
-          search-label="Rechercher"
-        />
-      </div>
-    </section>
+    <HeroSection
+      :title="hero.title"
+      :description="hero.description"
+      :image-url="hero.imageUrl"
+      alt-img=""
+      :colors="config.website.home_banner_colors"
+    >
+      <template #search>
+        <div class="big-search">
+          <SearchComponent
+            id="big-select-search"
+            :placeholder="config.website.header.search.placeholder"
+            search-label="Rechercher"
+          />
+        </div>
+      </template>
+    </HeroSection>
 
     <div v-if="loading" class="fr-container fr-py-8w">
       <p>Chargement...</p>
@@ -189,6 +206,7 @@ onMounted(() => {
           </div>
         </div>
       </section>
+
       <template v-for="section in sections" :key="section.id">
         <section
           v-if="section.fields.type === 'cards'"
@@ -259,12 +277,15 @@ onMounted(() => {
         <section
           v-else-if="section.fields.type === 'tags'"
           class="fr-container--fluid fr-py-8w"
-          :class="getBackgroundClass(section.fields.background_color)"
+          style="background-color: #e9f9dd"
         >
           <div class="fr-container">
-            <h2>{{ section.fields.section_title }}</h2>
+            <h2 class="fr-h2">{{ section.fields.section_title }}</h2>
 
-            <ul class="fr-tags-group">
+            <ul
+              class="fr-tags-group"
+              aria-label="Liste des thématiques culturelles"
+            >
               <li
                 v-for="item in getContentForSection(section.fields.section)"
                 :key="item.id"
@@ -300,26 +321,16 @@ onMounted(() => {
                   <!-- eslint-disable-next-line vue/no-v-html -->
                   <div v-html="fromMarkdown(item.fields.content).html"></div>
                 </div>
-                <div>
-                  <a
-                    v-if="item.fields.ctaLink && item.fields.ctaLabel"
-                    :href="item.fields.ctaLink"
-                    class="fr-btn fr-btn--secondary"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    :title="`${item.fields.ctaLabel} - nouvelle fenêtre`"
-                  >
-                    {{ item.fields.ctaLabel }}
-                  </a>
-                </div>
-              </div>
 
-              <div v-if="item.fields.imageUrl" class="highlight-img-col">
-                <img
-                  :src="item.fields.imageUrl"
-                  :alt="item.fields.title || 'Illustration'"
-                  class="highlight-img"
-                />
+                <a
+                  v-if="item.fields.ctaLink && item.fields.ctaLabel"
+                  :href="item.fields.ctaLink"
+                  class="fr-btn"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  {{ item.fields.ctaLabel }}
+                </a>
               </div>
             </div>
           </div>
@@ -439,19 +450,16 @@ onMounted(() => {
   background-color: var(--background-default-grey);
 }
 
-.main-title-v2 {
-  text-align: center;
-  font-size: clamp(1.375rem, 0.4698rem + 4.5259vw, 4rem);
-  margin-bottom: 1.5rem;
-
-  @media (max-width: 768px) {
-    text-align: inherit;
-  }
+.big-search {
+  display: flex;
+  width: 100%;
+  max-width: 588px;
+  align-items: flex-start;
 }
 
-.big-search {
-  max-width: 792px;
-  margin: 0 auto;
+.big-search > * {
+  flex: 1;
+  width: 100%;
 }
 
 section h2 {
@@ -485,33 +493,8 @@ section h2 {
   height: 100%;
 }
 
-.fr-tags-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  justify-content: center;
-  margin: 2rem 0;
-  list-style: none;
-  padding: 0;
-}
-
 .list-none {
   list-style-type: none !important;
-}
-
-.fr-tags-group .fr-tag {
-  margin: 0;
-  font-size: 0.875rem;
-  padding: 0.5rem 1rem;
-  border-radius: 1rem;
-  text-decoration: none;
-  transition: all 0.2s ease;
-  background-color: var(--background-action-low-blue-france);
-  color: #3a5da6;
-}
-
-.fr-tags-group .fr-tag:hover {
-  background-color: #a9c8fb;
 }
 
 /* --- Bloc Highlight DSFR (Image restreinte à la hauteur exacte du texte) --- */
