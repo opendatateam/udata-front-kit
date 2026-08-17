@@ -163,6 +163,7 @@ onMounted(() => {
             id="big-select-search"
             :placeholder="config.pages['univers-deps'].search.placeholder"
             search-label="Rechercher"
+            search-endpoint="/univers-deps"
           />
         </div>
       </template>
