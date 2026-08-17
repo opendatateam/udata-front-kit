@@ -11,7 +11,7 @@ import { DsfrCard, DsfrFollow, DsfrNewsLetter } from '@gouvminint/vue-dsfr'
 
 useMeta({
   description: () => config.website.homepage.meta_description,
-  canonicalUrl: () => window.location.origin
+  canonicalUrl: () => `${window.location.origin}/deps`
 })
 
 interface Section {
