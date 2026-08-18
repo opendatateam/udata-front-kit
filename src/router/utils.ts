@@ -330,7 +330,9 @@ export const useGlobalSearchPageRoutes = ({
           searchConfig,
           customFilters
         },
-        component: () => import('@/views/UnifiedSearchView.vue')
+        component: () => import('@/views/UnifiedSearchView.vue'),
+        // forces the component to be recreated when navigating to a different pageKey
+        props: () => ({ key: pageKey })
       },
       childrenPages
     ]
@@ -370,13 +372,11 @@ export const useTopicAdminPagesRoutes = ({
   ]
 }
 
-// Org detail stays at /organizations/:oid (not moved under /contributors), so
-// NavigationComponent's isActive() can't rely on a shared path prefix with the
-// "Contributeurs" menu entry (/contributors) — activeMenuLink covers that.
+// Org detail stays at /organizations/:oid; activeMenuLink highlights "Contributeurs" for it.
 export const useOrganizationsRoutes = (): RouteRecordRaw => {
   return {
     path: '/organizations',
-    name: 'organizations_routes',
+    // no name: the '' child is unnamed too, and naming only the parent trips a Vue Router warning
     children: [
       { path: '', redirect: '/contributors' },
       {

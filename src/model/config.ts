@@ -126,11 +126,8 @@ export type PagesConf = {
   [key: string]: PageConf
 }
 
-// A network (SIF) is a named, ordered group of PageConf entries, nested under
-// /contributors/<slug>. The first key in `pages` is the default page (used for
-// the bare /contributors/<slug> redirect and as the network's display identity).
-// Kept as a `{ pages: ... }` wrapper rather than flattened to leave room for
-// network-level fields later without colliding with page-subpath keys.
+// A network (SIF) is an ordered group of pages nested under /contributors/<slug>,
+// one per URL subpath. The first key is the default page (redirect target + display identity).
 export type NetworkConf = {
   pages: PagesConf
 }

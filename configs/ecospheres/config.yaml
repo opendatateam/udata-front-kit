@@ -210,19 +210,13 @@ organizations:
 # Configuration format for networks (SIF — Systèmes d'Information Fédérateurs):
 #
 # networks:
-#   {slug}:                # network identifier, used as /contributors/{slug}
-#     pages:                # one entry per object type this network exposes, keyed by URL subpath
-#                            # (rendered at /contributors/{slug}/{subpath}); the FIRST key listed is
-#                            # the default — used for the bare /contributors/{slug} redirect and as
-#                            # the network's display identity (name/logo) on the /contributors list.
-#                            # Each entry reuses the exact `pages.{page_id}` format documented above,
-#                            # plus two extra optional fields also available on any page:
-#       {subpath}:
-#         logo: {string?}          # shown above the page's search (see NetworkAboutBlock)
-#         external_link:           # CTA button shown next to the logo (e.g. link to the network's own site)
-#           url: {string}
-#           label: {string}
-#         # ...all other pages.{page_id} fields (object_type, universe_query, title, labels, etc.)
+#   {slug}:                  # network identifier, used as /contributors/{slug}
+#     pages:                  # one entry per object type this network exposes, keyed by URL subpath
+#                              # (rendered at /contributors/{slug}/{subpath}); the FIRST key listed is
+#                              # the default — used for the bare /contributors/{slug} redirect and as
+#                              # the network's display identity (title/logo) on the /contributors list.
+#       {subpath}:             # reuses the exact `pages.{page_id}` format documented below; its
+#                               # `banner.logo`/`banner.external_link` render above the page's search
 networks:
   simm:
     x-simm-common: &simm_common
