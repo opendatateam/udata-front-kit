@@ -26,7 +26,7 @@ const organizationsConfig = config.organizations as OrganizationsConfig
 const breadcrumbLinks: Ref<BreadcrumbItem[]> = ref([
   { to: '/', text: 'Accueil' },
   {
-    to: '/organizations',
+    to: '/contributors',
     text: organizationsConfig.page?.breadcrumb_title || 'Organisations'
   }
 ])

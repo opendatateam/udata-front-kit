@@ -18,6 +18,7 @@ import TopicFactorsList from '@/components/topics/TopicFactorsList.vue'
 import TopicFactorsListExport from '@/components/topics/TopicFactorsListExport.vue'
 import TopicReusesList from '@/components/topics/TopicReusesList.vue'
 import config from '@/config'
+import type { BreadcrumbItem } from '@/model/breadcrumb'
 import type { Topic } from '@/model/topic'
 import type { TopicPageRouterConf } from '@/router/model'
 import {
@@ -87,10 +88,10 @@ const handleFactorChanged = () => {
 }
 
 const breadcrumbLinks = computed(() => {
-  const breadcrumbs = [{ to: '/', text: 'Accueil' }]
+  const breadcrumbs: BreadcrumbItem[] = [{ to: '/', text: 'Accueil' }]
   if (pageConf.list_all === true) {
     breadcrumbs.push({
-      to: `/${meta.pageKey || 'topics'}`,
+      to: { name: meta.pageKey || 'topics' },
       text: pageConf.breadcrumb_title || pageConf.title
     })
   }

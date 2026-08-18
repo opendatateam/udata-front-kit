@@ -119,7 +119,7 @@ website:
     - text: Collections thématiques
       to: /bouquets
     - text: Contributeurs
-      to: /organizations
+      to: /contributors
     - text: À propos
       to: /about
   router:
@@ -155,7 +155,7 @@ website:
     - name: Indicateurs phares
       path: /indicators
     - name: Contributeurs
-      path: /organizations
+      path: /contributors
     - name: À propos
       path: /about
     - name: Conditions générales d'utilisation
@@ -206,6 +206,89 @@ organizations:
     meta:
       title: Liste des contributeurs
       description: Recherchez une organisation qui a partagé un jeu de données ou une réutilisation sur la transition écologique
+
+# Configuration format for networks (SIF — Systèmes d'Information Fédérateurs):
+#
+# networks:
+#   {slug}:                # network identifier, used as /contributors/{slug}
+#     pages:                # one entry per object type this network exposes, keyed by URL subpath
+#                            # (rendered at /contributors/{slug}/{subpath}); the FIRST key listed is
+#                            # the default — used for the bare /contributors/{slug} redirect and as
+#                            # the network's display identity (name/logo) on the /contributors list.
+#                            # Each entry reuses the exact `pages.{page_id}` format documented above,
+#                            # plus two extra optional fields also available on any page:
+#       {subpath}:
+#         logo: {string?}          # shown above the page's search (see NetworkAboutBlock)
+#         external_link:           # CTA button shown next to the logo (e.g. link to the network's own site)
+#           url: {string}
+#           label: {string}
+#         # ...all other pages.{page_id} fields (object_type, universe_query, title, labels, etc.)
+networks:
+  simm:
+    pages:
+      datasets:
+        object_type: datasets
+        list_all: true
+        universe_query:
+          topic: 6a82baef02381db0dc7229cf
+        filter_prefix:
+        title: Milieu Marin France
+        breadcrumb_title: Jeux de données
+        labels:
+          singular: jeu de données
+          plural: jeux de données
+          extended: jeu de données
+        search:
+          input: Rechercher dans les données du réseau SIMM
+          placeholder: null
+        banner:
+          title: L'accès de référence aux données publiques sur le milieu marin français
+          content: Milieu Marin France fédère et diffuse les données des politiques publiques françaises sur le milieu marin dans le cadre du Système d’information sur le milieu marin (SIMM).
+          logo: /static/ecospheres/logos/networks/simm.svg
+          external_link:
+            url: https://www.milieumarinfrance.fr/
+            label: Accéder au site
+        resources_tabs:
+          discussions:
+            display: false
+            create: false
+          datasets:
+            display: true
+          reuses:
+            display: true
+        editable: false
+        filters: []
+      dataservices:
+        object_type: dataservices
+        list_all: true
+        universe_query:
+          topic: 6a82baef02381db0dc7229cf
+        filter_prefix:
+        title: API — Milieux Marins France
+        breadcrumb_title: API
+        labels:
+          singular: API
+          plural: APIs
+          extended: API
+          feminine: true
+        search:
+          input: Rechercher dans les API du réseau SIMM
+          placeholder: null
+        banner:
+          title: L'accès de référence aux données publiques sur le milieu marin français
+          content: Milieu Marin France fédère et diffuse les données des politiques publiques françaises sur le milieu marin dans le cadre du Système d’information sur le milieu marin (SIMM).
+          logo: /static/ecospheres/logos/networks/simm.svg
+          external_link:
+            url: https://www.milieumarinfrance.fr/
+            label: Accéder au site
+        resources_tabs:
+          discussions:
+            display: false
+            create: false
+          datasets:
+            display: true
+        editable: false
+        filters: []
 
 # shared themes list for indicators and bouquets
 definitions: &definitions

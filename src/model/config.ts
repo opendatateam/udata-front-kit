@@ -66,6 +66,8 @@ export type PageUniverseQueryConf = {
 export type PageBannerConf = {
   title: string
   content: string
+  logo?: string
+  external_link?: PageExternalLinkConf
 }
 
 export type PageSearchConf = {
@@ -81,6 +83,11 @@ export type PageLabelsConf = {
 }
 
 export type PageObjectType = 'datasets' | 'dataservices' | 'topics'
+
+export type PageExternalLinkConf = {
+  url: string
+  label: string
+}
 
 export type PageConf = {
   object_type: PageObjectType
@@ -117,6 +124,19 @@ export type PageConf = {
 
 export type PagesConf = {
   [key: string]: PageConf
+}
+
+// A network (SIF) is a named, ordered group of PageConf entries, nested under
+// /contributors/<slug>. The first key in `pages` is the default page (used for
+// the bare /contributors/<slug> redirect and as the network's display identity).
+// Kept as a `{ pages: ... }` wrapper rather than flattened to leave room for
+// network-level fields later without colliding with page-subpath keys.
+export type NetworkConf = {
+  pages: PagesConf
+}
+
+export type NetworksConf = {
+  [slug: string]: NetworkConf
 }
 
 export type DatasetsConf = {

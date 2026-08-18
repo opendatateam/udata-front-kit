@@ -274,7 +274,7 @@ label:has(input[name='search-type']) span[aria-hidden='true']::after {
 }
 
 .hero-banner {
-  > div > p:first-child {
+  .hero-banner__title {
     font-size: 1.25em;
     font-weight: 400;
   }
@@ -282,7 +282,7 @@ label:has(input[name='search-type']) span[aria-hidden='true']::after {
   p:last-child {
     margin-bottom: 0;
   }
-  a {
+  a:not(.fr-btn) {
     color: var(--text-action-high-blue-france);
     &::after {
       content: ' →';
