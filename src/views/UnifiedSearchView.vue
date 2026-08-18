@@ -3,7 +3,6 @@ import SearchOrganizationFilter from '@/components/search/SearchOrganizationFilt
 import SearchSelectFilter from '@/components/search/SearchSelectFilter.vue'
 import TopicCard from '@/components/topics/TopicCard.vue'
 import VIconDsfr from '@/components/VIconDsfr.vue'
-import type { PageListConf } from '@/model/config'
 import { useUserStore } from '@/store/UserStore'
 import { fromMarkdown } from '@/utils'
 import { useAsyncComponent } from '@/utils/component'
@@ -23,9 +22,7 @@ const route = useRoute()
 const router = useRouter()
 const pageKey = computed(() => route.meta.pageKey as string)
 const pageConf = computed(
-  () =>
-    (route.meta.pageConf as PageListConf | undefined) ??
-    usePageConf(pageKey.value)
+  () => route.meta.pageConf ?? usePageConf(pageKey.value)
 )
 
 const organizationUrl = (id: string | undefined) =>
