@@ -25,7 +25,7 @@ const isPublicService = (): boolean =>
 </script>
 
 <template>
-  <div class="fr-tile-v2 fr-enlarge-link border">
+  <div class="contributor-tile fr-enlarge-link border">
     <div class="fr-grid-row fr-grid-row--middle fr-mb-8v">
       <div class="fr-col-auto">
         <div
@@ -62,7 +62,7 @@ const isPublicService = (): boolean =>
       </div>
     </div>
 
-    <div v-if="organization.description" class="fr-tile-v2__body">
+    <div v-if="organization.description" class="contributor-tile__body">
       <p class="fr-tile__desc">
         <text-clamp
           :auto-resize="true"
@@ -83,15 +83,6 @@ const isPublicService = (): boolean =>
 </template>
 
 <style scoped>
-.fr-tile-v2 {
-  padding: 2rem;
-  box-shadow: 0px 4px 0px var(--border-active-blue-france);
-  height: 100%;
-}
-.fr-tile-v2:where(:hover, :focus-within) {
-  background-color: var(--hover);
-}
-
 .fr-tile__img {
   background-color: var(--background-default-grey);
 }
