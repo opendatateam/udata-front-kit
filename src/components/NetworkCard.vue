@@ -9,8 +9,7 @@ const props = defineProps<{
   headingLevel: 'h2' | 'h3' | 'h4' | 'h5'
 }>()
 
-// The first page listed for a network is its default — used here as the
-// network's display identity (see NetworkConf doc comment in src/model/config.ts).
+// The first page listed for a network is used as the network's display identity
 const defaultSubpath = computed(() => Object.keys(props.network.pages)[0])
 const defaultPage = computed(() => props.network.pages[defaultSubpath.value])
 const name = computed(() => defaultPage.value.title)

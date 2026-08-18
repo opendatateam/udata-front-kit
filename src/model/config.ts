@@ -67,7 +67,10 @@ export type PageBannerConf = {
   title: string
   content: string
   logo?: string
-  external_link?: PageExternalLinkConf
+  external_link?: {
+    url: string
+    label: string
+  }
 }
 
 export type PageSearchConf = {
@@ -83,11 +86,6 @@ export type PageLabelsConf = {
 }
 
 export type PageObjectType = 'datasets' | 'dataservices' | 'topics'
-
-export type PageExternalLinkConf = {
-  url: string
-  label: string
-}
 
 // Minimum a GlobalSearch list page needs. PageConf below adds the fields only
 // read by the detail-view chain (DatasetDetailView, DiscussionsList, etc.).
@@ -234,10 +232,7 @@ export type OrganizationsConfig = {
   dataservices?: string
   bouquets?: string
   page?: OrganizationsPageConf
+} & {
   // Networks register their org-list URLs nested under their slug, e.g. organizations.simm.datasets.
-  [networkSlug: string]:
-    | string
-    | OrganizationsPageConf
-    | Record<string, string>
-    | undefined
+  [networkSlug: string]: Record<string, string> | undefined
 }
