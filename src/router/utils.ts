@@ -5,6 +5,7 @@ import {
   type NetworkConf,
   type OrganizationsConfig,
   type PageConf,
+  type PageListConf,
   type PageObjectType
 } from '@/model/config'
 import { useNetworksConf, usePageConf, usePagesConf } from '@/utils/config'
@@ -110,15 +111,21 @@ interface GlobalSearchPageRoutesOptions {
   pageKey: string
   // Override for pages not present in config.pages (network pages — see useNetworkRoutes).
   // When omitted, the page's config is looked up from config.pages via usePageConf(pageKey).
-  pageConf?: PageConf
+  pageConf?: PageListConf
   // Overrides the route's root path, which otherwise defaults to `/${pageKey}`.
   basePath?: string
   // Overrides the set of pages bundled into this page's GlobalSearch type switcher.
   // Must be keyed by the full pageKey used for each sibling's route name (see useNetworkRoutes).
   // When omitted, defaults to every list_all page in config.pages.
-  siblingPages?: Record<string, PageConf>
+  siblingPages?: Record<string, PageListConf>
   activeMenuLink?: string
   parentBreadcrumb?: { to: string; text: string }
+  // When false, no `${pageKey}_detail` route is registered for this page — its items
+  // link to detailPageKey's detail route instead (see useNetworkRoutes). Default true.
+  hasDetailRoute?: boolean
+  // pageKey whose `_detail` route item links should resolve to, when it differs from
+  // this page's own (used together with hasDetailRoute: false).
+  detailPageKey?: string
   cardComponent?: () => Promise<{ default: Component }>
   datasetCardComponent?: () => Promise<{ default: Component }>
   descriptionComponent?: () => Promise<{ default: Component }>
@@ -136,7 +143,7 @@ const CUSTOM_FILTER_TYPE_SET = new Set<CustomFilterType>(CUSTOM_FILTER_TYPES)
  */
 function buildSingleTypeConfig(
   pageKey: string,
-  pageConf: PageConf
+  pageConf: PageListConf
 ): GlobalSearchConfig[number] {
   const searchType = pageConf.object_type
   const hiddenFilters = Object.entries(pageConf.universe_query ?? {}).map(
@@ -196,7 +203,10 @@ function buildSingleTypeConfig(
  */
 export function buildGlobalSearchConfig(
   pageKey: string,
-  opts?: { pageConf?: PageConf; siblingPages?: Record<string, PageConf> }
+  opts?: {
+    pageConf?: PageListConf
+    siblingPages?: Record<string, PageListConf>
+  }
 ): {
   searchConfig: GlobalSearchConfig
   customFilters: CustomFilterConfig[]
@@ -274,6 +284,8 @@ export const useGlobalSearchPageRoutes = ({
   siblingPages,
   activeMenuLink,
   parentBreadcrumb,
+  hasDetailRoute = true,
+  detailPageKey,
   cardComponent,
   datasetCardComponent,
   descriptionComponent,
@@ -328,13 +340,14 @@ export const useGlobalSearchPageRoutes = ({
           cardComponent,
           searchType: objectType,
           searchConfig,
-          customFilters
+          customFilters,
+          detailPageKey
         },
         component: () => import('@/views/UnifiedSearchView.vue'),
         // forces the component to be recreated when navigating to a different pageKey
         props: () => ({ key: pageKey })
       },
-      childrenPages
+      ...(hasDetailRoute ? [childrenPages] : [])
     ]
   }
 
@@ -394,7 +407,9 @@ export const useOrganizationsRoutes = (): RouteRecordRaw => {
  * Builds routes for one network (SIF): a redirect from the bare /contributors/<slug>
  * to its default (first-listed) page, plus one GlobalSearch route per page in
  * network.pages, all nested under /contributors/<slug>/<subpath> and bundled into
- * a shared type switcher.
+ * a shared type switcher. Network pages stop at the list view — item links resolve
+ * to the standard page sharing their subpath's name (e.g. `datasets` -> /datasets/:item_id),
+ * relying on the convention that a network subpath matches its standard page's pageKey.
  */
 export const useNetworkRoutes = (
   slug: string,
@@ -421,7 +436,9 @@ export const useNetworkRoutes = (
         basePath: `${base}/${subpath}`,
         siblingPages,
         activeMenuLink: '/contributors',
-        parentBreadcrumb
+        parentBreadcrumb,
+        hasDetailRoute: false,
+        detailPageKey: subpath
       })
     )
   ]
@@ -455,6 +472,10 @@ export const useCurrentPageConf = () => {
   return {
     pageKey: meta.pageKey,
     meta,
-    pageConf: meta.pageConf ?? usePageConf(meta.pageKey)
+    // Only detail views and their descendants call this helper, and pages with
+    // hasDetailRoute: false (the only source of a PageListConf-shaped meta.pageConf)
+    // never register a detail route — so meta.pageConf here is always a full PageConf.
+    pageConf:
+      (meta.pageConf as PageConf | undefined) ?? usePageConf(meta.pageKey)
   }
 }

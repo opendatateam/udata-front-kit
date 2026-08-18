@@ -216,7 +216,10 @@ organizations:
 #                              # the default — used for the bare /contributors/{slug} redirect and as
 #                              # the network's display identity (title/logo) on the /contributors list.
 #       {subpath}:             # reuses the exact `pages.{page_id}` format documented below; its
-#                               # `banner.logo`/`banner.external_link` render above the page's search
+#                               # `banner.logo`/`banner.external_link` render above the page's search.
+#                               # Network pages stop at the list view — items link to the standard
+#                               # page sharing their subpath's name (e.g. `datasets` -> /datasets/:id),
+#                               # so `resources_tabs`/`editable` (detail-view-only) can be omitted.
 networks:
   simm:
     x-simm-common: &simm_common
@@ -232,7 +235,6 @@ networks:
           url: https://www.milieumarinfrance.fr/
           label: Accéder au site
       list_all: true
-      editable: false
       filters: []
     pages:
       datasets:
@@ -246,14 +248,6 @@ networks:
         search:
           input: Rechercher dans les données du réseau SIMM
           placeholder: null
-        resources_tabs:
-          discussions:
-            display: false
-            create: false
-          datasets:
-            display: true
-          reuses:
-            display: true
       dataservices:
         <<: *simm_common
         object_type: dataservices
@@ -266,12 +260,6 @@ networks:
         search:
           input: Rechercher dans les API du réseau SIMM
           placeholder: null
-        resources_tabs:
-          discussions:
-            display: false
-            create: false
-          datasets:
-            display: true
 
 # shared themes list for indicators and bouquets
 definitions: &definitions

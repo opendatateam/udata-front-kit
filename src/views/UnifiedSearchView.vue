@@ -3,7 +3,7 @@ import SearchOrganizationFilter from '@/components/search/SearchOrganizationFilt
 import SearchSelectFilter from '@/components/search/SearchSelectFilter.vue'
 import TopicCard from '@/components/topics/TopicCard.vue'
 import VIconDsfr from '@/components/VIconDsfr.vue'
-import type { PageConf } from '@/model/config'
+import type { PageListConf } from '@/model/config'
 import { useUserStore } from '@/store/UserStore'
 import { fromMarkdown } from '@/utils'
 import { useAsyncComponent } from '@/utils/component'
@@ -24,7 +24,8 @@ const router = useRouter()
 const pageKey = computed(() => route.meta.pageKey as string)
 const pageConf = computed(
   () =>
-    (route.meta.pageConf as PageConf | undefined) ?? usePageConf(pageKey.value)
+    (route.meta.pageConf as PageListConf | undefined) ??
+    usePageConf(pageKey.value)
 )
 
 const organizationUrl = (id: string | undefined) =>
@@ -78,6 +79,12 @@ const localType = computed({
     window.scrollTo(0, scrollY)
   }
 })
+
+// Pages without their own detail route (e.g. network pages) defer item links to
+// another page's detail route via route.meta.detailPageKey.
+const detailRouteName = computed(
+  () => `${route.meta.detailPageKey ?? localType.value}_detail`
+)
 
 useMeta({
   description: () => pageConf.value?.meta?.description,
@@ -196,7 +203,7 @@ onMounted(() => {
             "
             :dataset="dataset"
             :dataset-url="{
-              name: `${localType}_detail`,
+              name: detailRouteName,
               params: { item_id: dataset.id }
             }"
             :organization-url="
@@ -213,7 +220,7 @@ onMounted(() => {
             "
             :dataservice="dataservice"
             :dataservice-url="{
-              name: `${localType}_detail`,
+              name: detailRouteName,
               params: { item_id: dataservice.id }
             }"
           />
@@ -228,7 +235,7 @@ onMounted(() => {
             :topic="topic as TopicV2"
             :page-key="pageKey"
             :topic-url="{
-              name: `${localType}_detail`,
+              name: detailRouteName,
               params: { item_id: (topic as TopicV2).slug }
             }"
           />
