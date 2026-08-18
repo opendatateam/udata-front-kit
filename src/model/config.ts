@@ -218,18 +218,26 @@ export type SentryConfig = {
   replaysOnErrorSampleRate?: number
 }
 
+export type OrganizationsPageConf = {
+  breadcrumb_title?: string
+  labels?: {
+    singular?: string
+  }
+  meta?: {
+    title?: string
+    description?: string
+  }
+}
+
 export type OrganizationsConfig = {
   datasets?: string
   dataservices?: string
   bouquets?: string
-  page?: {
-    breadcrumb_title?: string
-    labels?: {
-      singular?: string
-    }
-    meta?: {
-      title?: string
-      description?: string
-    }
-  }
+  page?: OrganizationsPageConf
+  // Networks register their org-list URLs nested under their slug, e.g. organizations.simm.datasets.
+  [networkSlug: string]:
+    | string
+    | OrganizationsPageConf
+    | Record<string, string>
+    | undefined
 }

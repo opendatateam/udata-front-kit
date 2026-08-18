@@ -236,7 +236,9 @@ export function buildGlobalSearchConfig(
             label: f.name,
             defaultLabel: f.default_option ?? undefined,
             typeKeys: [pageKey],
-            pageKey
+            // network pageKeys are `${slug}__${subpath}` (see useNetworkRoutes); their
+            // org-list URL is nested under the slug in config.organizations instead.
+            pageKey: pageKey.replace('__', '.')
           }
         ]
       } else if (f.type === 'select') {
