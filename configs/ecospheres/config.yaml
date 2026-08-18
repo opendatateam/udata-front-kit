@@ -235,7 +235,67 @@ networks:
           url: https://www.milieumarinfrance.fr/
           label: Accéder au site
       list_all: true
-      filters: []
+      filters:
+        - id: theme
+          name: Such thesaurus
+          default_option: Tous les termes
+          type: select
+          use_filter_prefix: false
+          values:
+            - id: dcsmm
+              name: DCSMM (stratégie pour le milieu marin)
+            - id: littoral
+              name: Littoral
+            - id: oceanographie
+              name: Océanographie
+            - id: bathymetrie
+              name: Bathymétrie
+            - id: trait-de-cote
+              name: Trait de côte
+            - id: erosion-cotiere
+              name: Érosion côtière
+            - id: estran
+              name: Estran
+            - id: estuaire
+              name: Estuaires
+            - id: lagune
+              name: Lagunes
+            - id: habitat-marin
+              name: Habitats marins
+            - id: benthique
+              name: Milieu benthique
+            - id: faune-marine
+              name: Faune marine
+            - id: mammiferes-marins
+              name: Mammifères marins
+            - id: oiseaux-marins
+              name: Oiseaux marins
+            - id: cetaces
+              name: Cétacés
+            - id: poissons
+              name: Poissons
+            - id: coraux
+              name: Coraux et récifs
+            - id: algues
+              name: Algues
+            - id: plancton
+              name: Plancton
+            - id: halieutique
+              name: Ressources halieutiques
+            - id: peche
+              name: Pêche
+            - id: aquaculture
+              name: Aquaculture
+            - id: parc-naturel-marin
+              name: Parcs naturels marins
+            - id: aires-marines-protegees
+              name: Aires marines protégées
+            - id: maree
+              name: Marées
+            - id: houle
+              name: Houle
+            - id: autre
+              name: Autre
     pages:
       datasets:
         <<: *simm_common
