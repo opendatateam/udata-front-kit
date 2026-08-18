@@ -109,29 +109,30 @@ export const useRouteQueryAsString = (): RouteLocationQueryAsString => {
 
 interface GlobalSearchPageRoutesOptions {
   pageKey: string
-  // Override for pages not present in config.pages (network pages — see useNetworkRoutes).
-  // When omitted, the page's config is looked up from config.pages via usePageConf(pageKey).
-  pageConf?: PageListConf
-  // Overrides the route's root path, which otherwise defaults to `/${pageKey}`.
-  basePath?: string
-  // Overrides the set of pages bundled into this page's GlobalSearch type switcher.
-  // Must be keyed by the full pageKey used for each sibling's route name (see useNetworkRoutes).
-  // When omitted, defaults to every list_all page in config.pages.
-  siblingPages?: Record<string, PageListConf>
-  activeMenuLink?: string
-  parentBreadcrumb?: { to: string; text: string }
-  // When false, no `${pageKey}_detail` route is registered for this page — its items
-  // link to detailPageKey's detail route instead (see useNetworkRoutes). Default true.
-  hasDetailRoute?: boolean
-  // pageKey whose `_detail` route item links should resolve to, when it differs from
-  // this page's own (used together with hasDetailRoute: false).
-  detailPageKey?: string
   cardComponent?: () => Promise<{ default: Component }>
   datasetCardComponent?: () => Promise<{ default: Component }>
   descriptionComponent?: () => Promise<{ default: Component }>
   detailsViewComponent?: () => Promise<{ default: Component }>
   topicConf?: TopicPageRouterConf
   renderRootPage?: boolean
+}
+
+// Options specific to network pages (see useNetworkRoutes), which have no detail
+// route and live outside config.pages.
+interface ListPageRouteOptions {
+  pageKey: string
+  // Defaults to config.pages via usePageConf(pageKey) when omitted.
+  pageConf?: PageListConf
+  // Defaults to `/${pageKey}` when omitted.
+  basePath?: string
+  // Pages bundled into this page's GlobalSearch type switcher, keyed by each
+  // sibling's route name. Defaults to every list_all page in config.pages.
+  siblingPages?: Record<string, PageListConf>
+  activeMenuLink?: string
+  parentBreadcrumb?: { to: string; text: string }
+  // pageKey whose `_detail` route item links should resolve to.
+  detailPageKey?: string
+  cardComponent?: () => Promise<{ default: Component }>
 }
 
 const CUSTOM_FILTER_TYPE_SET = new Set<CustomFilterType>(CUSTOM_FILTER_TYPES)
@@ -276,18 +277,59 @@ export function buildGlobalSearchConfig(
 }
 
 /**
- * Creates routes for a GlobalSearch-based list page.
- * Reads universe_query and filters[].advanced from YAML; only component references are passed as arguments.
+ * Builds a list-only GlobalSearch route (no detail route) for one page.
+ * Used directly by network pages (see useNetworkRoutes) and internally by
+ * useGlobalSearchPageRoutes for pages that also register a detail route.
  */
-export const useGlobalSearchPageRoutes = ({
+function buildListPageRoute({
   pageKey,
   pageConf: pageConfOverride,
   basePath,
   siblingPages,
   activeMenuLink,
   parentBreadcrumb,
-  hasDetailRoute = true,
   detailPageKey,
+  cardComponent
+}: ListPageRouteOptions): RouteRecordRaw {
+  const pageConf = pageConfOverride ?? usePageConf(pageKey)
+  const root = basePath ?? `/${pageKey}`
+  const { searchConfig, customFilters } = buildGlobalSearchConfig(pageKey, {
+    pageConf: pageConfOverride,
+    siblingPages
+  })
+
+  return {
+    path: root,
+    children: [
+      {
+        path: '',
+        name: pageKey,
+        meta: {
+          title: pageConf.meta?.title ?? pageConf.title,
+          pageKey,
+          pageConf: pageConfOverride,
+          activeMenuLink,
+          parentBreadcrumb,
+          cardComponent,
+          searchType: pageConf.object_type,
+          searchConfig,
+          customFilters,
+          detailPageKey
+        },
+        component: () => import('@/views/UnifiedSearchView.vue'),
+        // forces the component to be recreated when navigating to a different pageKey
+        props: () => ({ key: pageKey })
+      }
+    ]
+  }
+}
+
+/**
+ * Creates routes for a GlobalSearch-based list page plus its paired detail route.
+ * Reads universe_query and filters[].advanced from YAML; only component references are passed as arguments.
+ */
+export const useGlobalSearchPageRoutes = ({
+  pageKey,
   cardComponent,
   datasetCardComponent,
   descriptionComponent,
@@ -295,13 +337,9 @@ export const useGlobalSearchPageRoutes = ({
   topicConf,
   renderRootPage = true
 }: GlobalSearchPageRoutesOptions): RouteRecordRaw => {
-  const pageConf = pageConfOverride ?? usePageConf(pageKey)
+  const pageConf = usePageConf(pageKey)
   const objectType = pageConf.object_type
-  const root = basePath ?? `/${pageKey}`
-  const { searchConfig, customFilters } = buildGlobalSearchConfig(pageKey, {
-    pageConf: pageConfOverride,
-    siblingPages
-  })
+  const root = `/${pageKey}`
 
   const defaultDetailsViews: Record<PageObjectType, () => Promise<unknown>> = {
     dataservices: () =>
@@ -316,9 +354,6 @@ export const useGlobalSearchPageRoutes = ({
     component: detailsViewComponent ?? defaultDetailsViews[objectType],
     meta: {
       pageKey,
-      pageConf: pageConfOverride,
-      activeMenuLink,
-      parentBreadcrumb,
       descriptionComponent,
       cardComponent,
       datasetCardComponent
@@ -327,33 +362,11 @@ export const useGlobalSearchPageRoutes = ({
     props: () => ({ key: pageKey, ...topicConf })
   }
 
-  const rootPage = {
-    path: root,
-    children: [
-      {
-        path: '',
-        name: pageKey,
-        meta: {
-          title: pageConf.meta?.title ?? pageConf.title,
-          pageKey,
-          pageConf: pageConfOverride,
-          activeMenuLink,
-          parentBreadcrumb,
-          cardComponent,
-          searchType: objectType,
-          searchConfig,
-          customFilters,
-          detailPageKey
-        },
-        component: () => import('@/views/UnifiedSearchView.vue'),
-        // forces the component to be recreated when navigating to a different pageKey
-        props: () => ({ key: pageKey })
-      },
-      ...(hasDetailRoute ? [childrenPages] : [])
-    ]
-  }
+  if (!renderRootPage) return childrenPages
 
-  return renderRootPage ? rootPage : childrenPages
+  const rootPage = buildListPageRoute({ pageKey, cardComponent })
+  rootPage.children?.push(childrenPages)
+  return rootPage
 }
 
 export const useTopicAdminPagesRoutes = ({
@@ -432,14 +445,13 @@ export const useNetworkRoutes = (
   return [
     { path: base, redirect: `${base}/${defaultSubpath}` },
     ...subpaths.map((subpath) =>
-      useGlobalSearchPageRoutes({
+      buildListPageRoute({
         pageKey: `${slug}__${subpath}`,
         pageConf: network.pages[subpath],
         basePath: `${base}/${subpath}`,
         siblingPages,
         activeMenuLink: '/contributors',
         parentBreadcrumb,
-        hasDetailRoute: false,
         detailPageKey: subpath
       })
     )
@@ -474,9 +486,8 @@ export const useCurrentPageConf = () => {
   return {
     pageKey: meta.pageKey,
     meta,
-    // Only detail views and their descendants call this helper, and pages with
-    // hasDetailRoute: false (the only source of a PageListConf-shaped meta.pageConf)
-    // never register a detail route — so meta.pageConf here is always a full PageConf.
+    // Only detail routes reach this helper, and those are never built by
+    // buildListPageRoute — so meta.pageConf here is always a full PageConf.
     pageConf:
       (meta.pageConf as PageConf | undefined) ?? usePageConf(meta.pageKey)
   }

@@ -28,8 +28,8 @@ declare module 'vue-router' {
     activeMenuLink?: string
     // Extra breadcrumb entry spliced between "Accueil" and the page's own title.
     parentBreadcrumb?: { to: string; text: string }
-    // Overrides the pageKey used to build item detail links (see useGlobalSearchPageRoutes'
-    // hasDetailRoute/detailPageKey), for pages whose items are detailed on another page's route.
+    // Overrides the pageKey used to build item detail links, for pages whose items
+    // are detailed on another page's route (see buildListPageRoute in router/utils.ts).
     detailPageKey?: string
   }
 }
