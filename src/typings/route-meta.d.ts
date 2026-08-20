@@ -1,5 +1,6 @@
 import 'vue-router'
 import type { GlobalSearchConfig } from '@datagouv/components-next'
+import type { BreadcrumbItem } from '@/model/breadcrumb'
 import type { PageListConf, PageObjectType } from '@/model/config'
 import type { CustomFilterConfig } from '@/router/utils'
 
@@ -26,8 +27,8 @@ declare module 'vue-router' {
     // Overrides NavigationComponent's isActive() path-prefix matching for pages
     // whose route doesn't share a path prefix with their nav menu entry.
     activeMenuLink?: string
-    // Extra breadcrumb entry spliced between "Accueil" and the page's own title.
-    parentBreadcrumb?: { to: string; text: string }
+    // Extra breadcrumb entries spliced between "Accueil" and the page's own title.
+    parentBreadcrumbs?: BreadcrumbItem[]
     // Overrides the pageKey used to build item detail links, for pages whose items
     // are detailed on another page's route (see buildListPageRoute in router/utils.ts).
     detailPageKey?: string

@@ -34,7 +34,7 @@ const labels = computed(() => useLabels(pageConf.value.labels))
 
 const links = computed(() => [
   { to: '/', text: 'Accueil' },
-  ...(route.meta.parentBreadcrumb ? [route.meta.parentBreadcrumb] : []),
+  ...(route.meta.parentBreadcrumbs ?? []),
   { text: pageConf.value.breadcrumb_title ?? pageConf.value.title }
 ])
 

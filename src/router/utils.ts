@@ -1,4 +1,5 @@
 import config from '@/config'
+import type { BreadcrumbItem } from '@/model/breadcrumb'
 import {
   CUSTOM_FILTER_TYPES,
   type CustomFilterType,
@@ -129,7 +130,7 @@ interface ListPageRouteOptions {
   // sibling's route name. Defaults to every list_all page in config.pages.
   siblingPages?: Record<string, PageListConf>
   activeMenuLink?: string
-  parentBreadcrumb?: { to: string; text: string }
+  parentBreadcrumbs?: BreadcrumbItem[]
   // pageKey whose `_detail` route item links should resolve to.
   detailPageKey?: string
   cardComponent?: () => Promise<{ default: Component }>
@@ -287,7 +288,7 @@ function buildListPageRoute({
   basePath,
   siblingPages,
   activeMenuLink,
-  parentBreadcrumb,
+  parentBreadcrumbs,
   detailPageKey,
   cardComponent
 }: ListPageRouteOptions): RouteRecordRaw {
@@ -309,7 +310,7 @@ function buildListPageRoute({
           pageKey,
           pageConf: pageConfOverride,
           activeMenuLink,
-          parentBreadcrumb,
+          parentBreadcrumbs,
           cardComponent,
           searchType: pageConf.object_type,
           searchConfig,
@@ -433,14 +434,22 @@ export const useNetworkRoutes = (
   const base = `/contributors/${slug}`
   const subpaths = Object.keys(network.pages)
   const defaultSubpath = subpaths[0]
+  // The default page's title is also the network's own display identity (see NetworkCard.vue).
+  const defaultPage = network.pages[defaultSubpath]
   const siblingPages = Object.fromEntries(
     subpaths.map((subpath) => [`${slug}__${subpath}`, network.pages[subpath]])
   )
   const organizationsConfig = config.organizations as OrganizationsConfig
-  const parentBreadcrumb = {
-    to: '/contributors',
-    text: organizationsConfig.page?.breadcrumb_title ?? 'Contributeurs'
-  }
+  const parentBreadcrumbs = [
+    {
+      to: '/contributors',
+      text: organizationsConfig.page?.breadcrumb_title ?? 'Contributeurs'
+    },
+    {
+      to: { name: `${slug}__${defaultSubpath}` },
+      text: defaultPage.title
+    }
+  ]
 
   return [
     { path: base, redirect: `${base}/${defaultSubpath}` },
@@ -451,7 +460,7 @@ export const useNetworkRoutes = (
         basePath: `${base}/${subpath}`,
         siblingPages,
         activeMenuLink: '/contributors',
-        parentBreadcrumb,
+        parentBreadcrumbs,
         detailPageKey: subpath
       })
     )
