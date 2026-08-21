@@ -1,13 +1,10 @@
+# Creates a tag on the deploy branch of `site` for `env`
+# and calls the `build-push-image` workflow on that tag
+
 name: Deployment of a given site on a given env
 run-name: Trigger deploy ${{ inputs.site }}-${{ inputs.environment }}
 
 on:
-  # TEMP: registers this workflow_dispatch-only workflow with GitHub so it becomes
-  # dispatchable before this branch is merged (a workflow_dispatch trigger can't
-  # bootstrap its own discovery). Remove this `push:` block before merging.
-  push:
-    branches:
-      - feat/ci/build-image
   workflow_dispatch:
     inputs:
       # workflow_dispatch `options:` can't reference vars (no expressions allowed here),
@@ -48,7 +45,6 @@ permissions:
 
 jobs:
   tag:
-    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - name: Determine ref
