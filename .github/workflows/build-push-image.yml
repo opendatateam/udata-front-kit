@@ -79,6 +79,13 @@ jobs:
           echo "environment=$ENVIRONMENT" >> "$GITHUB_OUTPUT"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
+      - name: Log parsed values
+        run: |
+          echo "matched: ${{ steps.parse.outputs.matched }}"
+          echo "site: ${{ steps.parse.outputs.site }}"
+          echo "environment: ${{ steps.parse.outputs.environment }}"
+          echo "version: ${{ steps.parse.outputs.version }}"
+
   build:
     needs: parse
     if: needs.parse.outputs.matched == 'true'
