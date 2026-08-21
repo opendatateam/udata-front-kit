@@ -4,6 +4,9 @@ run-name: Tag ${{ inputs.site }} (${{ inputs.environment }}) for image build
 on:
   workflow_dispatch:
     inputs:
+      # workflow_dispatch `options:` can't reference vars (no expressions allowed here),
+      # so this list must be kept in sync by hand with the vars.SITES repo variable
+      # that build-push-image.yml's parse step reads.
       site:
         description: 'Site to build an image for'
         required: true
@@ -17,6 +20,7 @@ on:
           - hackathon
           - simplifions
           - culture
+      # Same restriction as above: kept in sync by hand with vars.ENVS.
       environment:
         description: 'Environment whose branch/config to build from'
         required: true
