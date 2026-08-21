@@ -1,5 +1,5 @@
 name: Deployment of a given site on a given env
-run-name: Deploy ${{ inputs.site }} (${{ inputs.environment }})
+run-name: Trigger deploy ${{ inputs.site }}-${{ inputs.environment }}
 
 on:
   # TEMP: registers this workflow_dispatch-only workflow with GitHub so it becomes
