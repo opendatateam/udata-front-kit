@@ -402,7 +402,6 @@ pages:
     icon: fr-icon-lightbulb-line
     universe_query:
       tag: ecospheres-indicateurs
-      organization: 67884b4da4fca9c97bbef479
     filter_prefix: ecospheres-indicateurs
     title: Indicateurs phares
     breadcrumb_title: Indicateurs phares
