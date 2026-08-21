@@ -1,5 +1,5 @@
-# Takes a tag like `<site>-<environment>-<YYYYMMDD>-<N>` and builds and pushes
-# `<site>-<environment>:<YYYYMMDD>-<N>` and `<site>-<environment>:latest` to registry
+# Takes a tag like `<site>-<env>-<YYYYMMDD>-<N>` and builds and pushes
+# `<site>-<env>:<YYYYMMDD>-<N>` and `<site>-<env>:latest` to registry
 
 name: Build and push site image
 run-name: Build and push ${{ github.event.inputs.tag || github.ref_name }}
@@ -19,6 +19,7 @@ on:
 jobs:
   parse:
     runs-on: ubuntu-latest
+    permissions: {}
     outputs:
       matched: ${{ steps.parse.outputs.matched }}
       site: ${{ steps.parse.outputs.site }}
@@ -32,52 +33,23 @@ jobs:
           TAG: ${{ github.event.inputs.tag || github.ref_name }}
           SITES: ${{ vars.SITES }}
           ENVIRONMENTS: ${{ vars.ENVS }}
+          EVENT_NAME: ${{ github.event_name }}
         run: |
-          SITES="${SITES//|/ }"
-          ENVIRONMENTS="${ENVIRONMENTS//|/ }"
-
-          SITE=""
-          for s in $SITES; do
-            if [[ "$TAG" == "$s-"* ]]; then
-              SITE="$s"
-              break
-            fi
-          done
-
-          if [[ -z "$SITE" ]]; then
-            echo "Tag '$TAG' does not start with a known site, skipping"
-            echo "matched=false" >> "$GITHUB_OUTPUT"
+          if [[ "$TAG" =~ ^($SITES)-($ENVIRONMENTS)-([0-9]{8}-[0-9]+)$ ]]; then
+            echo "matched=true" >> "$GITHUB_OUTPUT"
+            echo "site=${BASH_REMATCH[1]}" >> "$GITHUB_OUTPUT"
+            echo "environment=${BASH_REMATCH[2]}" >> "$GITHUB_OUTPUT"
+            echo "version=${BASH_REMATCH[3]}" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          REST="${TAG#"$SITE"-}"
+          echo "Tag '$TAG' does not match <site>-<environment>-<YYYYMMDD>-<N> (known sites: $SITES; known environments: $ENVIRONMENTS)"
+          echo "matched=false" >> "$GITHUB_OUTPUT"
 
-          ENVIRONMENT=""
-          for e in $ENVIRONMENTS; do
-            if [[ "$REST" == "$e-"* ]]; then
-              ENVIRONMENT="$e"
-              break
-            fi
-          done
-
-          if [[ -z "$ENVIRONMENT" ]]; then
-            echo "Tag '$TAG' does not contain a known environment, skipping"
-            echo "matched=false" >> "$GITHUB_OUTPUT"
-            exit 0
+          if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+            echo "::error::Explicitly dispatched tag did not match - check vars.SITES/vars.ENVS are in sync with tag-image-release.yml's choice lists"
+            exit 1
           fi
-
-          VERSION="${REST#"$ENVIRONMENT"-}"
-
-          if [[ ! "$VERSION" =~ ^[0-9]{8}-[0-9]+$ ]]; then
-            echo "Version '$VERSION' does not match <YYYYMMDD>-<N>, skipping"
-            echo "matched=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          echo "matched=true" >> "$GITHUB_OUTPUT"
-          echo "site=$SITE" >> "$GITHUB_OUTPUT"
-          echo "environment=$ENVIRONMENT" >> "$GITHUB_OUTPUT"
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Log parsed values
         run: |
