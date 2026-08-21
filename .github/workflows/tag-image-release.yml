@@ -86,7 +86,9 @@ jobs:
       #
       # `ref` below selects which copy of the workflow *file* runs, not what gets built
       # (build-push-image.yml checks out the tag itself) - it must be a ref where the
-      # file exists, so this stays 'main' rather than the site/env deploy branch.
+      # file exists. Using github.ref_name (the ref this workflow was itself run from)
+      # rather than a hardcoded branch means it self-adjusts: 'main' once merged there,
+      # or the current feature branch when testing this workflow before merge.
       - name: Dispatch build workflow
         uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
         with:
@@ -96,7 +98,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: 'build-push-image.yml',
-              ref: 'main',
+              ref: '${{ github.ref_name }}',
               inputs: {
                 tag: '${{ steps.version.outputs.tag }}'
               }
