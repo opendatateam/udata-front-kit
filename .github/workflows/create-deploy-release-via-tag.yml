@@ -1,5 +1,5 @@
-name: Create image release tag
-run-name: Tag ${{ inputs.site }} (${{ inputs.environment }}) for image build
+name: Deployment of a given site on a given env
+run-name: Deploy ${{ inputs.site }} (${{ inputs.environment }})
 
 on:
   workflow_dispatch:
@@ -8,7 +8,7 @@ on:
       # so this list must be kept in sync by hand with the vars.SITES repo variable
       # that build-push-image.yml's parse step reads.
       site:
-        description: 'Site to build an image for'
+        description: 'Site to deploy'
         required: true
         type: choice
         options:
@@ -22,15 +22,17 @@ on:
           - culture
       # Same restriction as above: kept in sync by hand with vars.ENVS.
       environment:
-        description: 'Environment whose branch/config to build from'
+        description: 'Target environment'
         required: true
         type: choice
         options:
           - demo
           - preprod
           - prod
+          # FIXME:
+          - test
       ref:
-        description: 'Git ref to tag and build (defaults to <site>-<environment>)'
+        description: 'Git ref (branch) to deploy (defaults to <site>-<environment>)'
         required: false
         type: string
 
@@ -49,6 +51,7 @@ jobs:
           if [[ -z "$REF" ]]; then
             REF="${{ inputs.site }}-${{ inputs.environment }}"
           fi
+          echo "Computed ref: $REF"
           echo "ref=$REF" >> "$GITHUB_OUTPUT"
 
       - name: Checkout
@@ -67,7 +70,7 @@ jobs:
 
           EXISTING=$(git ls-remote --tags origin | grep -Eo "refs/tags/${PATTERN}$" | sed 's#refs/tags/##' || true)
 
-          NEXT=0
+          NEXT=1
           if [[ -n "$EXISTING" ]]; then
             MAX=$(echo "$EXISTING" | sed -E "s/^${SITE}-${ENVIRONMENT}-${TODAY}-//" | sort -n | tail -1)
             NEXT=$((MAX + 1))
@@ -84,19 +87,15 @@ jobs:
           git tag "${{ steps.version.outputs.tag }}"
           git push origin "${{ steps.version.outputs.tag }}"
 
-      # This push uses the default GITHUB_TOKEN, so it will NOT itself trigger
+      # The above push uses the default GITHUB_TOKEN, so it will NOT itself trigger
       # build-push-image.yml's `push: tags` event (GitHub's anti-recursion rule).
-      # We dispatch it explicitly instead, same mechanism as deploy-review-from-comment.yml.
-      #
-      # `ref` below selects which copy of the workflow *file* runs, not what gets built
-      # (build-push-image.yml checks out the tag itself) - it must be a ref where the
-      # file exists. Using github.ref_name (the ref this workflow was itself run from)
-      # rather than a hardcoded branch means it self-adjusts: 'main' once merged there,
-      # or the current feature branch when testing this workflow before merge.
+      # We dispatch it explicitly instead.
       - name: Dispatch build workflow
         uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          # ref: branch where the target workflow file exists
+          # FIXME: maybe use hardcoded main
           script: |
             await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
