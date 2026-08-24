@@ -313,7 +313,6 @@ cmd_deploy() {
   fi
   gh pr merge "$pr_ref" --merge --subject "$commit_msg" --delete-branch $admin_flag
 
-  # Releases are a prod-only policy owned here; the workflow just does what it is told
   local create_release=false
   if [[ "$env" == "prod" && "$SKIP_RELEASE" != true ]]; then
     create_release=true

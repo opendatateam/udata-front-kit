@@ -121,10 +121,10 @@ jobs:
           ENV: ${{ inputs.environment }}
         run: |
           # Checkout does not fetch tags, so read the previous release tag from the
-          # remote. sort -V because N is not zero-padded (-10 would sort before -2).
-          PREV=$(git ls-remote --tags origin \
-            | grep -Eo "refs/tags/${SITE}-${ENV}-[0-9]{8}-[0-9]+$" \
-            | sed 's#refs/tags/##' \
+          # remote. The pattern skips the legacy <site>-<env>-X.Y.Z tags, and sort -V
+          # because N is not zero-padded (-10 would sort before -2).
+          PREV=$(git ls-remote --tags --refs origin \
+            | grep -Eo "${SITE}-${ENV}-[0-9]{8}-[0-9]+$" \
             | grep -v "^${TAG}$" \
             | sort -V | tail -1 || true)
 
