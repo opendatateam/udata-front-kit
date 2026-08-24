@@ -100,6 +100,16 @@ export const useTopicStore = defineStore('topic', {
       return this.topics
     },
     /**
+     * Find topics containing a given dataset (e.g. the SIF networks it belongs to)
+     */
+    async loadForDataset(datasetId: string, tag?: string): Promise<Topic[]> {
+      const response = await topicsAPI.list({
+        params: { dataset: datasetId, ...(tag ? { tag } : {}) },
+        toasted: false
+      })
+      return response.data
+    },
+    /**
      * Get a single topic from API
      */
     async load(slugOrId: string, params?: BaseParams): Promise<Topic> {

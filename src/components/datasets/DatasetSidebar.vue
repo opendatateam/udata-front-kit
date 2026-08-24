@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ContactPoints from '@/components/datasets/ContactPoints.vue'
+import DatasetNetworks from '@/components/datasets/DatasetNetworks.vue'
 import MetricsStatBoxes from '@/components/MetricsStatBoxes.vue'
 import SidebarItem from '@/components/SidebarItem.vue'
 import SidebarList from '@/components/SidebarList.vue'
@@ -50,6 +51,7 @@ const hasContactPointsWithSpecificRole = computed(() => {
       >
         <SidebarOwner :object="dataset" />
       </SidebarItem>
+      <DatasetNetworks :dataset-id="dataset.id" />
       <SidebarItem
         v-if="dataset.contact_points.length"
         id="attributions"
