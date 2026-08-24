@@ -280,16 +280,17 @@ Le déploiement peut aussi être déclenché manuellement via l'interface GitHub
    - **Create release** : Créer une release GitHub (désactivé par défaut)
 5. **Cliquer sur "Run workflow"**
 
-:warning: Contrairement au script, cette solution ne vérifie pas que la PR de déploiement a été approuvée.
-
 #### Architecture de déploiement en preprod et en production
 
 Le déploiement s'articule autour d'un tag `{site}-{env}-{YYYYMMDD}-{N}` :
 
-1. **`create-deploy-release-via-tag.yml`** : calcule le prochain tag pour le jour courant, le crée sur la branche `{site}-{env}` et le pousse
-2. **`create-deploy-release-via-tag.yml`** : déclenche le workflow de build, puis crée la release GitHub si `create_release` est activé
-3. **`build-push-image.yml`** : décompose le tag (validé contre les variables de dépôt `SITES` et `ENVS`), construit l'image et la pousse sur le registre en `{site}-{env}:{YYYYMMDD}-{N}` et `{site}-{env}:latest`
-4. L'infrastructure récupère ensuite l'image depuis le registre
+1. **`create-deploy-release-via-tag.yml`** :
+
+- calcule le prochain tag pour le jour courant, le crée sur la branche `{site}-{env}` et le pousse
+- déclenche le workflow de build, puis crée la release GitHub si `create_release` est activé
+
+2. **`build-push-image.yml`** : décompose le tag (validé contre les variables de dépôt `SITES` et `ENVS`), construit l'image et la pousse sur le registre en `{site}-{env}:{YYYYMMDD}-{N}` et `{site}-{env}:latest`
+3. L'infrastructure récupère ensuite l'image depuis le registre
 
 Les deux workflows sont déclenchés exclusivement par `workflow_dispatch` : pousser un tag à la main ne construit rien.
 

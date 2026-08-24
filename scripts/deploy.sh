@@ -225,7 +225,8 @@ Or abort: git merge --abort"
 
   # Create PR
   info "Creating PR: $merge_branch → $target_branch"
-  local today=$(date +%Y%m%d)
+  # Includes the time so several deployments of the same site/env on one day differ
+  local timestamp=$(date +%Y%m%d-%H%M%S)
   local pr_body="## Deployment Summary
 
 - **Site:** $site
@@ -247,11 +248,10 @@ After review and approval:
 ./scripts/deploy.sh deploy <pr_url>
 \`\`\`"
 
-  # The deploy tag (and its increment) is computed by the workflow, not from this title
   local pr_url=$(gh pr create \
     --base "$target_branch" \
     --head "$merge_branch" \
-    --title "release($site): $env $today" \
+    --title "release($site): $env $timestamp" \
     --body "$pr_body" \
     --draft)
 
