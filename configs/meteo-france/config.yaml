@@ -23,8 +23,10 @@ website:
         - /admin
     sitemap_xml:
       topics_pages: []
-      datasets_pages: []
-      dataservices_pages: []
+      datasets_pages:
+        - datasets
+      dataservices_pages:
+        - dataservices
   formatted_title: '<i>meteo.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'RÉPUBLIQUE<br>
     FRANÇAISE'
@@ -123,10 +125,15 @@ website:
   menu:
     - text: Données
       to: /datasets
+    - text: API
+      to: /dataservices
     - text: Recherche guidée
       to: /form
     #- text: 'Hackathon le 8 et 9 avril 🚀'
     #  to: /hackathon
+    - text: Documentation
+      to: https://confluence-meteofrance.atlassian.net/wiki/spaces/OpenDataMeteoFrance/overview
+      external: true
     - text: A propos
       to: /about
   router:
@@ -201,6 +208,7 @@ pages:
       discussions:
         display: true
         create: false
+        notify_url_override: false
       datasets:
         display: true
       reuses:
@@ -283,3 +291,31 @@ pages:
           - name: Modèle de vagues et surcote
             id: pnt-vague-surcote
             parent: pnt
+  dataservices:
+    object_type: dataservices
+    list_all: true
+    universe_query:
+      organization: 534fff8ba3a7292c64a77ed4
+    filter_prefix:
+    title: API
+    breadcrumb_title: API
+    labels:
+      singular: API
+      plural: APIs
+      extended: API
+      feminine: true
+    search:
+      input: Rechercher une API
+      placeholder: null
+    banner:
+    resources_tabs:
+      discussions:
+        display: true
+        create: false
+      datasets:
+        display: true
+    editable: false
+    filters:
+      - id: last_update_range
+        name: Date de mise à jour
+        type: last_update_range

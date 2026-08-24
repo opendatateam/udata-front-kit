@@ -33,9 +33,10 @@ const liveInfos: Ref<InfoToAnnounce[] | undefined> = ref()
 
 const noticeContent = computed(() => {
   if (!config.website.notice?.display) return
-  return fromMarkdown(config.website.notice?.content, true)
+  return fromMarkdown(config.website.notice?.content, true).html
 })
 
+const siteID = config.site_id
 const isLoggedIn = computed(() => userStore.$state.isLoggedIn)
 
 const userName = computed(() => userStore.userName)
@@ -135,12 +136,12 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
     :custom-search="true"
   />
 
-  <main id="main-content" role="main">
+  <main id="main-content" :class="siteID" role="main">
     <RouterView />
   </main>
 
   <DsfrFooter
-    class="fr-mt-16w"
+    :class="[siteID, 'fr-mt-16w']"
     :logo-text="rf_title"
     :operator-img-src="logo?.src"
     :operator-img-style="{
@@ -168,5 +169,9 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
 }
 .fr-footer__logo {
   max-width: 100%;
+}
+.simplifions.fr-mt-16w,
+.culture.fr-mt-16w {
+  margin-top: 0 !important;
 }
 </style>
