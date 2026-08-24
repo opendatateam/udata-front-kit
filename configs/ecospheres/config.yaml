@@ -304,8 +304,7 @@ definitions: &definitions
 #
 # networks:
 #   tag: {string}            # tag on the udata side identifying a network's backing topic, so a
-#                             # dataset's page can look up "which network(s) is this in" via
-#                             # GET /api/2/topics/?dataset={id}&tag={tag}. Reserved key, not a slug.
+#                             # dataset's page can look up "which network(s) is this in"
 #   {slug}:                  # network identifier, used as /contributors/{slug}
 #     pages:                  # one entry per object type this network exposes, keyed by URL subpath
 #                              # (rendered at /contributors/{slug}/{subpath}); the FIRST key listed is

@@ -2,13 +2,16 @@ import type { DatasetV2 } from '@datagouv/components-next'
 import { datagouvResponseBuilder } from '../../../../support/datagouv_mocks'
 import { datasetFactory } from '../../../../support/factories/datasets_factory'
 
-// matches configs/ecospheres/config.yaml networks.simm universe_query.topic
-const SIMM_TOPIC_ID = '6a82baef02381db0dc7229cf'
+// read from the real site config instead of hardcoding it, so this test
+// keeps working if the SIMM network's tag/backing topic id ever changes
+const NETWORKS_TAG: string = Cypress.env('siteConfig').networks.tag
+const SIMM_TOPIC_ID: string =
+  Cypress.env('siteConfig').networks.simm.pages.datasets.universe_query.topic
 
 function mockDatasetNetworks(datasetId: string, topics: object[] = []) {
   cy.intercept(
     'GET',
-    `**/api/2/topics/?dataset=${datasetId}&tag=ecospheres-networks`,
+    `**/api/2/topics/?dataset=${datasetId}&tag=${NETWORKS_TAG}`,
     {
       statusCode: 200,
       body: datagouvResponseBuilder(topics)
