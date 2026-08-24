@@ -3,7 +3,7 @@ import config from '@/config'
 import { useCanonicalUrl, useMeta } from '@/utils/seo'
 
 import HomeHero from '@/custom/accessibilite/components/home/HomeHero.vue'
-import HomeThemes from '@/custom/accessibilite/components/home/HomeThemes.vue'
+import ThemesList from '@/custom/accessibilite/components/ThemesList.vue'
 import HomeAbout from '../components/home/HomeAbout.vue'
 import HomeLogos from '../components/home/HomeLogos.vue'
 
@@ -25,7 +25,7 @@ useMeta({
     </p>
   </section>
 
-  <HomeThemes />
+  <ThemesList />
   <HomeLogos />
   <HomeAbout />
 </template>

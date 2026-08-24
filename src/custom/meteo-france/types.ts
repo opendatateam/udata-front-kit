@@ -38,6 +38,7 @@ export interface Dataset {
   id: string
   departement: boolean
   periode: boolean
+  showCustomFilter?: boolean
   indicateur?: boolean
   indicateursListe?: Indicateur[]
 }

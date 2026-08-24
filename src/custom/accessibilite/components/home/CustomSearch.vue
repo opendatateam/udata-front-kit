@@ -29,6 +29,7 @@ const handleSearch = () => {
 
 <style scoped>
 form {
+  max-inline-size: 80ch;
   flex-flow: row wrap;
   gap: 0.5rem 0;
 }
@@ -47,5 +48,8 @@ form :deep(.fr-input) {
   margin: 0;
   flex: 1 1 70%;
   box-shadow: inset 0 -2px 0 0 var(--border-action-high-blue-france);
+}
+form :deep(.fr-btn) {
+  flex: 0 1 fit-content;
 }
 </style>

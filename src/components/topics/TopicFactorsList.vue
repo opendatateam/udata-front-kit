@@ -364,7 +364,7 @@ defineExpose({
               </template>
               <template #factorContent="{ factor }">
                 <!-- eslint-disable-next-line vue/no-v-html -->
-                <div v-html="fromMarkdown(factor.description)"></div>
+                <div v-html="fromMarkdown(factor.description).html" />
                 <DatasetInTopicCard
                   v-if="getDatasetForFactor(factor)"
                   :factor="factor"
