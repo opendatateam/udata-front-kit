@@ -37,9 +37,9 @@ on:
         required: false
         type: string
       create_release:
-        description: 'Create a GitHub release (prod only)'
+        description: 'Create a GitHub release'
         required: false
-        default: true
+        default: false
         type: boolean
 
 permissions:
@@ -115,17 +115,18 @@ jobs:
 
       # Last so a release failure cannot keep the build from being dispatched.
       - name: Create GitHub release
-        if: inputs.environment == 'prod' && inputs.create_release
+        if: inputs.create_release
         shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG: ${{ steps.version.outputs.tag }}
           SITE: ${{ inputs.site }}
+          ENV: ${{ inputs.environment }}
         run: |
           # Checkout does not fetch tags, so read the previous release tag from the
           # remote. sort -V because N is not zero-padded (-10 would sort before -2).
           PREV=$(git ls-remote --tags origin \
-            | grep -Eo "refs/tags/${SITE}-prod-[0-9]{8}-[0-9]+$" \
+            | grep -Eo "refs/tags/${SITE}-${ENV}-[0-9]{8}-[0-9]+$" \
             | sed 's#refs/tags/##' \
             | grep -v "^${TAG}$" \
             | sort -V | tail -1 || true)

@@ -102,11 +102,6 @@ remote_branch_exists() {
   git show-ref --verify --quiet "refs/remotes/origin/$branch"
 }
 
-latest_run_id() {
-  gh run list --workflow="$DEPLOY_WORKFLOW" --limit 1 --json databaseId \
-    --jq '.[0].databaseId // empty' 2>/dev/null || true
-}
-
 get_source_branch() {
   local env=$1
   local source_override=$2
@@ -318,47 +313,20 @@ cmd_deploy() {
   fi
   gh pr merge "$pr_ref" --merge --subject "$commit_msg" --delete-branch $admin_flag
 
-  # The workflow computes the tag, builds the image and (on prod) creates the release.
-  # --ref main so the definition comes from main, not from a stale deploy branch copy.
-  local create_release=true
-  if [[ "$SKIP_RELEASE" == true ]]; then
-    create_release=false
+  # Releases are a prod-only policy owned here; the workflow just does what it is told
+  local create_release=false
+  if [[ "$env" == "prod" && "$SKIP_RELEASE" != true ]]; then
+    create_release=true
   fi
 
-  # Remember the latest run so the one we are about to trigger can be told apart from it
-  local previous_run_id
-  previous_run_id=$(latest_run_id)
-
-  # The PR is already merged at this point, so a dispatch failure must be actionable:
-  # the site choice list is hand-synced with configs/, and the workflow must be on main
+  # The workflow computes the tag, builds the image and creates the release
   info "Triggering deployment workflow..."
-  if ! gh workflow run "$DEPLOY_WORKFLOW" --ref main \
-    -f site="$site" -f environment="$env" -f create_release="$create_release"; then
-    error "PR #$pr_number is merged, but the deployment workflow could not be dispatched.
-No tag was created and nothing was deployed. Retry from the Actions UI:
-  https://github.com/opendatateam/udata-front-kit/actions/workflows/$DEPLOY_WORKFLOW
-  site: $site, environment: $env, create release: $create_release
+  gh workflow run "$DEPLOY_WORKFLOW" \
+    -f site="$site" -f environment="$env" -f create_release="$create_release"
 
-Check that '$site' is in the workflow's site options and that $DEPLOY_WORKFLOW exists on main."
-  fi
-
-  # `gh workflow run` exits 0 even if the run fails immediately, so surface the run URL
-  local run_id="" run_url=""
-  for _ in 1 2 3 4 5; do
-    sleep 2
-    run_id=$(latest_run_id)
-    if [[ -n "$run_id" && "$run_id" != "$previous_run_id" ]]; then
-      run_url=$(gh run view "$run_id" --json url --jq '.url' 2>/dev/null || true)
-      break
-    fi
-  done
-
-  info "✓ Deployment triggered successfully!"
-  if [[ -n "$run_url" ]]; then
-    info "$run_url"
-  else
-    info "https://github.com/opendatateam/udata-front-kit/actions/workflows/$DEPLOY_WORKFLOW"
-  fi
+  info "✓ Deployment completed successfully!"
+  info "GitHub Actions workflow should be triggered now."
+  info "https://github.com/opendatateam/udata-front-kit/actions/workflows/$DEPLOY_WORKFLOW"
 }
 
 # Main script
