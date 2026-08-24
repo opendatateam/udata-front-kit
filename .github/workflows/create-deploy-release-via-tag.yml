@@ -32,8 +32,6 @@ on:
           - demo
           - preprod
           - prod
-          # FIXME:
-          - test
       ref:
         description: 'Git ref (branch) to deploy (defaults to <site>-<environment>)'
         required: false
@@ -98,8 +96,8 @@ jobs:
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          # ref: branch where the target workflow file exists
-          # FIXME: maybe use hardcoded main
+          # ref picks which build-push-image.yml definition runs, not the code it builds
+          # (that comes from the tag): dispatch from main, or from your branch to test CI
           script: |
             await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,

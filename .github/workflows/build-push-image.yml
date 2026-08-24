@@ -47,7 +47,7 @@ jobs:
           echo "matched=false" >> "$GITHUB_OUTPUT"
 
           if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
-            echo "::error::Explicitly dispatched tag did not match - check vars.SITES/vars.ENVS are in sync with tag-image-release.yml's choice lists"
+            echo "::error::Explicitly dispatched tag did not match - check vars.SITES/vars.ENVS are in sync with create-deploy-release-via-tag.yml's choice lists"
             exit 1
           fi
 
