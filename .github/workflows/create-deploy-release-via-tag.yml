@@ -94,14 +94,11 @@ jobs:
           git tag "${{ steps.version.outputs.tag }}"
           git push origin "${{ steps.version.outputs.tag }}"
 
-      # build-push-image.yml is workflow_dispatch-only, so pushing the tag above does
-      # not start it: this dispatch is the only path to a build.
       - name: Dispatch build workflow
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          # ref picks which build-push-image.yml definition runs, not the code it builds
-          # (that comes from the tag): dispatch from main, or from your branch to test CI
+          # ref picks which build-push-image.yml definition runs, not the code it builds (comes from tag)
           script: |
             await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
