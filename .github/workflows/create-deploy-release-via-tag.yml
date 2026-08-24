@@ -15,14 +15,14 @@ on:
         required: true
         type: choice
         options:
-          - ecospheres
-          - meteo-france
-          - logistique
           - accessibilite
-          - defis
-          - hackathon
-          - simplifions
           - culture
+          - defis
+          - ecospheres
+          - hackathon
+          - logistique
+          - meteo-france
+          - simplifions
       # Same restriction as above: kept in sync by hand with vars.ENVS.
       environment:
         description: 'Target environment'
