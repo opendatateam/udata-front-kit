@@ -3,7 +3,6 @@ import { computed, onMounted, ref } from 'vue'
 
 import LogoBox from '@/components/LogoBox.vue'
 import SidebarItem from '@/components/SidebarItem.vue'
-import type { Topic } from '@/model/topic'
 import { useTopicStore } from '@/store/TopicStore'
 import { useNetworksConf, useNetworksTag } from '@/utils/config'
 
@@ -21,13 +20,10 @@ interface MatchedNetwork {
   to: { name: string }
 }
 
-// map a network's configured universe topic id to its slug/default page,
-// so a topic returned by the API can be resolved back to a network to link to
+// map a network's configured universe topic id to its display info, so a
+// topic id returned by the API can be resolved back to a network to link to
 const networksByTopicId = computed(() => {
-  const map = new Map<
-    string,
-    { slug: string; defaultSubpath: string; title: string; logo?: string }
-  >()
+  const map = new Map<string, MatchedNetwork>()
   for (const [slug, network] of Object.entries(networksConf)) {
     const defaultSubpath = Object.keys(network.pages)[0]
     const defaultPage = network.pages[defaultSubpath]
@@ -35,9 +31,9 @@ const networksByTopicId = computed(() => {
     if (topicId !== undefined) {
       map.set(String(topicId), {
         slug,
-        defaultSubpath,
         title: defaultPage.title,
-        logo: defaultPage.banner?.logo
+        logo: defaultPage.banner?.logo,
+        to: { name: `${slug}__${defaultSubpath}` }
       })
     }
   }
@@ -50,26 +46,13 @@ onMounted(async () => {
   if (!networksTag || networksByTopicId.value.size === 0) return
 
   try {
-    const topics: Topic[] = await useTopicStore().loadForDataset(
+    const topics = await useTopicStore().loadForDataset(
       props.datasetId,
       networksTag
     )
-
-    const seen = new Set<string>()
-    const matched: MatchedNetwork[] = []
-    for (const topic of topics) {
-      const network = networksByTopicId.value.get(topic.id)
-      if (network && !seen.has(network.slug)) {
-        seen.add(network.slug)
-        matched.push({
-          slug: network.slug,
-          title: network.title,
-          logo: network.logo,
-          to: { name: `${network.slug}__${network.defaultSubpath}` }
-        })
-      }
-    }
-    networks.value = matched
+    networks.value = topics
+      .map((topic) => networksByTopicId.value.get(topic.id))
+      .filter((network) => network !== undefined)
   } catch (error) {
     console.error('Failed to fetch dataset networks', error)
   }
