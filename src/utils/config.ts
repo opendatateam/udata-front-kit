@@ -10,8 +10,8 @@ import type { SiteId } from '@/model/topic'
 
 export const usePagesConf = (): PagesConf => config.pages
 
-// `tag` is a reserved key on `networks` (see useNetworksTag), not a network slug
 export const useNetworksConf = (): NetworksConf => {
+  // `tag` is a reserved key on `networks`, not a network slug
   const { tag: _tag, ...networks } = config.networks ?? {}
   return networks
 }
