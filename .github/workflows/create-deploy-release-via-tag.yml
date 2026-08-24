@@ -69,17 +69,18 @@ jobs:
           SITE="${{ inputs.site }}"
           ENVIRONMENT="${{ inputs.environment }}"
           TODAY=$(date +%Y%m%d)
-          PATTERN="${SITE}-${ENVIRONMENT}-${TODAY}-[0-9]+"
+          PREFIX="${SITE}-${ENVIRONMENT}-${TODAY}"
+          PATTERN="${PREFIX}-[0-9]+"
 
           EXISTING=$(git ls-remote --tags origin | grep -Eo "refs/tags/${PATTERN}$" | sed 's#refs/tags/##' || true)
 
           NEXT=1
           if [[ -n "$EXISTING" ]]; then
-            MAX=$(echo "$EXISTING" | sed -E "s/^${SITE}-${ENVIRONMENT}-${TODAY}-//" | sort -n | tail -1)
+            MAX=$(echo "$EXISTING" | sed -E "s/^${PREFIX}-//" | sort -n | tail -1)
             NEXT=$((MAX + 1))
           fi
 
-          TAG="${SITE}-${ENVIRONMENT}-${TODAY}-${NEXT}"
+          TAG="${PREFIX}-${NEXT}"
           echo "Computed tag: $TAG"
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
 
