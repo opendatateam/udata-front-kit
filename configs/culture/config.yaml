@@ -134,9 +134,9 @@ website:
     files_list: 6
   contact_email: datagouv@datagouv.gouv.fr
   home_banner_colors:
-    - '#f6f6f6'
     - '#e3e3fd'
-    - '#019FE3'
+    - '#eaf3ef'
+    - '#c9e8b3'
   matomo:
     host: 'https://stats.data.gouv.fr'
     siteId: 312
@@ -255,9 +255,9 @@ pages:
       extended: jeu de données
     search:
       input: Rechercher un jeu de données
-      placeholder: null
+      placeholder: Rechercher les données du DEPS
     banner:
-      title: Un guichet unique pour l'accès aux données de la culture
+      title: Au sein des données de la Culture, un accès unique aux données du DEPS.
       content: |
         Cette collection constitue une base évolutive, appelée à s'enrichir et à s'affiner grâce aux retours et aux besoins exprimés par les acteurs partenaires.
     resources_tabs:
