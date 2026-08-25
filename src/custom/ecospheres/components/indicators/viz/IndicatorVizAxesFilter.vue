@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import VIconDsfr from '@/components/VIconDsfr.vue'
 import type { AxisValueDisplay } from './types'
 
 const GROUPED_MODE = '__grouped__'
@@ -38,6 +39,13 @@ const notSummableExplanation = computed(() =>
     : 'Une série par combinaison des axes : ces valeurs ne peuvent pas être additionnées.'
 )
 
+// Drives "is being filtered" cue on axis title.
+function isAxisPartiallyFiltered(axis: string): boolean {
+  const available = props.availableAxisValues[axis]
+  if (!available) return false
+  return (filters.value[axis]?.length ?? 0) !== available.length
+}
+
 function toggleValue(axis: string, value: string, checked: boolean) {
   const current = filters.value[axis] ?? []
   filters.value = {
@@ -65,9 +73,20 @@ function toggleValue(axis: string, value: string, checked: boolean) {
           name="axis-display-mode"
           :value="option.value"
         />
-        <label class="fr-label" :for="`axis-mode-${option.value}`">{{
-          option.label
-        }}</label>
+        <label class="fr-label" :for="`axis-mode-${option.value}`">
+          <span class="axis-mode-label">
+            {{ option.label }}
+            <template v-if="isAxisPartiallyFiltered(option.value)">
+              <VIconDsfr
+                name="filter-fill"
+                small
+                class="axis-filtered-icon"
+                title="Des valeurs de cet axe sont exclues et affectent les totaux"
+              />
+              <span class="fr-sr-only">(valeurs filtrées)</span>
+            </template>
+          </span>
+        </label>
       </div>
     </div>
     <p v-else class="fr-hint-text">{{ notSummableExplanation }}</p>
@@ -242,5 +261,16 @@ function toggleValue(axis: string, value: string, checked: boolean) {
 .axis-value-text {
   flex: 1;
   min-width: 0;
+}
+
+/* DSFR's radio label is flex-direction:column; wrap to keep icon inline. */
+.axis-mode-label {
+  display: inline-flex;
+  align-items: center;
+}
+
+.axis-filtered-icon {
+  color: var(--text-mention-grey);
+  margin-left: 0.25rem;
 }
 </style>
