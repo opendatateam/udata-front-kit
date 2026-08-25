@@ -18,9 +18,8 @@ const activeAxis = defineModel<string | null>('activeAxis', { required: true })
 
 const axisNames = computed(() => Object.keys(props.availableAxisValues))
 
-// "Regroupé" isn't valid when the indicator isn't summable.
 const modeOptions = computed(() => [
-  ...(props.summable ? [{ value: GROUPED_MODE, label: 'Regroupé' }] : []),
+  { value: GROUPED_MODE, label: 'Regroupé' },
   ...axisNames.value.map((axis) => ({ value: axis, label: `Par "${axis}"` }))
 ])
 
@@ -30,6 +29,14 @@ const mode = computed<string>({
     activeAxis.value = value === GROUPED_MODE ? null : value
   }
 })
+
+// Not summable: no "Regroupé" choice, so the mode block becomes an
+// explanation instead of radios.
+const notSummableExplanation = computed(() =>
+  axisNames.value.length === 1
+    ? "Une série par valeur de l'axe : ces valeurs ne peuvent pas être additionnées."
+    : 'Une série par combinaison des axes : ces valeurs ne peuvent pas être additionnées.'
+)
 
 function toggleValue(axis: string, value: string, checked: boolean) {
   const current = filters.value[axis] ?? []
@@ -45,7 +52,7 @@ function toggleValue(axis: string, value: string, checked: boolean) {
   <fieldset v-if="axisNames.length > 0" class="axis-mode-block">
     <legend class="fr-sr-only">Afficher le graphe</legend>
     <p aria-hidden="true" class="axis-filters-title">Afficher le graphe</p>
-    <div class="axis-options">
+    <div v-if="summable" class="axis-options">
       <div
         v-for="option in modeOptions"
         :key="option.value"
@@ -57,13 +64,13 @@ function toggleValue(axis: string, value: string, checked: boolean) {
           type="radio"
           name="axis-display-mode"
           :value="option.value"
-          :disabled="!summable"
         />
         <label class="fr-label" :for="`axis-mode-${option.value}`">{{
           option.label
         }}</label>
       </div>
     </div>
+    <p v-else class="fr-hint-text">{{ notSummableExplanation }}</p>
   </fieldset>
 
   <!-- Summable: only the axis picked above is filterable, in the chart's
@@ -108,16 +115,16 @@ function toggleValue(axis: string, value: string, checked: boolean) {
   </fieldset>
 
   <!-- Not summable: every combination of axis values is its own series, so
-       no single color maps to one axis value. Plain checkboxes only. -->
+       no single color maps to one axis value. Plain checkboxes, headed by
+       the axis name since there's no radio for it. -->
   <template v-if="!summable">
-    <fieldset v-for="axis in axisNames" :key="axis" class="axis-values-block">
+    <fieldset
+      v-for="axis in axisNames"
+      :key="axis"
+      class="axis-values-block axis-values-block--compact"
+    >
       <legend class="fr-sr-only">Valeurs de l'axe "{{ axis }}"</legend>
-      <p
-        aria-hidden="true"
-        class="axis-filters-title axis-filters-title--spacer"
-      >
-        &nbsp;
-      </p>
+      <p aria-hidden="true" class="axis-values-title">Axe "{{ axis }}"</p>
       <div class="axis-options">
         <div
           v-for="value in availableAxisValues[axis]"
@@ -159,6 +166,7 @@ function toggleValue(axis: string, value: string, checked: boolean) {
    as breathing room (0.1) */
 .axis-mode-block {
   flex: 0.1 1 auto;
+  max-width: 14rem;
   margin-left: 2rem;
 }
 
@@ -169,11 +177,22 @@ function toggleValue(axis: string, value: string, checked: boolean) {
   min-width: 0;
 }
 
+.axis-values-block--compact {
+  flex: 0 1 auto;
+  max-width: 11rem;
+}
+
 .axis-filters-title {
   font-size: 1rem;
   line-height: 1.5rem;
   font-weight: 700;
   color: var(--text-label-grey);
+  margin: 0 0 0.5rem;
+}
+
+.axis-values-title {
+  font-size: 0.875rem;
+  line-height: 1.5rem;
   margin: 0 0 0.5rem;
 }
 
@@ -184,7 +203,12 @@ function toggleValue(axis: string, value: string, checked: boolean) {
 /* Both are row-layout-only concerns; not needed once columns stack. */
 @media (max-width: 768px) {
   .axis-mode-block {
+    max-width: none;
     margin-left: 0;
+  }
+
+  .axis-values-block--compact {
+    max-width: none;
   }
 
   .axis-filters-title--spacer {

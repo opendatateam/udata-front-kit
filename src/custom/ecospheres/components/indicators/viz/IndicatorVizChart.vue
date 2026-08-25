@@ -228,7 +228,7 @@ onMounted(() => {
   display: flex;
   flex-direction: row;
   width: 100%;
-  gap: 1rem;
+  gap: 2rem;
   padding: 16px;
   background-color: #fafafa;
   border: 1px solid #f5f5f5;
