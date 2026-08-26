@@ -261,6 +261,14 @@ onMounted(() => {
 
 .canvas-container:fullscreen {
   background: white;
+  padding: 16px;
+}
+
+:deep(.chart-fullscreen-btn) {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
 }
 
 .loading-overlay {

@@ -4,6 +4,7 @@ import type { IndicatorExtrasData } from '../../../model/indicator'
 import { debug } from './debug'
 import { getSeriesColor } from './enums'
 import { formatBigNumber, formatNumber } from './format'
+import { fullscreenPlugin } from './fullscreenPlugin'
 import type { IndicatorVizChartSeries } from './types'
 
 function getMinMaxYear(years: number[]): [number, number] {
@@ -34,6 +35,7 @@ function buildConfig(
   return {
     type,
     data: { datasets: series },
+    plugins: [fullscreenPlugin],
     options: {
       responsive: true,
       maintainAspectRatio: false,
