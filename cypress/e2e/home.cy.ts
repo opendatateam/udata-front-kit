@@ -60,17 +60,27 @@ describe('Home Page', () => {
 
   it('should render footer mandatory links with the expected href', () => {
     const mandatoryLinks: { label: string; to?: string; href?: string }[] =
-      Cypress.env('siteConfig')?.footer?.mandatory_links ?? []
+      Cypress.env('siteConfig')?.website?.footer?.mandatory_links ?? []
 
     mandatoryLinks.forEach((link) => {
       const expectedHref = link.href ?? link.to
       if (!expectedHref) return
 
-      cy.contains('.fr-footer__bottom-link', link.label).should(
-        'have.attr',
-        'href',
-        expectedHref
-      )
+      const isExternal = /^(https?:|mailto:)/.test(expectedHref)
+
+      cy.contains('.fr-footer__bottom-link', link.label)
+        .should('have.attr', 'href')
+        .then((actualHref) => {
+          // a `to` pointing to an absolute URL resolves router-relative (prefixed with the
+          // current path) instead of navigating out, so make that failure mode explicit
+          if (isExternal) {
+            expect(
+              actualHref,
+              'external link must keep an absolute href'
+            ).to.match(/^(https?:|mailto:)/)
+          }
+          expect(actualHref).to.equal(expectedHref)
+        })
     })
   })
 
