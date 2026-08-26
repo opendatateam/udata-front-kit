@@ -58,6 +58,22 @@ describe('Home Page', () => {
     cy.get('h1').should('be.visible')
   })
 
+  it('should render footer mandatory links with the expected href', () => {
+    const mandatoryLinks: { label: string; to?: string; href?: string }[] =
+      Cypress.env('siteConfig')?.footer?.mandatory_links ?? []
+
+    mandatoryLinks.forEach((link) => {
+      const expectedHref = link.href ?? link.to
+      if (!expectedHref) return
+
+      cy.contains('.fr-footer__bottom-link', link.label).should(
+        'have.attr',
+        'href',
+        expectedHref
+      )
+    })
+  })
+
   it('should not have console errors', () => {
     // Use window:before:load so the stub is set on the NEW window before any
     // app code runs — cy.stub() on the old window wouldn't survive a reload.
