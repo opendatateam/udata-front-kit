@@ -109,6 +109,7 @@ interface GlobalSearchPageRoutesOptions {
   descriptionComponent?: () => Promise<{ default: Component }>
   detailsViewComponent?: () => Promise<{ default: Component }>
   topicConf?: TopicPageRouterConf
+  renderRootPage?: boolean
 }
 
 const CUSTOM_FILTER_TYPE_SET = new Set<CustomFilterType>(CUSTOM_FILTER_TYPES)
@@ -248,7 +249,8 @@ export const useGlobalSearchPageRoutes = ({
   datasetCardComponent,
   descriptionComponent,
   detailsViewComponent,
-  topicConf
+  topicConf,
+  renderRootPage = true
 }: GlobalSearchPageRoutesOptions): RouteRecordRaw => {
   const pageConf = usePageConf(pageKey)
   const objectType = pageConf.object_type
@@ -261,7 +263,21 @@ export const useGlobalSearchPageRoutes = ({
     datasets: () => import('@/views/datasets/DatasetDetailView.vue')
   }
 
-  return {
+  const childrenPages = {
+    path: renderRootPage ? ':item_id' : `/${pageKey}/:item_id`,
+    name: `${pageKey}_detail`,
+    component: detailsViewComponent ?? defaultDetailsViews[objectType],
+    meta: {
+      pageKey,
+      descriptionComponent,
+      cardComponent,
+      datasetCardComponent
+    },
+    // this forces the component to be recreated when switching page type
+    props: () => ({ key: pageKey, ...topicConf })
+  }
+
+  const rootPage = {
     path: `/${pageKey}`,
     children: [
       {
@@ -277,21 +293,11 @@ export const useGlobalSearchPageRoutes = ({
         },
         component: () => import('@/views/UnifiedSearchView.vue')
       },
-      {
-        path: ':item_id',
-        name: `${pageKey}_detail`,
-        component: detailsViewComponent ?? defaultDetailsViews[objectType],
-        meta: {
-          pageKey,
-          descriptionComponent,
-          cardComponent,
-          datasetCardComponent
-        },
-        // this forces the component to be recreated when switching page type
-        props: () => ({ key: pageKey, ...topicConf })
-      }
+      childrenPages
     ]
   }
+
+  return renderRootPage ? rootPage : childrenPages
 }
 
 export const useTopicAdminPagesRoutes = ({

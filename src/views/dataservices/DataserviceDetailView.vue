@@ -10,7 +10,7 @@ import MetricsStatBoxes from '@/components/MetricsStatBoxes.vue'
 import SidebarItem from '@/components/SidebarItem.vue'
 import SidebarList from '@/components/SidebarList.vue'
 import SidebarOwner from '@/components/SidebarOwner.vue'
-import VIconCustom from '@/components/VIconCustom.vue'
+import VIconDsfr from '@/components/VIconDsfr.vue'
 import { useCurrentPageConf, useRouteParamsAsString } from '@/router/utils'
 import { useDataserviceStore } from '@/store/DataserviceStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
@@ -222,8 +222,8 @@ onMounted(() => {
         @click="isSwaggerOpened = !isSwaggerOpened"
       >
         <span class="fr-text--bold">Swagger</span>
-        <VIconCustom v-if="isSwaggerOpened" name="arrow-up-s-line" />
-        <VIconCustom v-else name="arrow-down-s-line" />
+        <VIconDsfr v-if="isSwaggerOpened" name="arrow-up-s-line" />
+        <VIconDsfr v-else name="arrow-down-s-line" />
       </button>
       <OpenApiViewer
         v-if="isSwaggerOpened"

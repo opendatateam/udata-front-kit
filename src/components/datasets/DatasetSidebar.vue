@@ -4,7 +4,7 @@ import MetricsStatBoxes from '@/components/MetricsStatBoxes.vue'
 import SidebarItem from '@/components/SidebarItem.vue'
 import SidebarList from '@/components/SidebarList.vue'
 import SidebarOwner from '@/components/SidebarOwner.vue'
-import VIconCustom from '@/components/VIconCustom.vue'
+import VIconDsfr from '@/components/VIconDsfr.vue'
 import config from '@/config'
 import type { TypedHarvest } from '@/model/dataset'
 import { formatDate } from '@/utils'
@@ -32,6 +32,13 @@ const showHarvestQualityWarning = computed(() => {
   const warningBackends = datasetsConf.harvest_backends_quality_warning || []
   return backend && warningBackends.includes(backend)
 })
+
+const hasContactPointsWithSpecificRole = computed(() => {
+  if (!props.dataset) return false
+  return props.dataset.contact_points.some(
+    (contactPoint) => contactPoint.role !== 'contact'
+  )
+})
 </script>
 
 <template>
@@ -39,14 +46,14 @@ const showHarvestQualityWarning = computed(() => {
     <SidebarList>
       <SidebarItem
         id="producer"
-        :term="dataset.contact_points.length ? 'Éditeur' : 'Producteur'"
+        :term="hasContactPointsWithSpecificRole ? 'Diffuseur' : 'Producteur'"
       >
         <SidebarOwner :object="dataset" />
       </SidebarItem>
       <SidebarItem
         v-if="dataset.contact_points.length"
         id="attributions"
-        term="Attributions"
+        :term="hasContactPointsWithSpecificRole ? 'Attributions' : 'Contacts'"
       >
         <ContactPoints :contact-points="dataset.contact_points" />
       </SidebarItem>
@@ -89,7 +96,7 @@ const showHarvestQualityWarning = computed(() => {
       v-if="showHarvestQualityWarning"
       class="text-mention-grey fr-text--sm fr-my-1v"
     >
-      <VIconCustom name="warning-line" class="fr-icon--sm" />
+      <VIconDsfr name="warning-line" class="fr-icon--sm" />
       La qualité des métadonnées peut être trompeuse car les métadonnées de la
       source originale peuvent avoir été perdues lors de leur récupération. Nous
       travaillons actuellement à améliorer la situation.

@@ -63,13 +63,13 @@ website:
         title: 'gouvernement.fr - nouvelle fenêtre'
     mandatory_links:
       - label: 'Contact'
-        to: 'https://tally.so/r/m61AqO'
+        href: 'https://tally.so/r/m61AqO'
       - label: 'Plan du site'
         to: '/sitemap'
       - label: "Conditions générales d'utilisation"
         to: '/terms'
       - label: 'Politique de confidentialité'
-        to: 'https://www.data.gouv.fr/fr/suivi/'
+        href: 'https://www.data.gouv.fr/fr/suivi/'
       - label: 'Accessibilité : partiellement conforme'
         to: '/accessibility'
   homepage:
@@ -251,6 +251,9 @@ definitions: &definitions
 #       discussions:
 #         display: {bool}             # display discussions tab on detail page
 #         create: {bool}              # create discussions tab on detail page
+#         notify_url_override: {bool} # when true, email notifications will link back to this site's pages instead of the canonical udata pages.
+#                                     # website.seo.canonical_url must be set and the site domain must be allowed in the udata config
+#                                     # (DISCUSSION_ALLOWED_EXTERNAL_DOMAINS).
 #       datasets:
 #         display: {bool}             # display datasets tab on detail page
 #       reuses:
@@ -284,7 +287,7 @@ pages:
       topic: 65e9aa6cb5c809c30c70ee02
     filter_prefix:
     title: Toutes les données
-    breadcrumb_title: Données
+    breadcrumb_title: Toutes les données
     labels:
       singular: jeu de données
       plural: jeux de données
@@ -300,6 +303,7 @@ pages:
       discussions:
         display: true
         create: true
+        notify_url_override: false
       datasets:
         display: true
       reuses:
@@ -400,10 +404,9 @@ pages:
     icon: fr-icon-lightbulb-line
     universe_query:
       tag: ecospheres-indicateurs
-      organization: 67884b4da4fca9c97bbef479
     filter_prefix: ecospheres-indicateurs
     title: Indicateurs phares
-    breadcrumb_title: Indicateurs
+    breadcrumb_title: Indicateurs phares
     labels:
       singular: indicateur
       plural: indicateurs
@@ -419,6 +422,7 @@ pages:
       discussions:
         display: true
         create: true
+        notify_url_override: false
       datasets:
         display: true
       reuses:
@@ -567,6 +571,7 @@ pages:
       discussions:
         display: true
         create: true
+        notify_url_override: false
       datasets:
         display: true
     editable: false
@@ -589,7 +594,7 @@ pages:
       tag: univers-ecospheres
     filter_prefix: ecospheres
     title: Collections thématiques
-    breadcrumb_title: Collections
+    breadcrumb_title: Collections thématiques
     labels:
       singular: collection
       plural: collections thématiques
@@ -607,6 +612,7 @@ pages:
       discussions:
         display: true
         create: true
+        notify_url_override: true
       datasets:
         display: true
       reuses:

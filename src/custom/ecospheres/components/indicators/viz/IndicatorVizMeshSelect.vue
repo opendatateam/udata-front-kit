@@ -7,14 +7,19 @@ const selectedIndicatorVizMesh = defineModel<IndicatorMesh>({
   required: true
 })
 
-const meshOptions = computed(() =>
-  MESHES.filter(([mesh]) => props.availableMeshes.includes(mesh))
-)
+// 'commune' is excluded from MESHES (see enums.ts), so it's added back in
+// separately here, using the same availableMeshes check as the others.
+const meshOptions = computed<[IndicatorMesh, string][]>(() => [
+  ...MESHES.filter(([mesh]) => props.availableMeshes.includes(mesh)),
+  ...(props.availableMeshes.includes('commune')
+    ? ([['commune', 'Commune']] as [IndicatorMesh, string][])
+    : [])
+])
 </script>
 
 <template>
   <div class="fr-select-group">
-    <label class="fr-label" for="viz-mesh-select">Maille</label>
+    <label class="fr-label" for="viz-mesh-select">Maille territoriale</label>
     <select
       id="viz-mesh-select"
       v-model="selectedIndicatorVizMesh"
