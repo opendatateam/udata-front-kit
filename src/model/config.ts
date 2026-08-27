@@ -1,5 +1,4 @@
 import type { BuiltInFilterKey } from '@datagouv/components-next'
-import type { DsfrFooterProps } from '@gouvminint/vue-dsfr'
 
 export const CUSTOM_FILTER_TYPES = ['select', 'organization_custom'] as const
 export type CustomFilterType = (typeof CUSTOM_FILTER_TYPES)[number]
@@ -30,6 +29,7 @@ export interface StaticPageConfig {
 export interface MenuConfig {
   text: string
   to: string
+  external?: boolean
 }
 
 export interface PageFilterValueConf {
@@ -98,6 +98,7 @@ export type PageConf = {
     discussions: {
       display: boolean
       create: boolean
+      notify_url_override?: boolean
     }
     datasets: {
       display: boolean
@@ -144,11 +145,24 @@ export type HeaderConf = {
   }
 }
 
+type FooterExternalLink = {
+  label: string
+  href: string
+  title: string
+}
+
+type FooterMandatoryLink = {
+  label: string
+  to: string | undefined
+  href: string | undefined
+  title?: string
+}
+
 export type FooterConf = {
   logo?: Logo
   phrase?: string
-  external_links?: DsfrFooterProps['ecosystemLinks']
-  mandatory_links?: DsfrFooterProps['mandatoryLinks']
+  external_links?: FooterExternalLink[]
+  mandatory_links?: FooterMandatoryLink[]
 }
 
 export type WebsiteConfig = {

@@ -11,20 +11,20 @@
 <nav class="fr-summary" role="navigation" aria-labelledby="fr-summary-title">
   <ol>
       <li>
-          <a class="fr-summary__link" id="summary-link-2" href="#niveau-1-acces-facile">Niveau 1 : 💠 Accès facile</a>
+          <a class="fr-summary__link" id="summary-link-2" href="#niveau-1-acces-facile">Niveau 1 : Accès facile</a>
       </li>
       <li>
-          <a class="fr-summary__link" id="summary-link-2" href="#niveau-2-dlnuf">Niveau 2 : 💠💠 Dites-le-nous une fois</a>
+          <a class="fr-summary__link" id="summary-link-2" href="#niveau-2-dlnuf">Niveau 2 : Dites-le-nous une fois</a>
       </li>
       <li>
-          <a class="fr-summary__link" id="summary-link-2" href="#niveau-3-proactivite">Niveau 3 : 💠💠💠 Proactivité</a>
+          <a class="fr-summary__link" id="summary-link-2" href="#niveau-3-proactivite">Niveau 3 : Proactivité</a>
       </li>
   </ol>
 </nav>
 </div>
 </div>
 
-<h2 id="niveau-1-acces-facile" class="fr-h2 fr-my-0w" style="color: black; background-color: rgb(167, 212, 205); padding: 2px 4px; display: inline-block;">💠 Accès facile</h2>
+<h2 id="niveau-1-acces-facile" class="fr-h2 fr-my-0w" style="color: black; background-color: rgb(167, 212, 205); padding: 2px 4px; display: inline-block;">Accès facile</h2>
 
 <p class="fr-text--lead"><b>L'agent trouve facilement l'information</b></p>
 
@@ -32,9 +32,9 @@ Une première étape pour simplifier les démarches des usagers consiste à **re
 
 Les solutions de niveau 1 reférencées sur ce site sont fréquemment des portails d'accès aux données ou des annuaires.
 
-<a class="fr-btn" href="/cas-d-usages?types-de-simplification=acces-facile#list">Cas d'usages de niveau 1 💠</a> <a class="fr-ml-1w fr-btn fr-btn fr-btn--secondary" href="/solutions?types-de-simplification=acces-facile#list"> Solutions de niveau 1 💠</a>
+<a class="fr-btn" href="/cas-d-usages?types-de-simplification=acces-facile#list">Cas d'usages de niveau 1 </a> <a class="fr-ml-1w fr-btn fr-btn fr-btn--secondary" href="/solutions?types-de-simplification=acces-facile#list"> Solutions de niveau 1</a>
 
-<h2 id="niveau-2-dlnuf" class="fr-h2 fr-my-0w" style="color: black; background-color: rgb(167, 212, 205); padding: 2px 4px; display: inline-block;">💠💠 Dites-le-nous une fois</h2>
+<h2 id="niveau-2-dlnuf" class="fr-h2 fr-my-0w" style="color: black; background-color: rgb(167, 212, 205); padding: 2px 4px; display: inline-block;">Dites-le-nous une fois</h2>
 
 <p class="fr-text--lead"><b>L'usager n'a plus à fournir de justificatifs</b></p>
 
@@ -46,9 +46,9 @@ Contrairement au niveau 1, qui facilite principalement le travail des agents pub
 
 Les solutions de niveau 2 sont donc fréquemment des API ou des logiciels/formulaires en ligne intégrant des API ou des jeux de données.
 
-<a class="fr-btn" href="/cas-d-usages?types-de-simplification=dlnuf#list">Cas d'usages de niveau 2 💠💠</a> <a class="fr-ml-1w fr-btn fr-btn fr-btn--secondary" href="/solutions?types-de-simplification=dlnuf#list">Solutions de niveau 2 💠💠</a>
+<a class="fr-btn" href="/cas-d-usages?types-de-simplification=dlnuf#list">Cas d'usages de niveau 2</a> <a class="fr-ml-1w fr-btn fr-btn fr-btn--secondary" href="/solutions?types-de-simplification=dlnuf#list">Solutions de niveau 2</a>
 
-<h2 id="niveau-3-proactivite" class="fr-h2 fr-my-0w" style="color: black; background-color: rgb(167, 212, 205); padding: 2px 4px; display: inline-block;">💠💠💠 Proactivité</h2>
+<h2 id="niveau-3-proactivite" class="fr-h2 fr-my-0w" style="color: black; background-color: rgb(167, 212, 205); padding: 2px 4px; display: inline-block;">Proactivité</h2>
 
 <p class="fr-text--lead"><b>L'usager n'a plus de démarche à faire</b></p>
 
@@ -62,4 +62,4 @@ Pour terminer, le niveau 3 consiste presque à supprimer la démarche. Par l'ana
 
 Les solutions de niveau 3 sont donc fréquemment des API, des fichiers de données, ou des logiciels permettant la circulation de la donnée en temps réel entre les administrations.
 
-<a class="fr-btn" href="/cas-d-usages?types-de-simplification=proactivite#list">Cas d'usages de niveau 3 💠💠💠</a> <a class="fr-ml-1w fr-btn fr-btn fr-btn--secondary" href="/solutions?types-de-simplification=proactivite#list">Solutions de niveau 3 💠💠💠</a>
+<a class="fr-btn" href="/cas-d-usages?types-de-simplification=proactivite#list">Cas d'usages de niveau 3</a> <a class="fr-ml-1w fr-btn fr-btn fr-btn--secondary" href="/solutions?types-de-simplification=proactivite#list">Solutions de niveau 3</a>

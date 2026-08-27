@@ -27,7 +27,7 @@ const loading = ref(true)
 // Computed property pour le contenu HTML sécurisé
 const safeHtmlContent = computed(() => {
   if (!publierContent.value?.fields.content) return ''
-  return fromMarkdown(publierContent.value.fields.content)
+  return fromMarkdown(publierContent.value.fields.content).html
 })
 
 const fetchPublierContent = async () => {

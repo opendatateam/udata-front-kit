@@ -9,19 +9,23 @@ const allowedDomains = [
   'www.google.com',
   'android.clients.google.com',
   'safebrowsing.googleapis.com',
-  'accounts.google.com'
+  'accounts.google.com',
+  '*.gvt1.com'
 ]
 
 Cypress.Commands.add('catchUnmockedRequests', () => {
-  const escapedDomains = allowedDomains
-    .map((domain) => domain.replace(/\./g, '\\.'))
-    .join('|')
-  const regex = new RegExp(`^https?:\\/\\/(?!(${escapedDomains})(:|\/|$)).*`)
-
-  cy.intercept(regex, (req) => {
-    throw new Error(
-      `Unmocked external API call detected: ${req.method} ${req.url}`
+  cy.intercept('*', (req) => {
+    const { hostname } = new URL(req.url)
+    const allowed = allowedDomains.some((domain) =>
+      domain.startsWith('*.')
+        ? hostname.endsWith(domain.slice(1))
+        : hostname === domain
     )
+    if (!allowed) {
+      throw new Error(
+        `Unmocked external API call detected: ${req.method} ${req.url}`
+      )
+    }
   }).as('catchExternalRequests')
 })
 

@@ -86,8 +86,11 @@ describe('Indicator Detail View', () => {
         cy.contains('Prochaine mise à jour attendue').should('be.visible')
         cy.contains('T3 2025').should('be.visible')
 
+        // Tags
+        cy.contains('Mots-clés').should('be.visible')
+        cy.contains('ecospheres-indicateurs-levier-biogaz').should('be.visible')
+
         // Mots-clés et extras
-        cy.contains('Voir les mots-clés').should('be.visible')
         cy.contains('Voir les extras').should('be.visible')
       })
     })
