@@ -255,7 +255,7 @@ onMounted(() => {
   position: relative;
   margin-top: 32px;
   margin-bottom: 64px;
-  height: 300px;
+  height: 420px;
   width: 100%;
 }
 

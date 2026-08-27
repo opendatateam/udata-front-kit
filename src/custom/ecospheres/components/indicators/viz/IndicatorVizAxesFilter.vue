@@ -31,14 +31,6 @@ const mode = computed<string>({
   }
 })
 
-// Not summable: no "Regroupé" choice, so the mode block becomes an
-// explanation instead of radios.
-const notSummableExplanation = computed(() =>
-  axisNames.value.length === 1
-    ? "Une série par valeur de l'axe : ces valeurs ne peuvent pas être additionnées."
-    : 'Une série par combinaison des axes : ces valeurs ne peuvent pas être additionnées.'
-)
-
 // Drives "is being filtered" cue on axis title.
 function isAxisPartiallyFiltered(axis: string): boolean {
   const available = props.availableAxisValues[axis]
@@ -57,10 +49,10 @@ function toggleValue(axis: string, value: string, checked: boolean) {
 
 <template>
   <!-- Not using vue-dsfr components because fieldset styles will fight our layout -->
-  <fieldset v-if="axisNames.length > 0" class="axis-mode-block">
+  <fieldset v-if="summable && axisNames.length > 0" class="axis-mode-block">
     <legend class="fr-sr-only">Afficher le graphe</legend>
     <p aria-hidden="true" class="axis-filters-title">Afficher le graphe</p>
-    <div v-if="summable" class="axis-options">
+    <div class="axis-options">
       <div
         v-for="option in modeOptions"
         :key="option.value"
@@ -89,7 +81,6 @@ function toggleValue(axis: string, value: string, checked: boolean) {
         </label>
       </div>
     </div>
-    <p v-else class="fr-hint-text">{{ notSummableExplanation }}</p>
   </fieldset>
 
   <!-- Summable: only the axis picked above is filterable, in the chart's
@@ -100,7 +91,7 @@ function toggleValue(axis: string, value: string, checked: boolean) {
     v-if="summable && activeAxis && axisNames.includes(activeAxis)"
     class="axis-values-block"
   >
-    <legend class="fr-sr-only">Valeurs de l'axe "{{ activeAxis }}"</legend>
+    <legend class="fr-sr-only">Valeurs du filtre "{{ activeAxis }}"</legend>
     <p aria-hidden="true" class="axis-filters-title axis-filters-title--spacer">
       &nbsp;
     </p>
@@ -142,8 +133,10 @@ function toggleValue(axis: string, value: string, checked: boolean) {
       :key="axis"
       class="axis-values-block axis-values-block--compact"
     >
-      <legend class="fr-sr-only">Valeurs de l'axe "{{ axis }}"</legend>
-      <p aria-hidden="true" class="axis-values-title">Axe "{{ axis }}"</p>
+      <legend class="fr-sr-only">Valeurs du filtre "{{ axis }}"</legend>
+      <p aria-hidden="true" class="axis-filters-title">
+        Filtre par "{{ axis }}"
+      </p>
       <div class="axis-options">
         <div
           v-for="value in availableAxisValues[axis]"
@@ -206,12 +199,6 @@ function toggleValue(axis: string, value: string, checked: boolean) {
   line-height: 1.5rem;
   font-weight: 700;
   color: var(--text-label-grey);
-  margin: 0 0 0.5rem;
-}
-
-.axis-values-title {
-  font-size: 0.875rem;
-  line-height: 1.5rem;
   margin: 0 0 0.5rem;
 }
 
