@@ -200,9 +200,11 @@ organizations:
   dataservices: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo/organizations-dataservices.json
   bouquets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo/organizations-bouquets.json
   simm:
-    # FIXME: dummy values pending Grist setup
-    datasets: /static/ecospheres/organizations/simm.json
-    dataservices: /static/ecospheres/organizations/simm.json
+    datasets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo-simm/organizations-datasets.json
+    dataservices: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo-simm/organizations-dataservices.json
+  sieau:
+    datasets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo-sieau/organizations-datasets.json
+    dataservices: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo-sieau/organizations-dataservices.json
   page: # organizations.page is a special case of config.pages
     breadcrumb_title: Contributeurs
     labels:
