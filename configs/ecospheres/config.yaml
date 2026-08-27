@@ -364,6 +364,45 @@ networks:
         search:
           input: Rechercher dans les API du réseau SIMM
           placeholder: null
+  sieau:
+    x-sieau-common: &sieau_common
+      universe_query:
+        topic: 6a8eff5ce148bf49b3267152
+      filter_prefix:
+      title: Eaufrance
+      banner:
+        title: Le service public d'information sur l'eau
+        content: Eaufrance fédère et diffuse les données et informations publiques sur l'eau et les milieux aquatiques en France, dans le cadre du Système d'information sur l'eau (SIE).
+        logo: /static/ecospheres/logos/networks/sieau.png
+        external_link:
+          url: https://www.eaufrance.fr/
+          label: Accéder au site
+      list_all: true
+      filters: []
+    pages:
+      datasets:
+        <<: *sieau_common
+        object_type: datasets
+        breadcrumb_title: Jeux de données
+        labels:
+          singular: jeu de données
+          plural: jeux de données
+          extended: jeu de données
+        search:
+          input: Rechercher dans les données du réseau Eaufrance
+          placeholder: null
+      dataservices:
+        <<: *sieau_common
+        object_type: dataservices
+        breadcrumb_title: API
+        labels:
+          singular: API
+          plural: APIs
+          extended: API
+          feminine: true
+        search:
+          input: Rechercher dans les API du réseau Eaufrance
+          placeholder: null
 
 # Configuration format for pages:
 #
