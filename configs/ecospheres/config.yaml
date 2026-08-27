@@ -200,11 +200,11 @@ organizations:
   dataservices: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo/organizations-dataservices.json
   bouquets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo/organizations-bouquets.json
   simm:
-    datasets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo-simm/organizations-datasets.json
-    dataservices: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo-simm/organizations-dataservices.json
+    datasets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-simm-demo/organizations-datasets.json
+    dataservices: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-simm-demo/organizations-dataservices.json
   sieau:
-    datasets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo-sieau/organizations-datasets.json
-    dataservices: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo-sieau/organizations-dataservices.json
+    datasets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-sieau-demo/organizations-datasets.json
+    dataservices: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-sieau-demo/organizations-dataservices.json
   page: # organizations.page is a special case of config.pages
     breadcrumb_title: Contributeurs
     labels:
@@ -380,7 +380,20 @@ networks:
           url: https://www.eaufrance.fr/
           label: Accéder au site
       list_all: true
-      filters: []
+      filters:
+        - id: badge
+          name: Label de donnée
+          type: badge
+        - id: org
+          name: Organisation
+          default_option: Toutes les organisations
+          type: organization_custom
+        - id: inspire
+          name: Thème INSPIRE
+          default_option: Tous les thèmes
+          type: select
+          use_filter_prefix: false
+          values: *inspire_themes
     pages:
       datasets:
         <<: *sieau_common
