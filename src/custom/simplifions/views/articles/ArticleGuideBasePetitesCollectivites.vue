@@ -4,11 +4,10 @@
     :title="articleMeta.title"
     :lead="articleMeta.description"
     :hero-image-src="articleMeta.imageSrc"
-    :article-tags="articleMeta.articleTags"
-    :article-category="articleMeta.articleCategory"
-    :show-no-development-badge="articleMeta.showNoDevelopmentBadge"
+    :article-keywords="articleMeta.articleKeywords"
     :hero-backdrop-gradient="articleMeta.heroBackdropGradient"
     :hero-panel-background="articleMeta.heroPanelBackground"
+    :breadcrumb-links="breadcrumbLinks"
   >
     <ArticleSection
       id="definition"
@@ -101,7 +100,7 @@
 
     <ArticleSection id="actions-rapides" label="À vérifier dès maintenant">
       <p class="fr-text--lead guide-section-lead">
-        Pour s'assurer que votre collectivité utilise déjà bien les bases dont
+        Pour s'assurer que votre collectivité utilise déjà bien les données dont
         toute collectivité peut bénéficier, commencez par ces deux points :
       </p>
 
@@ -244,7 +243,7 @@
           class="fr-btn fr-btn--secondary fr-icon-arrow-right-line fr-btn--icon-right"
           to="/solutions?categorie-de-solution=portail-consultation"
         >
-          Tous les portails de consultation référencés
+          Tous les sites de consultation référencés
         </router-link>
       </div>
     </ArticleSection>
@@ -286,7 +285,7 @@
       </div>
 
       <p>
-        La liste des API et bases de données intégrées par logiciel éditeur se
+        La liste des API et jeux de données intégrées par logiciel éditeur se
         trouve, comme pour chaque solution, en bas de la page simplifions de la
         solution. Cette liste n'est pas exhaustive et sera complétée au fur et
         mesure.
@@ -469,7 +468,7 @@
           identifier de nouveaux logiciels métiers que vous pourriez utiliser ;
         </li>
         <li>
-          vous familiariser avec les API et bases de données et peut-être en
+          vous familiariser avec les API et jeux de données et peut-être en
           intégrer certaines directement dans votre système d'information.
         </li>
       </ul>
@@ -487,25 +486,16 @@
 </template>
 
 <script setup lang="ts">
-import SimplifionsArticleChecklist from '../../../components/article/SimplifionsArticleChecklist.vue'
-import SimplifionsArticleLayout from '../../../components/article/SimplifionsArticleLayout.vue'
-import ArticleSection from '../../../components/article/SimplifionsArticleSection.vue'
-import SimplifionsArticleTopicSpotlight from '../../../components/article/SimplifionsArticleTopicSpotlight.vue'
+import SimplifionsArticleChecklist from '../../components/article/SimplifionsArticleChecklist.vue'
+import SimplifionsArticleLayout from '../../components/article/SimplifionsArticleLayout.vue'
+import ArticleSection from '../../components/article/SimplifionsArticleSection.vue'
+import SimplifionsArticleTopicSpotlight from '../../components/article/SimplifionsArticleTopicSpotlight.vue'
+import {
+  articleGuideBasePetitesCollectivites as articleMeta,
+  getArticleBreadcrumbLinks
+} from '../../model/articles'
 
-const articleMeta = {
-  h1: 'Guide de base pour les petites collectivités',
-  title:
-    'Petites communes : un guide pour simplifier vos démarches',
-  description:
-    "Petites collectivités, simplifiez vos démarches administratives sans développement : portails publics gratuits et logiciels éditeurs déjà raccordés aux données vous permettent d'éviter de les redemander aux usagers.",
-  imageSrc:
-    '/static/simplifions/assets/image-guide-de-base-collectivites-guichet-mairie-2.jpg',
-  articleTags: [{ label: 'Petites collectivités' }],
-  articleCategory: 'guide' as const,
-  showNoDevelopmentBadge: true,
-  heroBackdropGradient: 'linear-gradient(135deg, #34BAB5 0%, #d2e2f6 100%)',
-  heroPanelBackground: 'var(--background-alt-beige-gris-galet)'
-}
+const breadcrumbLinks = getArticleBreadcrumbLinks(articleMeta.h1)
 </script>
 
 <style scoped>

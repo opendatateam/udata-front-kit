@@ -132,12 +132,11 @@
         :key="recommandation.Nom_de_la_recommandation"
         class="fr-mb-4w"
       >
-        <SimplifionsRecoSolutions
-          v-if="recommandation.Solution_recommandee"
-          :recommandation="recommandation"
-        />
-        <SimplifionsRecoDataApi
-          v-else-if="recommandation.API_ou_datasets_recommandes"
+        <SimplifionsReco
+          v-if="
+            recommandation.Solution_recommandee ||
+            recommandation.API_ou_datasets_recommandes
+          "
           :recommandation="recommandation"
         />
       </div>
@@ -170,8 +169,7 @@ import type { CasUsage, Recommandation } from '../model/grist'
 import type { TopicCasUsage } from '../model/topics'
 import { useHashScroll } from '../useHashScroll'
 import DraftTag from './DraftTag.vue'
-import SimplifionsRecoDataApi from './SimplifionsRecoDataApi.vue'
-import SimplifionsRecoSolutions from './SimplifionsRecoSolutions.vue'
+import SimplifionsReco from './SimplifionsReco.vue'
 import SimplifionsTags from './SimplifionsTags.vue'
 
 const props = defineProps<{
