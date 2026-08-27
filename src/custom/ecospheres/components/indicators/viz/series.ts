@@ -30,19 +30,19 @@ function filterDataByAxis(
   )
 }
 
+// Every combination of the split axes' values gets its own series, built
+// from the full data regardless of axisFilters, so series stay index-stable
+// (and thus color-stable) as checkboxes are toggled.
 function splitDataByAxis(
   data: IndicatorVizFormattedRow[],
-  axisNames: string[],
-  groupedAxis: Record<string, boolean>
+  splitAxisNames: string[],
+  groupedAxisNames: string[],
+  axisFilters: Record<string, string[]>
 ): IndicatorVizChartSeries[] {
-  const groupedAxisNames = axisNames.filter((axis) => groupedAxis[axis])
-  const nonGroupedAxisNames = axisNames.filter((axis) => !groupedAxis[axis])
-
   const groupsMap = new Map<string, IndicatorVizFormattedRow[]>()
 
   for (const item of data) {
-    const key =
-      nonGroupedAxisNames.map((axis) => item[axis]).join(' - ') || 'Total'
+    const key = splitAxisNames.map((axis) => item[axis]).join(' - ') || 'Total'
     if (!groupsMap.has(key)) {
       groupsMap.set(key, [])
     }
@@ -55,7 +55,11 @@ function splitDataByAxis(
         ? groupDataByYear(items)
         : items.map((item) => ({ x: item.year, y: item.value as number }))
 
-    return { label: key, data: chartData }
+    const hidden = splitAxisNames.some(
+      (axis) => !(axisFilters[axis] ?? []).includes(String(items[0][axis]))
+    )
+
+    return { label: key, data: chartData, hidden }
   })
 }
 
@@ -63,7 +67,8 @@ export function makeSeries(
   rawData: IndicatorVizFormattedRow[],
   axisNames: string[],
   axisFilters: Record<string, string[]>,
-  groupedAxis: Record<string, boolean>
+  summable: boolean,
+  activeAxis: string | null
 ): IndicatorVizChartSeries[] {
   if (axisNames.length === 0) {
     return [
@@ -74,7 +79,22 @@ export function makeSeries(
     ]
   }
 
-  const filtered = filterDataByAxis(rawData, axisNames, axisFilters)
+  // Not summable: every axis is split into its own series. Summable: only
+  // the active axis is split, the rest are summed into each series.
+  const splitAxisNames = summable ? (activeAxis ? [activeAxis] : []) : axisNames
+  const groupedAxisNames = axisNames.filter(
+    (axis) => !splitAxisNames.includes(axis)
+  )
+
+  // Only the grouped (summed) axes filter rows out: split axes keep every
+  // value so their series stay stable, see splitDataByAxis above.
+  const filtered = filterDataByAxis(rawData, groupedAxisNames, axisFilters)
   debug.log(`⚙️ Data filtered: ${rawData.length} → ${filtered.length} items`)
-  return splitDataByAxis(filtered, axisNames, groupedAxis)
+
+  return splitDataByAxis(
+    filtered,
+    splitAxisNames,
+    groupedAxisNames,
+    axisFilters
+  )
 }
