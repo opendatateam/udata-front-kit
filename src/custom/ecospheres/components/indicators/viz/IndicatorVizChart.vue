@@ -7,11 +7,13 @@ import type {
   IndicatorResource
 } from '../../../model/indicator'
 import { debug } from './debug'
+import { getSeriesColor } from './enums'
 import IndicatorVizAxesFilter from './IndicatorVizAxesFilter.vue'
 import IndicatorVizMeshSelect from './IndicatorVizMeshSelect.vue'
 import IndicatorVizOneYearValue from './IndicatorVizOneYearValue.vue'
 import IndicatorVizTerritorySelect from './IndicatorVizTerritorySelect.vue'
 import { makeSeries } from './series'
+import type { AxisValueDisplay } from './types'
 import { useIndicatorVizChart } from './useIndicatorVizChart'
 import { useIndicatorVizParams } from './useIndicatorVizParams'
 import { useTabularData } from './useTabularData'
@@ -64,6 +66,10 @@ watch(
   { immediate: true }
 )
 
+const isCommuneMesh = computed(
+  () => selectedIndicatorVizMesh.value === 'commune'
+)
+
 const tabularApiUrlRef = toRef(props, 'tabularApiUrl')
 const { rawData, availableAxisValues, isLoading, error } = useTabularData(
   tabularApiUrlRef,
@@ -73,29 +79,41 @@ const { rawData, availableAxisValues, isLoading, error } = useTabularData(
 )
 
 const axisFilters = ref<Record<string, string[]>>({})
-const groupedAxis = ref<Record<string, boolean>>({})
+// The axis currently split into its own series (null when not summable)
+const activeAxis = ref<string | null>(null)
 
 watch(availableAxisValues, (axisValues) => {
   if (Object.keys(axisValues).length === 0) return
   axisFilters.value = { ...axisValues }
-  groupedAxis.value = Object.fromEntries(
-    Object.keys(axisValues).map((axis) => [axis, summable.value])
-  )
+  activeAxis.value = null
 })
 
-// Uses axisFilters keys (not availableAxisValues) to avoid series depending on
-// availableAxisValues, which creates a new object reference on every recompute.
+// Builds the chart series from the current filters
 const series = computed(() =>
+  // axisFilters.value, not availableAxisValues.value: which is a new object on
+  // every recompute.
   makeSeries(
     rawData.value,
     Object.keys(axisFilters.value),
     axisFilters.value,
-    groupedAxis.value
+    summable.value,
+    activeAxis.value
   )
 )
 
 const isOneYear = computed(
   () => series.value.length === 1 && series.value[0].data.length === 1
+)
+
+// Same array, same index -> color as the chart (useIndicatorVizChart's
+// applyColors), so the filter checkboxes always match it exactly.
+const activeAxisValues = computed<AxisValueDisplay[]>(() =>
+  activeAxis.value
+    ? series.value.map((s, idx) => ({
+        value: s.label,
+        color: getSeriesColor(idx)
+      }))
+    : []
 )
 
 const hasNoAxisSelected = computed(
@@ -104,15 +122,19 @@ const hasNoAxisSelected = computed(
     Object.values(axisFilters.value).some((v) => v.length === 0)
 )
 
+// A single axis's values render as a stacked area instead of plain lines.
+const isStackedArea = computed(() => !!activeAxis.value)
+
 const chartCanvas = useTemplateRef<HTMLCanvasElement>('chartCanvas')
 const chartTitle = computed(() => props.indicator.title ?? '')
 
-const { hasNoData } = useIndicatorVizChart(
-  chartCanvas,
+const { hasNoData } = useIndicatorVizChart({
+  canvasRef: chartCanvas,
   series,
-  indicatorExtras,
-  chartTitle
-)
+  extras: indicatorExtras,
+  chartTitle,
+  stacked: isStackedArea
+})
 
 onMounted(() => {
   debug.log(`🔍 Indicator ${props.indicator.id} extras:`, indicatorExtras.value)
@@ -136,14 +158,23 @@ onMounted(() => {
         </div>
         <IndicatorVizAxesFilter
           v-model:filters="axisFilters"
-          v-model:grouped="groupedAxis"
+          v-model:active-axis="activeAxis"
           :available-axis-values="availableAxisValues"
           :summable="summable"
+          :active-axis-values="activeAxisValues"
         />
       </div>
 
       <DsfrAlert
-        v-if="error"
+        v-if="isCommuneMesh"
+        type="info"
+        description="Les données communales sont présentes dans les fichiers, mais la prévisualisation des communes n'est pas disponible."
+        :small="true"
+        class="fr-mt-4w"
+      />
+
+      <DsfrAlert
+        v-else-if="error"
         type="error"
         :description="`Erreur lors du chargement : ${error}`"
         :small="true"
@@ -191,51 +222,53 @@ onMounted(() => {
   width: 100%;
 }
 
+/* Column flex values: .axis-mode-block/.axis-values-block in
+   IndicatorVizAxesFilter.vue, .geo-dropdowns below. */
 .dropdowns {
   display: flex;
   flex-direction: row;
   width: 100%;
-  gap: 1rem;
+  gap: 2rem;
   padding: 16px;
   background-color: #fafafa;
   border: 1px solid #f5f5f5;
 }
 
+@media (max-width: 768px) {
+  .dropdowns {
+    flex-direction: column;
+  }
+}
+
 .geo-dropdowns {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  flex: 0 0 auto;
   align-items: start;
-  flex: 1;
 }
 
 :deep(.geo-dropdowns .fr-select-group) {
   width: 220px;
 }
 
-:deep(.axis-filters) {
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
-  flex: 2;
-}
-
-:deep(.axis-column) {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
 .canvas-container {
   position: relative;
   margin-top: 32px;
   margin-bottom: 64px;
-  height: 300px;
+  height: 420px;
   width: 100%;
 }
 
 .canvas-container:fullscreen {
   background: white;
+  padding: 16px;
+}
+
+:deep(.chart-fullscreen-btn) {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
 }
 
 .loading-overlay {
@@ -256,31 +289,8 @@ onMounted(() => {
   color: #666;
 }
 
-:deep(label) {
-  font-size: 0.7rem;
-  margin-bottom: 0;
-}
-
-:deep(select) {
-  margin-top: 0 !important;
-  font-size: 0.8rem !important;
-}
-
-:deep(.fr-fieldset) {
-  margin-top: 1rem;
-  margin-bottom: 0;
-}
-
-:deep(.fr-fieldset__element) {
-  margin-bottom: 0.5rem;
-}
-
-:deep(summary) {
-  font-size: 0.7rem;
-}
-
-:deep(.fr-toggle label::before) {
-  margin-right: 0.5rem;
+:deep(.geo-dropdowns .fr-label) {
+  font-weight: 700;
 }
 
 .help {
