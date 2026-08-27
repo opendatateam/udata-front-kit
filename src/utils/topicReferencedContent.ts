@@ -8,25 +8,7 @@ import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 import { useTopicStore } from '@/store/TopicStore'
 import { toastHttpError } from '@/utils/error'
 import { isNotFoundError } from '@/utils/http'
-
-/**
- * Generic function to extract a slug from a URI based on base URLs and resource path
- */
-const getSlugFromUri = (
-  uri: string,
-  resourceName: string,
-  baseUrls: (string | undefined)[]
-): string | null => {
-  const validBaseUrls = baseUrls.filter(Boolean)
-  if (validBaseUrls.length === 0) return null
-
-  for (const baseUrl of validBaseUrls) {
-    const match = uri.match(new RegExp(`${baseUrl}/${resourceName}/([^/]+)`))
-    if (match) return match[1]
-  }
-
-  return null
-}
+import { getSlugFromUri } from '@/utils/topic'
 
 /**
  * Generic function to load URI-referenced content (topics or dataservices) from factors

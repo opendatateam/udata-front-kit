@@ -128,21 +128,21 @@ const tabTitles = computed(() => {
   const titles = []
   if (filteredLogicielsMetiers.value.length > 0) {
     titles.push({
-      title: `Logiciels métiers (${filteredLogicielsMetiers.value.length}) 💠💠💠`,
+      title: `Logiciels métiers (${filteredLogicielsMetiers.value.length})`,
       tabId: 'tab-logiciel-metier',
       panelId: 'tab-content-logiciel-metier'
     })
   }
   if (filteredBriquesTechniques.value.length > 0) {
     titles.push({
-      title: `Briques techniques (${filteredBriquesTechniques.value.length}) 💠💠💠`,
+      title: `API, jeu de données ou brique logicielle (${filteredBriquesTechniques.value.length})`,
       tabId: 'tab-brique-technique',
       panelId: 'tab-content-brique-technique'
     })
   }
   if (filteredPortailsConsultation.value.length > 0) {
     titles.push({
-      title: `Portails de consultation (${filteredPortailsConsultation.value.length})`,
+      title: `Sites de consultation (${filteredPortailsConsultation.value.length})`,
       tabId: 'tab-portail-consultation',
       panelId: 'tab-content-portail-consultation'
     })

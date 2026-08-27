@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import config from '@/config'
+import { trackEvent } from '@/utils/matomo'
 import { useRouter } from 'vue-router'
 import type { EcologieHomepageThematicTag } from '../../model/config'
 
@@ -46,6 +47,7 @@ const doSearch = (q: string) => {
               <RouterLink
                 :to="{ name: 'datasets', query: { q: tag.q } }"
                 class="fr-tag"
+                @click="trackEvent('Accueil', 'Clic tag thématique', tag.label)"
               >
                 {{ tag.label }}
               </RouterLink>

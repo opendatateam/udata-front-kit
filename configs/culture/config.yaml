@@ -47,17 +47,19 @@ website:
     external_links:
       - label: 'culture.gouv.fr'
         href: 'https://www.culture.gouv.fr/'
+        title: 'culture.gouv.fr - nouvelle fenêtre'
       #    - label: 'Portail des API Météo-France'
       #      href: 'https://portail-api.meteofrance.fr/'
       - label: 'data.gouv.fr'
         href: 'https://www.data.gouv.fr'
+        title: 'data.gouv.fr - nouvelle fenêtre'
     mandatory_links:
       - label: 'Licences'
-        to: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
+        href: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
       - label: "Conditions générales d'utilisation"
-        to: 'https://www.data.gouv.fr/fr/terms/'
+        href: 'https://www.data.gouv.fr/fr/terms/'
       - label: 'Politique de confidentialité'
-        to: 'https://www.data.gouv.fr/fr/suivi/'
+        href: 'https://www.data.gouv.fr/fr/suivi/'
       - label: 'Accessibilité : non conforme'
         to: '/accessibility'
   header:
@@ -134,9 +136,9 @@ website:
     files_list: 6
   contact_email: datagouv@datagouv.gouv.fr
   home_banner_colors:
-    - '#f6f6f6'
     - '#e3e3fd'
-    - '#019FE3'
+    - '#eaf3ef'
+    - '#c9e8b3'
   matomo:
     host: 'https://stats.data.gouv.fr'
     siteId: 312
@@ -185,6 +187,7 @@ pages:
       discussions:
         display: true
         create: true
+        notify_url_override: false
       datasets:
         display: true
       reuses:
@@ -254,15 +257,16 @@ pages:
       extended: jeu de données
     search:
       input: Rechercher un jeu de données
-      placeholder: null
+      placeholder: Rechercher les données du DEPS
     banner:
-      title: Un guichet unique pour l'accès aux données de la culture
+      title: Au sein des données de la Culture, un accès unique aux données du DEPS.
       content: |
         Cette collection constitue une base évolutive, appelée à s'enrichir et à s'affiner grâce aux retours et aux besoins exprimés par les acteurs partenaires.
     resources_tabs:
       discussions:
         display: true
         create: true
+        notify_url_override: false
       datasets:
         display: true
       reuses:
@@ -271,19 +275,29 @@ pages:
     filters:
       - name: Thématique
         default_option: Toutes les catégories
-        id: tag
+        id: thematique
+        api_param: tag
         type: select
         use_filter_prefix: false
         values:
-          - name: 'Suivi conjoncturel des secteurs culturels marchands'
-            id: suivi-conjoncturel-des-secteurs-culturels-marchands
-          - name: 'Poids économique direct'
-            id: poids-economique-direct
-          - name: 'Financement'
-            id: financement
+          - name: '📊 Économie du champ culturel'
+            id: economie-culturelle
+          - name: '🎓 Formation, emploi et revenus'
+            id: formation-emploi-revenus
+          - name: '🗺️ Géographie des activités culturelles'
+            id: geographie-activites-culturelles
+          - name: '👥 Pratiques, usages et consommations'
+            id: pratiques-usages-consommations
+          - name: '🏛️ Patrimoines'
+            id: patrimoines
+          - name: '🎨 Création artistique'
+            id: creation-artistique
+          - name: '🎬 Médias et industries culturelles'
+            id: medias-industries-culturelles
       - name: Sous-thématique
         default_option: Toutes les catégories
-        id: tag
+        id: sous-thematique
+        api_param: tag
         type: select
         use_filter_prefix: false
         values:

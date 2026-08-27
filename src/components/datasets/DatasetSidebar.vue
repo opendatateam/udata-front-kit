@@ -32,6 +32,13 @@ const showHarvestQualityWarning = computed(() => {
   const warningBackends = datasetsConf.harvest_backends_quality_warning || []
   return backend && warningBackends.includes(backend)
 })
+
+const hasContactPointsWithSpecificRole = computed(() => {
+  if (!props.dataset) return false
+  return props.dataset.contact_points.some(
+    (contactPoint) => contactPoint.role !== 'contact'
+  )
+})
 </script>
 
 <template>
@@ -39,14 +46,14 @@ const showHarvestQualityWarning = computed(() => {
     <SidebarList>
       <SidebarItem
         id="producer"
-        :term="dataset.contact_points.length ? 'Éditeur' : 'Producteur'"
+        :term="hasContactPointsWithSpecificRole ? 'Diffuseur' : 'Producteur'"
       >
         <SidebarOwner :object="dataset" />
       </SidebarItem>
       <SidebarItem
         v-if="dataset.contact_points.length"
         id="attributions"
-        term="Attributions"
+        :term="hasContactPointsWithSpecificRole ? 'Attributions' : 'Contacts'"
       >
         <ContactPoints :contact-points="dataset.contact_points" />
       </SidebarItem>

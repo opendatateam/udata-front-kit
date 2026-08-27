@@ -2,8 +2,9 @@ import Chart, { type ChartConfiguration } from 'chart.js/auto'
 import type { Ref } from 'vue'
 import type { IndicatorExtrasData } from '../../../model/indicator'
 import { debug } from './debug'
-import { COLORS } from './enums'
+import { getSeriesColor } from './enums'
 import { formatBigNumber, formatNumber } from './format'
+import { fullscreenPlugin } from './fullscreenPlugin'
 import type { IndicatorVizChartSeries } from './types'
 
 function getMinMaxYear(years: number[]): [number, number] {
@@ -15,18 +16,26 @@ function getMinMaxYear(years: number[]): [number, number] {
   return [minYear, maxYear]
 }
 
+interface BuildConfigOptions {
+  extras: IndicatorExtrasData
+  chartTitle: string
+  stacked: boolean
+}
+
 function buildConfig(
   series: IndicatorVizChartSeries[],
-  extras: IndicatorExtrasData,
-  chartTitle: string
+  { extras, chartTitle, stacked }: BuildConfigOptions
 ): ChartConfiguration {
   const maxValue = Math.max(...series.flatMap((s) => s.data.map((p) => p.y)))
   const years = series.flatMap((s) => s.data.map((p) => p.x))
   const [minYear, maxYear] = getMinMaxYear(years)
+  const type = series.every((s) => s.data.length <= 1) ? 'bar' : 'line'
+  const effectiveStacked = type === 'bar' ? false : stacked
 
   return {
-    type: series.every((s) => s.data.length <= 1) ? 'bar' : 'line',
+    type,
     data: { datasets: series },
+    plugins: [fullscreenPlugin],
     options: {
       responsive: true,
       maintainAspectRatio: false,
@@ -71,6 +80,7 @@ function buildConfig(
           }
         },
         y: {
+          stacked: effectiveStacked,
           title: { display: true, text: extras.unite },
           beginAtZero: extras.y_start_at_zero ?? false,
           ticks: {
@@ -85,25 +95,38 @@ function buildConfig(
   }
 }
 
-function applyColors(
-  series: IndicatorVizChartSeries[]
+function applyStyles(
+  series: IndicatorVizChartSeries[],
+  { stacked }: { stacked: boolean }
 ): IndicatorVizChartSeries[] {
   series.forEach((s, idx) => {
-    s.borderColor = COLORS[idx % COLORS.length]
-    s.backgroundColor = COLORS[idx % COLORS.length]
+    s.borderColor = getSeriesColor(idx)
+    s.backgroundColor = getSeriesColor(idx)
+    // Turns the line into a stacked area (paired with y.stacked in buildConfig).
+    s.fill = stacked
   })
   return series
 }
 
-export function useIndicatorVizChart(
-  canvasRef: Ref<HTMLCanvasElement | null>,
-  series: Ref<IndicatorVizChartSeries[]>,
-  extras: Ref<IndicatorExtrasData>,
+interface UseIndicatorVizChartOptions {
+  canvasRef: Ref<HTMLCanvasElement | null>
+  series: Ref<IndicatorVizChartSeries[]>
+  extras: Ref<IndicatorExtrasData>
   chartTitle: Ref<string>
-) {
+  stacked: Ref<boolean>
+}
+
+export function useIndicatorVizChart({
+  canvasRef,
+  series,
+  extras,
+  chartTitle,
+  stacked
+}: UseIndicatorVizChartOptions) {
   let chartInstance: Chart | null = null
   let currentType: 'bar' | 'line' | null = null
   let currentIsMultiSeries: boolean | null = null
+  let currentStacked: boolean | null = null
   const hasNoData = ref(false)
 
   function destroyChart() {
@@ -112,6 +135,7 @@ export function useIndicatorVizChart(
       chartInstance = null
       currentType = null
       currentIsMultiSeries = null
+      currentStacked = null
     }
   }
 
@@ -125,25 +149,36 @@ export function useIndicatorVizChart(
     }
     debug.log(`⚙️ Computing chart`, { datasetsCount: newSeries.length })
 
-    const colored = applyColors(newSeries.map((s) => ({ ...s })))
+    const styled = applyStyles(
+      newSeries.map((s) => ({ ...s })),
+      {
+        stacked: stacked.value
+      }
+    )
 
-    const newType = colored.every((s) => s.data.length <= 1) ? 'bar' : 'line'
-    const newIsMultiSeries = colored.length > 1
+    const newType = styled.every((s) => s.data.length <= 1) ? 'bar' : 'line'
+    const newIsMultiSeries = styled.length > 1
 
     if (
       chartInstance &&
       currentType === newType &&
-      currentIsMultiSeries === newIsMultiSeries
+      currentIsMultiSeries === newIsMultiSeries &&
+      currentStacked === stacked.value
     ) {
-      chartInstance.data.datasets = colored
+      chartInstance.data.datasets = styled
       chartInstance.update()
     } else {
       destroyChart()
       currentType = newType
       currentIsMultiSeries = newIsMultiSeries
+      currentStacked = stacked.value
       chartInstance = new Chart(
         canvasRef.value,
-        buildConfig(colored, extras.value, chartTitle.value)
+        buildConfig(styled, {
+          extras: extras.value,
+          chartTitle: chartTitle.value,
+          stacked: stacked.value
+        })
       )
     }
   }
