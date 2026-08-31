@@ -285,7 +285,6 @@ Le déploiement peut aussi être déclenché manuellement via l'interface GitHub
 Le déploiement s'articule autour d'un tag `{site}-{env}-{YYYYMMDD}-{N}` :
 
 1. **`create-deploy-release-via-tag.yml`** :
-
    - Calcule le prochain tag pour le jour courant, le crée sur la branche `{site}-{env}` et le pousse
    - Déclenche le workflow de build, puis crée la release GitHub si `create_release` est activé
 
