@@ -286,8 +286,8 @@ Le déploiement s'articule autour d'un tag `{site}-{env}-{YYYYMMDD}-{N}` :
 
 1. **`create-deploy-release-via-tag.yml`** :
 
-- calcule le prochain tag pour le jour courant, le crée sur la branche `{site}-{env}` et le pousse
-- déclenche le workflow de build, puis crée la release GitHub si `create_release` est activé
+   - Calcule le prochain tag pour le jour courant, le crée sur la branche `{site}-{env}` et le pousse
+   - Déclenche le workflow de build, puis crée la release GitHub si `create_release` est activé
 
 2. **`build-push-image.yml`** : décompose le tag (validé contre les variables de dépôt `SITES` et `ENVS`), construit l'image et la pousse sur le registre en `{site}-{env}:{YYYYMMDD}-{N}` et `{site}-{env}:latest`
 3. L'infrastructure récupère ensuite l'image depuis le registre
