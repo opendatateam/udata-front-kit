@@ -290,7 +290,7 @@ Le déploiement s'articule autour d'un tag `{site}-{env}-{YYYYMMDD}-{N}` :
    - Déclenche le workflow de build, puis crée la release GitHub si `create_release` est activé
 
 2. **`build-push-image.yml`** : décompose le tag (validé contre les variables de dépôt `SITES` et `ENVS`), construit l'image et la pousse sur le registre en `{site}-{env}:{YYYYMMDD}-{N}` et `{site}-{env}:latest`
-3. L'infrastructure récupère ensuite l'image depuis le registre
+3. L'infrastructure récupère ensuite l'image depuis le registre et la déploie automatiquement dans l'environnement cible
 
 Les deux workflows sont déclenchés exclusivement par `workflow_dispatch` : pousser un tag à la main ne construit rien.
 
