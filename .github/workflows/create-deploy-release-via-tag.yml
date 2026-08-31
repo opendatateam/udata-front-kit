@@ -64,6 +64,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           ref: ${{ steps.ref.outputs.ref }}
+          fetch-tags: true
 
       - name: Compute next tag
         id: version
@@ -73,9 +74,8 @@ jobs:
           ENVIRONMENT="${{ inputs.environment }}"
           TODAY=$(date +%Y%m%d)
           PREFIX="${SITE}-${ENVIRONMENT}-${TODAY}"
-          PATTERN="${PREFIX}-[0-9]+"
 
-          EXISTING=$(git ls-remote --tags origin | grep -Eo "refs/tags/${PATTERN}$" | sed 's#refs/tags/##' || true)
+          EXISTING=$(git tag -l "${PREFIX}-*")
 
           NEXT=1
           if [[ -n "$EXISTING" ]]; then
@@ -120,11 +120,10 @@ jobs:
           SITE: ${{ inputs.site }}
           ENV: ${{ inputs.environment }}
         run: |
-          # Checkout does not fetch tags, so read the previous release tag from the
-          # remote. The pattern skips the legacy <site>-<env>-X.Y.Z tags, and sort -V
+          # The pattern skips the legacy <site>-<env>-X.Y.Z tags, and sort -V
           # because N is not zero-padded (-10 would sort before -2).
-          PREV=$(git ls-remote --tags --refs origin \
-            | grep -Eo "${SITE}-${ENV}-[0-9]{8}-[0-9]+$" \
+          PREV=$(git tag -l "${SITE}-${ENV}-*" \
+            | grep -E "^${SITE}-${ENV}-[0-9]{8}-[0-9]+$" \
             | grep -v "^${TAG}$" \
             | sort -V | tail -1 || true)
 
