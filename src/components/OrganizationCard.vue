@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import VIconDsfr from '@/components/VIconDsfr.vue'
+import EntityTypeBadges from '@/components/EntityTypeBadges.vue'
 import { stripFromMarkdown } from '@/utils'
 
 const props = defineProps({
@@ -46,17 +46,11 @@ const isPublicService = (): boolean =>
             class="fr-tile__link"
             :to="`/organizations/${organization.slug}`"
           >
-            <VIconDsfr
-              v-if="isPublicService()"
-              name="bank-line"
-              class="fr-icon--sm fr-mr-1v badge"
-            />
-            {{ organization.name }}
-            <VIconDsfr
-              v-if="isCertified()"
-              name="checkbox-circle-line"
-              class="fr-icon--sm fr-mr-1v badge"
-            />
+            <EntityTypeBadges
+              :public-service="isPublicService()"
+              :certified="isCertified()"
+              >{{ organization.name }}</EntityTypeBadges
+            >
           </RouterLink>
         </component>
       </div>
@@ -89,10 +83,6 @@ const isPublicService = (): boolean =>
 
 .fr-tile__link {
   color: var(--text-default-grey);
-}
-
-.fr-title-v2__title .badge {
-  color: var(--text-active-blue-france);
 }
 
 .card__tag {
