@@ -25,7 +25,6 @@ const router = useRouter()
 const datasetsConf = useDatasetsConf()
 const { enabled: newExplorerCookieEnabled, setEnabled: setNewExplorerEnabled } =
   useNewExplorer()
-// Ignores a stale cookie on tenants not opted into the spike.
 const newExplorerEnabled = computed(
   () =>
     datasetsConf.new_explorer_enabled === true && newExplorerCookieEnabled.value
