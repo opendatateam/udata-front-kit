@@ -314,58 +314,6 @@ definitions: &definitions
 #                               # page sharing their subpath's name (e.g. `datasets` -> /datasets/:id),
 #                               # so `resources_tabs`/`editable` (detail-view-only) can be omitted.
 networks:
-  simm:
-    x-simm-common: &simm_common
-      universe_query:
-        topic: 6a82baef02381db0dc7229cf
-      filter_prefix:
-      title: Milieu Marin France
-      banner:
-        title: L'accès de référence aux données publiques sur le milieu marin français
-        content: Milieu Marin France fédère et diffuse les données des politiques publiques françaises sur le milieu marin dans le cadre du Système d’information sur le milieu marin (SIMM).
-        logo: /static/ecospheres/logos/networks/simm.svg
-        external_link:
-          url: https://www.milieumarinfrance.fr/
-          label: Accéder au site
-      list_all: true
-      filters:
-        - id: badge
-          name: Label de donnée
-          type: badge
-        - id: org
-          name: Organisation
-          default_option: Toutes les organisations
-          type: organization_custom
-        - id: inspire
-          name: Thème INSPIRE
-          default_option: Tous les thèmes
-          type: select
-          use_filter_prefix: false
-          values: *inspire_themes
-    pages:
-      datasets:
-        <<: *simm_common
-        object_type: datasets
-        breadcrumb_title: Jeux de données
-        labels:
-          singular: jeu de données
-          plural: jeux de données
-          extended: jeu de données
-        search:
-          input: Rechercher dans les données du réseau SIMM
-          placeholder: null
-      dataservices:
-        <<: *simm_common
-        object_type: dataservices
-        breadcrumb_title: API
-        labels:
-          singular: API
-          plural: APIs
-          extended: API
-          feminine: true
-        search:
-          input: Rechercher dans les API du réseau SIMM
-          placeholder: null
   sieau:
     x-sieau-common: &sieau_common
       universe_query:
@@ -417,6 +365,58 @@ networks:
           feminine: true
         search:
           input: Rechercher dans les API du réseau Eaufrance
+          placeholder: null
+  simm:
+    x-simm-common: &simm_common
+      universe_query:
+        topic: 6a82baef02381db0dc7229cf
+      filter_prefix:
+      title: Milieu Marin France
+      banner:
+        title: L'accès de référence aux données publiques sur le milieu marin français
+        content: Milieu Marin France fédère et diffuse les données des politiques publiques françaises sur le milieu marin dans le cadre du Système d’information sur le milieu marin (SIMM).
+        logo: /static/ecospheres/logos/networks/simm.svg
+        external_link:
+          url: https://www.milieumarinfrance.fr/
+          label: Accéder au site
+      list_all: true
+      filters:
+        - id: badge
+          name: Label de donnée
+          type: badge
+        - id: org
+          name: Organisation
+          default_option: Toutes les organisations
+          type: organization_custom
+        - id: inspire
+          name: Thème INSPIRE
+          default_option: Tous les thèmes
+          type: select
+          use_filter_prefix: false
+          values: *inspire_themes
+    pages:
+      datasets:
+        <<: *simm_common
+        object_type: datasets
+        breadcrumb_title: Jeux de données
+        labels:
+          singular: jeu de données
+          plural: jeux de données
+          extended: jeu de données
+        search:
+          input: Rechercher dans les données du réseau SIMM
+          placeholder: null
+      dataservices:
+        <<: *simm_common
+        object_type: dataservices
+        breadcrumb_title: API
+        labels:
+          singular: API
+          plural: APIs
+          extended: API
+          feminine: true
+        search:
+          input: Rechercher dans les API du réseau SIMM
           placeholder: null
 
 # Configuration format for pages:
