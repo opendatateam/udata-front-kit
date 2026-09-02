@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
+import VIconDsfr from '@/components/VIconDsfr.vue'
 import type { NetworkConf } from '@/model/config'
 
 const props = defineProps<{
@@ -34,7 +35,12 @@ const to = computed(() => ({
       <div class="fr-col fr-px-3v">
         <component :is="headingLevel" class="fr-title-v2__title fr-m-0 h4">
           <RouterLink class="fr-tile__link" :to="to">
+            <VIconDsfr name="bank-line" class="fr-icon--sm fr-mr-1v badge" />
             {{ name }}
+            <VIconDsfr
+              name="checkbox-circle-line"
+              class="fr-icon--sm fr-mr-1v badge"
+            />
           </RouterLink>
         </component>
       </div>
@@ -58,5 +64,9 @@ const to = computed(() => ({
 
 .fr-tile__link {
   color: var(--text-default-grey);
+}
+
+.fr-title-v2__title .badge {
+  color: var(--text-active-blue-france);
 }
 </style>
