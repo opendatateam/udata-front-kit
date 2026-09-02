@@ -25,15 +25,13 @@ const router = useRouter()
 const datasetsConf = useDatasetsConf()
 const { enabled: newExplorerCookieEnabled, setEnabled: setNewExplorerEnabled } =
   useNewExplorer()
-// The toggle only exists on tenants opted into the spike; other tenants keep the
-// classic ResourcesList regardless of a stale cookie from a previous visit.
+// Ignores a stale cookie on tenants not opted into the spike.
 const newExplorerEnabled = computed(
   () =>
     datasetsConf.new_explorer_enabled === true && newExplorerCookieEnabled.value
 )
 
-// Going back to the old navigation drops ?resource_id: it doesn't carry the same
-// meaning there.
+// Drops ?resource_id when reverting: it doesn't carry the same meaning on the old navigation.
 function toggleNewExplorer() {
   const enable = !newExplorerEnabled.value
   setNewExplorerEnabled(enable)

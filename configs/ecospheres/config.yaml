@@ -189,7 +189,7 @@ website:
       - CSW-DCAT
       - CSW-ISO-19139
     show_extended_information_panel: true
-    # Spike: new @datagouv/components-next ResourceExplorer, opt-in via a banner toggle
+    # new @datagouv/components-next ResourceExplorer, opt-in via a banner toggle
     new_explorer_enabled: true
   # TODO: better place for that?
   topics:
