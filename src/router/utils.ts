@@ -269,6 +269,7 @@ export const useGlobalSearchPageRoutes = ({
     component: detailsViewComponent ?? defaultDetailsViews[objectType],
     meta: {
       pageKey,
+      objectType,
       descriptionComponent,
       cardComponent,
       datasetCardComponent

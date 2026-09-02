@@ -129,6 +129,12 @@ const routerPromise = siteRoutesPromise.then((siteRoutes) => {
       if (to.meta.searchConfig && from.meta.searchConfig) {
         return false
       }
+      // Preserve scroll on dataset detail pages (datasets, indicators, ...): their
+      // ResourceExplorer navigates resources/tabs via router.replace on the same
+      // route, which isn't a page navigation.
+      if (to.path === from.path && to.meta.objectType === 'datasets') {
+        return false
+      }
       if (savedPosition !== null) {
         return savedPosition
       } else {

@@ -14,6 +14,9 @@ declare module 'vue-router' {
     datasetCardComponent?: () => Promise<{ default: Component }>
     descriptionComponent?: () => Promise<{ default: Component }>
     pageKey?: string
+    // Detail page's object type (e.g. to scope behaviour to dataset detail pages,
+    // regardless of pageKey - datasets, indicators, ...)
+    objectType?: PageObjectType
     // GlobalSearch-specific
     searchType?: PageObjectType
     searchConfig?: GlobalSearchConfig

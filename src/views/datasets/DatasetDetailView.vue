@@ -10,7 +10,7 @@ import DatasetInformationPanel from '@/components/datasets/DatasetInformationPan
 import DatasetReusesList from '@/components/datasets/DatasetReusesList.vue'
 import DatasetSidebar from '@/components/datasets/DatasetSidebar.vue'
 import ExtendedInformationPanel from '@/components/datasets/ExtendedInformationPanel.vue'
-import ResourcesList from '@/components/datasets/ResourcesList.vue'
+import ResourcesTabContent from '@/components/datasets/ResourcesTabContent.vue'
 import config from '@/config'
 import { useCurrentPageConf, useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/DatasetStore'
@@ -212,7 +212,7 @@ onMounted(() => {
     >
       <!-- Fichiers -->
       <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0">
-        <ResourcesList :dataset="dataset" />
+        <ResourcesTabContent :dataset="dataset" />
         <div v-if="ogcLayerInfo.has(dataset.id)" class="fr-mt-2w">
           <DsfrButton
             secondary
