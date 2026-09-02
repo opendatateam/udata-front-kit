@@ -19,6 +19,7 @@ declare global {
       mockDatasetBadges(): Chainable<void>
       mockDatasetFrequencies(): Chainable<void>
       mockDatasetLicenses(): Chainable<void>
+      mockDatasetNetworks(datasetId: string, topics?: object[]): Chainable<void>
       mockDatasetSchemas(): Chainable<void>
       mockGristImages(): Chainable<void>
       mockGristRecord(resourceId: string, element: { id: number; [key: string]: unknown }): Chainable<void>
