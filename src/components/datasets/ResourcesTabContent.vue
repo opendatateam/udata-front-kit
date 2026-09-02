@@ -15,6 +15,10 @@ defineProps({
   noFileMessage: {
     type: String,
     default: "Il n'y a pas encore de fichier pour ce jeu de données."
+  },
+  fromRouteName: {
+    type: String,
+    default: 'datasets_detail'
   }
 })
 
@@ -58,6 +62,10 @@ function toggleNewExplorer() {
       </BrandedButton>
     </template>
   </BannerAction>
-  <NewResourceExplorer v-if="newExplorerEnabled" :dataset="dataset" />
+  <NewResourceExplorer
+    v-if="newExplorerEnabled"
+    :dataset="dataset"
+    :from-route-name="fromRouteName"
+  />
   <ResourcesList v-else :dataset="dataset" :no-file-message="noFileMessage" />
 </template>

@@ -6,14 +6,20 @@ import type {
 } from '@datagouv/components-next'
 import { ResourceExplorer } from '@datagouv/components-next'
 import { onErrorCaptured, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 import BlankState from '@/components/BlankState.vue'
-import config from '@/config'
 
 const props = defineProps({
   dataset: {
     type: Object as () => DatasetV2WithFullObject,
     required: true
+  },
+  // Route name to come back to when exiting the fullscreen explorer (datasets_detail,
+  // indicators_detail, ...) - both share object_type: datasets but have distinct pages.
+  fromRouteName: {
+    type: String,
+    default: 'datasets_detail'
   }
 })
 
@@ -21,9 +27,18 @@ const props = defineProps({
 // @ts-expect-error dataset prop is typed as DatasetV2, not DatasetV2WithFullObject
 const datasetForExplorer: DatasetV2 = props.dataset
 
-// Links out to data.gouv.fr's own /explore page instead of us building fullscreen mode here.
+// Absolute URL, not a router-relative path: AppLink (used by the button ResourceExplorer
+// renders this through) prepends `/${locale}` to any relative string href, since cdata's
+// own routes are locale-prefixed - ours aren't, so that would 404 the link.
+const router = useRouter()
 const exploreTo = (resource: Resource) =>
-  `${config.datagouvfr.base_url}/explore/${props.dataset.slug}?resource_id=${resource.id}`
+  `${window.location.origin}${
+    router.resolve({
+      name: 'explore',
+      params: { item_id: props.dataset.slug },
+      query: { resource_id: resource.id, from: props.fromRouteName }
+    }).href
+  }`
 
 // Without this, a rejected async resource fetch leaves the Suspense fallback spinning forever.
 const loadError = ref(false)

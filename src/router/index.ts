@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
 import config from '@/config'
 import type { StaticPageConfig } from '@/model/config'
+import { useNewExplorer } from '@/utils/newExplorer'
 import NotFoundView from '@/views/NotFoundView.vue'
 import StaticPageView from '@/views/StaticPageView.vue'
 
@@ -15,6 +16,27 @@ const defaultRoutes: RouteRecordRaw[] = [
       title: 'Accueil'
     },
     component: async () => await import('@/views/HomeView.vue')
+  },
+  // fullscreen resource explorer, opt-in per site (see useNewExplorer)
+  {
+    path: '/explore/:item_id',
+    name: 'explore',
+    meta: {
+      hideChrome: true,
+      // Reuses the same-route scroll-preservation rule as inline dataset detail pages
+      objectType: 'datasets'
+    },
+    component: async () =>
+      await import('@/views/datasets/DatasetExploreView.vue'),
+    beforeEnter: (to) => {
+      const { eligible } = useNewExplorer()
+      if (!eligible.value) {
+        return {
+          name: 'datasets_detail',
+          params: { item_id: to.params.item_id }
+        }
+      }
+    }
   },
   // technical pages
   {

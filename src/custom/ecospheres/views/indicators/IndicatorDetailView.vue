@@ -160,6 +160,7 @@ onMounted(() => {
         <ResourcesTabContent
           :dataset="indicator"
           no-file-message="Il n'y a pas encore de fichier pour cet indicateur."
+          from-route-name="indicators_detail"
         />
       </DsfrTabContent>
 
