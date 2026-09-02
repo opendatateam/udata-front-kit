@@ -3,6 +3,7 @@ import { computed, onMounted, ref } from 'vue'
 
 import LogoBox from '@/components/LogoBox.vue'
 import SidebarItem from '@/components/SidebarItem.vue'
+import VIconDsfr from '@/components/VIconDsfr.vue'
 import { useTopicStore } from '@/store/TopicStore'
 import { useNetworksConf, useNetworksTag } from '@/utils/config'
 
@@ -69,7 +70,12 @@ onMounted(async () => {
       <LogoBox v-if="network.logo" :src="network.logo" class="fr-mr-1-5v" />
       <p class="fr-col fr-m-0 min-width-0">
         <RouterLink class="fr-link network-link" :to="network.to">
+          <VIconDsfr name="bank-line" class="fr-icon--sm fr-mr-1v badge" />
           {{ network.title }}
+          <VIconDsfr
+            name="checkbox-circle-line"
+            class="fr-icon--sm fr-mr-1v badge"
+          />
         </RouterLink>
       </p>
     </div>
@@ -94,5 +100,9 @@ onMounted(async () => {
 a.network-link:hover,
 a.network-link:active {
   --underline-hover-width: 0;
+}
+
+.badge {
+  color: var(--text-active-blue-france);
 }
 </style>
