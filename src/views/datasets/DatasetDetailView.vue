@@ -19,6 +19,7 @@ import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
 import { useDatasetsConf, usePageConf } from '@/utils/config'
 import { useLabels } from '@/utils/labels'
+import { useNewExplorer } from '@/utils/newExplorer'
 import type { OgcLayerInfo } from '@/utils/ogcServices'
 import { fetchAllOgcResources } from '@/utils/ogcServices'
 import { openInQgis } from '@/utils/qgis'
@@ -61,6 +62,7 @@ const topicPageKey = datasetsConf.add_to_topic?.page
 const topicPageConf = topicPageKey ? usePageConf(topicPageKey) : null
 const labels = useLabels(pageConf.labels)
 const topicLabels = topicPageConf ? useLabels(topicPageConf.labels) : null
+const { enabled: newExplorerEnabled } = useNewExplorer()
 
 const canEdit = computed(() => {
   return pageConf.editable && userStore.hasEditPermissions(dataset.value)
@@ -155,7 +157,10 @@ onMounted(() => {
       <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
     </div>
     <div
-      v-if="dataset && (canEdit || canAddToTopic || exploreUrl)"
+      v-if="
+        dataset &&
+        (canEdit || canAddToTopic || (exploreUrl && !newExplorerEnabled))
+      "
       class="fr-col-auto fr-grid-row fr-grid-row--middle flex-gap"
     >
       <!-- add dataset to topic (if enabled) -->
@@ -175,7 +180,7 @@ onMounted(() => {
         />
       </template>
       <DsfrButton
-        v-if="exploreUrl"
+        v-if="exploreUrl && !newExplorerEnabled"
         size="sm"
         label="Explorer les données"
         icon="fr-icon-table-line"

@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import type { DatasetV2WithFullObject } from '@datagouv/components-next'
 import { BannerAction, BrandedButton } from '@datagouv/components-next'
-import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import NewResourceExplorer from '@/components/datasets/NewResourceExplorer.vue'
 import ResourcesList from '@/components/datasets/ResourcesList.vue'
-import { useDatasetsConf } from '@/utils/config'
 import { useNewExplorer } from '@/utils/newExplorer'
 
 defineProps({
@@ -22,13 +20,11 @@ defineProps({
 
 const route = useRoute()
 const router = useRouter()
-const datasetsConf = useDatasetsConf()
-const { enabled: newExplorerCookieEnabled, setEnabled: setNewExplorerEnabled } =
-  useNewExplorer()
-const newExplorerEnabled = computed(
-  () =>
-    datasetsConf.new_explorer_enabled === true && newExplorerCookieEnabled.value
-)
+const {
+  eligible: newExplorerEligible,
+  enabled: newExplorerEnabled,
+  setEnabled: setNewExplorerEnabled
+} = useNewExplorer()
 
 // Drops ?resource_id when reverting: it doesn't carry the same meaning on the old navigation.
 function toggleNewExplorer() {
@@ -43,7 +39,7 @@ function toggleNewExplorer() {
 
 <template>
   <BannerAction
-    v-if="datasetsConf.new_explorer_enabled"
+    v-if="newExplorerEligible"
     class="fr-mb-2w"
     type="primary"
     :title="
