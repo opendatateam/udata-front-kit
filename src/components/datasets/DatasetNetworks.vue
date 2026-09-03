@@ -61,7 +61,11 @@ onMounted(async () => {
 </script>
 
 <template>
-  <SidebarItem v-if="networks.length > 0" id="networks" term="Réseaux">
+  <SidebarItem
+    v-if="networks.length > 0"
+    id="networks"
+    :term="networks.length === 1 ? 'Réseau' : 'Réseaux'"
+  >
     <div
       v-for="network in networks"
       :key="network.slug"
