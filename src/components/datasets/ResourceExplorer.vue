@@ -15,14 +15,14 @@ const props = defineProps({
     type: Object as () => DatasetV2WithFullObject,
     required: true
   },
-  // Route to return to on exit: datasets_detail and indicators_detail share object_type but are distinct pages.
+  // Route name to return to on exit from full screen mode.
   fromRouteName: {
     type: String,
     default: 'datasets_detail'
   }
 })
 
-// FIXME: ResourceExplorer should accept DatasetV2WithFullObject — same upstream bug as ResourceAccordion (see ResourcesList.vue)
+// FIXME: ResourceExplorer should accept DatasetV2WithFullObject; same upstream bug as ResourceAccordion.
 // @ts-expect-error dataset prop is typed as DatasetV2, not DatasetV2WithFullObject
 const datasetForExplorer: DatasetV2 = props.dataset
 

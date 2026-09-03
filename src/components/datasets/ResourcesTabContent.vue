@@ -5,7 +5,7 @@ import { useRoute, useRouter } from 'vue-router'
 
 import ResourceExplorer from '@/components/datasets/ResourceExplorer.vue'
 import ResourcesList from '@/components/datasets/ResourcesList.vue'
-import { useExplorer } from '@/utils/explorer'
+import { useResourceExplorer } from '@/utils/explorer'
 
 defineProps({
   dataset: {
@@ -25,15 +25,15 @@ defineProps({
 const route = useRoute()
 const router = useRouter()
 const {
-  eligible: explorerEligible,
-  enabled: explorerEnabled,
-  setEnabled: setExplorerEnabled
-} = useExplorer()
+  eligible: resourceExplorerEligible,
+  enabled: resourceExplorerEnabled,
+  setEnabled: setResourceExplorerEnabled
+} = useResourceExplorer()
 
 // Drops ?resource_id when reverting: it doesn't carry the same meaning on the old navigation.
-function toggleExplorer() {
-  const enable = !explorerEnabled.value
-  setExplorerEnabled(enable)
+function toggleResourceExplorer() {
+  const enable = !resourceExplorerEnabled.value
+  setResourceExplorerEnabled(enable)
   if (!enable && route.query.resource_id) {
     const { resource_id, ...query } = route.query
     router.replace({ query })
@@ -43,19 +43,23 @@ function toggleExplorer() {
 
 <template>
   <BannerAction
-    v-if="explorerEligible"
+    v-if="resourceExplorerEligible"
     class="fr-mb-2w"
     type="primary"
     :title="
-      explorerEnabled
+      resourceExplorerEnabled
         ? 'Vous testez la nouvelle navigation dans les ressources'
         : 'Une nouvelle navigation dans les ressources est disponible'
     "
   >
     <template #button>
-      <BrandedButton size="xs" color="secondary" @click="toggleExplorer">
+      <BrandedButton
+        size="xs"
+        color="secondary"
+        @click="toggleResourceExplorer"
+      >
         {{
-          explorerEnabled
+          resourceExplorerEnabled
             ? "Revenir sur l'ancienne navigation"
             : 'Tester la nouvelle navigation'
         }}
@@ -63,7 +67,7 @@ function toggleExplorer() {
     </template>
   </BannerAction>
   <ResourceExplorer
-    v-if="explorerEnabled"
+    v-if="resourceExplorerEnabled"
     :dataset="dataset"
     :from-route-name="fromRouteName"
   />
