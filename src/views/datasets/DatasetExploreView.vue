@@ -9,8 +9,7 @@ import BlankState from '@/components/BlankState.vue'
 import { useDatasetStore } from '@/store/DatasetStore'
 import { useMeta } from '@/utils/seo'
 
-// Plain useRoute, not useRouteParamsAsString: exitTo must stay reactive to
-// resource_id, which ResourceExplorer rewrites via router.replace on every switch.
+// Plain useRoute, not useRouteParamsAsString: exitTo must stay reactive to resource_id, rewritten by ResourceExplorer on every switch.
 const route = useRoute()
 const itemId = route.params.item_id as string
 
@@ -22,8 +21,7 @@ const datasetForExplorer = computed(
   () => dataset.value as unknown as DatasetV2 | undefined
 )
 
-// Carries the visitor back to wherever they came from (datasets or indicators), on the
-// resource they were viewing - the origin route name and resource_id travel in via query.
+// Origin route name and resource_id travel in via query, to carry the visitor back to where they were.
 const exitTo = computed<RouteLocationRaw>(() => {
   const fromRouteName =
     typeof route.query.from === 'string' ? route.query.from : 'datasets_detail'

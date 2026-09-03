@@ -15,8 +15,7 @@ const props = defineProps({
     type: Object as () => DatasetV2WithFullObject,
     required: true
   },
-  // Route name to come back to when exiting the fullscreen explorer (datasets_detail,
-  // indicators_detail, ...) - both share object_type: datasets but have distinct pages.
+  // Route to return to on exit: datasets_detail and indicators_detail share object_type but are distinct pages.
   fromRouteName: {
     type: String,
     default: 'datasets_detail'
@@ -27,9 +26,7 @@ const props = defineProps({
 // @ts-expect-error dataset prop is typed as DatasetV2, not DatasetV2WithFullObject
 const datasetForExplorer: DatasetV2 = props.dataset
 
-// Absolute URL, not a router-relative path: AppLink (used by the button ResourceExplorer
-// renders this through) prepends `/${locale}` to any relative string href, since cdata's
-// own routes are locale-prefixed - ours aren't, so that would 404 the link.
+// Absolute URL, not a relative path: AppLink prepends `/${locale}` to relative hrefs, which would 404 here since our routes aren't locale-prefixed.
 const router = useRouter()
 const exploreTo = (resource: Resource) =>
   `${window.location.origin}${
