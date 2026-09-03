@@ -17,14 +17,13 @@ const defaultRoutes: RouteRecordRaw[] = [
     },
     component: async () => await import('@/views/HomeView.vue')
   },
-  // fullscreen resource explorer, opt-in per site (see useResourceExplorer)
+  // fullscreen resource explorer, opt-in per site
   {
     path: '/explore/:item_id',
     name: 'explore',
     meta: {
       fullscreen: true,
-      // Reuses the same-route scroll-preservation rule as inline dataset detail pages
-      objectType: 'datasets'
+      preserveScrollOnReplace: true
     },
     component: async () =>
       await import('@/views/datasets/DatasetExploreView.vue'),
@@ -151,8 +150,8 @@ const routerPromise = siteRoutesPromise.then((siteRoutes) => {
       if (to.meta.searchConfig && from.meta.searchConfig) {
         return false
       }
-      // Preserve scroll on dataset detail pages: ResourceExplorer's resource/tab switch is a same-route router.replace, not a navigation.
-      if (to.path === from.path && to.meta.objectType === 'datasets') {
+      // When asked explicitely by route, do not scroll to top when navigating on the same page
+      if (to.path === from.path && to.meta.preserveScrollOnReplace) {
         return false
       }
       if (savedPosition !== null) {

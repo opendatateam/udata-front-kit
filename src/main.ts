@@ -59,7 +59,7 @@ routerPromise
     app.use(datagouv, {
       name: 'data.gouv.fr',
       baseUrl: config.datagouvfr.base_url,
-      trustedDomains: ['data.gouv.fr'], // hostnames allowed in Access-Control-Allow-Origin for resource preview CORS checks (includes subdomains, e.g. demo.data.gouv.fr)
+      trustedDomains: ['data.gouv.fr'], // a resource is previewable if its CORS allow-origin header includes one of these (e.g. demo.data.gouv.fr)
       apiBase: config.datagouvfr.base_url,
       tabularApiUrl: config.datagouvfr.tabular_api_url,
       tabularAllowRemote: true,

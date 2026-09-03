@@ -270,6 +270,9 @@ export const useGlobalSearchPageRoutes = ({
     meta: {
       pageKey,
       objectType,
+      // Datasets-typed detail pages embed ResourceExplorer inline and need scroll behavior modification
+      // (resource switch should not reset the scroll)
+      preserveScrollOnReplace: objectType === 'datasets',
       descriptionComponent,
       cardComponent,
       datasetCardComponent

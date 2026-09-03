@@ -18,6 +18,8 @@ declare module 'vue-router' {
     objectType?: PageObjectType
     // Hides the site header/notice/footer, for pages rendering their own fullscreen layout
     fullscreen?: boolean
+    // Skips the router's default scroll reset when a same-route navigation only replaces the query
+    preserveScrollOnReplace?: boolean
     // GlobalSearch-specific
     searchType?: PageObjectType
     searchConfig?: GlobalSearchConfig
