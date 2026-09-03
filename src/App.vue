@@ -122,13 +122,13 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
   <Toaster rich-colors />
   <div id="tooltips" />
   <SkipLinks
-    v-if="!route.meta.hideChrome"
+    v-if="!route.meta.fullscreen"
     ref="skipLinksComp"
     :links="skipLinks"
   />
   <LiveRegion v-if="liveInfos" :infos="liveInfos" aria-live-mode="assertive" />
   <DsfrNotice
-    v-if="!route.meta.hideChrome && !isNoticeClosed && noticeContent"
+    v-if="!route.meta.fullscreen && !isNoticeClosed && noticeContent"
     :closeable="config.website.notice?.closeable ? true : undefined"
     @close="isNoticeClosed = true"
   >
@@ -136,7 +136,7 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
     <span v-html="noticeContent"></span>
   </DsfrNotice>
   <HeaderComponent
-    v-if="!route.meta.hideChrome"
+    v-if="!route.meta.fullscreen"
     :user-name="userName"
     :quick-links="quickLinks"
     :custom-search="true"
@@ -147,7 +147,7 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
   </main>
 
   <DsfrFooter
-    v-if="!route.meta.hideChrome"
+    v-if="!route.meta.fullscreen"
     :class="[siteID, 'fr-mt-16w']"
     :logo-text="rf_title"
     :operator-img-src="logo?.src"

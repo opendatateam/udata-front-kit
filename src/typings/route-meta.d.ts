@@ -16,8 +16,8 @@ declare module 'vue-router' {
     pageKey?: string
     // Detail page's object type, regardless of pageKey (datasets, indicators, ...)
     objectType?: PageObjectType
-    // Hides the site header/notice/footer (fullscreen pages, e.g. the resource explorer)
-    hideChrome?: boolean
+    // Hides the site header/notice/footer, for pages rendering their own fullscreen layout
+    fullscreen?: boolean
     // GlobalSearch-specific
     searchType?: PageObjectType
     searchConfig?: GlobalSearchConfig

@@ -22,7 +22,7 @@ const defaultRoutes: RouteRecordRaw[] = [
     path: '/explore/:item_id',
     name: 'explore',
     meta: {
-      hideChrome: true,
+      fullscreen: true,
       // Reuses the same-route scroll-preservation rule as inline dataset detail pages
       objectType: 'datasets'
     },
