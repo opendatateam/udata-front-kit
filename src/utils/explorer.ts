@@ -3,7 +3,6 @@ import { computed } from 'vue'
 
 import { useDatasetsConf } from '@/utils/config'
 
-// Feature flag for the resource explorer, shared across consumers and persisted in localStorage.
 const stored = useStorage('resources_explorer_enabled', false)
 
 export function useResourceExplorer() {

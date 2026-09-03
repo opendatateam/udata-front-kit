@@ -27,13 +27,10 @@ const defaultRoutes: RouteRecordRaw[] = [
     },
     component: async () =>
       await import('@/views/datasets/DatasetExploreView.vue'),
-    beforeEnter: (to) => {
+    beforeEnter: () => {
       const { eligible } = useResourceExplorer()
       if (!eligible.value) {
-        return {
-          name: 'datasets_detail',
-          params: { item_id: to.params.item_id }
-        }
+        return { name: 'not_found' }
       }
     }
   },
