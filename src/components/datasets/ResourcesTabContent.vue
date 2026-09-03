@@ -3,9 +3,9 @@ import type { DatasetV2WithFullObject } from '@datagouv/components-next'
 import { BannerAction, BrandedButton } from '@datagouv/components-next'
 import { useRoute, useRouter } from 'vue-router'
 
-import NewResourceExplorer from '@/components/datasets/NewResourceExplorer.vue'
+import ResourceExplorer from '@/components/datasets/ResourceExplorer.vue'
 import ResourcesList from '@/components/datasets/ResourcesList.vue'
-import { useNewExplorer } from '@/utils/newExplorer'
+import { useExplorer } from '@/utils/explorer'
 
 defineProps({
   dataset: {
@@ -25,15 +25,15 @@ defineProps({
 const route = useRoute()
 const router = useRouter()
 const {
-  eligible: newExplorerEligible,
-  enabled: newExplorerEnabled,
-  setEnabled: setNewExplorerEnabled
-} = useNewExplorer()
+  eligible: explorerEligible,
+  enabled: explorerEnabled,
+  setEnabled: setExplorerEnabled
+} = useExplorer()
 
 // Drops ?resource_id when reverting: it doesn't carry the same meaning on the old navigation.
-function toggleNewExplorer() {
-  const enable = !newExplorerEnabled.value
-  setNewExplorerEnabled(enable)
+function toggleExplorer() {
+  const enable = !explorerEnabled.value
+  setExplorerEnabled(enable)
   if (!enable && route.query.resource_id) {
     const { resource_id, ...query } = route.query
     router.replace({ query })
@@ -43,27 +43,27 @@ function toggleNewExplorer() {
 
 <template>
   <BannerAction
-    v-if="newExplorerEligible"
+    v-if="explorerEligible"
     class="fr-mb-2w"
     type="primary"
     :title="
-      newExplorerEnabled
+      explorerEnabled
         ? 'Vous testez la nouvelle navigation dans les ressources'
         : 'Une nouvelle navigation dans les ressources est disponible'
     "
   >
     <template #button>
-      <BrandedButton size="xs" color="secondary" @click="toggleNewExplorer">
+      <BrandedButton size="xs" color="secondary" @click="toggleExplorer">
         {{
-          newExplorerEnabled
+          explorerEnabled
             ? "Revenir sur l'ancienne navigation"
             : 'Tester la nouvelle navigation'
         }}
       </BrandedButton>
     </template>
   </BannerAction>
-  <NewResourceExplorer
-    v-if="newExplorerEnabled"
+  <ResourceExplorer
+    v-if="explorerEnabled"
     :dataset="dataset"
     :from-route-name="fromRouteName"
   />

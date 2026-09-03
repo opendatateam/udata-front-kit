@@ -2,7 +2,7 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
 import config from '@/config'
 import type { StaticPageConfig } from '@/model/config'
-import { useNewExplorer } from '@/utils/newExplorer'
+import { useExplorer } from '@/utils/explorer'
 import NotFoundView from '@/views/NotFoundView.vue'
 import StaticPageView from '@/views/StaticPageView.vue'
 
@@ -17,7 +17,7 @@ const defaultRoutes: RouteRecordRaw[] = [
     },
     component: async () => await import('@/views/HomeView.vue')
   },
-  // fullscreen resource explorer, opt-in per site (see useNewExplorer)
+  // fullscreen resource explorer, opt-in per site (see useExplorer)
   {
     path: '/explore/:item_id',
     name: 'explore',
@@ -29,7 +29,7 @@ const defaultRoutes: RouteRecordRaw[] = [
     component: async () =>
       await import('@/views/datasets/DatasetExploreView.vue'),
     beforeEnter: (to) => {
-      const { eligible } = useNewExplorer()
+      const { eligible } = useExplorer()
       if (!eligible.value) {
         return {
           name: 'datasets_detail',

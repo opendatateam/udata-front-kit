@@ -4,7 +4,7 @@ import type {
   DatasetV2WithFullObject,
   Resource
 } from '@datagouv/components-next'
-import { ResourceExplorer } from '@datagouv/components-next'
+import { ResourceExplorer as DatagouvfrResourceExplorer } from '@datagouv/components-next'
 import { onErrorCaptured, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -26,8 +26,8 @@ const props = defineProps({
 // @ts-expect-error dataset prop is typed as DatasetV2, not DatasetV2WithFullObject
 const datasetForExplorer: DatasetV2 = props.dataset
 
-// Absolute URL, not a relative path: AppLink prepends `/${locale}` to relative hrefs, which would 404 here since our routes aren't locale-prefixed.
 const router = useRouter()
+// Absolute URL needed for upstream component.
 const exploreTo = (resource: Resource) =>
   `${window.location.origin}${
     router.resolve({
@@ -52,7 +52,7 @@ onErrorCaptured(() => {
     message="Une erreur est survenue lors du chargement des ressources."
   />
   <Suspense v-else>
-    <ResourceExplorer
+    <DatagouvfrResourceExplorer
       :dataset="datasetForExplorer"
       no-results-image="/static/blank_state/file.svg"
       :explore-to="exploreTo"
