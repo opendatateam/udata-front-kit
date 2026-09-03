@@ -1,11 +1,19 @@
 <script setup lang="ts">
 import type { DatasetV2 } from '@datagouv/components-next'
 import { ResourceExplorer } from '@datagouv/components-next'
-import { computed, onErrorCaptured, onMounted, ref } from 'vue'
+import {
+  computed,
+  nextTick,
+  onErrorCaptured,
+  onMounted,
+  ref,
+  useTemplateRef
+} from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 import { useRoute } from 'vue-router'
 
 import BlankState from '@/components/BlankState.vue'
+import SkipLinks from '@/components/SkipLinks.vue'
 import { useDatasetStore } from '@/store/DatasetStore'
 import { useMeta } from '@/utils/seo'
 
@@ -39,6 +47,24 @@ onErrorCaptured(() => {
   return false
 })
 
+const skipLinks = [
+  { id: 'resource-explorer-viewer', text: 'Aller au contenu de la ressource' }
+]
+const explorerContainer = useTemplateRef<HTMLElement>('explorerContainer')
+
+// FIXME: fragile DOM patch, remove once ResourceExplorer exposes a stable id/landmark on its viewer region upstream
+// https://github.com/datagouv/cdata/pull/1216
+function attachViewerSkipTarget() {
+  nextTick(() => {
+    // Anchored on the sidebar's <aside> tag, the only unique hook — utility classes like flex-1/min-w-0 are reused elsewhere (e.g. the search input).
+    const sidebar = explorerContainer.value?.querySelector('aside')
+    sidebar?.parentElement?.nextElementSibling?.setAttribute(
+      'id',
+      'resource-explorer-viewer'
+    )
+  })
+}
+
 useMeta({
   title: () => dataset.value?.title,
   description: () => dataset.value?.description,
@@ -54,13 +80,17 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex h-dvh flex-col overflow-hidden bg-white">
+  <div
+    ref="explorerContainer"
+    class="flex h-dvh flex-col overflow-hidden bg-white"
+  >
+    <SkipLinks :links="skipLinks" />
     <BlankState
       v-if="loadError"
       image="/static/blank_state/file.svg"
       message="Une erreur est survenue lors du chargement des ressources."
     />
-    <Suspense v-else-if="datasetForExplorer">
+    <Suspense v-else-if="datasetForExplorer" @resolve="attachViewerSkipTarget">
       <ResourceExplorer
         :dataset="datasetForExplorer"
         fullscreen

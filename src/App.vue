@@ -121,6 +121,7 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
 <template>
   <Toaster rich-colors />
   <div id="tooltips" />
+  <!-- fullscreen mode is responsible for its own skiplinks -->
   <SkipLinks
     v-if="!route.meta.fullscreen"
     ref="skipLinksComp"
