@@ -7,6 +7,7 @@ import SidebarOwner from '@/components/SidebarOwner.vue'
 import VIconDsfr from '@/components/VIconDsfr.vue'
 import config from '@/config'
 import type { TypedHarvest } from '@/model/dataset'
+import { useCurrentPageConf } from '@/router/utils'
 import { formatDate } from '@/utils'
 import { useDatasetsConf } from '@/utils/config'
 import { useBadges } from '@/utils/dataset'
@@ -18,7 +19,6 @@ import {
   Toggletip
 } from '@datagouv/components-next'
 import { toRef } from 'vue'
-import { useRouter } from 'vue-router'
 
 const props = defineProps({
   dataset: {
@@ -28,17 +28,17 @@ const props = defineProps({
 })
 
 const datasetsConf = useDatasetsConf()
-const router = useRouter()
+const { pageKey, pageConf } = useCurrentPageConf()
 
 const harvest = computed(() => props.dataset.harvest as TypedHarvest)
 const datasetRef = toRef(props.dataset)
 const badges = useBadges(datasetRef)
 
-// Labels are a data.gouv.fr-wide concept: always link to the main datasets search.
+// Only link badges to a filtered search when the current page actually exposes that filter.
+const hasBadgeFilter = pageConf.filters.some((f) => f.type === 'badge')
+
 const badgeUrl = (kind: string) =>
-  router.hasRoute('datasets')
-    ? { name: 'datasets', query: { badge: kind } }
-    : undefined
+  hasBadgeFilter ? { name: pageKey, query: { badge: kind } } : undefined
 
 const showHarvestQualityWarning = computed(() => {
   const backend = harvest.value?.backend
