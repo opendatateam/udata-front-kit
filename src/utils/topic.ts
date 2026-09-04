@@ -61,7 +61,7 @@ export const getSlugFromUri = (
 }
 
 /**
- * Build a fonctionnal Topic from clone source data
+ * Build a functional Topic from clone source data
  */
 export const cloneTopic = async (
   topic: Topic,
