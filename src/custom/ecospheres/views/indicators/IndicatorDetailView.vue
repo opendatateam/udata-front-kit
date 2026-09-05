@@ -9,7 +9,7 @@ import DatasetAddToTopicModal from '@/components/datasets/DatasetAddToTopicModal
 import DatasetDataservicesList from '@/components/datasets/DatasetDataservicesList.vue'
 import DatasetReusesList from '@/components/datasets/DatasetReusesList.vue'
 import DatasetSidebar from '@/components/datasets/DatasetSidebar.vue'
-import ResourcesList from '@/components/datasets/ResourcesList.vue'
+import ResourcesTabContent from '@/components/datasets/ResourcesTabContent.vue'
 import config from '@/config'
 import IndicatorVizChart from '@/custom/ecospheres/components/indicators/viz/IndicatorVizChart.vue'
 import { useRouteParamsAsString } from '@/router/utils'
@@ -157,9 +157,10 @@ onMounted(() => {
     >
       <!-- Fichiers -->
       <DsfrTabContent panel-id="tab-content-files" tab-id="tab-files">
-        <ResourcesList
+        <ResourcesTabContent
           :dataset="indicator"
           no-file-message="Il n'y a pas encore de fichier pour cet indicateur."
+          from-route-name="indicators_detail"
         />
       </DsfrTabContent>
 

@@ -14,6 +14,12 @@ declare module 'vue-router' {
     datasetCardComponent?: () => Promise<{ default: Component }>
     descriptionComponent?: () => Promise<{ default: Component }>
     pageKey?: string
+    // Detail page's object type, regardless of pageKey (datasets, indicators, ...)
+    objectType?: PageObjectType
+    // Hides the site header/notice/footer, for pages rendering their own fullscreen layout
+    fullscreen?: boolean
+    // Skips the router's default scroll reset when a same-route navigation only replaces the query
+    preserveScrollOnReplace?: boolean
     // GlobalSearch-specific
     searchType?: PageObjectType
     searchConfig?: GlobalSearchConfig

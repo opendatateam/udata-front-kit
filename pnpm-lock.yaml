@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@datagouv/components-next':
-        specifier: 1.3.0
-        version: 1.3.0(core-js@3.47.0)(echarts@6.1.0)(resize-detector@0.3.0)(supports-color@8.1.1)(vue-router@4.6.4(vue@3.5.30(typescript@5.7.3)))(vue@3.5.30(typescript@5.7.3))
+        specifier: 1.0.2-dev.193
+        version: 1.0.2-dev.193(core-js@3.47.0)(echarts@6.1.0)(resize-detector@0.3.0)(supports-color@8.1.1)(vue-router@4.6.4(vue@3.5.30(typescript@5.7.3)))(vue@3.5.30(typescript@5.7.3))
       '@gouvfr/dsfr':
         specifier: ~1.14.4
         version: 1.14.4
@@ -415,8 +415,8 @@ packages:
   '@cypress/xvfb@1.2.4':
     resolution: {integrity: sha512-skbBzPggOVYCbnGgV+0dmBdW/s77ZkAOXIC1knS8NagwDjBrNC1LuXtQJeiN6l+m7lzmHtaoUw/ctJKdqkG57Q==}
 
-  '@datagouv/components-next@1.3.0':
-    resolution: {integrity: sha512-Y5/Gev4bOCGIURJpF9eXB8pAPIEyQ0co8FLglLSy24HYNixlyXgfTwF8PA4+lSkZn+xrQ9sbimQ64XEdmvWy9Q==}
+  '@datagouv/components-next@1.0.2-dev.193':
+    resolution: {integrity: sha512-TNAyHzP4ybMnMVHgThw90NYe56al1o5ZJa2o9QCe+4TSrgkKiwcSFLOsWXU/qZj0pi6xg5rkQdH/yWZnEndSUA==}
     engines: {node: '>= 20.0.0', npm: use-pnpm-instead, pnpm: '>= 10.0.0', yarn: use-pnpm-instead}
     peerDependencies:
       echarts: ^6.0.0
@@ -617,17 +617,19 @@ packages:
     resolution: {integrity: sha512-43/qtrDUokr7LJqoF2c3+RInu/t4zfrpYdoSDfYyhg52rwLV6TnOvdG4fXm7IkSB3wErkcmJS9iEhjVtOSEjjA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@floating-ui/core@1.7.5':
-    resolution: {integrity: sha512-1Ih4WTWyw0+lKyFMcBHGbb5U5FtuHJuujoyyr5zTaWS5EYMeT6Jb2AuDeftsCsEuchO+mM2ij5+q9crhydzLhQ==}
+  '@floating-ui/core@1.8.0':
+    resolution: {integrity: sha512-0CIZ5itps/8x7BG8dEIhs53BvCUH2PCoogtakwRTut+Arm58sJooJ0AuZhLw2HJYIR5cMLNPBSS728sPho2khQ==}
 
-  '@floating-ui/dom@1.7.6':
-    resolution: {integrity: sha512-9gZSAI5XM36880PPMm//9dfiEngYoC6Am2izES1FF406YFsjvyBMmeJ2g4SAju3xWwtuynNRFL2s9hgxpLI5SQ==}
+  '@floating-ui/dom@1.8.0':
+    resolution: {integrity: sha512-yXSrzeHZBTZadLOlfyhCkJHNeLJnHRnRInwdZ40L7ZiaAtrBwoYlsDrX3v5zB1Utk7CLfzcOVnVVWoXEky7Ceg==}
 
-  '@floating-ui/utils@0.2.11':
-    resolution: {integrity: sha512-RiB/yIh78pcIxl6lLMG0CgBXAZ2Y0eVHqMPYugu+9U0AeT6YBeiJpf7lbdJNIugFP5SIjwNRgo4DhR1Qxi26Gg==}
+  '@floating-ui/utils@0.2.12':
+    resolution: {integrity: sha512-HpCo8tmWzLVad5s2d19EhAz5zqrrQ6s69qd6moPMQvkOuSwDT1YgRfWSVuc4ennqrgv3OHppiOGMQ7oC13yIww==}
 
-  '@floating-ui/vue@1.1.11':
-    resolution: {integrity: sha512-HzHKCNVxnGS35r9fCHBc3+uCnjw9IWIlCPL683cGgM9Kgj2BiAl8x1mS7vtvP6F9S/e/q4O6MApwSHj8hNLGfw==}
+  '@floating-ui/vue@2.0.1':
+    resolution: {integrity: sha512-043dyEKD9TDSfz080YH2vobubgg+NIo/9Fw4RAl7sEMpD8Am1DNrrSTl/GpMBjyGHoD/FbJY2QLawY+HSQsEIA==}
+    peerDependencies:
+      vue: '>=3.3.0'
 
   '@gouvfr/dsfr-chart@2.0.4':
     resolution: {integrity: sha512-/JoW6R7ystExxvuLvHacR0ZWcL1PpDkUyG/niF8jgqRaksWgb31EpJGQjmgaHR29nrANdyvoRb1DEQAL00XZ1A==}
@@ -1623,6 +1625,7 @@ packages:
   '@xmldom/xmldom@0.9.10':
     resolution: {integrity: sha512-A9gOqLdi6cV4ibazAjcQufGj0B1y/vDqYrcuP6d/6x8P27gRS8643Dj9o1dEKtB6O7fwxb2FgBmJS2mX7gpvdw==}
     engines: {node: '>=14.6'}
+    deprecated: this version has critical issues, please update to the latest version
 
   '@zarrita/storage@0.2.0':
     resolution: {integrity: sha512-855ZXqtnds7spnT8vNvD+MXa3QExP1m2GqShe8yt7uZXHnQLgJHgkpVwFjE1B0KDDRO0ki09hmk6OboTaIfPsQ==}
@@ -2333,6 +2336,7 @@ packages:
   eslint@9.39.1:
     resolution: {integrity: sha512-BhHmn2yNOFA9H9JmmIVKJmd288g9hrVRDkdoIgRCRuSySRUHH7r/DI6aAXW9T1WwUuY3DFgrcaqB+deURBLR5g==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
     peerDependencies:
       jiti: '*'
@@ -2570,10 +2574,6 @@ packages:
   geoportal-access-lib@3.4.6:
     resolution: {integrity: sha512-TC0NKVHcJZ9QvkEDyuMB327lT0xQIcZoIE3aSNOHN4Bkt1TcF+D/zAMQTl2AVTAYdrLAqFl6bhTWn5r7VJvkpw==}
     engines: {node: '>=20'}
-
-  geotiff@2.1.3:
-    resolution: {integrity: sha512-PT6uoF5a1+kbC3tHmZSUsLHBp2QJlHasxxxxPW47QIY1VBKpFB+FcDvX+MxER6UzgLQZ0xDzJ9s48B9JbOCTqA==}
-    engines: {node: '>=10.19'}
 
   geotiff@3.0.5:
     resolution: {integrity: sha512-OWcL9S9+yDZ6iAlXMt32T1iwUApJM8UiD47xbm6ZP1h33d10fqkPs14EG/ttT5EnefpZSx3G15iDFC5FxUNUwA==}
@@ -3567,9 +3567,6 @@ packages:
     peerDependencies:
       ol: '*'
 
-  ol@10.7.0:
-    resolution: {integrity: sha512-122U5gamPqNgLpLOkogFJhgpywvd/5en2kETIDW+Ubfi9lPnZ0G9HWRdG+CX0oP8od2d6u6ky3eewIYYlrVczw==}
-
   ol@10.9.0:
     resolution: {integrity: sha512-svbbgVQUmEHaKpLQ8kRySojs59Brvgl2zYIrqG9eQNXGfsbi55rQasZIDpwpQzDL6OlzrUb0H4hQaiX9wDoGmA==}
 
@@ -4414,9 +4411,6 @@ packages:
   unist-util-visit@4.1.2:
     resolution: {integrity: sha512-MSd8OUGISqHdVvfY9TPhyK2VdUrPgxkUtWSuMHF6XAAFuL4LokseigBnZtPnJMu+FbynTkFNnFlyjxpVKujMRg==}
 
-  unist-util-visit@5.0.0:
-    resolution: {integrity: sha512-MR04uvD+07cwl/yhVuVWAtw+3GOR/knlL55Nd/wAdblk27GCVt3lqpTivy/tkJcZoNPzTwS1Y+KMojlLDhoTzg==}
-
   unist-util-visit@5.1.0:
     resolution: {integrity: sha512-m+vIdyeCOpdr/QeQCu2EzxX/ohgS8KbnPDgFni4dQsfSCtpz8UqDyY5GjRru8PDKuYn7Fq19j1CQ+nJSsGKOzg==}
 
@@ -4882,9 +4876,6 @@ packages:
   zrender@6.1.0:
     resolution: {integrity: sha512-oEGMDB6pOP2S6OwRR4PdVv610zrjnA3Bh+JnSG12fYJlBKjtNAoEb5fSUoCOOINlH96I2fU38/A2UpRKs67xYQ==}
 
-  zstddec@0.1.0:
-    resolution: {integrity: sha512-w2NTI8+3l3eeltKAdK8QpiLo/flRAr2p8AGeakfMZOXBxOg9HIu4LVDxBi81sYgVhFhdJjv1OrB5ssI8uFPoLg==}
-
   zstddec@0.2.0:
     resolution: {integrity: sha512-oyPnDa1X5c13+Y7mA/FDMNJrn4S8UNBe0KCqtDmor40Re7ALrPN6npFwyYVRRh+PqozZQdeg23QtbcamZnG5rA==}
 
@@ -5189,9 +5180,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@datagouv/components-next@1.3.0(core-js@3.47.0)(echarts@6.1.0)(resize-detector@0.3.0)(supports-color@8.1.1)(vue-router@4.6.4(vue@3.5.30(typescript@5.7.3)))(vue@3.5.30(typescript@5.7.3))':
+  '@datagouv/components-next@1.0.2-dev.193(core-js@3.47.0)(echarts@6.1.0)(resize-detector@0.3.0)(supports-color@8.1.1)(vue-router@4.6.4(vue@3.5.30(typescript@5.7.3)))(vue@3.5.30(typescript@5.7.3))':
     dependencies:
-      '@floating-ui/vue': 1.1.11(vue@3.5.30(typescript@5.7.3))
+      '@floating-ui/vue': 2.0.1(vue@3.5.30(typescript@5.7.3))
       '@headlessui/vue': 1.7.23(vue@3.5.30(typescript@5.7.3))
       '@remixicon/vue': 4.9.0(vue@3.5.30(typescript@5.7.3))
       '@types/hast': 3.0.4
@@ -5234,7 +5225,6 @@ snapshots:
     transitivePeerDependencies:
       - '@nuxt/kit'
       - '@nuxt/schema'
-      - '@vue/composition-api'
       - core-js
       - encoding
       - nuxt
@@ -5365,25 +5355,22 @@ snapshots:
       '@eslint/core': 0.17.0
       levn: 0.4.1
 
-  '@floating-ui/core@1.7.5':
+  '@floating-ui/core@1.8.0':
     dependencies:
-      '@floating-ui/utils': 0.2.11
+      '@floating-ui/utils': 0.2.12
 
-  '@floating-ui/dom@1.7.6':
+  '@floating-ui/dom@1.8.0':
     dependencies:
-      '@floating-ui/core': 1.7.5
-      '@floating-ui/utils': 0.2.11
+      '@floating-ui/core': 1.8.0
+      '@floating-ui/utils': 0.2.12
 
-  '@floating-ui/utils@0.2.11': {}
+  '@floating-ui/utils@0.2.12': {}
 
-  '@floating-ui/vue@1.1.11(vue@3.5.30(typescript@5.7.3))':
+  '@floating-ui/vue@2.0.1(vue@3.5.30(typescript@5.7.3))':
     dependencies:
-      '@floating-ui/dom': 1.7.6
-      '@floating-ui/utils': 0.2.11
-      vue-demi: 0.14.10(vue@3.5.30(typescript@5.7.3))
-    transitivePeerDependencies:
-      - '@vue/composition-api'
-      - vue
+      '@floating-ui/dom': 1.8.0
+      '@floating-ui/utils': 0.2.12
+      vue: 3.5.30(typescript@5.7.3)
 
   '@gouvfr/dsfr-chart@2.0.4': {}
 
@@ -7460,9 +7447,9 @@ snapshots:
       geoportal-access-lib: 3.4.6
       loglevel: 1.9.2
       marked: 16.4.2
-      ol: 10.7.0
-      ol-contextmenu: 5.5.0(ol@10.7.0)
-      ol-mapbox-style: 12.6.1(ol@10.7.0)
+      ol: 10.9.0
+      ol-contextmenu: 5.5.0(ol@10.9.0)
+      ol-mapbox-style: 12.6.1(ol@10.9.0)
       proj4: 2.15.0
       sortablejs: 1.15.3
       typescript: 5.7.3
@@ -7479,17 +7466,6 @@ snapshots:
       node-fetch: 2.7.0
     transitivePeerDependencies:
       - encoding
-
-  geotiff@2.1.3:
-    dependencies:
-      '@petamoriken/float16': 3.9.3
-      lerc: 3.0.0
-      pako: 2.1.0
-      parse-headers: 2.0.6
-      quick-lru: 6.1.2
-      web-worker: 1.5.0
-      xml-utils: 1.10.2
-      zstddec: 0.1.0
 
   geotiff@3.0.5:
     dependencies:
@@ -7653,7 +7629,7 @@ snapshots:
       mdast-util-to-hast: 13.2.1
       parse5: 7.3.0
       unist-util-position: 5.0.0
-      unist-util-visit: 5.0.0
+      unist-util-visit: 5.1.0
       vfile: 6.0.3
       web-namespaces: 2.0.1
       zwitch: 2.0.4
@@ -8348,7 +8324,7 @@ snapshots:
       micromark-util-sanitize-uri: 2.0.1
       trim-lines: 3.0.1
       unist-util-position: 5.0.0
-      unist-util-visit: 5.0.0
+      unist-util-visit: 5.1.0
       vfile: 6.0.3
 
   mdast-util-to-markdown@0.6.5:
@@ -8369,7 +8345,7 @@ snapshots:
       mdast-util-to-string: 4.0.0
       micromark-util-classify-character: 2.0.1
       micromark-util-decode-string: 2.0.1
-      unist-util-visit: 5.0.0
+      unist-util-visit: 5.1.0
       zwitch: 2.0.4
 
   mdast-util-to-string@2.0.0: {}
@@ -8764,24 +8740,16 @@ snapshots:
       node-fetch-native: 1.6.7
       ufo: 1.6.1
 
-  ol-contextmenu@5.5.0(ol@10.7.0):
+  ol-contextmenu@5.5.0(ol@10.9.0):
     dependencies:
-      ol: 10.7.0
+      ol: 10.9.0
       tiny-emitter: 2.1.0
 
-  ol-mapbox-style@12.6.1(ol@10.7.0):
+  ol-mapbox-style@12.6.1(ol@10.9.0):
     dependencies:
       '@maplibre/maplibre-gl-style-spec': 23.3.0
       mapbox-to-css-font: 3.2.0
-      ol: 10.7.0
-
-  ol@10.7.0:
-    dependencies:
-      '@types/rbush': 4.0.0
-      earcut: 3.0.2
-      geotiff: 2.1.3
-      pbf: 4.0.1
-      rbush: 4.0.1
+      ol: 10.9.0
 
   ol@10.9.0:
     dependencies:
@@ -9086,7 +9054,7 @@ snapshots:
       '@types/hast': 3.0.4
       hast-util-to-text: 4.0.2
       lowlight: 3.3.0
-      unist-util-visit: 5.0.0
+      unist-util-visit: 5.1.0
       vfile: 6.0.3
 
   rehype-raw@7.0.0:
@@ -9106,7 +9074,7 @@ snapshots:
       github-slugger: 2.0.0
       hast-util-heading-rank: 3.0.0
       hast-util-to-string: 3.0.1
-      unist-util-visit: 5.0.0
+      unist-util-visit: 5.1.0
 
   rehype-stringify@10.0.1:
     dependencies:
@@ -9748,12 +9716,6 @@ snapshots:
       unist-util-is: 5.2.1
       unist-util-visit-parents: 5.1.3
 
-  unist-util-visit@5.0.0:
-    dependencies:
-      '@types/unist': 3.0.3
-      unist-util-is: 6.0.1
-      unist-util-visit-parents: 6.0.2
-
   unist-util-visit@5.1.0:
     dependencies:
       '@types/unist': 3.0.3
@@ -10205,8 +10167,6 @@ snapshots:
   zrender@6.1.0:
     dependencies:
       tslib: 2.3.0
-
-  zstddec@0.1.0: {}
 
   zstddec@0.2.0: {}
 
