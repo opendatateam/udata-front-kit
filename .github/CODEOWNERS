@@ -7,8 +7,6 @@
 
 /.github/CODEOWNERS  @abulte @geoffreyaldebert @streino
 
-/.github/workflows/create-deploy-release.yml  @geoffreyaldebert @jordanguedj
-
 
 # Vertical owners
 # /configs/<vertical> and /src/custom/<vertical>

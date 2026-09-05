@@ -36,6 +36,11 @@ on:
         description: 'Git ref (branch) to deploy (defaults to <site>-<environment>)'
         required: false
         type: string
+      create_release:
+        description: 'Create a GitHub release'
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: write
@@ -59,6 +64,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           ref: ${{ steps.ref.outputs.ref }}
+          fetch-tags: true
 
       - name: Compute next tag
         id: version
@@ -68,9 +74,8 @@ jobs:
           ENVIRONMENT="${{ inputs.environment }}"
           TODAY=$(date +%Y%m%d)
           PREFIX="${SITE}-${ENVIRONMENT}-${TODAY}"
-          PATTERN="${PREFIX}-[0-9]+"
 
-          EXISTING=$(git ls-remote --tags origin | grep -Eo "refs/tags/${PATTERN}$" | sed 's#refs/tags/##' || true)
+          EXISTING=$(git tag -l "${PREFIX}-*")
 
           NEXT=1
           if [[ -n "$EXISTING" ]]; then
@@ -89,15 +94,11 @@ jobs:
           git tag "${{ steps.version.outputs.tag }}"
           git push origin "${{ steps.version.outputs.tag }}"
 
-      # The above push uses the default GITHUB_TOKEN, so it will NOT itself trigger
-      # build-push-image.yml's `push: tags` event (GitHub's anti-recursion rule).
-      # We dispatch it explicitly instead.
       - name: Dispatch build workflow
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          # ref picks which build-push-image.yml definition runs, not the code it builds
-          # (that comes from the tag): dispatch from main, or from your branch to test CI
+          # ref picks which build-push-image.yml definition runs, not the code it builds (comes from tag)
           script: |
             await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
@@ -108,3 +109,28 @@ jobs:
                 tag: '${{ steps.version.outputs.tag }}'
               }
             });
+
+      # Last so a release failure cannot keep the build from being dispatched.
+      - name: Create GitHub release
+        if: inputs.create_release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.version.outputs.tag }}
+          SITE: ${{ inputs.site }}
+          ENV: ${{ inputs.environment }}
+        run: |
+          # The pattern skips the legacy <site>-<env>-X.Y.Z tags, and sort -V
+          # because N is not zero-padded (-10 would sort before -2).
+          PREV=$(git tag -l "${SITE}-${ENV}-*" \
+            | grep -E "^${SITE}-${ENV}-[0-9]{8}-[0-9]+$" \
+            | grep -v "^${TAG}$" \
+            | sort -V | tail -1 || true)
+
+          OPTS=(--generate-notes --title "$TAG")
+          if [[ -n "$PREV" ]]; then
+            echo "Changelog since: $PREV"
+            OPTS+=(--notes-start-tag "$PREV")
+          fi
+
+          gh release create "$TAG" "${OPTS[@]}"

@@ -7,7 +7,9 @@ set -eu
 # Discover valid sites from configs directory
 VALID_SITES=$(find configs -maxdepth 1 -mindepth 1 -type d -exec basename {} \; | sort | tr '\n' ' ')
 VALID_ENVS="demo preprod prod"
-VALID_VERSIONS="major minor patch"
+
+# Workflow that tags the deploy branch, dispatches the image build and creates the release
+DEPLOY_WORKFLOW="create-deploy-release-via-tag.yml"
 
 # Colors for output
 RED='\033[0;31m'
@@ -31,7 +33,7 @@ warn() {
 usage() {
   cat <<EOF
 Usage:
-  $0 prepare <site> <env> <version> [--source <branch>]
+  $0 prepare <site> <env> [--source <branch>]
   $0 deploy <pr>
 
 Commands:
@@ -41,7 +43,6 @@ Commands:
 Arguments (prepare):
   site       Site name (${VALID_SITES})
   env        Environment (${VALID_ENVS})
-  version    Version type (${VALID_VERSIONS})
 
 Arguments (deploy):
   pr         PR number or URL
@@ -53,15 +54,15 @@ Options:
   --bypass-review     Skip PR review status check
 
 Examples:
-  $0 prepare ecospheres demo minor
-  $0 prepare ecospheres prod minor --source ecospheres-preprod
+  $0 prepare ecospheres demo
+  $0 prepare ecospheres prod --source ecospheres-preprod
   $0 deploy 123
   $0 deploy https://github.com/org/repo/pull/123
 
 Merge branch strategy:
-  - Creates temporary merge branch: {site}-{env}-{version}-merge
+  - Creates temporary merge branch: {site}-{env}-merge
   - Merges source → merge branch (resolve conflicts locally)
-  - Creates PR: {site}-{env}-{version}-merge → {site}-{env}
+  - Creates PR: {site}-{env}-merge → {site}-{env}
   - After deploy: deletes merge branch
 EOF
   exit 1
@@ -78,13 +79,6 @@ validate_env() {
   local env=$1
   if [[ ! " $VALID_ENVS " =~ " $env " ]]; then
     error "Invalid environment '$env'. Must be: $VALID_ENVS"
-  fi
-}
-
-validate_version() {
-  local version=$1
-  if [[ ! " $VALID_VERSIONS " =~ " $version " ]]; then
-    error "Invalid version type '$version'. Must be: $VALID_VERSIONS"
   fi
 }
 
@@ -124,19 +118,17 @@ get_source_branch() {
 cmd_prepare() {
   local site=$1
   local env=$2
-  local version=$3
-  local source_override=${4:-}
+  local source_override=${3:-}
   local source_arg=${source_override:+ --source $source_override}
 
   # Validate arguments
   validate_site "$site"
   validate_env "$env"
-  validate_version "$version"
   check_git_clean
 
   # Determine branches
   local target_branch="${site}-${env}"
-  local merge_branch="${site}-${env}-${version}-merge"
+  local merge_branch="${site}-${env}-merge"
   local source_branch
   source_branch=$(get_source_branch "$env" "$source_override")
 
@@ -210,7 +202,7 @@ Please resolve conflicts manually:
   1. Edit conflicted files
   2. Stage resolved files: git add <files>
   3. Complete merge: git commit --no-verify
-  4. Re-run: $0 prepare $site $env $version$source_arg
+  4. Re-run: $0 prepare $site $env$source_arg
 
 Or abort: git merge --abort"
     fi
@@ -222,7 +214,7 @@ Or abort: git merge --abort"
   echo
   if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     info "Cancelled. Merge branch '$merge_branch' exists locally. You can:"
-    info "  - Continue: $0 prepare $site $env $version$source_arg"
+    info "  - Continue: $0 prepare $site $env$source_arg"
     info "  - Abort: git checkout main && git branch -D $merge_branch"
     exit 0
   fi
@@ -233,12 +225,12 @@ Or abort: git merge --abort"
 
   # Create PR
   info "Creating PR: $merge_branch → $target_branch"
-  local today=$(date +%Y%m%d)
+  # Includes the time so several deployments of the same site/env on one day differ
+  local timestamp=$(date +%Y%m%d-%H%M%S)
   local pr_body="## Deployment Summary
 
 - **Site:** $site
 - **Environment:** $env
-- **Version bump:** $version
 - **Source:** \`$source_branch\`
 - **Target:** \`$target_branch\`
 
@@ -256,11 +248,10 @@ After review and approval:
 ./scripts/deploy.sh deploy <pr_url>
 \`\`\`"
 
-  # TODO: `-1` suffix could be dynamic
   local pr_url=$(gh pr create \
     --base "$target_branch" \
     --head "$merge_branch" \
-    --title "release($site): $env $today-1" \
+    --title "release($site): $env $timestamp" \
     --body "$pr_body" \
     --draft)
 
@@ -299,32 +290,22 @@ cmd_deploy() {
   local merge_branch=$(echo "$pr_json" | jq -r '.headRefName')
   local target_branch=$(echo "$pr_json" | jq -r '.baseRefName')
 
-  # Parse site, env, and version from branch name ({site}-{env}-{version}-merge)
-  if [[ ! "$merge_branch" =~ ^(.+)-([^-]+)-([^-]+)-merge$ ]]; then
-    error "Cannot parse site/env/version from branch name: $merge_branch"
+  # Parse site and env from branch name ({site}-{env}-merge)
+  if [[ ! "$merge_branch" =~ ^(.+)-([^-]+)-merge$ ]]; then
+    error "Cannot parse site/env from branch name: $merge_branch"
   fi
   local site="${BASH_REMATCH[1]}"
   local env="${BASH_REMATCH[2]}"
-  local version="${BASH_REMATCH[3]}"
 
   # Validate parsed values
   validate_site "$site"
   validate_env "$env"
-  validate_version "$version"
 
   info "Deploying: $merge_branch → $target_branch"
-  info "Site: $site, Env: $env, Version: $version"
-
-  # Translate site name for commit message (ecospheres -> ecologie, meteo-france -> meteo)
-  local site_for_infra="$site"
-  if [[ "$site" == "ecospheres" ]]; then
-    site_for_infra="ecologie"
-  elif [[ "$site" == "meteo-france" ]]; then
-    site_for_infra="meteo"
-  fi
+  info "Site: $site, Env: $env"
 
   # Merge PR and delete merge branches locally and remotely
-  local commit_msg="[${env}:${site_for_infra}:${version}] ${pr_title} #${pr_number}"
+  local commit_msg="${pr_title} #${pr_number}"
   info "Merging PR #$pr_number with message: $commit_msg"
   local admin_flag=""
   if [[ "$BYPASS_REVIEW" == true ]]; then
@@ -332,30 +313,19 @@ cmd_deploy() {
   fi
   gh pr merge "$pr_ref" --merge --subject "$commit_msg" --delete-branch $admin_flag
 
-  # Create release for prod deployments
+  local create_release=false
   if [[ "$env" == "prod" && "$SKIP_RELEASE" != true ]]; then
-    info "Creating release..."
-
-    # Extract date-increment from PR title: "release(site): prod 20260115-1" -> "20260115-1"
-    local date_increment=$(echo "$pr_title" | sed 's/.*prod //')
-    local new_tag="${site}-prod-${date_increment}"
-
-    # Find previous release tag for changelog
-    git fetch --tags
-    local prev_tag=$(git tag --list "${site}-prod-*" --sort=-creatordate | head -1)
-
-    local release_opts=(--generate-notes --target "$target_branch")
-    if [[ -n "$prev_tag" ]]; then
-      release_opts+=(--notes-start-tag "$prev_tag")
-    fi
-
-    gh release create "$new_tag" "${release_opts[@]}" --title "$new_tag"
-    info "Created release: $new_tag"
+    create_release=true
   fi
 
+  # The workflow computes the tag, builds the image and creates the release
+  info "Triggering deployment workflow..."
+  gh workflow run "$DEPLOY_WORKFLOW" \
+    -f site="$site" -f environment="$env" -f create_release="$create_release"
+
   info "✓ Deployment completed successfully!"
-  info "GitLab CI/CD pipeline should be triggered now."
-  info "https://github.com/opendatateam/udata-front-kit/actions"
+  info "GitHub Actions workflow should be triggered now."
+  info "https://github.com/opendatateam/udata-front-kit/actions/workflows/$DEPLOY_WORKFLOW"
 }
 
 # Main script
@@ -402,10 +372,10 @@ done
 
 case "$COMMAND" in
   prepare)
-    if [[ ${#POSITIONAL[@]} -lt 3 ]]; then
-      error "prepare requires: <site> <env> <version>"
+    if [[ ${#POSITIONAL[@]} -lt 2 ]]; then
+      error "prepare requires: <site> <env>"
     fi
-    cmd_prepare "${POSITIONAL[0]}" "${POSITIONAL[1]}" "${POSITIONAL[2]}" "$SOURCE_BRANCH"
+    cmd_prepare "${POSITIONAL[0]}" "${POSITIONAL[1]}" "$SOURCE_BRANCH"
     ;;
   deploy)
     if [[ ${#POSITIONAL[@]} -lt 1 ]]; then
