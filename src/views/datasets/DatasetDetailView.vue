@@ -12,6 +12,7 @@ import DatasetSidebar from '@/components/datasets/DatasetSidebar.vue'
 import ExtendedInformationPanel from '@/components/datasets/ExtendedInformationPanel.vue'
 import ResourcesList from '@/components/datasets/ResourcesList.vue'
 import config from '@/config'
+import type { BreadcrumbItem } from '@/model/breadcrumb'
 import { useCurrentPageConf, useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/DatasetStore'
 import { useResourceStore } from '@/store/ResourceStore'
@@ -79,9 +80,9 @@ const dataset = computed(() => datasetStore.get(datasetIdOrSlug))
 const showAddToTopicModal = ref(false)
 
 const links = computed(() => {
-  const breadcrumbs = [{ to: '/', text: 'Accueil' }]
+  const breadcrumbs: BreadcrumbItem[] = [{ to: '/', text: 'Accueil' }]
   breadcrumbs.push({
-    to: pageConf.list_all === true ? `/${pageKey || 'datasets'}` : '',
+    to: pageConf.list_all === true ? { name: pageKey || 'datasets' } : '',
     text: pageConf.breadcrumb_title || pageConf.title
   })
   breadcrumbs.push({ to: '', text: dataset.value?.title ?? '' })
