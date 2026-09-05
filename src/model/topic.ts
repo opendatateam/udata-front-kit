@@ -67,7 +67,7 @@ class ResolvedGenericElement implements GenericElement {
   }
 
   unresolved<T extends GenericElement = GenericElement>(): T {
-    // explicitely pick the required attributes for GenericElement
+    // explicitly pick the required attributes for GenericElement
     // const {removeMe, ...element} = this would not trigger type error if removeMe is not enough
     const { id, title, description, tags, extras, element } = this
     return { id, title, description, tags, extras, element } as T
