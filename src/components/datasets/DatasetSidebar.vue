@@ -7,11 +7,17 @@ import SidebarOwner from '@/components/SidebarOwner.vue'
 import VIconDsfr from '@/components/VIconDsfr.vue'
 import config from '@/config'
 import type { TypedHarvest } from '@/model/dataset'
+import { useCurrentPageConf } from '@/router/utils'
 import { formatDate } from '@/utils'
 import { useDatasetsConf } from '@/utils/config'
 import { useBadges } from '@/utils/dataset'
 import type { DatasetV2WithFullObject } from '@datagouv/components-next'
-import { AppLink, DatasetQuality, LabelTag } from '@datagouv/components-next'
+import {
+  AppLink,
+  DatasetQuality,
+  LabelTag,
+  Toggletip
+} from '@datagouv/components-next'
 import { toRef } from 'vue'
 
 const props = defineProps({
@@ -22,10 +28,17 @@ const props = defineProps({
 })
 
 const datasetsConf = useDatasetsConf()
+const { pageKey, pageConf } = useCurrentPageConf()
 
 const harvest = computed(() => props.dataset.harvest as TypedHarvest)
 const datasetRef = toRef(props.dataset)
 const badges = useBadges(datasetRef)
+
+// Only link badges to a filtered search when the current page actually exposes that filter.
+const hasBadgeFilter = pageConf.filters.some((f) => f.type === 'badge')
+
+const badgeUrl = (kind: string) =>
+  hasBadgeFilter ? { name: pageKey, query: { badge: kind } } : undefined
 
 const showHarvestQualityWarning = computed(() => {
   const backend = harvest.value?.backend
@@ -103,11 +116,42 @@ const hasContactPointsWithSpecificRole = computed(() => {
     </div>
     <SidebarList v-if="badges.length > 0" class="fr-mt-3v">
       <SidebarItem id="labels" term="Label">
+        <template #term-prefix>
+          <Toggletip
+            button-class="toggletip-label-button"
+            :button-props="{
+              title: 'En savoir plus sur les labels de données'
+            }"
+            no-margin
+          >
+            <template #toggletip="{ close }">
+              <div class="toggletip-header justify-between border-bottom">
+                <h5 class="fr-text--sm fr-my-0 fr-p-2v">Label</h5>
+                <button
+                  type="button"
+                  title="Fermer"
+                  class="toggletip-close border-left"
+                  @click="close"
+                >
+                  &times;
+                </button>
+              </div>
+              <div class="fr-p-2v">
+                Certains jeux de données bénéficient d'un ou plusieurs labels
+                reconnus au niveau national, européen ou international.
+                <br />
+                Ces labels peuvent signaler une valeur réglementaire ou une
+                importance stratégique.
+              </div>
+            </template>
+          </Toggletip>
+        </template>
         <LabelTag
           v-for="badge in badges"
           :key="badge.kind"
           :badge
-          class="fr-mr-1v"
+          :url="badgeUrl(badge.kind)"
+          class="fr-mr-1v fr-mb-1v"
         />
       </SidebarItem>
     </SidebarList>
@@ -117,6 +161,40 @@ const hasContactPointsWithSpecificRole = computed(() => {
 
 <style scoped>
 .license-code {
+  background-color: var(--background-alt-grey);
+}
+
+.toggletip-header {
+  display: flex;
+}
+
+.toggletip-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  font-size: 1.2rem;
+}
+</style>
+
+<style>
+/* headlessui's Popover isn't an SFC, so it breaks Vue's scoped data-v chain: this can't be `scoped` */
+.toggletip-label-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-left: -0.25rem;
+  padding: 0;
+  border: none;
+  border-radius: 0.25rem;
+  background: transparent;
+  color: inherit;
+  transform: translateY(1px);
+}
+
+.toggletip-label-button:hover {
   background-color: var(--background-alt-grey);
 }
 </style>
