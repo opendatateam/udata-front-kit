@@ -104,10 +104,9 @@ describe('Topic Elements - Deep Linking', () => {
       const ungroupedFactors = factorFactory.many(2, {
         traits: ['missing_no_group']
       })
-      const { testTopic } = setupTopicWithExistingFactors([
-        ...ungroupedFactors,
-        ...groupedFactors
-      ])
+      const { testTopic } = setupTopicWithExistingFactors({
+        factors: [...ungroupedFactors, ...groupedFactors]
+      })
       const targetFactor = ungroupedFactors[0]
 
       if (!targetFactor) throw Error('Could not find any ungrouped factor')
