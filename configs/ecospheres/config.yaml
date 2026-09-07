@@ -233,7 +233,7 @@ definitions: &definitions
 #     universe_query: {dict}          # used to define a "universe" on a given {page_id}, through query args
 #     filter_prefix: {string}         # prefix/namespace for filter value (eg ?tag={filter_prefix}-{value})
 #     title: {string}                 # title for the list page
-#     breadcrumb_title: {string}      # title in breadcrumb (optionnal, falls back to title)
+#     breadcrumb_title: {string}      # title in breadcrumb (optional, falls back to title)
 #     default_sort: {string}          # default sort option. Options are described in the List endpoints of Topics, Datasets and Dataservices, in the "sort" parameter.
 #     labels:                         # how to call the object that is displayed by the page
 #       singular: {string}            # singular name for the object
@@ -242,7 +242,7 @@ definitions: &definitions
 #     search:
 #       input: {string}               # label displayed above the search input
 #       placeholder: {string?|null?}  # input placeholder (null = no placeholder, omit = data.gouv.fr default)
-#     banner:                         # banner for the list page (optionnal)
+#     banner:                         # banner for the list page (optional)
 #       title: {string}               # title for the banner
 #       content: {string}             # content for the banner
 #     resources_tabs:                 # resources tabs at the bottom of a detail page
