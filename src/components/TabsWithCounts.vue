@@ -1,9 +1,9 @@
 <script setup lang="ts">
-export type TabWithCount = {
+import type { DsfrTabItemProps } from '@gouvminint/vue-dsfr'
+
+export type TabWithCount = DsfrTabItemProps & {
   title: string
   count?: number
-  tabId: string
-  panelId: string
 }
 
 defineProps<{
@@ -22,6 +22,7 @@ const activeTab = defineModel<number>({ required: true })
         :key="tab.tabId"
         :tab-id="tab.tabId"
         :panel-id="tab.panelId"
+        :icon="tab.icon"
         @click="activeTab = index"
         @next="activeTab = index === tabs.length - 1 ? 0 : index + 1"
         @previous="activeTab = index === 0 ? tabs.length - 1 : index - 1"
