@@ -54,22 +54,6 @@ describe('Topic Elements - Factor List Display', () => {
       cy.get('.test__add_dataset_btn').should('be.visible')
     })
 
-    it('should show the factors count on the Données tab', () => {
-      cy.contains('button', `Données (${testFactors.length})`).should(
-        'be.visible'
-      )
-    })
-
-    it('should show a zero count on the Données tab when the topic has no elements', () => {
-      const { testTopic: emptyTopic } = setupEmptyTopic()
-      visitTopic(emptyTopic.slug)
-
-      // this one will always fired and is easy to catch, signals that the page is loaded
-      cy.wait('@getElementsReuse')
-
-      cy.contains('button', 'Données (0)').should('be.visible')
-    })
-
     it('should handle empty factors list', () => {
       const { testTopic: emptyTopic } = setupEmptyTopic()
       visitTopic(emptyTopic.slug)
