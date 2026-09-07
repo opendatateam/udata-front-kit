@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@datagouv/components-next':
-        specifier: 1.0.2-dev.193
-        version: 1.0.2-dev.193(core-js@3.47.0)(echarts@6.1.0)(resize-detector@0.3.0)(supports-color@8.1.1)(vue-router@4.6.4(vue@3.5.30(typescript@5.7.3)))(vue@3.5.30(typescript@5.7.3))
+        specifier: 1.0.2-dev.202
+        version: 1.0.2-dev.202(core-js@3.47.0)(echarts@6.1.0)(resize-detector@0.3.0)(supports-color@8.1.1)(vue-router@4.6.4(vue@3.5.30(typescript@5.7.3)))(vue@3.5.30(typescript@5.7.3))
       '@gouvfr/dsfr':
         specifier: ~1.14.4
         version: 1.14.4
@@ -415,8 +415,8 @@ packages:
   '@cypress/xvfb@1.2.4':
     resolution: {integrity: sha512-skbBzPggOVYCbnGgV+0dmBdW/s77ZkAOXIC1knS8NagwDjBrNC1LuXtQJeiN6l+m7lzmHtaoUw/ctJKdqkG57Q==}
 
-  '@datagouv/components-next@1.0.2-dev.193':
-    resolution: {integrity: sha512-TNAyHzP4ybMnMVHgThw90NYe56al1o5ZJa2o9QCe+4TSrgkKiwcSFLOsWXU/qZj0pi6xg5rkQdH/yWZnEndSUA==}
+  '@datagouv/components-next@1.0.2-dev.202':
+    resolution: {integrity: sha512-wtvA/G1QR7JGrf6PvVpzPlyOqZHfZvbIOpYEju8dr314u+1UL7sFpzacE50gyYyMAK2HPLuW+oQ71iX6+Nou+Q==}
     engines: {node: '>= 20.0.0', npm: use-pnpm-instead, pnpm: '>= 10.0.0', yarn: use-pnpm-instead}
     peerDependencies:
       echarts: ^6.0.0
@@ -5180,7 +5180,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@datagouv/components-next@1.0.2-dev.193(core-js@3.47.0)(echarts@6.1.0)(resize-detector@0.3.0)(supports-color@8.1.1)(vue-router@4.6.4(vue@3.5.30(typescript@5.7.3)))(vue@3.5.30(typescript@5.7.3))':
+  '@datagouv/components-next@1.0.2-dev.202(core-js@3.47.0)(echarts@6.1.0)(resize-detector@0.3.0)(supports-color@8.1.1)(vue-router@4.6.4(vue@3.5.30(typescript@5.7.3)))(vue@3.5.30(typescript@5.7.3))':
     dependencies:
       '@floating-ui/vue': 2.0.1(vue@3.5.30(typescript@5.7.3))
       '@headlessui/vue': 1.7.23(vue@3.5.30(typescript@5.7.3))

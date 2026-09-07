@@ -19,6 +19,7 @@ import { createApp, markRaw } from 'vue'
 import { LoadingPlugin } from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/css/index.css'
 import VueMatomo from 'vue-matomo'
+import type { RouteLocationNormalizedLoaded } from 'vue-router'
 import TextClamp from 'vue3-text-clamp'
 
 import config from '@/config'
@@ -31,6 +32,7 @@ import type { SentryConfig } from './model/config'
 import routerPromise from './router'
 import LocalStorageService from './services/LocalStorageService'
 import { useUserStore } from './store/UserStore'
+import { resourceLinkContext } from './utils/explorer'
 import { isNotFoundError } from './utils/http'
 
 const app = createApp(App)
@@ -74,6 +76,22 @@ routerPromise
       schemaValidataUrl: 'https://validata.fr',
       schemasSiteUrl: 'https://schema.data.gouv.fr/',
       schemasSiteName: 'schema.data.gouv.fr',
+      // "Copier le lien" target: the resource's standard page on this site, instead of
+      // upstream's data.gouv.fr link.
+      getResourceExternalUrl: (dataset, resource) =>
+        `${window.location.origin}${
+          router.resolve(
+            {
+              name: resourceLinkContext.fromRouteName ?? 'datasets_detail',
+              params: { item_id: dataset.slug },
+              query: { resource_id: resource.id }
+            },
+            // Passing currentLocation avoids reading the reactive current route: this runs in
+            // library computeds that can refresh with no active component instance, where
+            // inject() would otherwise throw.
+            {} as RouteLocationNormalizedLoaded
+          ).href
+        }`,
       // inject authentication for datagouv components that make their own API calls
       onRequest: (param) => {
         const store = useUserStore()

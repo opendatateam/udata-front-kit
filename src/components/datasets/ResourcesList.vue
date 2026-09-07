@@ -10,6 +10,8 @@ import type {
 import { Pagination, ResourceAccordion } from '@datagouv/components-next'
 import { useLoading } from 'vue-loading-overlay'
 
+import { resourceLinkContext } from '@/utils/explorer'
+
 const pageSize = config.website.pagination_sizes.files_list as number
 
 const props = defineProps({
@@ -20,8 +22,15 @@ const props = defineProps({
   noFileMessage: {
     type: String,
     default: "Il n'y a pas encore de fichier pour ce jeu de données."
+  },
+  // Route name to build resource links against.
+  fromRouteName: {
+    type: String,
+    default: 'datasets_detail'
   }
 })
+
+resourceLinkContext.fromRouteName = props.fromRouteName
 
 // FIXME: ResourceAccordion should accept DatasetV2WithFullObject — upstream bug in @datagouv/components-next
 // @ts-expect-error dataset prop is typed as Dataset | DatasetV2, not DatasetV2WithFullObject

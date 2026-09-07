@@ -71,5 +71,10 @@ function toggleResourceExplorer() {
     :dataset="dataset"
     :from-route-name="fromRouteName"
   />
-  <ResourcesList v-else :dataset="dataset" :no-file-message="noFileMessage" />
+  <ResourcesList
+    v-else
+    :dataset="dataset"
+    :no-file-message="noFileMessage"
+    :from-route-name="fromRouteName"
+  />
 </template>

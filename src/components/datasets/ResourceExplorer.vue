@@ -9,6 +9,7 @@ import { onErrorCaptured, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import BlankState from '@/components/BlankState.vue'
+import { resourceLinkContext } from '@/utils/explorer'
 
 const props = defineProps({
   dataset: {
@@ -21,6 +22,8 @@ const props = defineProps({
     default: 'datasets_detail'
   }
 })
+
+resourceLinkContext.fromRouteName = props.fromRouteName
 
 // FIXME: ResourceExplorer should accept DatasetV2WithFullObject; same upstream bug as ResourceAccordion.
 // @ts-expect-error dataset prop is typed as DatasetV2, not DatasetV2WithFullObject
