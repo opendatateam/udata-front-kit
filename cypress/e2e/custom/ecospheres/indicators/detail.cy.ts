@@ -126,8 +126,6 @@ describe('Indicator Detail View', () => {
 
   describe('Tab counts', () => {
     it('should show distinct counts on each tab', () => {
-      // distinct, non-zero, non-equal values so a field mix-up (wrong metric,
-      // or a list length used instead of the sum) can't pass by coincidence
       const countsIndicator = createIndicator(
         {
           metrics: {
@@ -160,14 +158,7 @@ describe('Indicator Detail View', () => {
           enable_visualization: false
         }
       )
-      cy.mockDatasetAndRelatedObjects(
-        countsIndicator,
-        resourceFactory.many(5),
-        // list content intentionally smaller than metrics above, so the
-        // count can't accidentally match a list length instead
-        dataserviceFactory.many<Dataservice>(1),
-        reuseFactory.many<Reuse>(1)
-      )
+      cy.mockDatasetAndRelatedObjects(countsIndicator, resourceFactory.many(5))
 
       cy.visit(`/indicators/${countsIndicator.id}`)
 

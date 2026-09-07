@@ -238,7 +238,6 @@ describe('Dataservices (API) - Detail Page', () => {
 
   describe('Tab counts', () => {
     it('should show the linked datasets count on the Données tab and the discussions count on the Discussions tab', () => {
-      // distinct, non-equal values so a field mix-up can't pass by coincidence
       const countsDataservice = createMockedDataservice(
         {
           metrics: {

@@ -29,7 +29,6 @@ describe('Topic Detail View - Tab counts', () => {
     cy.mockStaticDatagouv()
     cy.simulateDisconnectedUser()
 
-    // distinct, non-equal values so a field mix-up can't pass by coincidence
     const testFactors = createTestFactors(3)
     const testTopic = createTestTopicWithElements(testFactors)
 
