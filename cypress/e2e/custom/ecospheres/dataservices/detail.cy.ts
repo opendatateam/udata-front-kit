@@ -236,6 +236,32 @@ describe('Dataservices (API) - Detail Page', () => {
     })
   })
 
+  describe('Tab counts', () => {
+    it('should show the linked datasets count on the Données tab and the discussions count on the Discussions tab', () => {
+      // distinct, non-equal values so a field mix-up can't pass by coincidence
+      const countsDataservice = createMockedDataservice(
+        {
+          metrics: {
+            discussions: 6,
+            discussions_open: 0,
+            followers: 0,
+            reuses: 0,
+            views: 0
+          }
+        },
+        datasetFactory.many(3)
+      )
+
+      cy.visit(`/dataservices/${countsDataservice.id}`)
+      cy.wait(`@get_dataservices_${countsDataservice.id}`)
+      cy.wait('@getDataserviceDatasets')
+
+      cy.contains('button', 'Données (3)').should('be.visible')
+      cy.contains('button', 'Discussions (6)').should('be.visible')
+      cy.contains('button', 'Informations').find('sup').should('not.exist')
+    })
+  })
+
   describe('Access Type And Availability Variations', () => {
     it('should display "Ouvert avec compte" badge for open_with_account access', () => {
       const restrictedDataservice = createMockedDataservice({
