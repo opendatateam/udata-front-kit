@@ -116,7 +116,7 @@ On utilise la librairie [mimicry-js](https://github.com/Stivooo/mimicry-js) comm
 pnpm run lint
 ```
 
-#### Typage via [TSc](https://www.typescriptlang.org/docs/handbook/compiler-options.html/)
+#### Typage via [tsc](https://www.typescriptlang.org/docs/handbook/compiler-options.html)
 
 ```sh
 pnpm run hint
@@ -334,9 +334,9 @@ Pour des raisons de sécurité, le déploiement est effectué par un dépôt pri
   - On commence par créer une Pull Request depuis `main` vers `{site}-preprod` ;
   - Une fois cette PR validée, on déploie soit via un message de commit normé soit via l'UI GitHub Actions (cf plus haut).
 - La branche `{site}-prod` est utilisée pour les déploiements sur <https://{site}.data.gouv.fr>.
-  - Même processus que pour la preprod, mais en créant une PR depuis `{site}-preprod` vers `{site})-prod`.
+  - Même processus que pour la preprod, mais en créant une PR depuis `{site}-preprod` vers `{site}-prod`.
 
-NB : dans certains cas, il possible de créer et de déployer des Pull Requests depuis une _feature branch_ vers `{site}-(pre)prod`, par exemple pour définir une configuration spécifique à l'environnement de preprod ou de prod.
+NB : dans certains cas, il est possible de créer et de déployer des Pull Requests depuis une _feature branch_ vers `{site}-(pre)prod`, par exemple pour définir une configuration spécifique à l'environnement de preprod ou de prod.
 
 ## 📚 Bibliothèques et plugins utilisés
 
