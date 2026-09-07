@@ -9,6 +9,7 @@ declare global {
       checkRGAAContrast(): Chainable<void>
       clickCheckbox(checkbox_name: string): Chainable<void>
       expectActionToCallApi(action: () => void, resourceName: string, expectedParams: Record<string, string | string[]>, options?: { drain?: boolean }): Chainable<void>
+      expectNoConsoleErrors(): Chainable<void>
       expectRequestWithParams(resourceName: string, requestParamsString: string | RegExp): Chainable<void>
       isInViewport(options?: { threshold?: number; wait?: number }): Chainable<Element>
       mockDatagouvObject(resourceName: string, resourceId: string, data?: object): Chainable<void>
@@ -40,6 +41,7 @@ declare global {
       selectFilterValue(selectLabel: string, optionLabel: string): Chainable<void>
       simulateConnectedUser(userData?: object): Chainable<void>
       simulateDisconnectedUser(): Chainable<void>
+      trackConsoleErrors(): Chainable<void>
     }
   }
 }
