@@ -7,6 +7,7 @@ import type {
 } from '@datagouv/components-next'
 
 import type { Activity } from '@/model/activity'
+import type { Discussion } from '@/model/discussion'
 import type { Resource } from '@/model/resource'
 import type { Factor, SiteId, Topic } from '@/model/topic'
 import { Availability } from '@/model/topic'
@@ -280,6 +281,8 @@ export interface MockTopicOptions {
   referencedDataservices?: Dataservice[]
   // Activity history for the topic
   activities?: Activity[]
+  // Discussions on the topic
+  discussions?: Discussion[]
   // Dataset resources mapped by dataset ID
   datasetResources?: Record<string, Resource[]>
   /** Custom datasets mapped by dataset ID (overrides auto-generated ones) */
@@ -298,6 +301,7 @@ export function mockTopicAndRelatedObjects(
     referencedTopics = [],
     referencedDataservices = [],
     activities = [],
+    discussions = [],
     datasetResources = {},
     datasets = {}
   } = options
@@ -343,7 +347,7 @@ export function mockTopicAndRelatedObjects(
       }
     ).as(`getDataserviceDatasets_${refDataservice.id}`)
   })
-  cy.mockDatagouvObjectList('discussions')
+  cy.mockDatagouvObjectList('discussions', discussions)
   cy.mockDatagouvObjectList('reuses')
   cy.mockDatagouvObjectList('activity', activities)
 
@@ -360,16 +364,25 @@ export function expandDisclosureGroup(groupName = 'Test Group') {
 }
 
 // Combined setup for tests with existing factors
-export function setupTopicWithExistingFactors(
-  factors?: Factor[],
-  activities: Activity[] = []
-) {
+export function setupTopicWithExistingFactors({
+  factors,
+  activities = [],
+  discussions = []
+}: {
+  factors?: Factor[]
+  activities?: Activity[]
+  discussions?: Discussion[]
+} = {}) {
   setupElementTest()
 
   const testFactors = factors || createTestFactors(2)
   const testTopic = createTestTopicWithElements(testFactors)
 
-  mockTopicAndRelatedObjects(testTopic, { factors: testFactors, activities })
+  mockTopicAndRelatedObjects(testTopic, {
+    factors: testFactors,
+    activities,
+    discussions
+  })
 
   // Determine element class distribution based on factor traits
   const datasetFactors = testFactors.filter(

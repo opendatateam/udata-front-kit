@@ -48,10 +48,10 @@ describe('Topic Activity List', () => {
         activityFactory.one({ traits: ['topic_updated'] })
       ]
 
-      const { testTopic } = setupTopicWithExistingFactors(
-        testFactors,
+      const { testTopic } = setupTopicWithExistingFactors({
+        factors: testFactors,
         activities
-      )
+      })
 
       visitTopic(testTopic.slug)
       cy.wait('@getElementsDataset')
@@ -84,10 +84,10 @@ describe('Topic Activity List', () => {
         activityFactory.one({ traits: ['topic_updated'] })
       ]
 
-      const { testTopic } = setupTopicWithExistingFactors(
-        testFactors,
+      const { testTopic } = setupTopicWithExistingFactors({
+        factors: testFactors,
         activities
-      )
+      })
 
       visitTopic(testTopic.slug)
       cy.wait('@getElementsDataset')
@@ -111,7 +111,7 @@ describe('Topic Activity List', () => {
         activityFactory.one({ traits: ['topic_updated'] })
       ]
 
-      const { testTopic } = setupTopicWithExistingFactors(undefined, activities)
+      const { testTopic } = setupTopicWithExistingFactors({ activities })
 
       visitTopic(testTopic.slug)
       cy.wait('@getElementsDataset')
@@ -134,7 +134,7 @@ describe('Topic Activity List', () => {
         })
       ]
 
-      const { testTopic } = setupTopicWithExistingFactors(undefined, activities)
+      const { testTopic } = setupTopicWithExistingFactors({ activities })
 
       visitTopic(testTopic.slug)
       cy.wait('@getElementsDataset')
@@ -161,10 +161,10 @@ describe('Topic Activity List', () => {
         })
       ]
 
-      const { testTopic } = setupTopicWithExistingFactors(
-        testFactors,
+      const { testTopic } = setupTopicWithExistingFactors({
+        factors: testFactors,
         activities
-      )
+      })
 
       visitTopic(testTopic.slug)
       cy.wait('@getElementsDataset')
@@ -202,10 +202,10 @@ describe('Topic Activity List', () => {
         })
       ]
 
-      const { testTopic } = setupTopicWithExistingFactors(
-        testFactors,
+      const { testTopic } = setupTopicWithExistingFactors({
+        factors: testFactors,
         activities
-      )
+      })
 
       visitTopic(testTopic.slug)
       cy.wait('@getElementsDataset')
@@ -279,7 +279,9 @@ describe('Topic Activity List', () => {
 
     it('should update activity list immediately after modifying a factor', () => {
       const testFactors = createTestFactors(1)
-      const { testTopic } = setupTopicWithExistingFactors(testFactors)
+      const { testTopic } = setupTopicWithExistingFactors({
+        factors: testFactors
+      })
       visitTopic(testTopic.slug)
       cy.wait('@getElementsDataset')
 
@@ -329,7 +331,9 @@ describe('Topic Activity List', () => {
 
     it('should update activity list immediately after deleting a factor', () => {
       const testFactors = createTestFactors(1)
-      const { testTopic } = setupTopicWithExistingFactors(testFactors)
+      const { testTopic } = setupTopicWithExistingFactors({
+        factors: testFactors
+      })
       visitTopic(testTopic.slug)
       cy.wait('@getElementsDataset')
 
