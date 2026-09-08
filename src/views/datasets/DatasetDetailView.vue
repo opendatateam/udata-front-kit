@@ -10,7 +10,7 @@ import DatasetInformationPanel from '@/components/datasets/DatasetInformationPan
 import DatasetReusesList from '@/components/datasets/DatasetReusesList.vue'
 import DatasetSidebar from '@/components/datasets/DatasetSidebar.vue'
 import ExtendedInformationPanel from '@/components/datasets/ExtendedInformationPanel.vue'
-import ResourcesList from '@/components/datasets/ResourcesList.vue'
+import ResourcesTabContent from '@/components/datasets/ResourcesTabContent.vue'
 import config from '@/config'
 import { useCurrentPageConf, useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/DatasetStore'
@@ -18,6 +18,7 @@ import { useResourceStore } from '@/store/ResourceStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
 import { useDatasetsConf, usePageConf } from '@/utils/config'
+import { useResourceExplorer } from '@/utils/explorer'
 import { useLabels } from '@/utils/labels'
 import type { OgcLayerInfo } from '@/utils/ogcServices'
 import { fetchAllOgcResources } from '@/utils/ogcServices'
@@ -61,6 +62,7 @@ const topicPageKey = datasetsConf.add_to_topic?.page
 const topicPageConf = topicPageKey ? usePageConf(topicPageKey) : null
 const labels = useLabels(pageConf.labels)
 const topicLabels = topicPageConf ? useLabels(topicPageConf.labels) : null
+const { enabled: resourceExplorerEnabled } = useResourceExplorer()
 
 const canEdit = computed(() => {
   return pageConf.editable && userStore.hasEditPermissions(dataset.value)
@@ -155,7 +157,10 @@ onMounted(() => {
       <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
     </div>
     <div
-      v-if="dataset && (canEdit || canAddToTopic || exploreUrl)"
+      v-if="
+        dataset &&
+        (canEdit || canAddToTopic || (exploreUrl && !resourceExplorerEnabled))
+      "
       class="fr-col-auto fr-grid-row fr-grid-row--middle flex-gap"
     >
       <!-- add dataset to topic (if enabled) -->
@@ -175,7 +180,7 @@ onMounted(() => {
         />
       </template>
       <DsfrButton
-        v-if="exploreUrl"
+        v-if="exploreUrl && !resourceExplorerEnabled"
         size="sm"
         label="Explorer les données"
         icon="fr-icon-table-line"
@@ -212,7 +217,7 @@ onMounted(() => {
     >
       <!-- Fichiers -->
       <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0">
-        <ResourcesList :dataset="dataset" />
+        <ResourcesTabContent :dataset="dataset" />
         <div v-if="ogcLayerInfo.has(dataset.id)" class="fr-mt-2w">
           <DsfrButton
             secondary
