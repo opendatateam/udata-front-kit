@@ -8,8 +8,8 @@ set -eu
 VALID_SITES=$(find configs -maxdepth 1 -mindepth 1 -type d -exec basename {} \; | sort | tr '\n' ' ')
 VALID_ENVS="demo preprod prod"
 
-# Workflow that tags the deploy branch, dispatches the image build and creates the release
-DEPLOY_WORKFLOW="create-deploy-release-via-tag.yml"
+# Workflow that tags the deploy branch, builds the image and creates the release
+DEPLOY_WORKFLOW="deploy-site.yml"
 
 # Colors for output
 RED='\033[0;31m'

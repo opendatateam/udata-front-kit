@@ -1,5 +1,4 @@
-# Creates a tag on the deploy branch of `site` for `env`
-# and calls the `build-push-image` workflow on that tag
+# Tags, builds and pushes the image for a given site/env, and creates a release if requested.
 
 name: Deployment of a given site on a given env
 run-name: Trigger deploy ${{ inputs.site }}-${{ inputs.environment }}
@@ -7,9 +6,6 @@ run-name: Trigger deploy ${{ inputs.site }}-${{ inputs.environment }}
 on:
   workflow_dispatch:
     inputs:
-      # workflow_dispatch `options:` can't reference vars (no expressions allowed here),
-      # so this list must be kept in sync by hand with the vars.SITES repo variable
-      # that build-push-image.yml's parse step reads.
       site:
         description: 'Site to deploy'
         required: true
@@ -23,7 +19,6 @@ on:
           - logistique
           - meteo-france
           - simplifions
-      # Same restriction as above: kept in sync by hand with vars.ENVS.
       environment:
         description: 'Target environment'
         required: true
@@ -35,6 +30,7 @@ on:
       ref:
         description: 'Git ref (branch) to deploy (defaults to <site>-<environment>)'
         required: false
+        default: ''
         type: string
       create_release:
         description: 'Create a GitHub release'
@@ -42,16 +38,17 @@ on:
         default: false
         type: boolean
 
-permissions:
-  contents: write
-  actions: write
-
 jobs:
   tag:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      tag: ${{ steps.compute-tag.outputs.tag }}
+      version: ${{ steps.compute-tag.outputs.version }}
     steps:
       - name: Determine ref
-        id: ref
+        id: determine-ref
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -79,11 +76,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          ref: ${{ steps.ref.outputs.ref }}
+          ref: ${{ steps.determine-ref.outputs.ref }}
           fetch-tags: true
 
       - name: Compute next tag
-        id: version
+        id: compute-tag
         shell: bash
         run: |
           SITE="${{ inputs.site }}"
@@ -102,39 +99,66 @@ jobs:
           TAG="${PREFIX}-${NEXT}"
           echo "Computed tag: $TAG"
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "version=${TODAY}-${NEXT}" >> "$GITHUB_OUTPUT"
 
       - name: Create and push tag
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag "${{ steps.version.outputs.tag }}"
-          git push origin "${{ steps.version.outputs.tag }}"
+          git tag "${{ steps.compute-tag.outputs.tag }}"
+          git push origin "${{ steps.compute-tag.outputs.tag }}"
 
-      - name: Dispatch build workflow
-        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+  build:
+    needs: tag
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    concurrency:
+      group: ${{ github.workflow }}-${{ needs.tag.outputs.tag }}
+      cancel-in-progress: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          # ref picks which build-push-image.yml definition runs, not the code it builds (comes from tag)
-          script: |
-            await github.rest.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'build-push-image.yml',
-              ref: '${{ github.ref_name }}',
-              inputs: {
-                tag: '${{ steps.version.outputs.tag }}'
-              }
-            });
+          ref: ${{ needs.tag.outputs.tag }}
 
-      # Last so a release failure cannot keep the build from being dispatched.
+      - name: Log in to container registry
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        with:
+          registry: ${{ vars.CONTAINER_REGISTRY_SERVER }}
+          username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
+          password: ${{ secrets.CONTAINER_REGISTRY_PASSWORD }}
+
+      - name: Build and push
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
+        with:
+          context: .
+          push: true
+          build-args: |
+            VITE_SITE_ID=${{ inputs.site }}
+          tags: |
+            ${{ vars.CONTAINER_REGISTRY_SERVER }}/${{ vars.CONTAINER_REGISTRY_NAMESPACE }}/${{ inputs.site }}-${{ inputs.environment }}:${{ needs.tag.outputs.version }}
+            ${{ vars.CONTAINER_REGISTRY_SERVER }}/${{ vars.CONTAINER_REGISTRY_NAMESPACE }}/${{ inputs.site }}-${{ inputs.environment }}:latest
+
+  release:
+    needs: [tag, build]
+    if: inputs.create_release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      TAG: ${{ needs.tag.outputs.tag }}
+      SITE: ${{ inputs.site }}
+      ENV: ${{ inputs.environment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-tags: true
+
       - name: Create GitHub release
-        if: inputs.create_release
         shell: bash
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG: ${{ steps.version.outputs.tag }}
-          SITE: ${{ inputs.site }}
-          ENV: ${{ inputs.environment }}
         run: |
           # The pattern skips the legacy <site>-<env>-X.Y.Z tags, and sort -V
           # because N is not zero-padded (-10 would sort before -2).

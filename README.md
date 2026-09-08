@@ -282,16 +282,13 @@ Le déploiement peut aussi être déclenché manuellement via l'interface GitHub
 
 #### Architecture de déploiement en preprod et en production
 
-Le déploiement s'articule autour d'un tag `{site}-{env}-{YYYYMMDD}-{N}` :
+Le déploiement s'articule autour d'un tag `{site}-{env}-{YYYYMMDD}-{N}`, et repose sur un unique workflow, **`deploy-site.yml`**, composé de trois jobs :
 
-1. **`create-deploy-release-via-tag.yml`** :
-   - Calcule le prochain tag pour le jour courant, le crée sur la branche `{site}-{env}` et le pousse
-   - Déclenche le workflow de build, puis crée la release GitHub si `create_release` est activé
+1. **`tag`** : calcule le prochain tag pour le jour courant, le crée sur la branche `{site}-{env}` (ou `main`, voir plus bas) et le pousse.
+2. **`build`** : construit l'image à partir du tag et la pousse sur le registre en `{site}-{env}:{YYYYMMDD}-{N}` et `{site}-{env}:latest`.
+3. **`release`** : crée la release GitHub si `create_release` est activé.
 
-2. **`build-push-image.yml`** : décompose le tag (validé contre les variables de dépôt `SITES` et `ENVS`), construit l'image et la pousse sur le registre en `{site}-{env}:{YYYYMMDD}-{N}` et `{site}-{env}:latest`
-3. L'infrastructure récupère ensuite l'image depuis le registre et la déploie automatiquement dans l'environnement cible
-
-Les deux workflows sont déclenchés exclusivement par `workflow_dispatch` : pousser un tag à la main ne construit rien.
+Le workflow est déclenché exclusivement par `workflow_dispatch` : pousser un tag à la main ne construit rien. L'infrastructure récupère ensuite l'image depuis le registre et la déploie automatiquement dans l'environnement cible.
 
 #### Workflow de déploiement recommandé
 
