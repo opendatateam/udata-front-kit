@@ -1,6 +1,7 @@
 import config from '@/config'
 
 import OauthAPI from './api/OauthAPI'
+import LocalStorageService from './LocalStorageService'
 
 const api = new OauthAPI()
 
@@ -22,8 +23,8 @@ export default class AuthService {
     const encodedState = encodeURIComponent(state)
     const encodedCC = encodeURIComponent(codeChallenge)
 
-    localStorage.setItem('pkceCodeVerifier', codeVerifier)
-    localStorage.setItem('pkceState', state)
+    LocalStorageService.setItem('pkceCodeVerifier', codeVerifier)
+    LocalStorageService.setItem('pkceState', state)
 
     return `${this.baseURL}/oauth/authorize?redirect_uri=${redirectURI}&response_type=code&state=${encodedState}&client_id=${this.clientId}&scope=default&code_challenge=${encodedCC}&code_challenge_method=S256`
   }
@@ -32,13 +33,13 @@ export default class AuthService {
    * Retrieve an oauth token from a verification code
    */
   async retrieveToken(code, state) {
-    const storedState = localStorage.getItem('pkceState')
+    const storedState = LocalStorageService.getItem('pkceState')
     if (state !== storedState) {
       const error = `Unmatching states: ${state} vs ${storedState}`
       console.error(error)
       throw new Error(error)
     }
-    const pkceCodeVerifier = localStorage.getItem('pkceCodeVerifier')
+    const pkceCodeVerifier = LocalStorageService.getItem('pkceCodeVerifier')
     return await api.token({
       code,
       pkceCodeVerifier,
@@ -58,8 +59,8 @@ export default class AuthService {
    * Cleanup after login flow
    */
   cleanup() {
-    localStorage.removeItem('pkceCodeVerifier')
-    localStorage.removeItem('pkceState')
+    LocalStorageService.removeItem('pkceCodeVerifier')
+    LocalStorageService.removeItem('pkceState')
   }
 
   /**

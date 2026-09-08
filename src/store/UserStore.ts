@@ -49,8 +49,8 @@ export const useUserStore = defineStore('user', {
      * If we have a token, fetch user infos from API
      */
     async init(): Promise<User | undefined> {
-      const token = localStorage.getItem(STORAGE_KEY)
-      if (token !== null) {
+      const token = LocalStorageService.getItem(STORAGE_KEY)
+      if (token !== undefined) {
         this.token = token
         this.isLoggedIn = true
         let userData: User | undefined
@@ -103,7 +103,7 @@ export const useUserStore = defineStore('user', {
     login(token: string) {
       this.isLoggedIn = true
       this.token = token
-      localStorage.setItem(STORAGE_KEY, token)
+      LocalStorageService.setItem(STORAGE_KEY, token)
     },
     /**
      * Reflet logged-out state
@@ -112,7 +112,7 @@ export const useUserStore = defineStore('user', {
       this.isLoggedIn = false
       this.token = undefined
       this.data = undefined
-      localStorage.removeItem(STORAGE_KEY)
+      LocalStorageService.removeItem(STORAGE_KEY)
     },
     /**
      * Store user infos
