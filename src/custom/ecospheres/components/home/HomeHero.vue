@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import config from '@/config'
-import { trackEvent } from '@/utils/matomo'
+import { trackEvent } from '@datagouv/components-next'
 import { useRouter } from 'vue-router'
 import type { EcologieHomepageThematicTag } from '../../model/config'
 
