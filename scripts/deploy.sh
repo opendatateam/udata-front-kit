@@ -141,7 +141,7 @@ cmd_prepare() {
 
   # Check target branch exists
   if ! remote_branch_exists "$target_branch"; then
-    error "Branch 'origin/$target_branch' does not exist"
+    error "Branch 'origin/$target_branch' does not exist. Maybe this site deploys from main?"
   fi
 
   # Check if we're in the middle of a merge

@@ -52,13 +52,29 @@ jobs:
     steps:
       - name: Determine ref
         id: ref
-        run: |
-          REF="${{ inputs.ref }}"
-          if [[ -z "$REF" ]]; then
-            REF="${{ inputs.site }}-${{ inputs.environment }}"
-          fi
-          echo "Computed ref: $REF"
-          echo "ref=$REF" >> "$GITHUB_OUTPUT"
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const inputs = context.payload.inputs || {}
+            core.debug(`Received inputs: ${JSON.stringify(inputs)}`)
+            const { site, environment, ref } = inputs
+            let target = ref || `${site}-${environment}`
+
+            // Sites without a dedicated <site>-<env> branch deploy straight from main.
+            // Only fall back on a confirmed 404; any other error must fail loud
+            if (!ref) {
+              try {
+                await github.rest.repos.getBranch({ ...context.repo, branch: target })
+              } catch (error) {
+                if (error.status !== 404) throw error
+                core.warning(`Branch '${target}' does not exist, falling back to main`)
+                target = 'main'
+              }
+            }
+
+            core.info(`Computed ref: ${target}`)
+            core.setOutput('ref', target)
 
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2

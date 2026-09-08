@@ -201,7 +201,7 @@ Les **review apps** ne sont **pas créées automatiquement** lors de l'ouverture
 
 ##### Solution 1 : Script de déploiement local (recommandé)
 
-Un script bash `scripts/deploy.sh` simplifie le processus de déploiement en deux étapes.
+Un script bash `scripts/deploy.sh` simplifie le processus de déploiement en deux étapes. Ce processus repose sur des branches par environnement (`{site}-{env}`) et sur des Pull Requests entre ces branches. Il ne s'applique donc qu'aux sites qui suivent ce modèle (voir [Sites déployés directement depuis `main`](#sites-déployés-directement-depuis-main) sinon).
 
 **Prérequis :** [GitHub CLI (`gh`)](https://cli.github.com/) et `jq` installés, `gh` authentifié.
 
@@ -276,7 +276,7 @@ Le déploiement peut aussi être déclenché manuellement via l'interface GitHub
 4. **Choisir** :
    - **Site** : Le site à déployer (dropdown avec les sites disponibles)
    - **Environment** : L'environnement cible (`demo`, `preprod`, ou `prod`)
-   - **Ref** : Optionnel, la branche à déployer (défaut : `{site}-{env}`)
+   - **Ref** : Optionnel, la branche à déployer (défaut : `{site}-{env}`). Si cette branche n'existe pas, le workflow se rabat automatiquement sur `main`. C'est le cas des sites sans branche `{site}-{env}` dédiée (voir plus bas).
    - **Create release** : Créer une release GitHub (désactivé par défaut)
 5. **Cliquer sur "Run workflow"**
 
@@ -305,6 +305,12 @@ Les deux workflows sont déclenchés exclusivement par `workflow_dispatch` : pou
   - Même processus que pour la preprod, mais en créant une PR depuis `{site}-preprod` vers `{site}-prod`.
 
 NB : dans certains cas, il est possible de créer et de déployer des Pull Requests depuis une _feature branch_ vers `{site}-(pre)prod`, par exemple pour définir une configuration spécifique à l'environnement de preprod ou de prod.
+
+#### Sites déployés directement depuis `main`
+
+Certains sites (peu déployés, sans distinction demo/preprod) n'ont pas de branche `{site}-{env}` et sont déployés directement depuis `main`, par exemple `defis` ou `hackathon`.
+
+Pour ces sites, `scripts/deploy.sh` ne s'applique pas car il n'y a pas de branche `{site}-{env}` à préparer, ni de PR à créer. Le déploiement se fait uniquement via l'**interface GitHub Actions** (cf plus haut). Choisir le site, l'environnement `prod`, et laisser **Ref** vide. Le workflow détecte l'absence de branche `{site}-prod` et se rabat automatiquement sur `main`.
 
 ## 📚 Bibliothèques et plugins utilisés
 
