@@ -78,6 +78,7 @@ routerPromise
       schemasSiteName: 'schema.data.gouv.fr',
       // "Copier le lien" target: the resource's standard page on this site, instead of
       // upstream's data.gouv.fr link.
+      // FIXME: this should be handled upstream by a prop rather than a config key
       getResourceExternalUrl: (dataset, resource) =>
         `${window.location.origin}${
           router.resolve(
