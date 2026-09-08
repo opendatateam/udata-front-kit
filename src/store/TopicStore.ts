@@ -77,7 +77,7 @@ export const useTopicStore = defineStore('topic', {
      */
     async loadTopicsForUniverse(pageKey?: string): Promise<Topic[]> {
       const mergedApiParams = useUniverseQuery(pageKey || 'topics', {})
-      // make sure our user has registerd its permissions
+      // make sure our user has registered its permissions
       await useUserStore().waitForStoreInit()
       let response = await topicsAPI.list({
         params: {

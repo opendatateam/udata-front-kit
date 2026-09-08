@@ -29,7 +29,7 @@ export default class AuthService {
   }
 
   /**
-   * Retrive an oauth token from a verification code
+   * Retrieve an oauth token from a verification code
    */
   async retrieveToken(code, state) {
     const storedState = localStorage.getItem('pkceState')

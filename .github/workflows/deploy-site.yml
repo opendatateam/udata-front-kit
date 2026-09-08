@@ -1,0 +1,176 @@
+# Tags, builds and pushes the image for a given site/env, and creates a release if requested.
+
+name: Deployment of a given site on a given env
+run-name: deploy site ${{ inputs.site }} on env ${{ inputs.environment }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      site:
+        description: 'Site to deploy'
+        required: true
+        type: choice
+        options:
+          - accessibilite
+          - culture
+          - defis
+          - ecospheres
+          - hackathon
+          - logistique
+          - meteo-france
+          - simplifions
+      environment:
+        description: 'Target environment'
+        required: true
+        type: choice
+        options:
+          - demo
+          - preprod
+          - prod
+      ref:
+        description: 'Git ref (branch) to deploy (defaults to <site>-<environment>)'
+        required: false
+        default: ''
+        type: string
+      create_release:
+        description: 'Create a GitHub release'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      tag: ${{ steps.compute-tag.outputs.tag }}
+      version: ${{ steps.compute-tag.outputs.version }}
+    steps:
+      - name: Determine ref
+        id: determine-ref
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const inputs = context.payload.inputs || {}
+            core.debug(`Received inputs: ${JSON.stringify(inputs)}`)
+            const { site, environment, ref } = inputs
+            let target = ref || `${site}-${environment}`
+
+            // Sites without a dedicated <site>-<env> branch deploy straight from main.
+            // Only fall back on a confirmed 404; any other error must fail loud
+            if (!ref) {
+              try {
+                await github.rest.repos.getBranch({ ...context.repo, branch: target })
+              } catch (error) {
+                if (error.status !== 404) throw error
+                core.warning(`Branch '${target}' does not exist, falling back to main`)
+                target = 'main'
+              }
+            }
+
+            core.info(`Computed ref: ${target}`)
+            core.setOutput('ref', target)
+
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ steps.determine-ref.outputs.ref }}
+          fetch-tags: true
+
+      - name: Compute next tag
+        id: compute-tag
+        shell: bash
+        run: |
+          SITE="${{ inputs.site }}"
+          ENVIRONMENT="${{ inputs.environment }}"
+          TODAY=$(date +%Y%m%d)
+          PREFIX="${SITE}-${ENVIRONMENT}-${TODAY}"
+
+          EXISTING=$(git tag -l "${PREFIX}-*")
+
+          NEXT=1
+          if [[ -n "$EXISTING" ]]; then
+            MAX=$(echo "$EXISTING" | sed -E "s/^${PREFIX}-//" | sort -n | tail -1)
+            NEXT=$((MAX + 1))
+          fi
+
+          TAG="${PREFIX}-${NEXT}"
+          echo "Computed tag: $TAG"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "version=${TODAY}-${NEXT}" >> "$GITHUB_OUTPUT"
+
+      - name: Create and push tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag "${{ steps.compute-tag.outputs.tag }}"
+          git push origin "${{ steps.compute-tag.outputs.tag }}"
+
+  build:
+    needs: tag
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    concurrency:
+      group: ${{ github.workflow }}-${{ needs.tag.outputs.tag }}
+      cancel-in-progress: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ needs.tag.outputs.tag }}
+
+      - name: Log in to container registry
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        with:
+          registry: ${{ vars.CONTAINER_REGISTRY_SERVER }}
+          username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
+          password: ${{ secrets.CONTAINER_REGISTRY_PASSWORD }}
+
+      - name: Build and push
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
+        with:
+          context: .
+          push: true
+          build-args: |
+            VITE_SITE_ID=${{ inputs.site }}
+          tags: |
+            ${{ vars.CONTAINER_REGISTRY_SERVER }}/${{ vars.CONTAINER_REGISTRY_NAMESPACE }}/${{ inputs.site }}-${{ inputs.environment }}:${{ needs.tag.outputs.version }}
+            ${{ vars.CONTAINER_REGISTRY_SERVER }}/${{ vars.CONTAINER_REGISTRY_NAMESPACE }}/${{ inputs.site }}-${{ inputs.environment }}:latest
+
+  release:
+    needs: [tag, build]
+    if: inputs.create_release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      TAG: ${{ needs.tag.outputs.tag }}
+      SITE: ${{ inputs.site }}
+      ENV: ${{ inputs.environment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-tags: true
+
+      - name: Create GitHub release
+        shell: bash
+        run: |
+          # The pattern skips the legacy <site>-<env>-X.Y.Z tags, and sort -V
+          # because N is not zero-padded (-10 would sort before -2).
+          PREV=$(git tag -l "${SITE}-${ENV}-*" \
+            | grep -E "^${SITE}-${ENV}-[0-9]{8}-[0-9]+$" \
+            | grep -v "^${TAG}$" \
+            | sort -V | tail -1 || true)
+
+          OPTS=(--generate-notes --title "$TAG")
+          if [[ -n "$PREV" ]]; then
+            echo "Changelog since: $PREV"
+            OPTS+=(--notes-start-tag "$PREV")
+          fi
+
+          gh release create "$TAG" "${OPTS[@]}"
