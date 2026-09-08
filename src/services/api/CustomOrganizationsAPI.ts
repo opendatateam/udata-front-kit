@@ -12,11 +12,18 @@ export default class CustomOrganizationsAPI {
   baseUrl: string
   toasted: boolean
 
+  // pageKey is a dotted path for network pages (e.g. `simm.datasets` -> organizations.simm.datasets).
   constructor(pageKey: string) {
-    this.baseUrl = config.organizations[pageKey]
-    if (!this.baseUrl) {
+    const resolved = pageKey
+      .split('.')
+      .reduce<unknown>(
+        (obj, key) => (obj as Record<string, unknown> | undefined)?.[key],
+        config.organizations
+      )
+    if (typeof resolved !== 'string') {
       throw new Error(`No organizations base URL found for ${pageKey}`)
     }
+    this.baseUrl = resolved
     this.toasted = true
   }
 

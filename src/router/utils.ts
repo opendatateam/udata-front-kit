@@ -1,9 +1,15 @@
+import config from '@/config'
+import type { BreadcrumbItem } from '@/model/breadcrumb'
 import {
   CUSTOM_FILTER_TYPES,
   type CustomFilterType,
+  type NetworkConf,
+  type OrganizationsConfig,
+  type PageConf,
+  type PageListConf,
   type PageObjectType
 } from '@/model/config'
-import { usePageConf, usePagesConf } from '@/utils/config'
+import { useNetworksConf, usePageConf, usePagesConf } from '@/utils/config'
 import {
   getDefaultDataserviceConfig,
   getDefaultDatasetConfig,
@@ -112,6 +118,24 @@ interface GlobalSearchPageRoutesOptions {
   renderRootPage?: boolean
 }
 
+// Options specific to network pages (see useNetworkRoutes), which have no detail
+// route and live outside config.pages.
+interface ListPageRouteOptions {
+  pageKey: string
+  // Defaults to config.pages via usePageConf(pageKey) when omitted.
+  pageConf?: PageListConf
+  // Defaults to `/${pageKey}` when omitted.
+  basePath?: string
+  // Pages bundled into this page's GlobalSearch type switcher, keyed by each
+  // sibling's route name. Defaults to every list_all page in config.pages.
+  siblingPages?: Record<string, PageListConf>
+  activeMenuLink?: string
+  parentBreadcrumbs?: BreadcrumbItem[]
+  // pageKey whose `_detail` route item links should resolve to.
+  detailPageKey?: string
+  cardComponent?: () => Promise<{ default: Component }>
+}
+
 const CUSTOM_FILTER_TYPE_SET = new Set<CustomFilterType>(CUSTOM_FILTER_TYPES)
 
 /**
@@ -121,9 +145,9 @@ const CUSTOM_FILTER_TYPE_SET = new Set<CustomFilterType>(CUSTOM_FILTER_TYPES)
  */
 function buildSingleTypeConfig(
   pageKey: string,
-  searchType: PageObjectType
+  pageConf: PageListConf
 ): GlobalSearchConfig[number] {
-  const pageConf = usePageConf(pageKey)
+  const searchType = pageConf.object_type
   const hiddenFilters = Object.entries(pageConf.universe_query ?? {}).map(
     ([key, value]) => ({ key, value })
   )
@@ -179,16 +203,28 @@ function buildSingleTypeConfig(
  * Each page gets key=pageKey so same-class pages (e.g. datasets + indicators) are distinct.
  * Also returns customFilters for the primary page for rendering via the #custom-filters slot.
  */
-export function buildGlobalSearchConfig(pageKey: string): {
+export function buildGlobalSearchConfig(
+  pageKey: string,
+  opts?: {
+    pageConf?: PageListConf
+    siblingPages?: Record<string, PageListConf>
+  }
+): {
   searchConfig: GlobalSearchConfig
   customFilters: CustomFilterConfig[]
 } {
-  const pageConf = usePageConf(pageKey)
-  const allPages = usePagesConf()
+  const pageConf = opts?.pageConf ?? usePageConf(pageKey)
   const searchConfig: GlobalSearchConfig = []
-  for (const [key, conf] of Object.entries(allPages)) {
-    if (!conf.list_all) continue
-    searchConfig.push(buildSingleTypeConfig(key, conf.object_type))
+  if (opts?.siblingPages) {
+    for (const [key, conf] of Object.entries(opts.siblingPages)) {
+      searchConfig.push(buildSingleTypeConfig(key, conf))
+    }
+  } else {
+    const allPages = usePagesConf()
+    for (const [key, conf] of Object.entries(allPages)) {
+      if (!conf.list_all) continue
+      searchConfig.push(buildSingleTypeConfig(key, conf))
+    }
   }
 
   // Build customFilters for the primary page (rendered via SearchSelectFilter/SearchOrganizationFilter in #custom-filters slot).
@@ -202,7 +238,9 @@ export function buildGlobalSearchConfig(pageKey: string): {
             label: f.name,
             defaultLabel: f.default_option ?? undefined,
             typeKeys: [pageKey],
-            pageKey
+            // network pageKeys are `${slug}__${subpath}` (see useNetworkRoutes); their
+            // org-list URL is nested under the slug in config.organizations instead.
+            pageKey: pageKey.replace('__', '.')
           }
         ]
       } else if (f.type === 'select') {
@@ -240,7 +278,55 @@ export function buildGlobalSearchConfig(pageKey: string): {
 }
 
 /**
- * Creates routes for a GlobalSearch-based list page.
+ * Builds a list-only GlobalSearch route (no detail route) for one page.
+ * Used directly by network pages (see useNetworkRoutes) and internally by
+ * useGlobalSearchPageRoutes for pages that also register a detail route.
+ */
+function buildListPageRoute({
+  pageKey,
+  pageConf: pageConfOverride,
+  basePath,
+  siblingPages,
+  activeMenuLink,
+  parentBreadcrumbs,
+  detailPageKey,
+  cardComponent
+}: ListPageRouteOptions): RouteRecordRaw {
+  const pageConf = pageConfOverride ?? usePageConf(pageKey)
+  const root = basePath ?? `/${pageKey}`
+  const { searchConfig, customFilters } = buildGlobalSearchConfig(pageKey, {
+    pageConf: pageConfOverride,
+    siblingPages
+  })
+
+  return {
+    path: root,
+    children: [
+      {
+        path: '',
+        name: pageKey,
+        meta: {
+          title: pageConf.meta?.title ?? pageConf.title,
+          pageKey,
+          pageConf: pageConfOverride,
+          activeMenuLink,
+          parentBreadcrumbs,
+          cardComponent,
+          searchType: pageConf.object_type,
+          searchConfig,
+          customFilters,
+          detailPageKey
+        },
+        component: () => import('@/views/UnifiedSearchView.vue'),
+        // forces the component to be recreated when navigating to a different pageKey
+        props: () => ({ key: pageKey })
+      }
+    ]
+  }
+}
+
+/**
+ * Creates routes for a GlobalSearch-based list page plus its paired detail route.
  * Reads universe_query and filters[].advanced from YAML; only component references are passed as arguments.
  */
 export const useGlobalSearchPageRoutes = ({
@@ -254,7 +340,7 @@ export const useGlobalSearchPageRoutes = ({
 }: GlobalSearchPageRoutesOptions): RouteRecordRaw => {
   const pageConf = usePageConf(pageKey)
   const objectType = pageConf.object_type
-  const { searchConfig, customFilters } = buildGlobalSearchConfig(pageKey)
+  const root = `/${pageKey}`
 
   const defaultDetailsViews: Record<PageObjectType, () => Promise<unknown>> = {
     dataservices: () =>
@@ -264,7 +350,7 @@ export const useGlobalSearchPageRoutes = ({
   }
 
   const childrenPages = {
-    path: renderRootPage ? ':item_id' : `/${pageKey}/:item_id`,
+    path: renderRootPage ? ':item_id' : `${root}/:item_id`,
     name: `${pageKey}_detail`,
     component: detailsViewComponent ?? defaultDetailsViews[objectType],
     meta: {
@@ -277,27 +363,11 @@ export const useGlobalSearchPageRoutes = ({
     props: () => ({ key: pageKey, ...topicConf })
   }
 
-  const rootPage = {
-    path: `/${pageKey}`,
-    children: [
-      {
-        path: '',
-        name: pageKey,
-        meta: {
-          title: pageConf.meta?.title ?? pageConf.title,
-          pageKey,
-          cardComponent,
-          searchType: objectType,
-          searchConfig,
-          customFilters
-        },
-        component: () => import('@/views/UnifiedSearchView.vue')
-      },
-      childrenPages
-    ]
-  }
+  if (!renderRootPage) return childrenPages
 
-  return renderRootPage ? rootPage : childrenPages
+  const rootPage = buildListPageRoute({ pageKey, cardComponent })
+  rootPage.children?.push(childrenPages)
+  return rootPage
 }
 
 export const useTopicAdminPagesRoutes = ({
@@ -331,25 +401,86 @@ export const useTopicAdminPagesRoutes = ({
   ]
 }
 
+// Org detail stays at /organizations/:oid; activeMenuLink highlights "Contributeurs" for it.
 export const useOrganizationsRoutes = (): RouteRecordRaw => {
   return {
     path: '/organizations',
-    name: 'organizations_routes',
+    // no name: the '' child is unnamed too, and naming only the parent trips a Vue Router warning
     children: [
-      {
-        path: '',
-        name: 'organizations',
-        component: async () =>
-          await import('@/views/organizations/OrganizationsListView.vue')
-      },
+      { path: '', redirect: '/contributors' },
       {
         path: ':oid',
         name: 'organization_detail',
         component: async () =>
-          await import('@/views/organizations/OrganizationDetailView.vue')
+          await import('@/views/organizations/OrganizationDetailView.vue'),
+        meta: { activeMenuLink: '/contributors' }
       }
     ]
   }
+}
+
+/**
+ * Builds routes for one network (SIF): a redirect from the bare /contributors/<slug>
+ * to its default (first-listed) page, plus one GlobalSearch route per page in
+ * network.pages, all nested under /contributors/<slug>/<subpath> and bundled into
+ * a shared type switcher. Network pages stop at the list view — item links resolve
+ * to the standard page sharing their subpath's name (e.g. `datasets` -> /datasets/:item_id),
+ * relying on the convention that a network subpath matches its standard page's pageKey.
+ */
+export const useNetworkRoutes = (
+  slug: string,
+  network: NetworkConf
+): RouteRecordRaw[] => {
+  const base = `/contributors/${slug}`
+  const subpaths = Object.keys(network.pages)
+  const defaultSubpath = subpaths[0]
+  // The default page's title is also the network's own display identity (see NetworkCard.vue).
+  const defaultPage = network.pages[defaultSubpath]
+  const siblingPages = Object.fromEntries(
+    subpaths.map((subpath) => [`${slug}__${subpath}`, network.pages[subpath]])
+  )
+  const organizationsConfig = config.organizations as OrganizationsConfig
+  const parentBreadcrumbs = [
+    {
+      to: '/contributors',
+      text: organizationsConfig.page?.breadcrumb_title ?? 'Contributeurs'
+    },
+    {
+      to: { name: `${slug}__${defaultSubpath}` },
+      text: defaultPage.title
+    }
+  ]
+
+  return [
+    { path: base, redirect: `${base}/${defaultSubpath}` },
+    ...subpaths.map((subpath) =>
+      buildListPageRoute({
+        pageKey: `${slug}__${subpath}`,
+        pageConf: network.pages[subpath],
+        basePath: `${base}/${subpath}`,
+        siblingPages,
+        activeMenuLink: '/contributors',
+        parentBreadcrumbs,
+        detailPageKey: subpath
+      })
+    )
+  ]
+}
+
+export const useContributorsRoutes = (): RouteRecordRaw[] => {
+  const networks = useNetworksConf()
+  return [
+    {
+      path: '/contributors',
+      name: 'contributors',
+      meta: { activeMenuLink: '/contributors' },
+      component: async () =>
+        await import('@/views/organizations/ContributorsListView.vue')
+    },
+    ...Object.entries(networks).flatMap(([slug, network]) =>
+      useNetworkRoutes(slug, network)
+    )
+  ]
 }
 
 export const useRouteMeta = () => {
@@ -364,6 +495,9 @@ export const useCurrentPageConf = () => {
   return {
     pageKey: meta.pageKey,
     meta,
-    pageConf: usePageConf(meta.pageKey)
+    // Only detail routes reach this helper, and those are never built by
+    // buildListPageRoute — so meta.pageConf here is always a full PageConf.
+    pageConf:
+      (meta.pageConf as PageConf | undefined) ?? usePageConf(meta.pageKey)
   }
 }

@@ -11,6 +11,7 @@ import SidebarItem from '@/components/SidebarItem.vue'
 import SidebarList from '@/components/SidebarList.vue'
 import SidebarOwner from '@/components/SidebarOwner.vue'
 import VIconDsfr from '@/components/VIconDsfr.vue'
+import type { BreadcrumbItem } from '@/model/breadcrumb'
 import { useCurrentPageConf, useRouteParamsAsString } from '@/router/utils'
 import { useDataserviceStore } from '@/store/DataserviceStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
@@ -60,9 +61,9 @@ const goToPage = (page: number) => {
 }
 
 const links = computed(() => {
-  const breadcrumbs = [{ to: '/', text: 'Accueil' }]
+  const breadcrumbs: BreadcrumbItem[] = [{ to: '/', text: 'Accueil' }]
   breadcrumbs.push({
-    to: pageConf.list_all === true ? `/${pageKey || 'dataservices'}` : '',
+    to: pageConf.list_all === true ? { name: pageKey || 'dataservices' } : '',
     text: pageConf.breadcrumb_title || pageConf.title
   })
   breadcrumbs.push({ to: '', text: dataservice.value?.title ?? '' })

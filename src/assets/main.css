@@ -273,8 +273,17 @@ label:has(input[name='search-type']) span[aria-hidden='true']::after {
   }
 }
 
+.contributor-tile {
+  padding: 2rem;
+  box-shadow: 0px 4px 0px var(--border-active-blue-france);
+  height: 100%;
+}
+.contributor-tile:where(:hover, :focus-within) {
+  background-color: var(--hover);
+}
+
 .hero-banner {
-  > div > p:first-child {
+  .hero-banner__title {
     font-size: 1.25em;
     font-weight: 400;
   }
@@ -282,7 +291,7 @@ label:has(input[name='search-type']) span[aria-hidden='true']::after {
   p:last-child {
     margin-bottom: 0;
   }
-  a {
+  a:not(.fr-btn) {
     color: var(--text-action-high-blue-france);
     &::after {
       content: ' →';

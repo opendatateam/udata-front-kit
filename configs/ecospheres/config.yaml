@@ -119,7 +119,7 @@ website:
     - text: Collections thématiques
       to: /bouquets
     - text: Contributeurs
-      to: /organizations
+      to: /contributors
     - text: À propos
       to: /about
   router:
@@ -155,7 +155,7 @@ website:
     - name: Indicateurs phares
       path: /indicators
     - name: Contributeurs
-      path: /organizations
+      path: /contributors
     - name: À propos
       path: /about
     - name: Conditions générales d'utilisation
@@ -199,6 +199,12 @@ organizations:
   datasets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo/organizations-datasets.json
   dataservices: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo/organizations-dataservices.json
   bouquets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-demo/organizations-bouquets.json
+  simm:
+    datasets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-simm-demo/organizations-datasets.json
+    dataservices: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-simm-demo/organizations-dataservices.json
+  sieau:
+    datasets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-sieau-demo/organizations-datasets.json
+    dataservices: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-sieau-demo/organizations-dataservices.json
   page: # organizations.page is a special case of config.pages
     breadcrumb_title: Contributeurs
     labels:
@@ -207,7 +213,7 @@ organizations:
       title: Liste des contributeurs
       description: Recherchez une organisation qui a partagé un jeu de données ou une réutilisation sur la transition écologique
 
-# shared themes list for indicators and bouquets
+# shared value lists used across pages/networks
 definitions: &definitions
   fnv_themes: &fnv_themes
     - id: mieux-consommer
@@ -224,6 +230,197 @@ definitions: &definitions
       name: Mieux se nourrir
     - id: autre
       name: Autre
+  inspire_themes: &inspire_themes
+    - id: adresses
+      name: Adresses
+    - id: altitude
+      name: Altitude
+    - id: batiments
+      name: Bâtiments
+    - id: caracteristiques-geographiques-meteorologiques
+      name: Caractéristiques géographiques météorologiques
+    - id: caracteristiques-geographiques-oceanographiques
+      name: Caractéristiques géographiques océanographiques
+    - id: conditions-atmospheriques
+      name: Conditions atmosphériques
+    - id: denominations-geographiques
+      name: Dénominations géographiques
+    - id: geologie
+      name: Géologie
+    - id: habitats-et-biotopes
+      name: Habitats et biotopes
+    - id: hydrographie
+      name: Hydrographie
+    - id: installations-agricoles-et-aquacoles
+      name: Installations agricoles et aquacoles
+    - id: installations-de-suivi-environnemental
+      name: Installations de suivi environnemental
+    - id: lieux-de-production-et-sites-industriels
+      name: Lieux de production et sites industriels
+    - id: occupation-des-terres
+      name: Occupation des terres
+    - id: ortho-imagerie
+      name: Ortho-imagerie
+    - id: parcelles-cadastrales
+      name: Parcelles cadastrales
+    - id: ressources-minerales
+      name: Ressources minérales
+    - id: referentiels-de-coordonnees
+      name: Référentiels de coordonnées
+    - id: regions-biogeographiques
+      name: Régions biogéographiques
+    - id: regions-maritimes
+      name: Régions maritimes
+    - id: repartition-de-la-population-demographie
+      name: Répartition de la population — démographie
+    - id: repartition-des-especes
+      name: Répartition des espèces
+    - id: reseaux-de-transport
+      name: Réseaux de transport
+    - id: sante-et-securite-des-personnes
+      name: Santé et sécurité des personnes
+    - id: services-dutilite-publique-et-services-publics
+      name: Services d'utilité publique et services publics
+    - id: sites-proteges
+      name: Sites protégés
+    - id: sols
+      name: Sols
+    - id: sources-denergie
+      name: Sources d'énergie
+    - id: systemes-de-maillage-geographique
+      name: Systèmes de maillage géographique
+    - id: unites-administratives
+      name: Unités administratives
+    - id: unites-statistiques
+      name: Unités statistiques
+    - id: usage-des-sols
+      name: Usage des sols
+    - id: zones-de-gestion-de-restriction-ou-de-reglementation-et-unites-de-declaration
+      name: Zones de gestion, de restriction ou de réglementation et unités de déclaration
+    - id: zones-a-risque-naturel
+      name: Zones à risque naturel
+
+# Configuration format for networks (SIF — Systèmes d'Information Fédérateurs):
+#
+# networks:
+#   tag: {string}            # tag on the udata side identifying a network's backing topic, so a
+#                             # dataset's page can look up "which network(s) is this in"
+#   {slug}:                  # network identifier, used as /contributors/{slug}
+#     pages:                  # one entry per object type this network exposes, keyed by URL subpath
+#                              # (rendered at /contributors/{slug}/{subpath}); the FIRST key listed is
+#                              # the default — used for the bare /contributors/{slug} redirect and as
+#                              # the network's display identity (title/logo) on the /contributors list.
+#       {subpath}:             # reuses the exact `pages.{page_id}` format documented below; its
+#                               # `banner.logo`/`banner.external_link` render above the page's search.
+#                               # Network pages stop at the list view — items link to the standard
+#                               # page sharing their subpath's name (e.g. `datasets` -> /datasets/:id),
+#                               # so `resources_tabs`/`editable` (detail-view-only) can be omitted.
+networks:
+  tag: ecospheres-networks
+  sieau:
+    x-sieau-common: &sieau_common
+      universe_query:
+        topic: 6a8eff5ce148bf49b3267152
+      filter_prefix:
+      title: Eaufrance
+      banner:
+        title: Le service public d'information sur l'eau
+        content: Eaufrance fédère et diffuse les données et informations publiques sur l'eau et les milieux aquatiques en France, dans le cadre du Système d'information sur l'eau (SIE).
+        logo: /static/ecospheres/logos/networks/sieau.png
+        external_link:
+          url: https://www.eaufrance.fr/
+          label: Accéder au site
+      list_all: true
+      filters:
+        - id: badge
+          name: Label de donnée
+          type: badge
+        - id: org
+          name: Organisation
+          default_option: Toutes les organisations
+          type: organization_custom
+        - id: inspire
+          name: Thème INSPIRE
+          default_option: Tous les thèmes
+          type: select
+          use_filter_prefix: false
+          values: *inspire_themes
+    pages:
+      datasets:
+        <<: *sieau_common
+        object_type: datasets
+        breadcrumb_title: Jeux de données
+        labels:
+          singular: jeu de données
+          plural: jeux de données
+          extended: jeu de données
+        search:
+          input: Rechercher dans les données du réseau Eaufrance
+          placeholder: null
+      dataservices:
+        <<: *sieau_common
+        object_type: dataservices
+        breadcrumb_title: API
+        labels:
+          singular: API
+          plural: APIs
+          extended: API
+          feminine: true
+        search:
+          input: Rechercher dans les API du réseau Eaufrance
+          placeholder: null
+  simm:
+    x-simm-common: &simm_common
+      universe_query:
+        topic: 6a82baef02381db0dc7229cf
+      filter_prefix:
+      title: Milieu Marin France
+      banner:
+        title: L'accès de référence aux données publiques sur le milieu marin français
+        content: Milieu Marin France fédère et diffuse les données des politiques publiques françaises sur le milieu marin dans le cadre du Système d’information sur le milieu marin (SIMM).
+        logo: /static/ecospheres/logos/networks/simm.svg
+        external_link:
+          url: https://www.milieumarinfrance.fr/
+          label: Accéder au site
+      list_all: true
+      filters:
+        - id: badge
+          name: Label de donnée
+          type: badge
+        - id: org
+          name: Organisation
+          default_option: Toutes les organisations
+          type: organization_custom
+        - id: inspire
+          name: Thème INSPIRE
+          default_option: Tous les thèmes
+          type: select
+          use_filter_prefix: false
+          values: *inspire_themes
+    pages:
+      datasets:
+        <<: *simm_common
+        object_type: datasets
+        breadcrumb_title: Jeux de données
+        labels:
+          singular: jeu de données
+          plural: jeux de données
+          extended: jeu de données
+        search:
+          input: Rechercher dans les données du réseau SIMM
+          placeholder: null
+      dataservices:
+        <<: *simm_common
+        object_type: dataservices
+        breadcrumb_title: API
+        labels:
+          singular: API
+          plural: APIs
+          extended: API
+          feminine: true
+        search:
+          input: Rechercher dans les API du réseau SIMM
+          placeholder: null
 
 # Configuration format for pages:
 #
@@ -326,75 +523,7 @@ pages:
         default_option: Tous les thèmes
         type: select
         use_filter_prefix: false
-        values:
-          - id: adresses
-            name: Adresses
-          - id: altitude
-            name: Altitude
-          - id: batiments
-            name: Bâtiments
-          - id: caracteristiques-geographiques-meteorologiques
-            name: Caractéristiques géographiques météorologiques
-          - id: caracteristiques-geographiques-oceanographiques
-            name: Caractéristiques géographiques océanographiques
-          - id: conditions-atmospheriques
-            name: Conditions atmosphériques
-          - id: denominations-geographiques
-            name: Dénominations géographiques
-          - id: geologie
-            name: Géologie
-          - id: habitats-et-biotopes
-            name: Habitats et biotopes
-          - id: hydrographie
-            name: Hydrographie
-          - id: installations-agricoles-et-aquacoles
-            name: Installations agricoles et aquacoles
-          - id: installations-de-suivi-environnemental
-            name: Installations de suivi environnemental
-          - id: lieux-de-production-et-sites-industriels
-            name: Lieux de production et sites industriels
-          - id: occupation-des-terres
-            name: Occupation des terres
-          - id: ortho-imagerie
-            name: Ortho-imagerie
-          - id: parcelles-cadastrales
-            name: Parcelles cadastrales
-          - id: ressources-minerales
-            name: Ressources minérales
-          - id: referentiels-de-coordonnees
-            name: Référentiels de coordonnées
-          - id: regions-biogeographiques
-            name: Régions biogéographiques
-          - id: regions-maritimes
-            name: Régions maritimes
-          - id: repartition-de-la-population-demographie
-            name: Répartition de la population — démographie
-          - id: repartition-des-especes
-            name: Répartition des espèces
-          - id: reseaux-de-transport
-            name: Réseaux de transport
-          - id: sante-et-securite-des-personnes
-            name: Santé et sécurité des personnes
-          - id: services-dutilite-publique-et-services-publics
-            name: Services d'utilité publique et services publics
-          - id: sites-proteges
-            name: Sites protégés
-          - id: sols
-            name: Sols
-          - id: sources-denergie
-            name: Sources d'énergie
-          - id: systemes-de-maillage-geographique
-            name: Systèmes de maillage géographique
-          - id: unites-administratives
-            name: Unités administratives
-          - id: unites-statistiques
-            name: Unités statistiques
-          - id: usage-des-sols
-            name: Usage des sols
-          - id: zones-de-gestion-de-restriction-ou-de-reglementation-et-unites-de-declaration
-            name: Zones de gestion, de restriction ou de réglementation et unités de déclaration
-          - id: zones-a-risque-naturel
-            name: Zones à risque naturel
+        values: *inspire_themes
   # INDICATORS
   indicators:
     object_type: datasets # indicators are datasets filtered by universe_query
