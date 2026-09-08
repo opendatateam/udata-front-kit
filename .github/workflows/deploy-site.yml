@@ -1,0 +1,12 @@
+# Placeholder so `deploy-site.yml` is registered as a dispatchable workflow on the default branch
+name: Deployment of a given site on a given env
+run-name: Placeholder run for deploy-site.yml
+
+on:
+  workflow_dispatch:
+
+jobs:
+  noop:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Placeholder - see feat/ci/new-deploy for the real workflow"
