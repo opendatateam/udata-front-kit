@@ -31,9 +31,6 @@ const breadcrumbLinks = computed(() => {
 onMounted(async () => {
   try {
     post.value = await postStore.fetchPostById(id.value)
-    if (post.value.body_type === 'blocs' && post.value.content_as_page) {
-      await postStore.fetchPage(post.value.content_as_page.id)
-    }
   } catch {
     error.value = true
   } finally {
@@ -45,8 +42,6 @@ const renderedMarkdown = computed(() => {
   if (!post.value || post.value.body_type !== 'markdown') return ''
   return fromMarkdown(post.value.content)
 })
-
-const page = computed(() => postStore.currentPage)
 </script>
 
 <template>
@@ -75,8 +70,8 @@ const page = computed(() => postStore.currentPage)
   </div>
 
   <template v-else-if="post">
-    <template v-if="post.body_type === 'blocs' && page">
-      <PageShow :page="page" :edit="false" />
+    <template v-if="post.body_type === 'blocs'">
+      <PageShow :blocs="post.blocs ?? []" :edit="false" />
     </template>
 
     <template v-else-if="post.body_type === 'markdown'">

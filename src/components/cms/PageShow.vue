@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { Page, PageBloc } from '@datagouv/components-next'
+import type { PageBloc } from '@datagouv/components-next'
 
 import AddBlocDropdown from './AddBlocDropdown.vue'
 import DatasetsListBlocComponent from './blocks/DatasetsListBloc.vue'
@@ -7,57 +7,57 @@ import HeroBlocComponent from './blocks/HeroBloc.vue'
 import MarkdownBlocComponent from './blocks/MarkdownBloc.vue'
 
 const props = defineProps<{
-  page: Page
+  blocs: PageBloc[]
   edit: boolean
 }>()
 
 const emit = defineEmits<{
-  save: [page: Page]
+  save: [blocs: PageBloc[]]
 }>()
 
-const blocs = ref<PageBloc[]>([...props.page.blocs])
+const localBlocs = ref<PageBloc[]>([...props.blocs])
 
 watch(
-  () => props.page,
-  (newPage) => {
-    blocs.value = [...newPage.blocs]
+  () => props.blocs,
+  (newBlocs) => {
+    localBlocs.value = [...newBlocs]
   }
 )
 
 const updateBloc = (index: number, updated: PageBloc) => {
-  blocs.value = blocs.value.map((b, i) => (i === index ? updated : b))
+  localBlocs.value = localBlocs.value.map((b, i) => (i === index ? updated : b))
 }
 
 const removeBloc = (index: number) => {
-  blocs.value = blocs.value.filter((_, i) => i !== index)
+  localBlocs.value = localBlocs.value.filter((_, i) => i !== index)
 }
 
 const moveUp = (index: number) => {
   if (index === 0) return
-  const updated = [...blocs.value]
+  const updated = [...localBlocs.value]
   ;[updated[index - 1], updated[index]] = [updated[index], updated[index - 1]]
-  blocs.value = updated
+  localBlocs.value = updated
 }
 
 const moveDown = (index: number) => {
-  if (index === blocs.value.length - 1) return
-  const updated = [...blocs.value]
+  if (index === localBlocs.value.length - 1) return
+  const updated = [...localBlocs.value]
   ;[updated[index], updated[index + 1]] = [updated[index + 1], updated[index]]
-  blocs.value = updated
+  localBlocs.value = updated
 }
 
 const addBlocAt = (bloc: PageBloc, afterIndex: number) => {
-  const updated = [...blocs.value]
+  const updated = [...localBlocs.value]
   updated.splice(afterIndex + 1, 0, bloc)
-  blocs.value = updated
+  localBlocs.value = updated
 }
 
 const addBlocAtStart = (bloc: PageBloc) => {
-  blocs.value = [bloc, ...blocs.value]
+  localBlocs.value = [bloc, ...localBlocs.value]
 }
 
 const save = () => {
-  emit('save', { ...props.page, blocs: blocs.value })
+  emit('save', localBlocs.value)
 }
 </script>
 
@@ -69,7 +69,7 @@ const save = () => {
       </div>
     </template>
 
-    <template v-for="(bloc, index) in blocs" :key="bloc.id">
+    <template v-for="(bloc, index) in localBlocs" :key="bloc.id">
       <!-- HeroBloc — full width -->
       <template v-if="bloc.class === 'HeroBloc'">
         <HeroBlocComponent
@@ -89,7 +89,7 @@ const save = () => {
             <button
               type="button"
               class="fr-btn fr-btn--tertiary-no-outline fr-btn--sm fr-icon-arrow-down-line"
-              :disabled="index === blocs.length - 1"
+              :disabled="index === localBlocs.length - 1"
               title="Déplacer vers le bas"
               @click="moveDown(index)"
             />
@@ -124,7 +124,7 @@ const save = () => {
               <button
                 type="button"
                 class="fr-btn fr-btn--tertiary-no-outline fr-btn--sm fr-icon-arrow-down-line"
-                :disabled="index === blocs.length - 1"
+                :disabled="index === localBlocs.length - 1"
                 title="Déplacer vers le bas"
                 @click="moveDown(index)"
               />
@@ -160,7 +160,7 @@ const save = () => {
               <button
                 type="button"
                 class="fr-btn fr-btn--tertiary-no-outline fr-btn--sm fr-icon-arrow-down-line"
-                :disabled="index === blocs.length - 1"
+                :disabled="index === localBlocs.length - 1"
                 title="Déplacer vers le bas"
                 @click="moveDown(index)"
               />

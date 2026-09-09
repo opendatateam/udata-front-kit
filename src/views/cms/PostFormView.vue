@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { Page, Post } from '@datagouv/components-next'
+import type { PageBloc, Post } from '@datagouv/components-next'
 import { useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
@@ -21,7 +21,6 @@ const postId = computed(
 )
 
 const post = ref<Post | null>(null)
-const page = ref<Page | null>(null)
 const loading = ref(false)
 const saving = ref(false)
 const publishing = ref(false)
@@ -29,6 +28,24 @@ const error = ref('')
 
 const name = ref('')
 const headline = ref('')
+
+// Post updates are a full-replace PUT: strip read-only/reference fields so we
+// don't send back nested objects (owner, datasets, reuses) the write schema rejects.
+const toWritablePost = (p: Post) => {
+  const {
+    id: _id,
+    slug: _slug,
+    url: _url,
+    owner: _owner,
+    datasets: _datasets,
+    reuses: _reuses,
+    created_at: _created_at,
+    last_modified: _last_modified,
+    published: _published,
+    ...writable
+  } = p
+  return writable
+}
 
 const breadcrumbLinks = computed(() => {
   const base = [
@@ -42,15 +59,11 @@ const breadcrumbLinks = computed(() => {
 const loadPost = async (id: string) => {
   loading.value = true
   post.value = null
-  page.value = null
   error.value = ''
   try {
     post.value = await postStore.fetchPostById(id)
     name.value = post.value.name
     headline.value = post.value.headline || ''
-    if (post.value.content_as_page) {
-      page.value = await postStore.fetchPage(post.value.content_as_page.id)
-    }
   } catch {
     error.value = 'Impossible de charger la page.'
   } finally {
@@ -74,13 +87,12 @@ const handleCreate = async () => {
   saving.value = true
   error.value = ''
   try {
-    const newPage = await postStore.createPage({ blocs: [] })
     const newPost = await postStore.createPost({
       name: name.value,
       headline: headline.value,
       kind: 'page',
       body_type: 'blocs',
-      content_as_page: newPage.id,
+      blocs: [],
       tags: config.website.cms?.site_tag ? [config.website.cms.site_tag] : []
     })
     await router.push(`/admin/cms/edit/${newPost.id}`)
@@ -102,10 +114,15 @@ const handleSaveMeta = async () => {
   savingMeta.value = true
   error.value = ''
   try {
-    post.value = await postStore.updatePost(post.value.id, {
+    const currentBlocs = post.value.blocs
+    const updated = await postStore.updatePost(post.value.id, {
+      ...toWritablePost(post.value),
       name: name.value,
       headline: headline.value
     })
+    // Keep the bloc editor's array reference stable so its watcher doesn't
+    // discard in-progress, unsaved bloc edits on an unrelated metadata save.
+    post.value = { ...updated, blocs: currentBlocs }
   } catch {
     error.value = 'Erreur lors de la sauvegarde.'
   } finally {
@@ -113,11 +130,14 @@ const handleSaveMeta = async () => {
   }
 }
 
-const handleSave = async (updatedPage: Page) => {
-  if (!page.value) return
+const handleSave = async (updatedBlocs: PageBloc[]) => {
+  if (!post.value) return
   saving.value = true
   try {
-    page.value = await postStore.savePage(page.value.id, updatedPage)
+    post.value = await postStore.updatePost(post.value.id, {
+      ...toWritablePost(post.value),
+      blocs: updatedBlocs
+    })
   } finally {
     saving.value = false
   }
@@ -252,10 +272,12 @@ const togglePublish = async () => {
         </button>
       </form>
     </GenericContainer>
-    <PageShow v-if="page" :page="page" :edit="true" @save="handleSave" />
-    <div v-else class="fr-container fr-py-3w">
-      <p>Aucune page de blocs associée.</p>
-    </div>
+    <PageShow
+      v-if="post.body_type === 'blocs'"
+      :blocs="post.blocs ?? []"
+      :edit="true"
+      @save="handleSave"
+    />
   </template>
 
   <div v-else class="fr-container fr-py-4w">

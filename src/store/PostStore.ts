@@ -1,16 +1,13 @@
 import { defineStore } from 'pinia'
 
-import PagesAPI from '@/services/api/resources/PagesAPI'
 import PostsAPI from '@/services/api/resources/PostsAPI'
-import type { Page, Post } from '@datagouv/components-next'
+import type { Post } from '@datagouv/components-next'
 
 const postsAPI = new PostsAPI()
-const pagesAPI = new PagesAPI()
 
 export interface RootState {
   posts: Post[]
   currentPost: Post | null
-  currentPage: Page | null
   loading: boolean
 }
 
@@ -18,7 +15,6 @@ export const usePostStore = defineStore('post', {
   state: (): RootState => ({
     posts: [],
     currentPost: null,
-    currentPage: null,
     loading: false
   }),
   actions: {
@@ -31,11 +27,6 @@ export const usePostStore = defineStore('post', {
       } finally {
         this.loading = false
       }
-    },
-    async fetchPage(pageId: string): Promise<Page> {
-      const page = await pagesAPI.get({ entityId: pageId })
-      this.currentPage = page
-      return page
     },
     async listAdminPosts(): Promise<Post[]> {
       this.loading = true
@@ -61,11 +52,6 @@ export const usePostStore = defineStore('post', {
     async updatePost(postId: string, data: object): Promise<Post> {
       return await postsAPI.update({ entityId: postId, data })
     },
-    async savePage(pageId: string, data: object): Promise<Page> {
-      const page = await pagesAPI.update({ entityId: pageId, data })
-      this.currentPage = page
-      return page
-    },
     async publishPost(postId: string): Promise<Post> {
       return await postsAPI.publish(postId)
     },
@@ -74,9 +60,6 @@ export const usePostStore = defineStore('post', {
     },
     async deletePost(postId: string): Promise<void> {
       await postsAPI.delete({ entityId: postId })
-    },
-    async createPage(data: object): Promise<Page> {
-      return await pagesAPI.create({ data })
     }
   }
 })
