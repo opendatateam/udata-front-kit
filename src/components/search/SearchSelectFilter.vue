@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import type { SelectFilterConfig } from '@/router/utils'
+import { trackEvent } from '@/utils/matomo'
 import { SearchableSelect, useSearchFilter } from '@datagouv/components-next'
 import { computed } from 'vue'
 
 type FilterOption = SelectFilterConfig['values'][number]
 
-const props = defineProps<{ config: SelectFilterConfig }>()
+const props = defineProps<{ config: SelectFilterConfig; pageKey: string }>()
 
 const urlValue = useSearchFilter(props.config.urlParam, {
   apiParam: props.config.apiParam,
@@ -18,6 +19,14 @@ const model = computed<FilterOption | null>({
     props.config.values.find((v) => v.value === urlValue.value) ?? null,
   set: (opt) => {
     urlValue.value = opt?.value ?? undefined
+    // Track the selection, not the clear, so Matomo only sees actual filter usage
+    if (opt) {
+      trackEvent(
+        `Filter ${props.pageKey} list`,
+        `Trigger filter ${props.config.urlParam}`,
+        opt.value
+      )
+    }
   }
 })
 </script>
