@@ -23,7 +23,7 @@ const model = computed<FilterOption | null>({
     if (opt) {
       trackEvent(
         `Filter ${props.pageKey} list`,
-        `Trigger filter ${props.config.urlParam}`,
+        `Trigger custom filter ${props.config.urlParam}`,
         opt.value
       )
     }
