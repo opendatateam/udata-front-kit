@@ -16,11 +16,11 @@ const colorOptions: Array<{ value: HeroBloc['color']; label: string }> = [
   { value: 'purple', label: 'Violet' }
 ]
 
-const colorClasses: Record<HeroBloc['color'], string> = {
-  primary:
-    'fr-background-action-high--blue-france fr-text-inverted--blue-france',
-  green: 'fr-background-flat--success fr-text-inverted--success',
-  purple: 'fr-background-flat--purple-glycine fr-text-inverted--purple-glycine'
+// Text is always white regardless of background color, matching upstream's HeroBanner.
+const backgroundClasses: Record<HeroBloc['color'], string> = {
+  primary: 'fr-background-action-high--blue-france',
+  green: 'fr-background-flat--success',
+  purple: 'fr-background-flat--purple-glycine'
 }
 
 const update = (patch: Partial<HeroBloc>) => {
@@ -31,10 +31,15 @@ const update = (patch: Partial<HeroBloc>) => {
 <template>
   <div
     v-if="!edit"
-    :class="['fr-py-6w fr-px-4w', colorClasses[modelValue.color]]"
+    :class="[
+      'fr-py-6w fr-px-4w fr-text-inverted--grey',
+      backgroundClasses[modelValue.color]
+    ]"
   >
     <div class="fr-container">
-      <h1 class="fr-h2 fr-mb-2w">{{ modelValue.title }}</h1>
+      <h1 class="fr-h2 fr-mb-2w fr-text-inverted--grey">
+        {{ modelValue.title }}
+      </h1>
       <p v-if="modelValue.description" class="fr-text--lg fr-mb-3w">
         {{ modelValue.description }}
       </p>

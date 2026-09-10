@@ -29,6 +29,10 @@ const error = ref('')
 const name = ref('')
 const headline = ref('')
 
+// Stable reference so PageShow's watch on `blocs` doesn't fire (and discard
+// in-progress edits) on unrelated re-renders when post.blocs is nullish.
+const blocs = computed(() => post.value?.blocs ?? [])
+
 // Post updates are a full-replace PUT: strip read-only/reference fields so we
 // don't send back nested objects (owner, datasets, reuses) the write schema rejects.
 const toWritablePost = (p: Post) => {
@@ -274,7 +278,7 @@ const togglePublish = async () => {
     </GenericContainer>
     <PageShow
       v-if="post.body_type === 'blocs'"
-      :blocs="post.blocs ?? []"
+      :blocs="blocs"
       :edit="true"
       @save="handleSave"
     />

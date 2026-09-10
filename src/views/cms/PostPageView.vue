@@ -42,6 +42,8 @@ const renderedMarkdown = computed(() => {
   if (!post.value || post.value.body_type !== 'markdown') return ''
   return fromMarkdown(post.value.content).html
 })
+
+const blocs = computed(() => post.value?.blocs ?? [])
 </script>
 
 <template>
@@ -71,7 +73,7 @@ const renderedMarkdown = computed(() => {
 
   <template v-else-if="post">
     <template v-if="post.body_type === 'blocs'">
-      <PageShow :blocs="post.blocs ?? []" :edit="false" />
+      <PageShow :blocs="blocs" :edit="false" />
     </template>
 
     <template v-else-if="post.body_type === 'markdown'">

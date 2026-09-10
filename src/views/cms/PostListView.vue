@@ -72,6 +72,7 @@ const handleDelete = async (post: Post) => {
           <th scope="col">Titre</th>
           <th scope="col">Identifiant</th>
           <th scope="col">Route</th>
+          <th scope="col">Tags</th>
           <th scope="col">Statut</th>
           <th scope="col">Dernière modification</th>
           <th scope="col">Actions</th>
@@ -90,6 +91,14 @@ const handleDelete = async (post: Post) => {
               class="fr-link fr-text--sm"
               >{{ routeForPost(post.id) }}</RouterLink
             >
+            <span v-else class="fr-text--sm fr-text-mention--grey">—</span>
+          </td>
+          <td>
+            <ul v-if="post.tags.length" class="fr-tags-group">
+              <li v-for="tag in post.tags" :key="tag">
+                <span class="fr-tag fr-tag--sm">{{ tag }}</span>
+              </li>
+            </ul>
             <span v-else class="fr-text--sm fr-text-mention--grey">—</span>
           </td>
           <td>
