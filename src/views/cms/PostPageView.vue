@@ -40,7 +40,7 @@ onMounted(async () => {
 
 const renderedMarkdown = computed(() => {
   if (!post.value || post.value.body_type !== 'markdown') return ''
-  return fromMarkdown(post.value.content)
+  return fromMarkdown(post.value.content).html
 })
 </script>
 

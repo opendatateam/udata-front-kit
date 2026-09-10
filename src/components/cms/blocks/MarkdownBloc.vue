@@ -12,7 +12,9 @@ const emit = defineEmits<{
   'update:modelValue': [value: MarkdownBloc]
 }>()
 
-const renderedContent = computed(() => fromMarkdown(props.modelValue.content))
+const renderedContent = computed(
+  () => fromMarkdown(props.modelValue.content).html
+)
 
 const update = (patch: Partial<MarkdownBloc>) => {
   emit('update:modelValue', { ...props.modelValue, ...patch })
