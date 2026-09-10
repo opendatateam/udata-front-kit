@@ -1,5 +1,6 @@
 import {
   CUSTOM_FILTER_TYPES,
+  type CmsPageConfig,
   type CustomFilterType,
   type PageObjectType
 } from '@/model/config'
@@ -350,6 +351,43 @@ export const useOrganizationsRoutes = (): RouteRecordRaw => {
       }
     ]
   }
+}
+
+export const useCmsRoutes = (cmsPages: CmsPageConfig[]): RouteRecordRaw[] => {
+  const adminRoutes: RouteRecordRaw[] = [
+    {
+      path: '/admin/cms',
+      name: 'cms_list',
+      component: async () => await import('@/views/cms/PostListView.vue'),
+      meta: { requiresAuth: true, title: 'Pages CMS' }
+    },
+    {
+      path: '/admin/cms/add',
+      name: 'cms_add',
+      component: async () => await import('@/views/cms/PostFormView.vue'),
+      meta: { requiresAuth: true, title: 'Nouvelle page' }
+    },
+    {
+      path: '/admin/cms/view/:id',
+      name: 'cms_view',
+      component: async () => await import('@/views/cms/PostPageView.vue'),
+      meta: { requiresAuth: true, title: 'Aperçu' }
+    },
+    {
+      path: '/admin/cms/edit/:id',
+      name: 'cms_edit',
+      component: async () => await import('@/views/cms/PostFormView.vue'),
+      meta: { requiresAuth: true, title: 'Modifier la page' }
+    }
+  ]
+  const publicRoutes: RouteRecordRaw[] = cmsPages.map(
+    (p): RouteRecordRaw => ({
+      path: p.route,
+      component: async () => await import('@/views/cms/PostPageView.vue'),
+      props: { id: p.id }
+    })
+  )
+  return [...adminRoutes, ...publicRoutes]
 }
 
 export const useRouteMeta = () => {

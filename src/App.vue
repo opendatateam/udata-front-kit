@@ -60,6 +60,16 @@ const quickLinks = computed(() => {
         }
       : null
 
+  const cmsShortcut =
+    config.website.cms?.enabled && userStore.isAdmin
+      ? {
+          label: 'CMS',
+          icon: 'fr-icon-article-line',
+          to: '/admin/cms',
+          iconRight: true
+        }
+      : null
+
   const userProfile = isLoggedIn.value
     ? {
         button: true,
@@ -81,7 +91,13 @@ const quickLinks = computed(() => {
       }
     : null
 
-  const buttons = [userProfile, headerButton, adminShorcut, logLink]
+  const buttons = [
+    userProfile,
+    headerButton,
+    cmsShortcut,
+    adminShorcut,
+    logLink
+  ]
 
   return buttons.filter((button) => button !== null)
 })
