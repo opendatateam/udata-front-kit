@@ -38,6 +38,14 @@ describe('Indicator Detail View', () => {
       cy.visit(`/indicators/${indicator.id}`)
       cy.contains('Biogaz').should('be.visible')
     })
+
+    it('should not display a placeholder when there are no tags', () => {
+      const untaggedIndicator = createIndicator({ tags: [] })
+      cy.mockDatasetAndRelatedObjects(untaggedIndicator)
+      cy.visit(`/indicators/${untaggedIndicator.id}`)
+      cy.contains(untaggedIndicator.title).should('be.visible')
+      cy.contains('Non renseigné').should('not.exist')
+    })
   })
 
   describe('Informations Tab', () => {
