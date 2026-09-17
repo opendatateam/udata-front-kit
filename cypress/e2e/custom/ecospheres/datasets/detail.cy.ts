@@ -28,6 +28,6 @@ describe('Dataset Page - Tab counts', () => {
     cy.contains('button', 'Fichiers (4)').should('be.visible')
     cy.contains('button', 'Réutilisations et API (5)').should('be.visible')
     cy.contains('button', 'Discussions (7)').should('be.visible')
-    cy.contains('button', 'Informations').find('sup').should('not.exist')
+    cy.contains('button', /^Informations$/).should('be.visible')
   })
 })
