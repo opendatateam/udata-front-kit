@@ -166,7 +166,9 @@ describe('Indicator Detail View', () => {
       cy.contains('button', 'Sources (2)').should('be.visible')
       cy.contains('button', 'Réutilisations et API (7)').should('be.visible')
       cy.contains('button', 'Discussions (9)').should('be.visible')
-      cy.contains('button', 'Informations').find('sup').should('not.exist')
+      cy.contains('button', 'Informations')
+        .find('sup.tab-count')
+        .should('not.exist')
     })
   })
 

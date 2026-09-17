@@ -257,7 +257,9 @@ describe('Dataservices (API) - Detail Page', () => {
 
       cy.contains('button', 'Données (3)').should('be.visible')
       cy.contains('button', 'Discussions (6)').should('be.visible')
-      cy.contains('button', 'Informations').find('sup').should('not.exist')
+      cy.contains('button', 'Informations')
+        .find('sup.tab-count')
+        .should('not.exist')
     })
   })
 
