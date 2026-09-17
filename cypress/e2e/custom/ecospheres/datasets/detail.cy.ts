@@ -28,7 +28,7 @@ describe('Dataset Detail View - Networks (univers)', () => {
     cy.wait(`@get_datasets_${dataset.id}`)
     cy.wait(`@get_dataset_networks_${dataset.id}`)
 
-    cy.contains('dt', 'Réseaux').should('be.visible')
+    cy.contains('dt', 'Réseau').should('be.visible')
     cy.contains('Milieu Marin France')
       .should('have.attr', 'href')
       .and('include', '/contributors/simm/datasets')
@@ -39,6 +39,6 @@ describe('Dataset Detail View - Networks (univers)', () => {
     cy.wait(`@get_datasets_${dataset.id}`)
     cy.wait(`@get_dataset_networks_${dataset.id}`)
 
-    cy.contains('dt', 'Réseaux').should('not.exist')
+    cy.contains('dt', 'Réseau').should('not.exist')
   })
 })
