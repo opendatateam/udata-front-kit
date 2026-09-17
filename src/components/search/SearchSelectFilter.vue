@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import type { SelectFilterConfig } from '@/router/utils'
-import { trackEvent } from '@/utils/matomo'
-import { SearchableSelect, useSearchFilter } from '@datagouv/components-next'
+import {
+  SearchableSelect,
+  trackEvent,
+  useSearchFilter
+} from '@datagouv/components-next'
 import { computed } from 'vue'
 
 type FilterOption = SelectFilterConfig['values'][number]
