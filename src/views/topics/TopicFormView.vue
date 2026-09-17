@@ -78,7 +78,7 @@ const errorMsg = ref('')
 
 const isReadyForForm = computed(() => {
   const extras = topic.value?.extras?.[useSiteId()]
-  // condition for form mouting based on topic data load: edit || create raw || create cloned
+  // condition for form mounting based on topic data load: edit || create raw || create cloned
   return (
     topic.value.id ||
     (props.isCreate && !routeQuery.clone) ||

@@ -151,7 +151,11 @@ onMounted(() => {
             v-for="filter in route.meta.customFilters"
             :key="filter.urlParam"
           >
-            <SearchSelectFilter v-if="'values' in filter" :config="filter" />
+            <SearchSelectFilter
+              v-if="'values' in filter"
+              :config="filter"
+              :page-key="pageKey"
+            />
             <SearchOrganizationFilter
               v-else-if="'pageKey' in filter"
               :config="filter"
