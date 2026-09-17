@@ -134,6 +134,9 @@ interface ListPageRouteOptions {
   // pageKey whose `_detail` route item links should resolve to.
   detailPageKey?: string
   cardComponent?: () => Promise<{ default: Component }>
+  // Which GlobalSearch type switcher this page's config array belongs to. Defaults to
+  // 'global' (the site-wide switcher); network pages pass their slug.
+  switcher?: string
 }
 
 const CUSTOM_FILTER_TYPE_SET = new Set<CustomFilterType>(CUSTOM_FILTER_TYPES)
@@ -290,7 +293,8 @@ function buildListPageRoute({
   activeMenuLink,
   parentBreadcrumbs,
   detailPageKey,
-  cardComponent
+  cardComponent,
+  switcher = 'global'
 }: ListPageRouteOptions): RouteRecordRaw {
   const pageConf = pageConfOverride ?? usePageConf(pageKey)
   const root = basePath ?? `/${pageKey}`
@@ -318,8 +322,8 @@ function buildListPageRoute({
           detailPageKey
         },
         component: () => import('@/views/UnifiedSearchView.vue'),
-        // forces the component to be recreated when navigating to a different pageKey
-        props: () => ({ key: pageKey })
+        // `key` forces a remount when it changes, i.e. only when crossing switchers
+        props: () => ({ key: switcher })
       }
     ]
   }
@@ -461,7 +465,8 @@ export const useNetworkRoutes = (
         siblingPages,
         activeMenuLink: '/contributors',
         parentBreadcrumbs,
-        detailPageKey: subpath
+        detailPageKey: subpath,
+        switcher: slug
       })
     )
   ]
