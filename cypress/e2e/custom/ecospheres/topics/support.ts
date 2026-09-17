@@ -181,7 +181,7 @@ export function createTestFactors(
 
 // Create test topic with proper setup
 export function createTestTopic(overrides = {}): Topic {
-  // user owned Topic to faciliate permission tests
+  // user owned Topic to facilitate permission tests
   const owner = UserFactory.one({
     overrides: {
       id: 'test-user-id',
