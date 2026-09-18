@@ -23,10 +23,13 @@ const datasetForExplorer = computed(
   () => dataset.value as unknown as DatasetV2 | undefined
 )
 
-// Origin route name travels in via query, to carry the user back to where they were.
-const fromRouteName = computed(() =>
-  typeof route.query.from === 'string' ? route.query.from : 'datasets_detail'
-)
+// Origin route name travels in via query; validated since an unknown name would throw on resolve.
+const fromRouteName = computed(() => {
+  const from = route.query.from
+  return typeof from === 'string' && router.hasRoute(from)
+    ? from
+    : 'datasets_detail'
+})
 
 const resourceExternalUrl = computed(() =>
   datasetForExplorer.value
