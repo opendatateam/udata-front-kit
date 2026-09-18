@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import type { DatasetV2 } from '@datagouv/components-next'
 import { ResourceExplorer } from '@datagouv/components-next'
-import { computed, onErrorCaptured, onMounted, ref, watchEffect } from 'vue'
+import { computed, onErrorCaptured, onMounted, ref } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import BlankState from '@/components/BlankState.vue'
 import SkipLinks from '@/components/SkipLinks.vue'
 import { useDatasetStore } from '@/store/DatasetStore'
-import { resourceLinkContext } from '@/utils/explorer'
+import { buildResourceExternalUrl } from '@/utils/explorer'
 import { useCanonicalUrl, useMeta } from '@/utils/seo'
 
 const route = useRoute()
+const router = useRouter()
 const itemId = route.params.item_id as string
 
 const datasetStore = useDatasetStore()
@@ -27,9 +28,15 @@ const fromRouteName = computed(() =>
   typeof route.query.from === 'string' ? route.query.from : 'datasets_detail'
 )
 
-watchEffect(() => {
-  resourceLinkContext.fromRouteName = fromRouteName.value
-})
+const resourceExternalUrl = computed(() =>
+  datasetForExplorer.value
+    ? buildResourceExternalUrl(
+        router,
+        datasetForExplorer.value,
+        fromRouteName.value
+      )
+    : undefined
+)
 
 const exitTo = computed<RouteLocationRaw>(() => {
   const resourceId = route.query.resource_id
@@ -77,6 +84,7 @@ onMounted(() => {
         fullscreen
         :exit-to="exitTo"
         no-results-image="/static/blank_state/file.svg"
+        :resource-external-url="resourceExternalUrl"
       />
       <template #fallback>
         <div class="fr-py-4w" role="status">Chargement de l'explorateur…</div>

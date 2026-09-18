@@ -9,7 +9,7 @@ import { onErrorCaptured, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import BlankState from '@/components/BlankState.vue'
-import { resourceLinkContext } from '@/utils/explorer'
+import { buildResourceExternalUrl } from '@/utils/explorer'
 
 const props = defineProps({
   dataset: {
@@ -23,13 +23,16 @@ const props = defineProps({
   }
 })
 
-resourceLinkContext.fromRouteName = props.fromRouteName
-
 // FIXME: ResourceExplorer should accept DatasetV2WithFullObject; same upstream bug as ResourceAccordion.
 // @ts-expect-error dataset prop is typed as DatasetV2, not DatasetV2WithFullObject
 const datasetForExplorer: DatasetV2 = props.dataset
 
 const router = useRouter()
+const resourceExternalUrl = buildResourceExternalUrl(
+  router,
+  datasetForExplorer,
+  props.fromRouteName
+)
 // Absolute URL needed for upstream component.
 const exploreTo = (resource: Resource) =>
   `${window.location.origin}${
@@ -59,6 +62,7 @@ onErrorCaptured(() => {
       :dataset="datasetForExplorer"
       no-results-image="/static/blank_state/file.svg"
       :explore-to="exploreTo"
+      :resource-external-url="resourceExternalUrl"
     />
     <template #fallback>
       <div class="fr-py-4w" role="status">Chargement de l'explorateur…</div>

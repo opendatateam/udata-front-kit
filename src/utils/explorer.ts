@@ -1,14 +1,16 @@
+import type {
+  CommunityResource,
+  Dataset,
+  DatasetV2,
+  Resource
+} from '@datagouv/components-next'
 import { useStorage } from '@vueuse/core'
 import { computed } from 'vue'
+import type { Router } from 'vue-router'
 
 import { useDatasetsConf } from '@/utils/config'
 
 const stored = useStorage('resources_explorer_enabled', false)
-
-// Route name to build resource links against, set by whichever resource list/explorer is
-// rendering. A plain object, not provide/inject: this gets read from library computeds that
-// can refresh with no active component instance, where inject() throws.
-export const resourceLinkContext: { fromRouteName?: string } = {}
 
 export function useResourceExplorer() {
   // Whether this site opted into the explorer at all, independent of the user's own toggle.
@@ -22,4 +24,23 @@ export function useResourceExplorer() {
     enabled,
     setEnabled: (value: boolean) => (stored.value = value)
   }
+}
+
+// "Copier le lien" target: the resource's standard page on this site, instead of upstream's data.gouv.fr link.
+export function buildResourceExternalUrl(
+  router: Router,
+  dataset:
+    | Dataset
+    | DatasetV2
+    | Omit<Dataset, 'resources' | 'community_resources'>,
+  fromRouteName: string
+) {
+  return (resource: Resource | CommunityResource) =>
+    `${window.location.origin}${
+      router.resolve({
+        name: fromRouteName,
+        params: { item_id: dataset.slug },
+        query: { resource_id: resource.id }
+      }).href
+    }`
 }

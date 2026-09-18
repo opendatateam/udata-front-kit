@@ -9,8 +9,9 @@ import type {
 } from '@datagouv/components-next'
 import { Pagination, ResourceAccordion } from '@datagouv/components-next'
 import { useLoading } from 'vue-loading-overlay'
+import { useRouter } from 'vue-router'
 
-import { resourceLinkContext } from '@/utils/explorer'
+import { buildResourceExternalUrl } from '@/utils/explorer'
 
 const pageSize = config.website.pagination_sizes.files_list as number
 
@@ -30,11 +31,16 @@ const props = defineProps({
   }
 })
 
-resourceLinkContext.fromRouteName = props.fromRouteName
-
 // FIXME: ResourceAccordion should accept DatasetV2WithFullObject — upstream bug in @datagouv/components-next
 // @ts-expect-error dataset prop is typed as Dataset | DatasetV2, not DatasetV2WithFullObject
 const datasetForAccordion: DatasetV2 = props.dataset
+
+const router = useRouter()
+const resourceExternalUrl = buildResourceExternalUrl(
+  router,
+  datasetForAccordion,
+  props.fromRouteName
+)
 
 const resourceStore = useResourceStore()
 const resources = ref<Record<string, ResourceData>>({})
@@ -138,6 +144,7 @@ onMounted(async () => {
             :key="resource.id"
             :dataset="datasetForAccordion"
             :resource="resource"
+            :resource-external-url="resourceExternalUrl"
           />
           <Pagination
             v-if="typedResources.total > pageSize"
