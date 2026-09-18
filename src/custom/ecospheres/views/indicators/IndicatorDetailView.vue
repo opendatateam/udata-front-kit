@@ -5,6 +5,7 @@ import { capitalize, computed, onMounted, ref } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
+import TabsWithCounts from '@/components/TabsWithCounts.vue'
 import DatasetAddToTopicModal from '@/components/datasets/DatasetAddToTopicModal.vue'
 import DatasetDataservicesList from '@/components/datasets/DatasetDataservicesList.vue'
 import DatasetReusesList from '@/components/datasets/DatasetReusesList.vue'
@@ -46,7 +47,7 @@ const links = computed(() => [
   { text: indicator.value?.title || '' }
 ])
 
-const tabTitles = computed(() => [
+const tabs = computed(() => [
   // only display the visualization tab if the indicator has visualization enabled
   ...(indicator.value?.extras['ecospheres-indicateurs'].enable_visualization
     ? [
@@ -59,17 +60,28 @@ const tabTitles = computed(() => [
     : []),
   {
     title: 'Fichiers',
+    count: indicator.value?.resources.total ?? 0,
     tabId: 'tab-files',
     panelId: 'tab-content-files'
   },
-  { title: 'Sources', tabId: 'tab-sources', panelId: 'tab-content-sources' },
+  {
+    title: 'Sources',
+    count:
+      indicator.value?.extras['ecospheres-indicateurs'].sources.length ?? 0,
+    tabId: 'tab-sources',
+    panelId: 'tab-content-sources'
+  },
   {
     title: 'Réutilisations et API',
+    count:
+      (indicator.value?.metrics.reuses ?? 0) +
+      (indicator.value?.metrics.dataservices ?? 0),
     tabId: 'tab-reuses',
     panelId: 'tab-content-reuses'
   },
   {
     title: 'Discussions',
+    count: indicator.value?.metrics.discussions ?? 0,
     tabId: 'tab-discussions',
     panelId: 'tab-content-discussions'
   },
@@ -149,11 +161,11 @@ onMounted(() => {
       <DatasetSidebar :dataset="indicator" />
     </div>
 
-    <DsfrTabs
+    <TabsWithCounts
       v-model="activeTab"
       class="fr-mt-2w"
       tab-list-name="Groupes d'attributs du jeu de données"
-      :tab-titles="tabTitles"
+      :tabs="tabs"
     >
       <!-- Fichiers -->
       <DsfrTabContent panel-id="tab-content-files" tab-id="tab-files">
@@ -205,7 +217,7 @@ onMounted(() => {
       <DsfrTabContent panel-id="tab-content-infos" tab-id="tab-infos">
         <IndicatorInformationPanel :indicator="indicator" />
       </DsfrTabContent>
-    </DsfrTabs>
+    </TabsWithCounts>
   </GenericContainer>
 </template>
 

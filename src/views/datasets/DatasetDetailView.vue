@@ -4,6 +4,7 @@ import { capitalize, computed, onMounted, ref } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
+import TabsWithCounts from '@/components/TabsWithCounts.vue'
 import DatasetAddToTopicModal from '@/components/datasets/DatasetAddToTopicModal.vue'
 import DatasetDataservicesList from '@/components/datasets/DatasetDataservicesList.vue'
 import DatasetInformationPanel from '@/components/datasets/DatasetInformationPanel.vue'
@@ -88,12 +89,29 @@ const links = computed(() => {
   return breadcrumbs
 })
 
-const tabTitles = [
-  { title: 'Fichiers', tabId: 'tab-0', panelId: 'tab-content-0' },
-  { title: 'Réutilisations et API', tabId: 'tab-1', panelId: 'tab-content-1' },
-  { title: 'Discussions', tabId: 'tab-2', panelId: 'tab-content-2' },
+const tabs = computed(() => [
+  {
+    title: 'Fichiers',
+    count: dataset.value?.resources.total ?? 0,
+    tabId: 'tab-0',
+    panelId: 'tab-content-0'
+  },
+  {
+    title: 'Réutilisations et API',
+    count:
+      (dataset.value?.metrics.reuses ?? 0) +
+      (dataset.value?.metrics.dataservices ?? 0),
+    tabId: 'tab-1',
+    panelId: 'tab-content-1'
+  },
+  {
+    title: 'Discussions',
+    count: dataset.value?.metrics.discussions ?? 0,
+    tabId: 'tab-2',
+    panelId: 'tab-content-2'
+  },
   { title: 'Informations', tabId: 'tab-3', panelId: 'tab-content-3' }
-]
+])
 
 const activeTab = ref(0)
 
@@ -204,11 +222,11 @@ onMounted(() => {
       <DatasetSidebar :dataset="dataset" />
     </div>
 
-    <DsfrTabs
+    <TabsWithCounts
       v-model="activeTab"
       class="fr-mt-2w"
       tab-list-name="Groupes d'attributs du jeu de données"
-      :tab-titles="tabTitles"
+      :tabs="tabs"
     >
       <!-- Fichiers -->
       <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0">
@@ -271,6 +289,6 @@ onMounted(() => {
           <DatasetInformationPanel :dataset="dataset" />
         </div>
       </DsfrTabContent>
-    </DsfrTabs>
+    </TabsWithCounts>
   </GenericContainer>
 </template>

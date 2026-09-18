@@ -12,6 +12,9 @@ import GenericContainer from '@/components/GenericContainer.vue'
 import SidebarItem from '@/components/SidebarItem.vue'
 import SidebarList from '@/components/SidebarList.vue'
 import SidebarOwner from '@/components/SidebarOwner.vue'
+import TabsWithCounts, {
+  type TabWithCount
+} from '@/components/TabsWithCounts.vue'
 import TagComponent from '@/components/TagComponent.vue'
 import TopicActivityList from '@/components/topics/TopicActivityList.vue'
 import TopicFactorsList from '@/components/topics/TopicFactorsList.vue'
@@ -25,6 +28,7 @@ import {
   useRouteMeta,
   useRouteParamsAsStringReactive
 } from '@/router/utils'
+import { useDiscussionStore } from '@/store/DiscussionStore'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
@@ -57,6 +61,7 @@ const customDescriptionComponent = useAsyncComponent(
 )
 
 const userStore = useUserStore()
+const discussionStore = useDiscussionStore()
 const canEdit = computed(() => {
   return userStore.hasEditPermissions(topic.value) && pageConf.editable
 })
@@ -70,7 +75,7 @@ const showReuses = pageConf.resources_tabs.reuses.display
 const tags = useTagsByRef(pageKey, topic)
 
 const { clonedFrom } = useExtras(topic)
-const { factors } = useTopicFactors(topic)
+const { factors, nbFactors } = useTopicFactors(topic)
 const topicFactorsListRef = ref<InstanceType<typeof TopicFactorsList> | null>(
   null
 )
@@ -78,6 +83,9 @@ const discussionsListRef = ref<InstanceType<typeof DiscussionsList> | null>(
   null
 )
 const topicActivityListRef = ref<InstanceType<typeof TopicActivityList> | null>(
+  null
+)
+const topicReusesListRef = ref<InstanceType<typeof TopicReusesList> | null>(
   null
 )
 
@@ -100,39 +108,44 @@ const breadcrumbLinks = computed(() => {
 
 const showActivity = computed(() => canEdit.value)
 
-const tabTitles = computed(() => {
-  const tabs: { title: string; tabId: string; panelId: string }[] = []
+const tabs = computed(() => {
+  const result: TabWithCount[] = []
 
   if (showDatasets) {
-    tabs.push({
+    result.push({
       title: 'Données',
+      count: nbFactors.value,
       tabId: 'tab-datasets',
       panelId: 'tab-content-datasets'
     })
   }
   if (showDiscussions) {
-    tabs.push({
+    result.push({
       title: 'Discussions',
+      count: topic.value
+        ? (discussionStore.getDiscussionsForSubject(topic.value.id)?.total ?? 0)
+        : 0,
       tabId: 'tab-discussions',
       panelId: 'tab-content-discussions'
     })
   }
   if (showReuses) {
-    tabs.push({
+    result.push({
       title: 'Réutilisations',
+      count: topicReusesListRef.value?.reuses.length ?? 0,
       tabId: 'tab-reuses',
       panelId: 'tab-content-reuses'
     })
   }
   if (showActivity.value) {
-    tabs.push({
+    result.push({
       title: 'Activité',
       tabId: 'tab-activity',
       panelId: 'tab-content-activity'
     })
   }
 
-  return tabs
+  return result
 })
 
 const activeTab = ref(0)
@@ -256,7 +269,7 @@ watch(
       )
       clearHash()
     } else if (hash.startsWith('#discussion-')) {
-      const tabIndex = tabTitles.value.findIndex(
+      const tabIndex = tabs.value.findIndex(
         (t) => t.tabId === 'tab-discussions'
       )
       if (tabIndex !== -1) activeTab.value = tabIndex
@@ -437,11 +450,11 @@ watch(
       </div>
     </div>
 
-    <DsfrTabs
-      v-if="tabTitles.length > 0"
+    <TabsWithCounts
+      v-if="tabs.length > 0"
       v-model="activeTab"
       class="fr-mt-2w"
-      :tab-titles="tabTitles"
+      :tabs="tabs"
       :tab-list-name="`Groupes d'attributs ${labels.articles.du} ${labels.singular}`"
     >
       <!-- Jeux de données -->
@@ -488,7 +501,7 @@ watch(
         panel-id="tab-content-reuses"
         tab-id="tab-reuses"
       >
-        <TopicReusesList :topic="topic" />
+        <TopicReusesList ref="topicReusesListRef" :topic="topic" />
       </DsfrTabContent>
       <!-- Activité -->
       <DsfrTabContent
@@ -503,7 +516,7 @@ watch(
           @navigate-to-factor="handleNavigateToFactor"
         />
       </DsfrTabContent>
-    </DsfrTabs>
+    </TabsWithCounts>
   </GenericContainer>
 </template>
 
