@@ -26,6 +26,8 @@ onMounted(() => {
     .getReusesFromElementsRel(props.topic.elements)
     .then((data) => (reuses.value = data))
 })
+
+defineExpose({ reuses })
 </script>
 
 <template>
