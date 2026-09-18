@@ -326,7 +326,7 @@ networks:
       banner:
         title: Le service public d'information sur l'eau
         content: Eaufrance fédère et diffuse les données et informations publiques sur l'eau et les milieux aquatiques en France, dans le cadre du Système d'information sur l'eau (SIE).
-        logo: /static/ecospheres/logos/networks/sieau.png
+        logo: /static/ecospheres/logos/networks/sieau.svg
         external_link:
           url: https://www.eaufrance.fr/
           label: Accéder au site

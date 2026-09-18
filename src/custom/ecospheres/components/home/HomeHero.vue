@@ -1,11 +1,25 @@
 <script setup lang="ts">
 import config from '@/config'
+import { useNetworksConf } from '@/utils/config'
 import { trackEvent } from '@datagouv/components-next'
 import { useRouter } from 'vue-router'
 import type { EcologieHomepageThematicTag } from '../../model/config'
 
 const thematicTags: EcologieHomepageThematicTag[] =
   config.ecospheres.homepage?.thematic_tags ?? []
+
+const networksConf = useNetworksConf()
+const partnerCatalogs = computed(() =>
+  Object.entries(networksConf).map(([slug, network]) => {
+    const defaultSubpath = Object.keys(network.pages)[0]
+    const { title, banner } = network.pages[defaultSubpath]
+    return {
+      title,
+      logo: banner.logo,
+      to: { name: `${slug}__${defaultSubpath}` }
+    }
+  })
+)
 
 const router = useRouter()
 const searchQuery = ref('')
@@ -53,6 +67,30 @@ const doSearch = (q: string) => {
               </RouterLink>
             </li>
           </ul>
+          <div v-if="partnerCatalogs.length" class="fr-mt-5w">
+            <p class="fr-text--bold fr-mb-2v">Catalogues partenaires</p>
+            <ul class="partner-catalogs" role="list">
+              <li v-for="partner in partnerCatalogs" :key="partner.title">
+                <RouterLink
+                  :to="partner.to"
+                  class="fr-raw-link partner-catalog-link"
+                  @click="
+                    trackEvent(
+                      'Accueil',
+                      'Clic catalogue partenaire',
+                      partner.title
+                    )
+                  "
+                >
+                  <img
+                    :src="partner.logo"
+                    :alt="partner.title"
+                    loading="lazy"
+                  />
+                </RouterLink>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -118,5 +156,35 @@ h1 :deep(.highlight),
   .fr-input {
     box-shadow: inset 0 -2px 0 0 var(--text-default-grey);
   }
+}
+
+.partner-catalogs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding-inline-start: 0;
+}
+
+.partner-catalog-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 10rem;
+  height: 4.5rem;
+  padding: 0.75rem 1rem;
+  background-color: #fff;
+  border: 1px solid var(--border-default-grey);
+  border-radius: 0.25rem;
+}
+
+.partner-catalog-link:hover,
+.partner-catalog-link:focus-within {
+  background-color: var(--hover);
+}
+
+.partner-catalog-link img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 </style>

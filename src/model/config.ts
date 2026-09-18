@@ -133,11 +133,15 @@ export type PagesListConf = {
   [key: string]: PageListConf
 }
 
+export type NetworkPageConf = PageListConf & {
+  banner: PageBannerConf & { logo: string }
+}
+
 // A network (SIF) is an ordered group of pages nested under /contributors/<slug>,
 // one per URL subpath. The first key is the default page (redirect target + display identity).
 // Network pages stop at the list view, so PageListConf (not PageConf) is enough.
 export type NetworkConf = {
-  pages: PagesListConf
+  pages: { [subpath: string]: NetworkPageConf }
 }
 
 export type NetworksConf = {
