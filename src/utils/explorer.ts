@@ -10,9 +10,11 @@ import type { Router } from 'vue-router'
 
 import { useDatasetsConf } from '@/utils/config'
 
-const stored = useStorage('resources_explorer_enabled', false)
+// Lazy: this module loads on every page (router/index.ts imports it for the /explore guard), so a module-scope useStorage() would read localStorage eagerly everywhere.
+let stored: ReturnType<typeof useStorage<boolean>>
 
 export function useResourceExplorer() {
+  stored ??= useStorage('resources_explorer_enabled', false)
   // Whether this site opted into the explorer at all, independent of the user's own toggle.
   const eligible = computed(
     () => useDatasetsConf().resources_explorer_enabled === true
