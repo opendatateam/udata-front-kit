@@ -40,7 +40,11 @@ onMounted(() => {
         :key="reuse.id"
         class="fr-col-12 fr-col-md-6 fr-col-lg-4"
       >
-        <ReuseCard :reuse="reuse" :reuse-url="reuse.page" />
+        <ReuseCard
+          :reuse="reuse"
+          :reuse-url="reuse.page"
+          :organization-url="null"
+        />
       </li>
     </ul>
   </div>

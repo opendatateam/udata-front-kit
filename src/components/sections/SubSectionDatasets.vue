@@ -2,11 +2,9 @@
 import type { Dataset } from '@datagouv/components-next'
 import { DatasetCard } from '@datagouv/components-next'
 import { onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
 
 import { useDatasetStore } from '@/store/OrganizationDatasetStore'
 
-const router = useRouter()
 const datasetStore = useDatasetStore()
 
 const props = defineProps({
@@ -32,13 +30,6 @@ const getDatasetPage = (id: string) => {
   return { name: 'datasets_detail', params: { item_id: id } }
 }
 
-const getOrganizationPage = (id: string) => {
-  if (router.hasRoute('organization_detail')) {
-    return { name: 'organization_detail', params: { oid: id } }
-  }
-  return ''
-}
-
 onMounted(() => {
   loadDatasets()
 })
@@ -53,7 +44,7 @@ onMounted(() => {
       :style="zIndex(index)"
       :dataset="d"
       :dataset-url="getDatasetPage(d.id)"
-      :organization-url="getOrganizationPage(d.organization?.id ?? '')"
+      :organization-url="null"
     />
   </div>
 </template>
