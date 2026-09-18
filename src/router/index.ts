@@ -2,9 +2,11 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
 import config from '@/config'
 import type { StaticPageConfig } from '@/model/config'
+import LocalStorageService from '@/services/LocalStorageService'
 import { useResourceExplorer } from '@/utils/explorer'
 import NotFoundView from '@/views/NotFoundView.vue'
 import StaticPageView from '@/views/StaticPageView.vue'
+import { toast } from '@datagouv/components-next'
 
 // common/default routes
 const defaultRoutes: RouteRecordRaw[] = [
@@ -63,6 +65,15 @@ if (config.website.oauth_option === true) {
     {
       path: '/login',
       name: 'login',
+      // the oauth flow relies on localStorage to persist PKCE state across the redirect
+      beforeEnter: () => {
+        if (!LocalStorageService.isAvailable()) {
+          toast.error(
+            'La connexion nécessite que votre navigateur autorise le stockage local.'
+          )
+          return { name: 'home' }
+        }
+      },
       component: async () => await import('@/views/LoginView.vue')
     },
     {
