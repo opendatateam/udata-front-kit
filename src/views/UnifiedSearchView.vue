@@ -133,6 +133,19 @@ onMounted(() => {
   >
     <div class="fr-container fr-py-12v">
       <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle">
+        <div
+          v-if="pageConf.banner.logo"
+          class="fr-col-12 fr-col-md-4 fr-pr-md-6w"
+        >
+          <div class="logo">
+            <img
+              :src="pageConf.banner.logo"
+              alt=""
+              loading="lazy"
+              class="fr-responsive-img"
+            />
+          </div>
+        </div>
         <div class="fr-col-12 fr-col-md">
           <!-- eslint-disable vue/no-v-html -->
           <p
@@ -150,20 +163,10 @@ onMounted(() => {
             :href="pageConf.banner.external_link.url"
             target="_blank"
             rel="noopener noreferrer"
-            class="fr-btn fr-btn--secondary fr-mt-2w"
+            class="fr-btn fr-btn--secondary fr-btn--sm fr-mt-2w"
           >
             {{ pageConf.banner.external_link.label }}
           </a>
-        </div>
-        <div v-if="pageConf.banner.logo" class="fr-col-12 fr-col-md-3">
-          <div class="logo">
-            <img
-              :src="pageConf.banner.logo"
-              alt=""
-              loading="lazy"
-              class="fr-responsive-img"
-            />
-          </div>
         </div>
       </div>
     </div>
