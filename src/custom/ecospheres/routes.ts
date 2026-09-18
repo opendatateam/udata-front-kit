@@ -1,4 +1,5 @@
 import {
+  useContributorsRoutes,
   useGlobalSearchPageRoutes,
   useOrganizationsRoutes,
   useTopicAdminPagesRoutes
@@ -56,5 +57,6 @@ export const routes: RouteRecordRaw[] = [
     pageKey: 'bouquets',
     topicConf
   }),
-  useOrganizationsRoutes()
+  useOrganizationsRoutes(),
+  ...useContributorsRoutes()
 ]
