@@ -10,6 +10,7 @@ import MetricsStatBoxes from '@/components/MetricsStatBoxes.vue'
 import SidebarItem from '@/components/SidebarItem.vue'
 import SidebarList from '@/components/SidebarList.vue'
 import SidebarOwner from '@/components/SidebarOwner.vue'
+import TabsWithCounts from '@/components/TabsWithCounts.vue'
 import VIconDsfr from '@/components/VIconDsfr.vue'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
 import { useCurrentPageConf, useRouteParamsAsString } from '@/router/utils'
@@ -70,11 +71,21 @@ const links = computed(() => {
   return breadcrumbs
 })
 
-const tabTitles = [
-  { title: 'Données', tabId: 'tab-0', panelId: 'tab-content-0' },
-  { title: 'Discussions', tabId: 'tab-1', panelId: 'tab-content-1' },
+const tabs = computed(() => [
+  {
+    title: 'Données',
+    count: total.value,
+    tabId: 'tab-0',
+    panelId: 'tab-content-0'
+  },
+  {
+    title: 'Discussions',
+    count: dataservice.value?.metrics.discussions ?? 0,
+    tabId: 'tab-1',
+    panelId: 'tab-content-1'
+  },
   { title: 'Informations', tabId: 'tab-2', panelId: 'tab-content-2' }
-]
+])
 
 const activeTab = ref(0)
 
@@ -232,11 +243,11 @@ onMounted(() => {
       />
     </div>
 
-    <DsfrTabs
+    <TabsWithCounts
       v-model="activeTab"
       class="fr-mt-4w"
       tab-list-name="Groupes d'attributs de l'API"
-      :tab-titles="tabTitles"
+      :tabs="tabs"
     >
       <!-- Données -->
       <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0">
@@ -330,7 +341,7 @@ onMounted(() => {
           </div>
         </div>
       </DsfrTabContent>
-    </DsfrTabs>
+    </TabsWithCounts>
   </GenericContainer>
 </template>
 
