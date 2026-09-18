@@ -36,7 +36,7 @@ const navItems = computed(() => {
 
 <template>
   <!-- pass a dummy nav-items to satisfy props check, we're overriding the slot anyway -->
-  <DsfrNavigation id="main-nav" :nav-items="[]">
+  <DsfrNavigation id="main-nav" tabindex="-1" :nav-items="[]">
     <DsfrNavigationItem v-for="(navItem, idx) of navItems" :key="idx">
       <a
         v-if="navItem.to && navItem.text && navItem.external"
