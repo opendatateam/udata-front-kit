@@ -21,12 +21,12 @@ const doSearch = () => {
   router.push({ name: 'datasets', query: { q: query.value } })
 }
 
-const homepageTitle = config.website.homepage.title
-const homepageSubTitle = config.website.homepage.subtitle
-const sectionsHomePage = config.website.homepage.sections
-const colorsBanner = config.website.home_banner_colors
-const searchConfig = config.website.search_bar
-const secondarySearchConfig = config.website.secondary_search
+const homepageTitle = computed(() => config.website.homepage.title)
+const homepageSubTitle = computed(() => config.website.homepage.subtitle)
+const sectionsHomePage = computed(() => config.website.homepage.sections)
+const colorsBanner = computed(() => config.website.home_banner_colors)
+const searchConfig = computed(() => config.website.search_bar)
+const secondarySearchConfig = computed(() => config.website.secondary_search)
 
 const goToPage = (page: string) => {
   window.location.href = page

@@ -36,7 +36,7 @@ const noticeContent = computed(() => {
   return fromMarkdown(config.website.notice?.content, true).html
 })
 
-const siteID = config.site_id
+const siteID = computed(() => config.site_id)
 const isLoggedIn = computed(() => userStore.$state.isLoggedIn)
 
 const userName = computed(() => userStore.userName)
@@ -81,7 +81,22 @@ const quickLinks = computed(() => {
       }
     : null
 
-  const buttons = [userProfile, headerButton, adminShorcut, logLink]
+  const configEditorLink = config.website.header.show_config_editor
+    ? {
+        label: 'Éditeur de config',
+        icon: 'fr-icon-edit-line',
+        to: '/editor',
+        iconRight: true
+      }
+    : null
+
+  const buttons = [
+    userProfile,
+    headerButton,
+    adminShorcut,
+    configEditorLink,
+    logLink
+  ]
 
   return buttons.filter((button) => button !== null)
 })
@@ -90,8 +105,14 @@ onMounted(() => {
   userStore.init()
 })
 
-const { footer, rf_title, title } = useWebsiteConfig()
-const { logo, phrase, external_links, mandatory_links } = footer
+const websiteConfig = useWebsiteConfig()
+const footer = computed(() => websiteConfig.footer)
+const rf_title = computed(() => websiteConfig.rf_title)
+const title = computed(() => websiteConfig.title)
+const logo = computed(() => footer.value.logo)
+const phrase = computed(() => footer.value.phrase)
+const external_links = computed(() => footer.value.external_links)
+const mandatory_links = computed(() => footer.value.mandatory_links)
 
 const skipLinksComp =
   useTemplateRef<InstanceType<typeof SkipLinks>>('skipLinksComp')

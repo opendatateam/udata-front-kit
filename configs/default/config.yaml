@@ -62,6 +62,9 @@ website:
     # suppress the header's built-in text-title fallback (see
     # HeaderComponent.vue: `service-title: title_image ? undefined : title`)
     admin_shortcut: false
+    # this is the generator's starter site only: never enable this on a
+    # real deployed thematic site.
+    show_config_editor: true
     beta: true
     button:
       display: false

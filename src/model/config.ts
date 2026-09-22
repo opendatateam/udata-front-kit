@@ -143,6 +143,10 @@ export type HeaderConf = {
     display: boolean
     placeholder?: string
   }
+  // shows a header button that downloads the live in-app-edited config as
+  // YAML (see views/ConfigEditorView.vue). Only meant for the generator's
+  // "default" starter site, never a real deployed thematic site.
+  show_config_editor?: boolean
 }
 
 type FooterExternalLink = {

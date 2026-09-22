@@ -8,7 +8,7 @@ import {
   useTopicAdminPagesRoutes
 } from '@/router/utils'
 import LocalStorageService from '@/services/LocalStorageService'
-import { usePagesConf } from '@/utils/config'
+import { usePageConf, usePagesConf } from '@/utils/config'
 import NotFoundView from '@/views/NotFoundView.vue'
 import StaticPageView from '@/views/StaticPageView.vue'
 import { toast } from '@datagouv/components-next'
@@ -23,6 +23,15 @@ const defaultRoutes: RouteRecordRaw[] = [
       title: 'Accueil'
     },
     component: async () => await import('@/views/HomeView.vue')
+  },
+  // in-app config editor, hot-updates the running site (see @/config.ts)
+  {
+    path: '/editor',
+    name: 'config_editor',
+    meta: {
+      title: 'Éditeur de configuration'
+    },
+    component: async () => await import('@/views/ConfigEditorView.vue')
   },
   // technical pages
   {
@@ -98,23 +107,24 @@ const DEFAULT_TOPIC_CONF: TopicPageRouterConf = {
   enableReadMore: true
 }
 
-// mirrors what a hand-written custom/<site>/routes.ts does for a plain config.pages entry:
-// one search route per page, plus topic admin routes when the page is a topics page
-function generateRoutesFromConfig(): RouteRecordRaw[] {
-  const routes: RouteRecordRaw[] = []
-  for (const [pageKey, pageConf] of Object.entries(usePagesConf())) {
-    if (pageConf.object_type === 'topics') {
-      routes.push(
-        useGlobalSearchPageRoutes({ pageKey, topicConf: DEFAULT_TOPIC_CONF })
-      )
-      routes.push(
-        ...useTopicAdminPagesRoutes({ pageKey, topicConf: DEFAULT_TOPIC_CONF })
-      )
-    } else {
-      routes.push(useGlobalSearchPageRoutes({ pageKey }))
-    }
+// mirrors what a hand-written custom/<site>/routes.ts does for a single
+// config.pages entry: one search route, plus topic admin routes when the
+// page is a topics page. Shared by the initial route generation below and
+// by the live-reload watcher further down (new pages added via the in-app
+// config editor after boot).
+function routesForPage(pageKey: string): RouteRecordRaw[] {
+  const pageConf = usePageConf(pageKey)
+  if (pageConf.object_type === 'topics') {
+    return [
+      useGlobalSearchPageRoutes({ pageKey, topicConf: DEFAULT_TOPIC_CONF }),
+      ...useTopicAdminPagesRoutes({ pageKey, topicConf: DEFAULT_TOPIC_CONF })
+    ]
   }
-  return routes
+  return [useGlobalSearchPageRoutes({ pageKey })]
+}
+
+function generateRoutesFromConfig(): RouteRecordRaw[] {
+  return Object.keys(usePagesConf()).flatMap(routesForPage)
 }
 
 // custom routes from site-specific routes definition
@@ -153,7 +163,7 @@ const routerPromise = siteRoutesPromise.then((siteRoutes) => {
     path: '/:pathMatch(.*)',
     component: NotFoundView
   })
-  return createRouter({
+  const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes,
     scrollBehavior(to, from, savedPosition) {
@@ -180,6 +190,30 @@ const routerPromise = siteRoutesPromise.then((siteRoutes) => {
       }
     }
   })
+
+  // config.pages can gain new keys at runtime (in-app config editor, see
+  // ConfigEditorView.vue) — vue-router's route table is otherwise only
+  // built once, here, at boot, so a brand new page would 404 forever
+  // without this. Only reacts to the page-key set changing (Object.keys),
+  // not to every edit of an existing page's fields.
+  watch(
+    () => Object.keys(usePagesConf()),
+    (pageKeys) => {
+      let addedAny = false
+      for (const pageKey of pageKeys) {
+        if (router.hasRoute(pageKey)) continue
+        routesForPage(pageKey).forEach((route) => router.addRoute(route))
+        addedAny = true
+      }
+      // re-resolve the current URL in case we were sitting on a 404 for
+      // the page that just became available
+      if (addedAny) {
+        void router.replace(router.currentRoute.value.fullPath)
+      }
+    }
+  )
+
+  return router
 })
 
 export default routerPromise
