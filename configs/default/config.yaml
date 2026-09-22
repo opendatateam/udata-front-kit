@@ -1,0 +1,146 @@
+# Generic starter config, seeded into every repo created via the "Deploy with
+# Vercel" button before it's customized. No theme/tag baked in on purpose, so
+# it's always populated regardless of what the eventual site ends up being
+# about. No src/custom/default/ directory exists — routes are generated
+# automatically from `pages:` below (see src/router/index.ts).
+
+site_id: default
+
+datagouvfr:
+  base_url: https://www.data.gouv.fr
+  oauth_client_id:
+  tabular_api_url:
+
+website:
+  title: 'Mon portail data.gouv.fr'
+  seo:
+    canonical_url:
+    meta:
+      keywords:
+      description:
+      robots: 'noindex, nofollow'
+    robots_txt:
+      disallow:
+        - /admin
+    sitemap_xml:
+      topics_pages: []
+      datasets_pages:
+        - datasets
+      dataservices_pages: []
+  formatted_title: '<i>mon.</i><b>portail</b><i>.data.gouv.fr</i>'
+  rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'
+  homepage:
+    title: Bienvenue sur votre portail data.gouv.fr
+    subtitle: |
+      Ceci est un site de démarrage, généré automatiquement. Personnalisez-le
+      pour créer votre propre déclinaison thématique de data.gouv.fr.
+    sections:
+      - title:
+        content:
+        sub_section_datasets:
+        sub_section_cards:
+        sub_section_tiles:
+        sub_section_buttons:
+    meta_description:
+  footer:
+    logo:
+    phrase: "Ce site est une déclinaison thématique de data.gouv.fr, générée automatiquement à partir d'un modèle de démarrage."
+    external_links:
+      - label: 'data.gouv.fr'
+        href: 'https://www.data.gouv.fr'
+        title: 'data.gouv.fr - nouvelle fenêtre'
+    mandatory_links:
+      - label: 'Licences'
+        href: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
+      - label: "Conditions générales d'utilisation"
+        href: 'https://www.data.gouv.fr/fr/terms/'
+      - label: 'Politique de confidentialité'
+        href: 'https://www.data.gouv.fr/fr/suivi/'
+  header:
+    logo:
+    # no title_image: an empty {src: null} object is still truthy and would
+    # suppress the header's built-in text-title fallback (see
+    # HeaderComponent.vue: `service-title: title_image ? undefined : title`)
+    admin_shortcut: false
+    beta: true
+    button:
+      display: false
+      label:
+      link:
+    search:
+      display: false
+      placeholder:
+  search_bar:
+    display: true
+    placeholder: 'Rechercher un jeu de données'
+  secondary_search:
+    display: false
+    name:
+    link:
+  menu:
+    - text: Accueil
+      to: /
+    - text: Données
+      to: /datasets/
+  router:
+    static_pages: []
+  show_quality_component: true
+  oauth_option: false
+  notice:
+    display: true
+    content: 'Ceci est un site de démarrage généré automatiquement. Personnalisez `configs/default/config.yaml` pour en faire votre propre portail.'
+    closeable: true
+  default_debounce_wait: 600
+  pagination_sizes:
+    organizations_list: 9
+    topics_drafts_list: 9
+    files_list: 6
+  home_banner_colors:
+    - '#E7E1F9'
+    - '#C9C1F2'
+    - '#ADA9E8'
+  env: 'prod'
+  matomo:
+    host:
+    siteId:
+  datasets:
+    add_to_topic:
+    harvest_backends_quality_warning: []
+    show_extended_information_panel: false
+  topics:
+    can_add_topics:
+      everyone: false
+      authorized_users: []
+
+pages:
+  # No universe_query on purpose: a brand-new site has no theme/tag yet, so
+  # this lists the full data.gouv.fr datasets catalog rather than risking an
+  # empty page. Narrow it to a theme (tag/topic/organization) once customized.
+  datasets:
+    object_type: datasets
+    list_all: true
+    universe_query:
+    filter_prefix:
+    title: Données
+    breadcrumb_title: Données
+    labels:
+      singular: jeu de données
+      plural: jeux de données
+      extended: jeu de données
+    search:
+      input: Rechercher un jeu de données
+      placeholder: null
+    banner:
+    resources_tabs:
+      discussions:
+        display: true
+        create: false
+        notify_url_override: false
+      datasets:
+        display: true
+      reuses:
+        display: true
+    editable: false
+    filters: []
+
+organizations:
