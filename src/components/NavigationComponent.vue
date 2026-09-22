@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { trackEvent } from '@datagouv/components-next'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -6,6 +7,15 @@ import config from '@/config'
 import type { MenuConfig } from '@/model/config'
 
 const route = useRoute()
+
+// only these tabs are part of the analytics measurement plan (NAV-05/07/09/10); keyed by
+// path rather than label so a menu label rewording doesn't silently break existing funnels
+const trackedTabs: Record<string, string> = {
+  '/datasets': 'Toutes les données',
+  '/indicators': 'Indicateurs phares',
+  '/dataservices': 'API',
+  '/bouquets': 'Collections thématiques'
+}
 
 const props = defineProps({
   onClick: {
@@ -50,6 +60,14 @@ const navItems = computed(() => {
         v-else-if="navItem.to && navItem.text"
         v-bind="navItem"
         @toggle-id="props.onClick"
+        @click="
+          navItem.to in trackedTabs &&
+          trackEvent(
+            'Navigation principale',
+            'Clic onglet',
+            trackedTabs[navItem.to]
+          )
+        "
       />
     </DsfrNavigationItem>
   </DsfrNavigation>

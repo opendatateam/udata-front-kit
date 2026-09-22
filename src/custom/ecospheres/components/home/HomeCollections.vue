@@ -3,6 +3,7 @@ import config from '@/config'
 import type { EcologieHomepageConf } from '@/custom/ecospheres/model/config'
 import TopicsAPI from '@/services/api/resources/TopicsAPI'
 import { useUniverseQuery } from '@/utils/universe'
+import { trackEvent } from '@datagouv/components-next'
 
 const homepage = config.ecospheres.homepage as EcologieHomepageConf
 const collections = homepage.collections
@@ -62,7 +63,7 @@ onMounted(() => {
       </div>
       <div class="collections-grid">
         <article
-          v-for="collection in collections"
+          v-for="(collection, index) in collections"
           :key="collection.slug || collection.title"
           :class="[
             'card',
@@ -79,6 +80,13 @@ onMounted(() => {
                   name: 'bouquets_detail',
                   params: { item_id: collection.slug }
                 }"
+                @click="
+                  trackEvent(
+                    'Homepage - Collections thématiques',
+                    'Clic collection',
+                    `Bloc ${index + 1} | ${collection.title}`
+                  )
+                "
               >
                 {{ collection.title }}
               </RouterLink>

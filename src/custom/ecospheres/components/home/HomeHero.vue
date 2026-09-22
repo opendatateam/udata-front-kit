@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import config from '@/config'
-import { trackEvent } from '@datagouv/components-next'
+import { getMatomo, trackEvent } from '@datagouv/components-next'
 import { useRouter } from 'vue-router'
 import type { EcologieHomepageThematicTag } from '../../model/config'
 
@@ -11,6 +11,12 @@ const router = useRouter()
 const searchQuery = ref('')
 
 const doSearch = (q: string) => {
+  trackEvent('Moteur de recherche', 'Recherche validée')
+  // category/results count aren't known at submit time (search executes on /datasets);
+  // Matomo's JS tracking client docs say to pass false for unknown, but the lib's type
+  // declares both as required strings/numbers, hence the ts-expect-error
+  // @ts-expect-error category/resultsCount are optional at runtime, unlike the lib's type
+  getMatomo()?.trackSiteSearch(q, false, false)
   router
     .push({ name: 'datasets', query: { q } })
     .then(() => (searchQuery.value = ''))
