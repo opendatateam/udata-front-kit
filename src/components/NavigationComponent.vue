@@ -8,15 +8,6 @@ import type { MenuConfig } from '@/model/config'
 
 const route = useRoute()
 
-// only these tabs are part of the analytics measurement plan (NAV-05/07/09/10); keyed by
-// path rather than label so a menu label rewording doesn't silently break existing funnels
-const trackedTabs: Record<string, string> = {
-  '/datasets': 'Toutes les données',
-  '/indicators': 'Indicateurs phares',
-  '/dataservices': 'API',
-  '/bouquets': 'Collections thématiques'
-}
-
 const props = defineProps({
   onClick: {
     type: Function as PropType<(id: string) => void>,
@@ -61,12 +52,7 @@ const navItems = computed(() => {
         v-bind="navItem"
         @toggle-id="props.onClick"
         @click="
-          navItem.to in trackedTabs &&
-          trackEvent(
-            'Navigation principale',
-            'Clic onglet',
-            trackedTabs[navItem.to]
-          )
+          trackEvent('Navigation principale', 'Clic onglet', navItem.text)
         "
       />
     </DsfrNavigationItem>
