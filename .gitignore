@@ -23,3 +23,5 @@ cypress/downloads
 
 # vscode
 .vscode/settings.json
+.vercel
+.env*

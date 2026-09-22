@@ -37,6 +37,20 @@ export default defineConfig(({ mode }) => {
   const config = load(readFileSync(configFileUrl, 'utf-8')) as Config
   return {
     base: '/',
+    server: {
+      // Local /api/* development: vercel.json's SPA rewrite (needed in
+      // production, see docs/architecture notes) breaks `vercel dev`'s own
+      // handling of the frontend — confirmed both empirically and via
+      // Vercel's community forum, it's a known gap in their CLI, not a
+      // misconfiguration on our side. So we don't run the frontend through
+      // `vercel dev` at all: run `pnpm run dev` (this, unaffected) for the
+      // frontend, and separately `vercel dev --listen 3210` purely to host
+      // the functions (never navigate to that port directly) — this proxy
+      // forwards /api/* calls over to it.
+      proxy: {
+        '/api': 'http://localhost:3210'
+      }
+    },
     plugins: [
       vueDevTools(),
       vue({
