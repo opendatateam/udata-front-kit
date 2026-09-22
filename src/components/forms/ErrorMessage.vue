@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import VIconCustom from '@/components/VIconCustom.vue'
+import VIconDsfr from '@/components/VIconDsfr.vue'
 
 defineProps({
   inputName: { type: String, required: true },
@@ -9,7 +9,7 @@ defineProps({
 
 <template v-if="errorMessage">
   <p :id="`errors-${inputName}`" class="error">
-    <VIconCustom name="error-fill" />
+    <VIconDsfr name="error-fill" />
     {{ errorMessage }}
   </p>
 </template>

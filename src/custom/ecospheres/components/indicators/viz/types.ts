@@ -9,4 +9,12 @@ export interface IndicatorVizChartSeries {
   data: { x: number; y: number }[]
   borderColor?: string
   backgroundColor?: string
+  hidden?: boolean
+  // "fill" is chart.js version of our "stacked" attribute
+  fill?: boolean
+}
+
+export interface AxisValueDisplay {
+  value: string
+  color: string
 }

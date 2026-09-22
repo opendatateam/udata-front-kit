@@ -52,15 +52,23 @@ export function useTabularData(
       resource.extras['ecospheres-indicateurs']?.axes ?? {}
     )
     return axisKeys.reduce<Record<string, string[]>>((acc, axis) => {
-      acc[axis] = [
-        ...new Set(rawData.value.map((row) => String(row[axis])))
-      ].sort()
+      acc[axis] = [...new Set(rawData.value.map((row) => String(row[axis])))]
       return acc
     }, {})
   })
 
   async function fetchData() {
     const mesh = selectedIndicatorVizMesh.value
+
+    // Commune preview isn't supported (see IndicatorVizChart's isCommuneMesh
+    // alert): clear any stale data from a previous mesh instead of fetching.
+    if (mesh === 'commune') {
+      rawData.value = []
+      isLoading.value = false
+      error.value = null
+      return
+    }
+
     const resource = resources.value.find(
       (r) => r.extras['ecospheres-indicateurs']?.maille === mesh
     )

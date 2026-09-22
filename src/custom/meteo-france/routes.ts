@@ -11,5 +11,8 @@ export const routes = [
   },
   useGlobalSearchPageRoutes({
     pageKey: 'datasets'
+  }),
+  useGlobalSearchPageRoutes({
+    pageKey: 'dataservices'
   })
 ]

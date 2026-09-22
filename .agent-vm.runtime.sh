@@ -8,6 +8,9 @@ command -v pm2 || pnpm add --global pm2
 
 CI=true pnpm install --store-dir ~/.local/share/pnpm/store
 
+# makes sure pre-commit is enabled, even if removed in a previous session
+./node_modules/.bin/husky
+
 pm2 delete dev-server 2>/dev/null || true
 export CHOKIDAR_USEPOLLING=true
 pm2 start "pnpm run dev" --name dev-server

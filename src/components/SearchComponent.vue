@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import VIconCustom from '@/components/VIconCustom.vue'
+import VIconDsfr from '@/components/VIconDsfr.vue'
 import { ref } from 'vue'
 
 import { useRouter } from 'vue-router'
@@ -77,7 +77,7 @@ const doSimpleSearch = (event: string) => {
       :title="!labelVisible ? searchLabel : undefined"
     >
       <template #before-input>
-        <VIconCustom name="search-line" class="search-icon" />
+        <VIconDsfr name="search-line" class="search-icon" />
       </template>
     </DsfrInputGroup>
   </search>
