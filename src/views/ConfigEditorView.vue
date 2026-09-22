@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { dump, load } from 'js-yaml'
 
-import config from '@/config'
+import config, { configStorageKey } from '@/config'
+import LocalStorageService from '@/services/LocalStorageService'
 
 // config is a reactive singleton (see @/config.ts): mutating it in place
 // updates the same object every other component reads through computed(),
@@ -65,6 +66,7 @@ const applyYaml = () => {
     config as unknown as Record<string, unknown>,
     parsed as Record<string, unknown>
   )
+  LocalStorageService.setItem(configStorageKey, toRaw(config))
 }
 
 const downloadConfig = () => {
@@ -83,10 +85,11 @@ const downloadConfig = () => {
   <div class="fr-container fr-my-4w">
     <h1>Éditeur de configuration</h1>
     <p class="fr-text--sm">
-      Ce texte est le contenu de <code>config.yaml</code>. Cliquez sur «
-      Appliquer » pour mettre à jour le site en direct, tant que vous restez
-      dans cet onglet. Rien n'est encore enregistré sur disque — utilisez le
-      téléchargement une fois satisfait.
+      Ce texte est le contenu de <code>config.yaml</code>. « Sauvegarder » met à
+      jour le site en direct et conserve cette configuration dans ce navigateur
+      (elle sera reproposée à la prochaine visite). Rien n'est encore écrit dans
+      le vrai <code>config.yaml</code> du dépôt — utilisez le téléchargement
+      pour ça.
     </p>
 
     <DsfrAlert
