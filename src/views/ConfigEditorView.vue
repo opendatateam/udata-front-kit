@@ -111,8 +111,25 @@ const downloadConfig = () => {
       </div>
 
       <details class="fr-mb-2w">
-        <summary>Voir le prompt utilisé</summary>
-        <pre class="albert-prompt-preview">{{ albertChat.systemPrompt }}</pre>
+        <summary>Voir / modifier le prompt utilisé</summary>
+        <textarea
+          class="albert-prompt-preview"
+          rows="6"
+          spellcheck="false"
+          :value="albertChat.systemPrompt"
+          @change="
+            albertChat.setSystemPrompt(
+              ($event.target as HTMLTextAreaElement).value
+            )
+          "
+        />
+        <button
+          type="button"
+          class="fr-btn fr-btn--tertiary fr-btn--sm fr-mt-1w"
+          @click="albertChat.resetSystemPrompt"
+        >
+          Réinitialiser le prompt par défaut
+        </button>
       </details>
 
       <div v-if="albertChat.chatLog.length" class="albert-chat-log fr-mb-2w">
@@ -230,7 +247,7 @@ const downloadConfig = () => {
   border: 1px solid var(--border-default-grey, #ddd);
 }
 .albert-prompt-preview {
-  white-space: pre-wrap;
+  width: 100%;
   font-family: ui-monospace, 'SF Mono', Consolas, monospace;
   font-size: 0.8rem;
   background-color: var(--background-default-grey, #fff);

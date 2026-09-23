@@ -23,8 +23,11 @@ import { mergeConfigAndPersist } from '@/utils/configMerge'
 // guarantee.
 const ALBERT_MODEL = 'qwen3-coder-30b-a3b-instruct'
 const ALBERT_TOKEN_KEY = 'albert-api-token'
+const ALBERT_PROMPT_KEY = 'albert-system-prompt'
 
-const ALBERT_SYSTEM_PROMPT = `Tu aides à configurer un site data.gouv.fr thématique par une conversation en français, naturelle et concise.
+// Default — editable from the UI (see ConfigEditorView.vue) and persisted
+// separately per browser, same pattern as the token.
+const DEFAULT_ALBERT_SYSTEM_PROMPT = `Tu aides à configurer un site data.gouv.fr thématique par une conversation en français, naturelle et concise.
 Utilise l'outil ask_question si le thème du site n'est pas assez précis pour choisir un tag data.gouv.fr pertinent — une seule question à la fois.
 Utilise l'outil propose_config dès que tu as assez d'éléments pour une première proposition, même imparfaite : l'utilisateur pourra ensuite demander des ajustements, tu rappelleras alors propose_config avec la version mise à jour.
 Les couleurs doivent être une palette pastel harmonieuse en dégradé. Le tag doit être court, en minuscules, sans accents.
@@ -130,6 +133,7 @@ export type ChatEntry = {
 
 export interface AlbertChatState {
   token: string
+  systemPrompt: string
   userInput: string
   messages: AlbertMessage[]
   chatLog: ChatEntry[]
@@ -138,30 +142,45 @@ export interface AlbertChatState {
   error: string | null
 }
 
-const initialMessages = (): AlbertMessage[] => [
-  { role: 'system', content: ALBERT_SYSTEM_PROMPT }
+const initialMessages = (systemPrompt: string): AlbertMessage[] => [
+  { role: 'system', content: systemPrompt }
 ]
 
 export const useAlbertChatStore = defineStore('albertChat', {
-  state: (): AlbertChatState => ({
-    token: LocalStorageService.getItem(ALBERT_TOKEN_KEY) ?? '',
-    userInput: '',
-    messages: initialMessages(),
-    chatLog: [],
-    pendingToolCallId: null,
-    loading: false,
-    error: null
-  }),
-  getters: {
-    systemPrompt: () => ALBERT_SYSTEM_PROMPT
+  state: (): AlbertChatState => {
+    const systemPrompt =
+      LocalStorageService.getItem(ALBERT_PROMPT_KEY) ??
+      DEFAULT_ALBERT_SYSTEM_PROMPT
+    return {
+      token: LocalStorageService.getItem(ALBERT_TOKEN_KEY) ?? '',
+      systemPrompt,
+      userInput: '',
+      messages: initialMessages(systemPrompt),
+      chatLog: [],
+      pendingToolCallId: null,
+      loading: false,
+      error: null
+    }
   },
   actions: {
     setToken(value: string) {
       this.token = value
       LocalStorageService.setItem(ALBERT_TOKEN_KEY, value)
     },
+    setSystemPrompt(value: string) {
+      this.systemPrompt = value
+      LocalStorageService.setItem(ALBERT_PROMPT_KEY, value)
+      // keep an already-started conversation in sync without forcing
+      // "Nouvelle conversation" — only the system message is touched
+      if (this.messages[0]?.role === 'system') {
+        this.messages[0].content = value
+      }
+    },
+    resetSystemPrompt() {
+      this.setSystemPrompt(DEFAULT_ALBERT_SYSTEM_PROMPT)
+    },
     reset() {
-      this.messages = initialMessages()
+      this.messages = initialMessages(this.systemPrompt)
       this.chatLog = []
       this.pendingToolCallId = null
       this.error = null
@@ -188,6 +207,15 @@ export const useAlbertChatStore = defineStore('albertChat', {
       this.chatLog.push({ role: 'user', text })
       this.userInput = ''
       this.loading = true
+
+      console.log('[Albert] system prompt used:', this.systemPrompt)
+      console.log('[Albert] full messages sent:', this.messages)
+      // The model sees these tool descriptions on every request regardless
+      // of the system prompt — e.g. propose_config's description literally
+      // says "Propose une configuration de site data.gouv.fr...", which is
+      // why the model still references "une configuration" even under an
+      // unrelated/joke system prompt.
+      console.log('[Albert] tools sent:', ALBERT_TOOLS)
 
       try {
         const response = await fetch('/api/albert-chat-completions', {
