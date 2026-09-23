@@ -5,6 +5,7 @@ import { useRoute, useRouter } from 'vue-router'
 import TabsWithCounts from '@/components/TabsWithCounts.vue'
 import DatasetSearchAndAdd from '@/components/universe/DatasetSearchAndAdd.vue'
 import OrganizationSearchAndAdd from '@/components/universe/OrganizationSearchAndAdd.vue'
+import TagSearchAndAdd from '@/components/universe/TagSearchAndAdd.vue'
 import LocalStorageService from '@/services/LocalStorageService'
 import { useUniverseStore } from '@/store/UniverseStore'
 import { useUserStore } from '@/store/UserStore'
@@ -49,7 +50,8 @@ const addTabs = [
     tabId: 'tab-add-datasets',
     panelId: 'panel-add-datasets'
   },
-  { title: 'Organisations', tabId: 'tab-add-orgs', panelId: 'panel-add-orgs' }
+  { title: 'Organisations', tabId: 'tab-add-orgs', panelId: 'panel-add-orgs' },
+  { title: 'Mots-clés', tabId: 'tab-add-tags', panelId: 'panel-add-tags' }
 ]
 const activeAddTab = ref(0)
 </script>
@@ -150,6 +152,12 @@ const activeAddTab = ref(0)
           <OrganizationSearchAndAdd
             :pending-org-id="universeStore.bulkAddingOrgId"
             @add="universeStore.addOrganizationDatasets($event)"
+          />
+        </DsfrTabContent>
+        <DsfrTabContent panel-id="panel-add-tags" tab-id="tab-add-tags">
+          <TagSearchAndAdd
+            :pending-tag="universeStore.bulkAddingTag"
+            @add="universeStore.addTaggedDatasets($event.tag, $event.datasets)"
           />
         </DsfrTabContent>
       </TabsWithCounts>

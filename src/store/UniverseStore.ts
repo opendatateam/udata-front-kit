@@ -24,6 +24,7 @@ export interface UniverseState {
   datasets: GenericElement[]
   pendingDatasetIds: string[]
   bulkAddingOrgId: string | null
+  bulkAddingTag: string | null
   loading: boolean
   error: string | null
 }
@@ -35,6 +36,7 @@ export const useUniverseStore = defineStore('universe', {
     datasets: [],
     pendingDatasetIds: [],
     bulkAddingOrgId: null,
+    bulkAddingTag: null,
     loading: false,
     error: null
   }),
@@ -194,6 +196,45 @@ export const useUniverseStore = defineStore('universe', {
         this.error = `Échec de l'ajout des jeux de données de « ${organization.name} ».`
       } finally {
         this.bulkAddingOrgId = null
+      }
+    },
+    // Bulk-adds a set of datasets already fetched by the caller (see
+    // TagSearchAndAdd.vue) — unlike addOrganizationDatasets(), this store
+    // action doesn't do the searching itself: the tag search is capped to
+    // a fixed top-N (no pagination to drive), so the component fetches
+    // once for preview and passes the exact same list back here, avoiding
+    // a second, possibly-inconsistent query.
+    async addTaggedDatasets(
+      tag: string,
+      datasets: Array<{ id: string; title: string }>
+    ) {
+      if (!this.topicId) return
+      if (this.bulkAddingTag) return
+      this.error = null
+      this.bulkAddingTag = tag
+      try {
+        const toAdd = datasets.filter(
+          (dataset) => !this.datasets.some((d) => d.element?.id === dataset.id)
+        )
+        if (toAdd.length === 0) return
+        const elements = toAdd.map(
+          (dataset) =>
+            ({
+              element: { class: 'Dataset', id: dataset.id },
+              title: dataset.title,
+              description: null,
+              tags: []
+            }) as unknown as GenericElement
+        )
+        const created = await useTopicElementStore().createElements(
+          this.topicId,
+          elements
+        )
+        this.datasets = [...this.datasets, ...created]
+      } catch {
+        this.error = `Échec de l'ajout des jeux de données pour le mot-clé « ${tag} ».`
+      } finally {
+        this.bulkAddingTag = null
       }
     },
     async removeDataset(elementId: string) {
