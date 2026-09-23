@@ -62,6 +62,17 @@ export const useUniverseStore = defineStore('universe', {
             classes: ['Dataset']
           }))
         ]
+        // Self-heal: the universe topic itself lives on data.gouv.fr and
+        // survives independently, but config.pages.datasets.universe_query
+        // only lives in this browser's localStorage (see
+        // configMerge.ts) — "Supprimer la configuration locale" wipes it
+        // back to the pristine config.yaml's value even though the
+        // universe still exists. Re-propagate only when it's genuinely
+        // unset; never clobber a universe_query the user deliberately
+        // pointed elsewhere via the config editor (e.g. a manual tag).
+        if (!config.pages.datasets?.universe_query) {
+          this.propagateToConfig()
+        }
       } catch {
         // stale/invalid id (e.g. topic deleted on data.gouv.fr) — drop it
         // rather than getting stuck on a permanent error

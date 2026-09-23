@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { dump, load } from 'js-yaml'
 
+import AlbertChatPanel from '@/components/albert/AlbertChatPanel.vue'
 import config, { configStorageKey } from '@/config'
 import LocalStorageService from '@/services/LocalStorageService'
 import { useAlbertChatStore } from '@/store/AlbertChatStore'
@@ -90,112 +91,7 @@ const downloadConfig = () => {
       </button>
     </div>
 
-    <section class="albert-generator fr-p-3w fr-mb-3w">
-      <h2 class="fr-h6">Générer avec Albert</h2>
-      <p class="fr-text--sm fr-mb-2w">
-        Votre jeton reste stocké seulement dans ce navigateur. Il transite, pour
-        chaque appel, par une fonction relais sans état hébergée avec ce site
-        (l'API Albert refuse les appels directs depuis un navigateur) — cette
-        fonction ne conserve ni ne journalise le jeton.
-      </p>
-
-      <div class="fr-input-group">
-        <DsfrInput
-          id="albert-token"
-          :model-value="albertChat.token"
-          type="password"
-          label="Jeton API Albert"
-          label-visible
-          @update:model-value="albertChat.setToken($event as string)"
-        />
-      </div>
-
-      <details class="fr-mb-2w">
-        <summary>Voir / modifier le prompt utilisé</summary>
-        <textarea
-          class="albert-prompt-preview"
-          rows="6"
-          spellcheck="false"
-          :value="albertChat.systemPrompt"
-          @change="
-            albertChat.setSystemPrompt(
-              ($event.target as HTMLTextAreaElement).value
-            )
-          "
-        />
-        <button
-          type="button"
-          class="fr-btn fr-btn--tertiary fr-btn--sm fr-mt-1w"
-          @click="albertChat.resetSystemPrompt"
-        >
-          Réinitialiser le prompt par défaut
-        </button>
-      </details>
-
-      <div v-if="albertChat.chatLog.length" class="albert-chat-log fr-mb-2w">
-        <div
-          v-for="(entry, i) in albertChat.chatLog"
-          :key="i"
-          class="albert-chat-entry"
-          :class="`albert-chat-entry--${entry.role}`"
-        >
-          <strong v-if="entry.role === 'question'">Albert demande : </strong>
-          <strong v-else-if="entry.role === 'config'">✓ </strong>
-          <strong v-else-if="entry.role === 'error'">Erreur : </strong>
-          {{ entry.text }}
-        </div>
-        <div
-          v-if="albertChat.loading"
-          class="albert-chat-entry albert-chat-entry--info"
-        >
-          Albert réfléchit…
-        </div>
-      </div>
-
-      <DsfrAlert
-        v-if="albertChat.error"
-        type="error"
-        :title="albertChat.error"
-        class="fr-mb-2w"
-      />
-
-      <div class="fr-input-group">
-        <DsfrInput
-          id="albert-user-input"
-          v-model="albertChat.userInput"
-          is-textarea
-          :label="
-            albertChat.pendingToolCallId
-              ? 'Votre réponse'
-              : albertChat.chatLog.length
-                ? 'Affiner (ex : plus de vert, un autre tag…)'
-                : 'Décrivez le site que vous voulez créer'
-          "
-          label-visible
-          placeholder="Ex : un site sur les données du vélo en libre-service en France"
-          @keydown.enter.exact.prevent="albertChat.send"
-        />
-      </div>
-
-      <div class="fr-btns-group fr-btns-group--inline fr-btns-group--right">
-        <button
-          v-if="albertChat.chatLog.length"
-          type="button"
-          class="fr-btn fr-btn--secondary"
-          @click="albertChat.reset"
-        >
-          Nouvelle conversation
-        </button>
-        <button
-          type="button"
-          class="fr-btn"
-          :disabled="albertChat.loading"
-          @click="albertChat.send"
-        >
-          {{ albertChat.loading ? 'Envoi…' : 'Envoyer' }}
-        </button>
-      </div>
-    </section>
+    <AlbertChatPanel />
 
     <details>
       <summary>Mode avancé : éditer le fichier de configuration</summary>
@@ -242,41 +138,6 @@ const downloadConfig = () => {
 </template>
 
 <style scoped>
-.albert-generator {
-  background-color: var(--background-alt-blue-france, #f5f5fe);
-  border: 1px solid var(--border-default-grey, #ddd);
-}
-.albert-prompt-preview {
-  width: 100%;
-  font-family: ui-monospace, 'SF Mono', Consolas, monospace;
-  font-size: 0.8rem;
-  background-color: var(--background-default-grey, #fff);
-  border: 1px solid var(--border-default-grey, #ddd);
-  padding: 1rem;
-}
-.albert-chat-log {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  max-height: 20rem;
-  overflow-y: auto;
-}
-.albert-chat-entry {
-  padding: 0.5rem 0.75rem;
-  border-radius: 0.25rem;
-  background-color: var(--background-default-grey, #fff);
-  border: 1px solid var(--border-default-grey, #ddd);
-}
-.albert-chat-entry--user {
-  align-self: flex-end;
-  background-color: var(--background-action-low-blue-france, #e8edff);
-}
-.albert-chat-entry--config {
-  border-color: var(--border-plain-success, #18753c);
-}
-.albert-chat-entry--error {
-  border-color: var(--border-plain-error, #ce0500);
-}
 summary {
   cursor: pointer;
   font-weight: bold;

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Toaster } from '@datagouv/components-next'
 
-import config from '@/config'
+import config, { rawConfig } from '@/config'
 
 import { DsfrFooter } from '@gouvminint/vue-dsfr'
 import ConfigDebugPanel from './components/ConfigDebugPanel.vue'
@@ -16,8 +16,17 @@ import {
 import { useUserStore } from './store/UserStore'
 import { fromMarkdown } from './utils'
 import { useWebsiteConfig } from './utils/config'
+import { diffConfig } from './utils/configDiff'
 
 const userStore = useUserStore()
+
+// Reactive stand-in for "a local config exists": every path that persists
+// to localStorage (ConfigEditorView.vue's Save, Albert, the wizard) does so
+// by mutating the same reactive `config` singleton via
+// mergeConfigAndPersist(), so a diff against the pristine config.yaml is
+// exactly "has this site been customized" — already tracked live by
+// ConfigDebugPanel.vue, reused here instead of a separate signal.
+const hasLocalConfig = computed(() => diffConfig(rawConfig, config).length > 0)
 const isNoticeClosed = ref(false)
 
 const skipLinks: SkipLinksProps['links'] = [
@@ -82,28 +91,51 @@ const quickLinks = computed(() => {
       }
     : null
 
-  const configEditorLink = config.website.header.show_config_editor
-    ? {
-        label: 'Éditeur de config',
-        icon: 'fr-icon-edit-line',
-        to: '/editor',
-        iconRight: true
-      }
-    : null
+  // The wizard is for the initial bootstrap only — once a local config
+  // exists (Save, Albert, or the wizard's own propose_config all persist
+  // one), it's no longer a "fresh site" and offering it again is
+  // confusing at best, actively misleading at worst (its config step's
+  // prompt assumes it's the first customization pass).
+  const bootstrapWizardLink =
+    config.website.header.show_bootstrap_wizard && !hasLocalConfig.value
+      ? {
+          label: 'Assistant de démarrage',
+          icon: 'fr-icon-magic-line',
+          to: '/wizard',
+          iconRight: true
+        }
+      : null
 
-  const universeManagerLink = config.website.header.show_universe_manager
-    ? {
-        label: 'Mon univers',
-        icon: 'fr-icon-database-line',
-        to: '/universe',
-        iconRight: true
-      }
-    : null
+  // Hidden as standalone header buttons only while the wizard is offered —
+  // it already links to both /editor and /universe inline, and surfacing
+  // all three at once is more confusing than helpful. Once a local config
+  // exists (wizard link gone), these reappear. The routes themselves stay
+  // reachable either way.
+  const configEditorLink =
+    config.website.header.show_config_editor && !bootstrapWizardLink
+      ? {
+          label: 'Éditeur de config',
+          icon: 'fr-icon-edit-line',
+          to: '/editor',
+          iconRight: true
+        }
+      : null
+
+  const universeManagerLink =
+    config.website.header.show_universe_manager && !bootstrapWizardLink
+      ? {
+          label: 'Mon univers',
+          icon: 'fr-icon-database-line',
+          to: '/universe',
+          iconRight: true
+        }
+      : null
 
   const buttons = [
     userProfile,
     headerButton,
     adminShorcut,
+    bootstrapWizardLink,
     configEditorLink,
     universeManagerLink,
     logLink

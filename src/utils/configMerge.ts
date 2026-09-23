@@ -45,11 +45,30 @@ export const deepAssignInPlace = (
       targetValue !== null &&
       typeof targetValue === 'object' &&
       !Array.isArray(targetValue)
+    const targetIsPlainObject =
+      targetValue !== null &&
+      typeof targetValue === 'object' &&
+      !Array.isArray(targetValue)
+
     if (bothPlainObjects) {
       deepAssignInPlace(
         targetValue as Record<string, unknown>,
         sourceValue as Record<string, unknown>,
         { prune }
+      )
+    } else if (!prune && targetIsPlainObject) {
+      // Defense in depth against an untrusted partial source (Albert) —
+      // even with additionalProperties:false on every tool schema object,
+      // nothing guarantees the API enforces it. Without this guard, a
+      // stray out-of-schema value here (e.g. a string where an object was
+      // expected) would silently replace a whole structural object like
+      // config.website.header with a non-object, crashing every
+      // computed() that reads it unconditionally. Confirmed live. A
+      // trusted full-document merge (prune: true, the YAML editor) is
+      // exempt — there, replacing an object's shape is a deliberate edit.
+      console.warn(
+        `[configMerge] ignoring "${key}": Albert proposed a non-object value for a field that must stay an object`,
+        sourceValue
       )
     } else {
       target[key] = sourceValue

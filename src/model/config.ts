@@ -152,6 +152,10 @@ export type HeaderConf = {
   // pages via a data.gouv.fr Topic. Same "generator starter site only"
   // caveat as show_config_editor.
   show_universe_manager?: boolean
+  // shows a header button to /wizard (see views/BootstrapWizardView.vue),
+  // which sequences the universe manager then a dedicated Albert config
+  // step for the initial site bootstrap. Same caveat as show_config_editor.
+  show_bootstrap_wizard?: boolean
 }
 
 type FooterExternalLink = {

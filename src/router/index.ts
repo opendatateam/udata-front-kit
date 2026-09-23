@@ -43,6 +43,16 @@ const defaultRoutes: RouteRecordRaw[] = [
     },
     component: async () => await import('@/views/UniverseManagerView.vue')
   },
+  // sequences /universe then /editor's Albert flow for the initial site
+  // bootstrap — see BootstrapWizardView.vue
+  {
+    path: '/wizard',
+    name: 'bootstrap_wizard',
+    meta: {
+      title: 'Assistant de démarrage'
+    },
+    component: async () => await import('@/views/BootstrapWizardView.vue')
+  },
   // technical pages
   {
     path: '/404',

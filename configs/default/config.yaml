@@ -72,6 +72,7 @@ website:
     # real deployed thematic site.
     show_config_editor: true
     show_universe_manager: true
+    show_bootstrap_wizard: true
     beta: true
     button:
       display: false
@@ -98,7 +99,7 @@ website:
   oauth_option: true
   notice:
     display: true
-    content: 'Ceci est un site de démarrage généré automatiquement. Personnalisez `configs/default/config.yaml` pour en faire votre propre portail.'
+    content: 'Ceci est un site de démarrage généré automatiquement. Personnalisez le pour en faire votre propre portail.'
     closeable: true
   default_debounce_wait: 600
   pagination_sizes:
