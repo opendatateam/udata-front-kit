@@ -1,4 +1,5 @@
 import type { DatasetV2 } from '@datagouv/components-next'
+import { datagouvResponseBuilder } from 'cypress/support/datagouv_mocks'
 import { datasetFactory } from 'cypress/support/factories/datasets_factory'
 import { createIndicator } from '../indicators/support'
 
@@ -87,6 +88,41 @@ describe('Datasets - List Page', () => {
     cy.contains('label', 'API').click()
     cy.url().should('include', '/dataservices')
     cy.url().should('not.include', 'org=')
+  })
+
+  it('should persist filtered results on page reload', () => {
+    const filteredDataset = datasetFactory.one({
+      overrides: { title: 'Filtered Dataset' }
+    })
+
+    // Filtered request returns immediately with data.
+    // Other datasets requests (initial unfiltered + indicators) return empty after a delay
+    // We're testing that initial unfiltered results (fired first, arriving last) do not overwrite filtered ones
+    cy.intercept('GET', /.*data\.gouv\.fr\/api\/\d\/datasets.*/, (req) => {
+      if (req.url.includes('tag=adresses')) {
+        req.reply({
+          statusCode: 200,
+          body: datagouvResponseBuilder([filteredDataset])
+        })
+      } else {
+        req.reply({
+          delay: 300,
+          statusCode: 200,
+          body: datagouvResponseBuilder([])
+        })
+      }
+    }).as('get_datasets_list')
+
+    // Visit with the custom filter already in the URL (simulates a page reload)
+    cy.visit('/datasets?inspire=adresses')
+
+    // Filtered results should appear once the filtered request completes
+    cy.get('.search-results').should('contain', 'Filtered Dataset')
+
+    // Wait beyond the stale response delay (300ms) so it has time to land.
+    cy.wait(400)
+
+    cy.get('.search-results').should('contain', 'Filtered Dataset')
   })
 
   it('should display indicator datasets with the Indicateur badge', () => {

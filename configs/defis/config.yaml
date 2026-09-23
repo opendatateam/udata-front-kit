@@ -82,7 +82,7 @@ website:
             - id: '69c3fbc9ff3ef0f070f2ecc4'
               name: 'Identifier et prévoir les facteurs de sévérité des allergies'
               description: 'Comment mobiliser les données de la base ACC pour définir des profils allergiques, identifier des facteurs de sévérité et comprendre comment les profils IgE peuvent aider à prédire la sévérité des allergies ?'
-              url: '/identifier-et-prevoir-les-facteurs-de-severite-des-allergies'
+              url: '/defis/identifier-et-prevoir-les-facteurs-de-severite-des-allergies'
               image_url: 'https://gist.github.com/user-attachments/assets/d91c6beb-6516-44e9-b29c-2d0a264a8dfc'
             - id: '695e5d9d02995cff0635005f'
               name: 'L’impact environnemental de l’IA générative'
@@ -225,15 +225,17 @@ website:
     external_links:
       - label: 'data.gouv.fr'
         href: 'https://www.data.gouv.fr'
+        title: 'data.gouv.fr - nouvelle fenêtre'
       - label: 'Association Latitudes'
         href: 'https://www.latitudes.cc/'
+        title: 'Association Latitudes - nouvelle fenêtre'
     mandatory_links:
       - label: 'Licences'
-        to: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
+        href: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
       - label: "Conditions générales d'utilisation"
-        to: 'https://www.data.gouv.fr/fr/terms/'
+        href: 'https://www.data.gouv.fr/fr/terms/'
       - label: 'Politique de confidentialité'
-        to: 'https://www.data.gouv.fr/fr/suivi/'
+        href: 'https://www.data.gouv.fr/fr/suivi/'
       - label: 'Accessibilité : non conforme'
         to: '/accessibility'
   header:
@@ -329,6 +331,7 @@ pages:
       discussions:
         display: false
         create: false
+        notify_url_override: false
       datasets:
         display: true
       reuses:
@@ -372,6 +375,7 @@ pages:
       discussions:
         display: false
         create: false
+        notify_url_override: false
       datasets:
         display: true
       reuses:

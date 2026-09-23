@@ -12,6 +12,9 @@ import GenericContainer from '@/components/GenericContainer.vue'
 import SidebarItem from '@/components/SidebarItem.vue'
 import SidebarList from '@/components/SidebarList.vue'
 import SidebarOwner from '@/components/SidebarOwner.vue'
+import TabsWithCounts, {
+  type TabWithCount
+} from '@/components/TabsWithCounts.vue'
 import TagComponent from '@/components/TagComponent.vue'
 import TopicActivityList from '@/components/topics/TopicActivityList.vue'
 import TopicFactorsList from '@/components/topics/TopicFactorsList.vue'
@@ -25,6 +28,7 @@ import {
   useRouteMeta,
   useRouteParamsAsStringReactive
 } from '@/router/utils'
+import { useDiscussionStore } from '@/store/DiscussionStore'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
@@ -57,6 +61,7 @@ const customDescriptionComponent = useAsyncComponent(
 )
 
 const userStore = useUserStore()
+const discussionStore = useDiscussionStore()
 const canEdit = computed(() => {
   return userStore.hasEditPermissions(topic.value) && pageConf.editable
 })
@@ -70,11 +75,17 @@ const showReuses = pageConf.resources_tabs.reuses.display
 const tags = useTagsByRef(pageKey, topic)
 
 const { clonedFrom } = useExtras(topic)
-const { factors } = useTopicFactors(topic)
+const { factors, nbFactors } = useTopicFactors(topic)
 const topicFactorsListRef = ref<InstanceType<typeof TopicFactorsList> | null>(
   null
 )
+const discussionsListRef = ref<InstanceType<typeof DiscussionsList> | null>(
+  null
+)
 const topicActivityListRef = ref<InstanceType<typeof TopicActivityList> | null>(
+  null
+)
+const topicReusesListRef = ref<InstanceType<typeof TopicReusesList> | null>(
   null
 )
 
@@ -97,39 +108,44 @@ const breadcrumbLinks = computed(() => {
 
 const showActivity = computed(() => canEdit.value)
 
-const tabTitles = computed(() => {
-  const tabs: { title: string; tabId: string; panelId: string }[] = []
+const tabs = computed(() => {
+  const result: TabWithCount[] = []
 
   if (showDatasets) {
-    tabs.push({
+    result.push({
       title: 'Données',
+      count: nbFactors.value,
       tabId: 'tab-datasets',
       panelId: 'tab-content-datasets'
     })
   }
   if (showDiscussions) {
-    tabs.push({
+    result.push({
       title: 'Discussions',
+      count: topic.value
+        ? (discussionStore.getDiscussionsForSubject(topic.value.id)?.total ?? 0)
+        : 0,
       tabId: 'tab-discussions',
       panelId: 'tab-content-discussions'
     })
   }
   if (showReuses) {
-    tabs.push({
+    result.push({
       title: 'Réutilisations',
+      count: topicReusesListRef.value?.reuses.length ?? 0,
       tabId: 'tab-reuses',
       panelId: 'tab-content-reuses'
     })
   }
   if (showActivity.value) {
-    tabs.push({
+    result.push({
       title: 'Activité',
       tabId: 'tab-activity',
       panelId: 'tab-content-activity'
     })
   }
 
-  return tabs
+  return result
 })
 
 const activeTab = ref(0)
@@ -212,31 +228,57 @@ useMeta({
   noIndex: () => topic.value?.private
 })
 
-// Handle factor deeplinks: #factor-{id} switches to Données tab and scrolls to factor
+// Wait until `ready()` is true (e.g. a child component is mounted and its
+// data has loaded), then run `action()` once.
+const runWhenReady = (ready: () => boolean, action: () => void) => {
+  if (ready()) {
+    action()
+    return
+  }
+  const stop = watchEffect(() => {
+    if (!ready()) return
+    action()
+    stop()
+  })
+}
+
+// Clear the hash immediately using replaceState to avoid adding a history
+// entry and to avoid interfering with the deeplink's own scroll behavior.
+// TODO: proper way would be to implement deeplinking for tabs
+const clearHash = () => {
+  const url = new URL(window.location.href)
+  url.hash = ''
+  window.history.replaceState(window.history.state, '', url.toString())
+}
+
+// Handle deeplinks: #factor-{id} switches to Données tab and scrolls to the
+// factor; #discussion-{id} switches to the Discussions tab and
+// scrolls to the discussion.
 watch(
   () => router.currentRoute.value.hash,
   (hash) => {
     if (hash.startsWith('#factor-')) {
       activeTab.value = 0
       const elementId = hash.replace('#factor-', '')
-
-      // Wait for component and data to be ready before navigating
-      let stopWatching: (() => void) | undefined = undefined
-      stopWatching = watchEffect(() => {
-        if (topicFactorsListRef.value && factors.value.length > 0) {
-          nextTick(() => {
+      runWhenReady(
+        () => !!topicFactorsListRef.value && factors.value.length > 0,
+        () =>
+          nextTick(() =>
             topicFactorsListRef.value?.navigateToElement(elementId)
-          })
-          stopWatching?.()
-        }
-      })
-
-      // Clear hash immediately using replaceState to avoid adding history entry
-      // and to avoid interfering with navigateToElement's scroll behavior
-      // TODO: proper way would be implement deeplinking for tabs
-      const url = new URL(window.location.href)
-      url.hash = ''
-      window.history.replaceState(window.history.state, '', url.toString())
+          )
+      )
+      clearHash()
+    } else if (hash.startsWith('#discussion-')) {
+      const tabIndex = tabs.value.findIndex(
+        (t) => t.tabId === 'tab-discussions'
+      )
+      if (tabIndex !== -1) activeTab.value = tabIndex
+      const discussionId = hash.replace('#discussion-', '')
+      runWhenReady(
+        () => !!discussionsListRef.value,
+        () => discussionsListRef.value?.navigateToDiscussion(discussionId)
+      )
+      clearHash()
     }
   },
   { immediate: true }
@@ -408,11 +450,11 @@ watch(
       </div>
     </div>
 
-    <DsfrTabs
-      v-if="tabTitles.length > 0"
+    <TabsWithCounts
+      v-if="tabs.length > 0"
       v-model="activeTab"
       class="fr-mt-2w"
-      :tab-titles="tabTitles"
+      :tabs="tabs"
       :tab-list-name="`Groupes d'attributs ${labels.articles.du} ${labels.singular}`"
     >
       <!-- Jeux de données -->
@@ -447,6 +489,7 @@ watch(
         tab-id="tab-discussions"
       >
         <DiscussionsList
+          ref="discussionsListRef"
           :subject="topic"
           subject-class="Topic"
           :empty-message="`Il n'y a pas encore de discussion pour ${labels.articles.ce} ${labels.singular}.`"
@@ -458,7 +501,7 @@ watch(
         panel-id="tab-content-reuses"
         tab-id="tab-reuses"
       >
-        <TopicReusesList :topic="topic" />
+        <TopicReusesList ref="topicReusesListRef" :topic="topic" />
       </DsfrTabContent>
       <!-- Activité -->
       <DsfrTabContent
@@ -473,7 +516,7 @@ watch(
           @navigate-to-factor="handleNavigateToFactor"
         />
       </DsfrTabContent>
-    </DsfrTabs>
+    </TabsWithCounts>
   </GenericContainer>
 </template>
 

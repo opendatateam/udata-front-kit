@@ -15,6 +15,13 @@ interface DiscussionForm {
   title: string
   comment: string
   subject: Subject
+  extras?: DiscussionExtras
+}
+
+interface DiscussionExtras {
+  notification?: {
+    external_url: string
+  }
 }
 
 interface Post {
@@ -42,6 +49,7 @@ interface DiscussionResponse extends GenericResponse {
 
 export type {
   Discussion,
+  DiscussionExtras,
   DiscussionForm,
   DiscussionId,
   DiscussionResponse,
