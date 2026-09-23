@@ -6,7 +6,7 @@
 
 - **des <a class="fr-link" href="/cas-d-usages">cas d'usages</a>** : il s'agit des démarches des particuliers, entreprises et associations qui peuvent être facilitées grâce à l'utilisation de la donnée ;
 - **les API et les jeux de données** qui répondent aux besoins du cas d'usage ;
-- **les solutions** (logiciels métiers clés en main, briques techniques ou portails de consultation) qui permettent d'accéder à ces données pour simplifier les cas d'usages.
+- **les solutions** (logiciels métiers clés en main, briques logicielles ou sites de consultation) qui permettent d'accéder à ces données pour simplifier les cas d'usages.
 
 <h2 id="niveau-1-acces-facile" class="fr-h4 fr-my-0w">Le contenu est rédigé :</h2>
 

@@ -47,17 +47,19 @@ website:
     external_links:
       - label: 'culture.gouv.fr'
         href: 'https://www.culture.gouv.fr/'
+        title: 'culture.gouv.fr - nouvelle fenêtre'
       #    - label: 'Portail des API Météo-France'
       #      href: 'https://portail-api.meteofrance.fr/'
       - label: 'data.gouv.fr'
         href: 'https://www.data.gouv.fr'
+        title: 'data.gouv.fr - nouvelle fenêtre'
     mandatory_links:
       - label: 'Licences'
-        to: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
+        href: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
       - label: "Conditions générales d'utilisation"
-        to: 'https://www.data.gouv.fr/fr/terms/'
+        href: 'https://www.data.gouv.fr/fr/terms/'
       - label: 'Politique de confidentialité'
-        to: 'https://www.data.gouv.fr/fr/suivi/'
+        href: 'https://www.data.gouv.fr/fr/suivi/'
       - label: 'Accessibilité : non conforme'
         to: '/accessibility'
   header:
@@ -91,6 +93,8 @@ website:
       to: /datasets
     # - text: Réutiliser
     #   to: /reuses
+    - text: 'Observer'
+      to: /deps
     - text: 'Publier'
       to: /publier
     - text: Echanger
@@ -112,6 +116,8 @@ website:
       path: /
     - name: Jeux de données
       path: /datasets
+    - name: Observer
+      path: /deps
     - name: Publier
       path: /publier
     - name: Démarche
@@ -130,9 +136,9 @@ website:
     files_list: 6
   contact_email: datagouv@datagouv.gouv.fr
   home_banner_colors:
-    - '#f6f6f6'
     - '#e3e3fd'
-    - '#019FE3'
+    - '#eaf3ef'
+    - '#c9e8b3'
   matomo:
     host: 'https://stats.data.gouv.fr'
     siteId: 312
@@ -181,6 +187,7 @@ pages:
       discussions:
         display: true
         create: true
+        notify_url_override: false
       datasets:
         display: true
       reuses:
@@ -250,66 +257,123 @@ pages:
       extended: jeu de données
     search:
       input: Rechercher un jeu de données
-      placeholder: null
+      placeholder: Rechercher les données du DEPS
     banner:
-      title: Un guichet unique pour l'accès aux données de la culture
+      title: Au sein des données de la Culture, un accès unique aux données du DEPS.
       content: |
         Cette collection constitue une base évolutive, appelée à s'enrichir et à s'affiner grâce aux retours et aux besoins exprimés par les acteurs partenaires.
     resources_tabs:
       discussions:
         display: true
         create: true
+        notify_url_override: false
       datasets:
         display: true
       reuses:
         display: true
     editable: true
     filters:
-      - name: Catégories
+      - name: Thématique
         default_option: Toutes les catégories
-        id: tag
+        id: thematique
+        api_param: tag
         type: select
         use_filter_prefix: false
         values:
-          - name: '🗃️ Archives'
-            id: archives
-          - name: '🏗️ Architecture'
+          - name: '📊 Économie du champ culturel'
+            id: economie-culturelle
+          - name: '🎓 Formation, emploi et revenus'
+            id: formation-emploi-revenus
+          - name: '🗺️ Géographie des activités culturelles'
+            id: geographie-activites-culturelles
+          - name: '👥 Pratiques, usages et consommations'
+            id: pratiques-usages-consommations
+          - name: '🏛️ Patrimoines'
+            id: patrimoines
+          - name: '🎨 Création artistique'
+            id: creation-artistique
+          - name: '🎬 Médias et industries culturelles'
+            id: medias-industries-culturelles
+      - name: Sous-thématique
+        default_option: Toutes les catégories
+        id: sous-thematique
+        api_param: tag
+        type: select
+        use_filter_prefix: false
+        values:
+          - name: 'Suivi conjoncturel des secteurs culturels marchands'
+            id: suivi-conjoncturel-des-secteurs-culturels-marchands
+          - name: 'Poids économique direct'
+            id: poids-economique-direct
+          - name: 'Financement'
+            id: financement
+          - name: 'pratiques-usages-consommations'
+            id: pratiques-usages-consommations
+          - name: 'Entreprises culturelles'
+            id: entreprises-culturelles
+          - name: 'Associations culturelles'
+            id: associations-culturelles
+          - name: 'Emploi culturel'
+            id: emploi-culturel
+          - name: 'Commerce extérieur'
+            id: commerce-exterieur
+          - name: 'Non-salariés des secteurs culturels'
+            id: non-salaries-des-secteurs-culturels
+          - name: 'Artistes-auteurs'
+            id: artistes-auteurs
+          - name: "Droits d'auteurs et droits voisins"
+            id: droits-d-auteurs-et-droits-voisins
+          - name: 'Enseignement supérieur artistique et culturel et insertion professionnelle'
+            id: enseignement-superieur-artistique-et-culturel-et-insertion-professionnelle
+          - name: 'Égalité entre femmes et hommes'
+            id: egalite-entre-femmes-et-hommes
+          - name: "Approche géographique de l'offre culturelle"
+            id: approche-geographique-de-l-offre-culturelle
+          - name: 'Tourisme et culture'
+            id: tourisme-et-culture
+          - name: 'Festivals'
+            id: festivals
+          - name: 'Pratiques culturelles'
+            id: pratiques-culturelles
+          - name: 'Pass Culture'
+            id: pass-culture
+          - name: 'Archéologie'
+            id: archeologie
+          - name: 'Architecture'
             id: architecture
-          - name: '🎨 Arts plastiques'
-            id: arts-plastiques
-          - name: '🎬 Cinéma'
-            id: cinema
-          - name: '🎭 Spectacle vivant'
-            id: spectacle-vivant
-          - name: '📚 Livre & lecture'
-            id: livre
-          - name: '🎵 Musique'
+          - name: 'Archives'
+            id: archives
+          - name: 'Musées'
+            id: musees
+          - name: 'Monuments historiques et sites patrimoniaux'
+            id: monuments-historiques-et-sites-patrimoniaux
+          - name: 'Arts visuels'
+            id: arts-visuels
+          - name: 'Billetterie du spectacle vivant'
+            id: billetterie-du-spectacle-vivant
+          - name: 'Danse'
+            id: danse
+          - name: 'Musique'
             id: musique
-          - name: '📰 Presse écrite'
-            id: presse
-          - name: '🖼️ Musées'
-            id: musee
-          - name: '💬 Langue'
-            id: langue
-          - name: '💡 Industries culturelles'
-            id: industries-culturelles
-      - name: Type d'organisation
-        default_option: Tous les types
-        id: organization_badge
-        type: select
-        api_param: organization_badge
-        use_filter_prefix: false
-        color: blue-france
-        values:
-          - name: Service public
-            id: public-service
-          - name: Collectivités territoriales
-            id: local-authority
-          - name: Association
-            id: association
-          - name: Entreprise
-            id: company
-      - name: Organisation
-        default_option: Toutes les organisations
-        id: organization
-        type: organization_custom
+          - name: 'Théâtre et arts associés'
+            id: theatre-et-arts-associes
+          - name: 'Diffusion pluridisciplinaire'
+            id: diffusion-pluridisciplinaire
+          - name: 'Cinéma'
+            id: cinema
+          - name: 'Internet'
+            id: internet
+          - name: 'Jeu vidéo'
+            id: jeu-video
+          - name: 'Livre et lecture publique'
+            id: livre-et-lecture-publique
+          - name: 'Musique enregistrée'
+            id: musique-enregistree
+          - name: 'Presse écrite'
+            id: presse-ecrite
+          - name: 'Radio'
+            id: radio
+          - name: 'Télévision'
+            id: television
+          - name: 'Vidéo'
+            id: video

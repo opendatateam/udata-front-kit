@@ -191,7 +191,7 @@ async function onSelectDep(event: Event) {
   res = [...new Set(res)]
   optionsPeriod.value = res
   showPeriod.value = true
-  if (selectedDataPack.value == 'Données climatologiques de base') {
+  if (selectedDataset.value?.showCustomFilter) {
     for (const obj of deps) {
       if (obj.code === selectedDep.value) {
         mapOptions.value = obj

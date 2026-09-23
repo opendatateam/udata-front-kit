@@ -16,11 +16,7 @@
           {{ topic.description }}
         </p>
 
-        <SimplifionsTags
-          :topic="topic"
-          :page-key="pageKey"
-          :show-simplification="false"
-        />
+        <SimplifionsTags :topic="topic" :page-key="pageKey" />
 
         <ul class="fr-mt-4w">
           <li>
@@ -344,6 +340,7 @@ import type {
   SolutionRecord
 } from '../model/grist'
 import type { TopicSolution } from '../model/topics'
+import { useHashScroll } from '../useHashScroll'
 import DraftTag from './DraftTag.vue'
 import HumanReadableList from './HumanReadableList.vue'
 import SimplifionsCasDusageRelatedCard from './SimplifionsCasDusageRelatedCard.vue'
@@ -550,12 +547,19 @@ const filteredAndSortedSolutions = computed(() => {
 const onFiltersUpdate = (filters: IntegrateursFilters) => {
   integrateursFilters.value = filters
 }
+
+useHashScroll({
+  ready: () => !!solution.value,
+  hashConditions: {
+    '#solutions-integratices': () => solutionsIntegratices.value.length > 0
+  }
+})
 </script>
 
 <style scoped>
 h2.colored-title {
   color: black;
-  background-color: rgb(167, 212, 205);
+  background-color: var(--simplifions-h2-highlight);
   padding: 2px 4px;
   display: inline-block;
 }
