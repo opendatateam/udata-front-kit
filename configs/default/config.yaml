@@ -14,7 +14,7 @@ datagouvfr:
   # to point there too — meaning datasets/topics shown come from the demo
   # catalog, not the real www.data.gouv.fr, until swapped for real creds.
   base_url: https://demo.data.gouv.fr
-  oauth_client_id: 66e30254d3cc5d5b52a4b6ec
+  oauth_client_id: 6ab36f5670022ca32196c2f5
   tabular_api_url:
 
 website:

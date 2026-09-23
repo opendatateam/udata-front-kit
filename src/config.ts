@@ -6,6 +6,10 @@ import rawConfig from '@siteConfig/config.yaml'
 // Shared with ConfigEditorView.vue, which writes to this same key on save.
 export const configStorageKey = `config-editor:${rawConfig.site_id}`
 
+// The pristine, as-shipped config.yaml — exported so ConfigDebugPanel.vue
+// can diff the live (possibly locally-edited) config against it.
+export { rawConfig }
+
 // A locally-saved config is only ever loaded on sites that shipped with the
 // in-app config editor enabled (see configs/default/config.yaml) — never on
 // a real deployed thematic site, and never for a visitor who's never opened

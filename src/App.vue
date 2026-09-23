@@ -4,6 +4,7 @@ import { Toaster } from '@datagouv/components-next'
 import config from '@/config'
 
 import { DsfrFooter } from '@gouvminint/vue-dsfr'
+import ConfigDebugPanel from './components/ConfigDebugPanel.vue'
 import HeaderComponent from './components/header/HeaderComponent.vue'
 import type { InfoToAnnounce } from './components/LiveRegion.vue'
 import LiveRegion from './components/LiveRegion.vue'
@@ -184,6 +185,8 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
     :mandatory-links="mandatory_links"
     :home-title="`Retour à l'accueil du site - ${title}`"
   />
+
+  <ConfigDebugPanel v-if="config.website.header.show_config_editor" />
 </template>
 
 <!-- global styles -->
