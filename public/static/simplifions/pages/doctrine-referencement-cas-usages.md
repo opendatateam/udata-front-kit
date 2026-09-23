@@ -20,10 +20,7 @@
 
 <h2 id="referencement-cas-usage" class="fr-h2 fr-my-0w" style="color: black; background-color: rgb(167, 212, 205); padding: 2px 4px; display: inline-block;">Règles de référencement d'un cas d'usage</h2>
 
-
-
 <p class="fr-text--lead">Lorsque l'équipe de Simplifions.data.gouv.fr identifie un cas d'usage susceptible d'être simplifié via l'utilisation de données, voici les questions qu'elle se pose pour identifier si ce cas d'usage peut être référencé sur Simplifions.data.gouv.fr. </p>
-
 
 <div class="fr-col-12 fr-col-lg-8 fr-ml-4w">
     <ol class="fr-text--lg">
@@ -63,4 +60,3 @@
         </li>
     </ol>
 </div>
-

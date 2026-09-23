@@ -51,7 +51,10 @@ export const mockCasUsage = (
   return { gristCasUsage, topicCasUsage }
 }
 
-export const mockSolutionRecommandation = (recommandationFields = {}) => {
+export const mockSolutionRecommandation = (
+  recommandationFields = {},
+  solutionFields = {}
+) => {
   const gristRecommandation = gristRecommandationFactory.one({
     overrides: {
       fields: {
@@ -82,7 +85,8 @@ export const mockSolutionRecommandation = (recommandationFields = {}) => {
       Visible_sur_simplifions: true,
       API_ou_datasets_integres: null,
       APIs_ou_datasets_fournis: null,
-      solutions_integratrices: null
+      solutions_integratrices: null,
+      ...solutionFields
     }
   }
 
@@ -98,7 +102,11 @@ export const mockSolutionRecommandation = (recommandationFields = {}) => {
     [topicSolutionRecommandee]
   )
 
-  return { gristRecommandation, topicSolution: topicSolutionRecommandee }
+  return {
+    gristRecommandation,
+    gristSolution: gristSolutionRecommandee,
+    topicSolution: topicSolutionRecommandee
+  }
 }
 
 export const mockApidatasetRecommandations = (

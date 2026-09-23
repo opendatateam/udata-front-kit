@@ -1,6 +1,7 @@
 import type {
   ApiEtDatasetsIntegresRecord,
   ApiOrDatasetRecord,
+  ApiOrDatasetType,
   ApiOrDatasetUtilesRecord,
   CasUsageRecord,
   RecommandationRecord,
@@ -25,7 +26,6 @@ export const gristCasUsageFactory = build<CasUsageRecord>({
       Nom_complet: sequence((x) => `🧑‍💼 Cas d'usage ${x}`),
       Pour_simplifier_les_demarches_de: [1, 2],
       Recommandations: [1, 2, 3],
-      Types_de_simplification: [1, 2],
       Visible_sur_simplifions: true
     }
   }
@@ -91,13 +91,13 @@ export const solutionFactory = build<SolutionRecord>({
       Prix: '',
       Public_ou_prive: sequence((x) => (x % 2 === 0 ? 'Public' : 'Privé')),
       Site_internet: sequence((x) => `https://solution${x}.example.com`),
-      Types_de_simplification: [1, 2],
       Visible_sur_simplifions: true,
       Recommande_pour_les_cas_d_usages: [1, 2],
       Type_de_solution: ['Éditeur'],
       URL_demande_d_acces: '',
       solutions_integratrices: null,
-      liste_categories_de_solution: ['Logiciel métier']
+      liste_categories_de_solution: ['Logiciel métier'],
+      UID_datagouv: ''
     }
   }
 })
@@ -125,7 +125,9 @@ export const apiOrDatasetFactory = build<ApiOrDatasetRecord>({
       Nom: sequence(
         (x) => ['API n°' + x, 'Jeu de données n°' + x][x % 2] as string
       ),
-      Type: sequence((x) => ['API', 'Jeu de données'][x % 2] as string),
+      Type: sequence(
+        (x) => ['API', 'Jeu de données'][x % 2] as ApiOrDatasetType
+      ),
       Fourni_par: 1,
       Integre_par: [1, 2],
       Visible_sur_simplifions: true,
