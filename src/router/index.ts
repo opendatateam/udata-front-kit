@@ -33,6 +33,16 @@ const defaultRoutes: RouteRecordRaw[] = [
     },
     component: async () => await import('@/views/ConfigEditorView.vue')
   },
+  // in-app universe manager: lets a logged-in user pick the datasets that
+  // back this site's pages via a data.gouv.fr Topic (see store/UniverseStore.ts)
+  {
+    path: '/universe',
+    name: 'universe_manager',
+    meta: {
+      title: 'Mon univers'
+    },
+    component: async () => await import('@/views/UniverseManagerView.vue')
+  },
   // technical pages
   {
     path: '/404',

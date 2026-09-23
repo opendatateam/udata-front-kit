@@ -90,11 +90,21 @@ const quickLinks = computed(() => {
       }
     : null
 
+  const universeManagerLink = config.website.header.show_universe_manager
+    ? {
+        label: 'Mon univers',
+        icon: 'fr-icon-database-line',
+        to: '/universe',
+        iconRight: true
+      }
+    : null
+
   const buttons = [
     userProfile,
     headerButton,
     adminShorcut,
     configEditorLink,
+    universeManagerLink,
     logLink
   ]
 

@@ -7,8 +7,14 @@
 site_id: default
 
 datagouvfr:
-  base_url: https://www.data.gouv.fr
-  oauth_client_id:
+  # Temporarily borrowing ecospheres' oauth_client_id/base_url so login works
+  # at all before the hackathon gets its own dedicated oauth client. This
+  # client is only registered on demo.data.gouv.fr (oauth clients don't
+  # carry over between the demo and prod udata instances), so base_url has
+  # to point there too — meaning datasets/topics shown come from the demo
+  # catalog, not the real www.data.gouv.fr, until swapped for real creds.
+  base_url: https://demo.data.gouv.fr
+  oauth_client_id: 66e30254d3cc5d5b52a4b6ec
   tabular_api_url:
 
 website:
@@ -65,6 +71,7 @@ website:
     # this is the generator's starter site only: never enable this on a
     # real deployed thematic site.
     show_config_editor: true
+    show_universe_manager: true
     beta: true
     button:
       display: false
@@ -88,7 +95,7 @@ website:
   router:
     static_pages: []
   show_quality_component: true
-  oauth_option: false
+  oauth_option: true
   notice:
     display: true
     content: 'Ceci est un site de démarrage généré automatiquement. Personnalisez `configs/default/config.yaml` pour en faire votre propre portail.'

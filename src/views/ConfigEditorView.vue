@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { dump, load } from 'js-yaml'
 
-import config from '@/config'
+import config, { configStorageKey } from '@/config'
+import LocalStorageService from '@/services/LocalStorageService'
 import { useAlbertChatStore } from '@/store/AlbertChatStore'
 import { mergeConfigAndPersist } from '@/utils/configMerge'
 
@@ -15,6 +16,9 @@ const albertChat = useAlbertChatStore()
 
 const yamlText = ref(dump(toRaw(config), { lineWidth: -1 }))
 const parseError = ref<string | null>(null)
+const hasLocalConfig = ref(
+  LocalStorageService.getItem(configStorageKey) != null
+)
 
 const applyYaml = () => {
   let parsed: unknown
@@ -31,6 +35,7 @@ const applyYaml = () => {
   }
   parseError.value = null
   mergeConfigAndPersist(parsed as Record<string, unknown>)
+  hasLocalConfig.value = true
 }
 
 // AlbertChatStore.send() applies config updates itself (see
@@ -43,9 +48,18 @@ watch(
   () => {
     if (albertChat.chatLog.at(-1)?.role === 'config') {
       yamlText.value = dump(toRaw(config), { lineWidth: -1 })
+      hasLocalConfig.value = true
     }
   }
 )
+
+// The reactive `config` singleton is only re-seeded from localStorage at
+// module load (see @/config.ts's initialConfig()) — clearing storage alone
+// wouldn't reset the live in-memory config, so a reload is needed too.
+const deleteLocalConfig = () => {
+  LocalStorageService.removeItem(configStorageKey)
+  window.location.reload()
+}
 
 const downloadConfig = () => {
   const yaml = dump(toRaw(config), { lineWidth: -1 })
@@ -62,6 +76,19 @@ const downloadConfig = () => {
 <template>
   <div class="fr-container fr-my-4w">
     <h1>Éditeur de configuration</h1>
+
+    <div
+      v-if="hasLocalConfig"
+      class="fr-btns-group fr-btns-group--inline fr-btns-group--right fr-mb-3w"
+    >
+      <button
+        type="button"
+        class="fr-btn fr-background-action-high--red-marianne"
+        @click="deleteLocalConfig"
+      >
+        Supprimer la configuration locale
+      </button>
+    </div>
 
     <section class="albert-generator fr-p-3w fr-mb-3w">
       <h2 class="fr-h6">Générer avec Albert</h2>
