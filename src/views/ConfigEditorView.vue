@@ -1,76 +1,20 @@
 <script setup lang="ts">
 import { dump, load } from 'js-yaml'
 
-import config, { configStorageKey } from '@/config'
-import LocalStorageService from '@/services/LocalStorageService'
+import config from '@/config'
+import { useAlbertChatStore } from '@/store/AlbertChatStore'
+import { mergeConfigAndPersist } from '@/utils/configMerge'
 
-// config is a reactive singleton (see @/config.ts): mutating it in place
-// updates the same object every other component reads through computed(),
-// so HeaderComponent/App/HomeView hot-update as you edit, with no separate
-// preview implementation to keep in sync.
-//
-// Crucially, "in place" has to hold all the way down the tree: some
-// consumers (HeaderComponent, App.vue) capture config.website once at setup
-// via useWebsiteConfig() rather than through a computed(). If we ever
-// replaced config.website itself with a new object (e.g. a naive
-// delete-everything-then-Object.assign), those consumers would keep
-// pointing at the old, orphaned object and stop updating forever. So the
-// merge below only ever replaces leaf values — every nested object keeps
-// its original identity.
-//
-// `prune`: when true (the manual YAML-textarea path), a target key absent
-// from source is deleted — correct there, since the textarea always holds
-// the *complete* config. When false (the Albert path), absent keys are
-// left untouched instead: Albert is only ever asked for a small subset of
-// fields (see ALBERT_SYSTEM_PROMPT), so "absent" means "not part of this
-// generation," not "delete this." Pruning there wiped out config.website.header
-// (and everything else outside that subset) on every generation.
-const deepAssignInPlace = (
-  target: Record<string, unknown>,
-  source: Record<string, unknown>,
-  { prune = true }: { prune?: boolean } = {}
-) => {
-  if (prune) {
-    for (const key of Object.keys(target)) {
-      if (!(key in source)) delete target[key]
-    }
-  }
-  for (const key of Object.keys(source)) {
-    const sourceValue = source[key]
-    const targetValue = target[key]
-    const bothPlainObjects =
-      sourceValue !== null &&
-      typeof sourceValue === 'object' &&
-      !Array.isArray(sourceValue) &&
-      targetValue !== null &&
-      typeof targetValue === 'object' &&
-      !Array.isArray(targetValue)
-    if (bothPlainObjects) {
-      deepAssignInPlace(
-        targetValue as Record<string, unknown>,
-        sourceValue as Record<string, unknown>,
-        { prune }
-      )
-    } else {
-      target[key] = sourceValue
-    }
-  }
-}
+// The Albert conversation lives in a Pinia store, not local refs here —
+// found live that navigating away from /editor (e.g. to check the result
+// on the homepage) and back destroyed the whole conversation, since a
+// component's local <script setup> state doesn't survive unmount. Every
+// other cross-page-persistent thing in this app (UserStore, etc.) already
+// uses this same pattern.
+const albertChat = useAlbertChatStore()
 
 const yamlText = ref(dump(toRaw(config), { lineWidth: -1 }))
 const parseError = ref<string | null>(null)
-
-const mergeAndPersist = (
-  parsed: Record<string, unknown>,
-  options: { prune?: boolean } = {}
-) => {
-  deepAssignInPlace(
-    config as unknown as Record<string, unknown>,
-    parsed,
-    options
-  )
-  LocalStorageService.setItem(configStorageKey, toRaw(config))
-}
 
 const applyYaml = () => {
   let parsed: unknown
@@ -86,145 +30,22 @@ const applyYaml = () => {
     return
   }
   parseError.value = null
-  mergeAndPersist(parsed as Record<string, unknown>)
+  mergeConfigAndPersist(parsed as Record<string, unknown>)
 }
 
-// --- Albert API generation ---------------------------------------------
-// The token is entered by the user and stored only in their own browser
-// (localStorage) — we never see it. Calls go through our own same-origin
-// /api/albert-* proxy (see api/albert-models.ts, api/albert-chat-completions.ts)
-// rather than straight to albert.api.etalab.gouv.fr: Albert's API blocks
-// direct browser calls (CORS), confirmed live — even Etalab's own web
-// client goes through its own backend, not the browser, to reach it. The
-// proxy is a stateless per-request relay: it forwards whatever
-// Authorization header it receives and never stores or logs the token.
-const ALBERT_TOKEN_KEY = 'albert-api-token'
-
-const albertToken = ref(LocalStorageService.getItem(ALBERT_TOKEN_KEY) ?? '')
-watch(albertToken, (value) => {
-  LocalStorageService.setItem(ALBERT_TOKEN_KEY, value)
-})
-
-const albertPrompt = ref('')
-const albertLoading = ref(false)
-const albertError = ref<string | null>(null)
-
-// Albert doesn't reliably honor "no markdown" instructions, so defensively
-// unwrap a ```json ... ``` fence if the model wrapped its answer in one.
-const stripCodeFence = (text: string): string => {
-  const match = text.match(/```(?:json)?\s*([\s\S]*?)```/i)
-  return match ? match[1].trim() : text.trim()
-}
-
-const ALBERT_SYSTEM_PROMPT = `Tu génères un fragment de configuration JSON pour un site data.gouv.fr, à partir de la description d'un thème donnée par l'utilisateur.
-Réponds UNIQUEMENT avec un objet JSON valide, sans texte autour, sans balises markdown, respectant EXACTEMENT cette forme :
-{
-  "website": {
-    "title": "string, nom du site, ex: Données Vélo",
-    "homepage": {
-      "title": "string, titre accrocheur pour la page d'accueil",
-      "subtitle": "string, 1-2 phrases décrivant le site"
-    },
-    "footer": {
-      "phrase": "string, 1 phrase décrivant le site pour le pied de page"
-    },
-    "home_banner_colors": ["#rrggbb", "#rrggbb", "#rrggbb"]
-  },
-  "pages": {
-    "datasets": {
-      "universe_query": {
-        "tag": "string, un tag data.gouv.fr en kebab-case pertinent pour ce thème, ex: velo, energie, sante"
-      }
+// AlbertChatStore.send() applies config updates itself (see
+// store/AlbertChatStore.ts); refresh the textarea preview whenever that
+// happens so "mode avancé" shows the latest state. Deliberately does NOT
+// touch yamlText.value from applyYaml/manual edits — see that function —
+// this only reacts to the Albert-driven path.
+watch(
+  () => albertChat.chatLog.length,
+  () => {
+    if (albertChat.chatLog.at(-1)?.role === 'config') {
+      yamlText.value = dump(toRaw(config), { lineWidth: -1 })
     }
   }
-}
-Les couleurs doivent être une palette pastel harmonieuse en dégradé. Le tag doit être court, en minuscules, sans accents.`
-
-const generateWithAlbert = async () => {
-  albertError.value = null
-  if (!albertToken.value.trim()) {
-    albertError.value = 'Renseignez votre jeton Albert API.'
-    return
-  }
-  if (!albertPrompt.value.trim()) {
-    albertError.value = 'Décrivez le site que vous voulez créer.'
-    return
-  }
-  albertLoading.value = true
-  try {
-    const headers = {
-      Authorization: `Bearer ${albertToken.value.trim()}`,
-      'Content-Type': 'application/json'
-    }
-
-    const modelsResponse = await fetch('/api/albert-models', {
-      headers
-    })
-    if (!modelsResponse.ok) {
-      throw new Error(
-        `Impossible de lister les modèles (HTTP ${modelsResponse.status}). Jeton invalide ?`
-      )
-    }
-    const modelsData = await modelsResponse.json()
-    const modelId = modelsData?.data?.[0]?.id
-    if (!modelId) {
-      throw new Error('Aucun modèle disponible pour ce jeton.')
-    }
-
-    const completionResponse = await fetch('/api/albert-chat-completions', {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({
-        model: modelId,
-        messages: [
-          { role: 'system', content: ALBERT_SYSTEM_PROMPT },
-          { role: 'user', content: albertPrompt.value.trim() }
-        ]
-      })
-    })
-    if (!completionResponse.ok) {
-      throw new Error(
-        `Échec de la génération (HTTP ${completionResponse.status}).`
-      )
-    }
-    const completionData = await completionResponse.json()
-    console.log('[Albert] raw response:', completionData)
-    const content = completionData?.choices?.[0]?.message?.content
-    if (typeof content !== 'string') {
-      throw new Error('Réponse Albert inattendue (pas de contenu texte).')
-    }
-    console.log('[Albert] message content:', content)
-
-    const parsed: unknown = JSON.parse(stripCodeFence(content))
-    if (
-      parsed === null ||
-      typeof parsed !== 'object' ||
-      Array.isArray(parsed)
-    ) {
-      throw new Error("La réponse d'Albert n'est pas un objet JSON valide.")
-    }
-    console.log('[Albert] parsed fragment (merged without pruning):', parsed)
-
-    // prune: false — Albert only ever returns a small subset of fields by
-    // design (see ALBERT_SYSTEM_PROMPT); anything it doesn't mention must
-    // be left alone, not deleted.
-    mergeAndPersist(parsed as Record<string, unknown>, { prune: false })
-    yamlText.value = dump(toRaw(config), { lineWidth: -1 })
-  } catch (e) {
-    albertError.value =
-      e instanceof Error ? e.message : 'Erreur inconnue lors de la génération.'
-    // calls go through our own same-origin /api/albert-* proxy now, so a
-    // network-level failure here means the proxy itself is unreachable —
-    // e.g. running via `pnpm run dev` (Vite alone doesn't serve /api/*,
-    // only `vercel dev` or an actual Vercel deployment does), not CORS.
-    if (e instanceof TypeError) {
-      albertError.value +=
-        " (échec réseau vers /api/albert-* — en local, cette route n'existe que sous `vercel dev`, pas sous `pnpm run dev`.)"
-    }
-  } finally {
-    albertLoading.value = false
-  }
-}
+)
 
 const downloadConfig = () => {
   const yaml = dump(toRaw(config), { lineWidth: -1 })
@@ -254,44 +75,82 @@ const downloadConfig = () => {
       <div class="fr-input-group">
         <DsfrInput
           id="albert-token"
-          v-model="albertToken"
+          :model-value="albertChat.token"
           type="password"
           label="Jeton API Albert"
           label-visible
-        />
-      </div>
-
-      <div class="fr-input-group">
-        <DsfrInput
-          id="albert-prompt"
-          v-model="albertPrompt"
-          is-textarea
-          label="Décrivez le site que vous voulez créer"
-          label-visible
-          placeholder="Ex : un site sur les données du vélo en libre-service en France"
+          @update:model-value="albertChat.setToken($event as string)"
         />
       </div>
 
       <details class="fr-mb-2w">
         <summary>Voir le prompt utilisé</summary>
-        <pre class="albert-prompt-preview">{{ ALBERT_SYSTEM_PROMPT }}</pre>
+        <pre class="albert-prompt-preview">{{ albertChat.systemPrompt }}</pre>
       </details>
 
+      <div v-if="albertChat.chatLog.length" class="albert-chat-log fr-mb-2w">
+        <div
+          v-for="(entry, i) in albertChat.chatLog"
+          :key="i"
+          class="albert-chat-entry"
+          :class="`albert-chat-entry--${entry.role}`"
+        >
+          <strong v-if="entry.role === 'question'">Albert demande : </strong>
+          <strong v-else-if="entry.role === 'config'">✓ </strong>
+          <strong v-else-if="entry.role === 'error'">Erreur : </strong>
+          {{ entry.text }}
+        </div>
+        <div
+          v-if="albertChat.loading"
+          class="albert-chat-entry albert-chat-entry--info"
+        >
+          Albert réfléchit…
+        </div>
+      </div>
+
       <DsfrAlert
-        v-if="albertError"
+        v-if="albertChat.error"
         type="error"
-        :title="albertError"
+        :title="albertChat.error"
         class="fr-mb-2w"
       />
 
-      <button
-        type="button"
-        class="fr-btn"
-        :disabled="albertLoading"
-        @click="generateWithAlbert"
-      >
-        {{ albertLoading ? 'Génération en cours…' : 'Générer' }}
-      </button>
+      <div class="fr-input-group">
+        <DsfrInput
+          id="albert-user-input"
+          v-model="albertChat.userInput"
+          is-textarea
+          :label="
+            albertChat.pendingToolCallId
+              ? 'Votre réponse'
+              : albertChat.chatLog.length
+                ? 'Affiner (ex : plus de vert, un autre tag…)'
+                : 'Décrivez le site que vous voulez créer'
+          "
+          label-visible
+          placeholder="Ex : un site sur les données du vélo en libre-service en France"
+          @keydown.enter.exact.prevent="albertChat.send"
+        />
+      </div>
+
+      <div class="fr-btns-group fr-btns-group--inline fr-btns-group--right">
+        <button
+          v-if="albertChat.chatLog.length"
+          type="button"
+          class="fr-btn fr-btn--secondary"
+          @click="albertChat.reset"
+        >
+          Nouvelle conversation
+        </button>
+        <button
+          type="button"
+          class="fr-btn"
+          :disabled="albertChat.loading"
+          @click="albertChat.send"
+        >
+          {{ albertChat.loading ? 'Envoi…' : 'Envoyer' }}
+        </button>
+      </div>
     </section>
 
     <details>
@@ -350,6 +209,29 @@ const downloadConfig = () => {
   background-color: var(--background-default-grey, #fff);
   border: 1px solid var(--border-default-grey, #ddd);
   padding: 1rem;
+}
+.albert-chat-log {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 20rem;
+  overflow-y: auto;
+}
+.albert-chat-entry {
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.25rem;
+  background-color: var(--background-default-grey, #fff);
+  border: 1px solid var(--border-default-grey, #ddd);
+}
+.albert-chat-entry--user {
+  align-self: flex-end;
+  background-color: var(--background-action-low-blue-france, #e8edff);
+}
+.albert-chat-entry--config {
+  border-color: var(--border-plain-success, #18753c);
+}
+.albert-chat-entry--error {
+  border-color: var(--border-plain-error, #ce0500);
 }
 summary {
   cursor: pointer;
