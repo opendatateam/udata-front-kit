@@ -6,6 +6,7 @@ import TabsWithCounts from '@/components/TabsWithCounts.vue'
 import DatasetSearchAndAdd from '@/components/universe/DatasetSearchAndAdd.vue'
 import OrganizationSearchAndAdd from '@/components/universe/OrganizationSearchAndAdd.vue'
 import TagSearchAndAdd from '@/components/universe/TagSearchAndAdd.vue'
+import UniverseDatasetList from '@/components/universe/UniverseDatasetList.vue'
 import LocalStorageService from '@/services/LocalStorageService'
 import { useUniverseStore } from '@/store/UniverseStore'
 import { useUserStore } from '@/store/UserStore'
@@ -118,24 +119,14 @@ const activeAddTab = ref(0)
         {{ universeStore.topic?.description }}
       </p>
 
-      <ul v-if="universeStore.datasets.length" class="universe-dataset-list">
-        <li
-          v-for="dataset in universeStore.datasets"
-          :key="dataset.id"
-          class="fr-p-2w fr-mb-1w"
-        >
-          <span>{{ dataset.title }}</span>
-          <button
-            type="button"
-            class="fr-btn fr-btn--tertiary fr-btn--sm"
-            @click="universeStore.removeDataset(dataset.id!)"
-          >
-            Retirer
-          </button>
-        </li>
-      </ul>
+      <UniverseDatasetList
+        v-if="universeStore.datasets.length"
+        :datasets="universeStore.datasets"
+        @remove="universeStore.removeDataset($event)"
+      />
       <p v-else class="fr-text--sm">Aucun jeu de données pour le moment.</p>
 
+      <h2 class="fr-h6 fr-mt-3w">Ajouter des jeux de données</h2>
       <TabsWithCounts
         v-model="activeAddTab"
         tab-list-name="Ajouter à mon univers"
@@ -166,19 +157,8 @@ const activeAddTab = ref(0)
 </template>
 
 <style scoped>
-.universe-create,
-.universe-dataset-list li {
+.universe-create {
   background-color: var(--background-alt-blue-france, #f5f5fe);
   border: 1px solid var(--border-default-grey, #ddd);
-}
-.universe-dataset-list {
-  list-style: none;
-  padding: 0;
-}
-.universe-dataset-list li {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-radius: 0.25rem;
 }
 </style>
