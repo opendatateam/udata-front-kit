@@ -57,6 +57,27 @@ export const useTopicElementStore = defineStore('element', {
       return createdElement
     },
 
+    // Bulk variant of createElement — one POST for N elements instead of N
+    // requests. Used by UniverseStore.addOrganizationDatasets() to add all
+    // of an organization's datasets in a single call.
+    async createElements<T extends GenericElement>(
+      topicId: string,
+      elements: T[]
+    ): Promise<T[]> {
+      if (elements.length === 0) return []
+      const createdElements = (await topicAPI.createElements(
+        topicId,
+        elements
+      )) as T[]
+
+      if (!this.elements[topicId]) {
+        this.elements[topicId] = []
+      }
+      this.elements[topicId].push(...createdElements)
+
+      return createdElements
+    },
+
     async updateElement(
       topicId: string,
       elementId: string,

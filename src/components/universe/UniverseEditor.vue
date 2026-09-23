@@ -2,7 +2,9 @@
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
+import TabsWithCounts from '@/components/TabsWithCounts.vue'
 import DatasetSearchAndAdd from '@/components/universe/DatasetSearchAndAdd.vue'
+import OrganizationSearchAndAdd from '@/components/universe/OrganizationSearchAndAdd.vue'
 import LocalStorageService from '@/services/LocalStorageService'
 import { useUniverseStore } from '@/store/UniverseStore'
 import { useUserStore } from '@/store/UserStore'
@@ -40,6 +42,16 @@ const createUniverse = () => {
   if (!name.value.trim()) return
   universeStore.create(name.value.trim(), description.value.trim())
 }
+
+const addTabs = [
+  {
+    title: 'Jeux de données',
+    tabId: 'tab-add-datasets',
+    panelId: 'panel-add-datasets'
+  },
+  { title: 'Organisations', tabId: 'tab-add-orgs', panelId: 'panel-add-orgs' }
+]
+const activeAddTab = ref(0)
 </script>
 
 <template>
@@ -122,11 +134,25 @@ const createUniverse = () => {
       </ul>
       <p v-else class="fr-text--sm">Aucun jeu de données pour le moment.</p>
 
-      <DatasetSearchAndAdd
-        :selected-ids="selectedIds"
-        :pending-ids="universeStore.pendingDatasetIds"
-        @add="universeStore.addDataset($event)"
-      />
+      <TabsWithCounts
+        v-model="activeAddTab"
+        tab-list-name="Ajouter à mon univers"
+        :tabs="addTabs"
+      >
+        <DsfrTabContent panel-id="panel-add-datasets" tab-id="tab-add-datasets">
+          <DatasetSearchAndAdd
+            :selected-ids="selectedIds"
+            :pending-ids="universeStore.pendingDatasetIds"
+            @add="universeStore.addDataset($event)"
+          />
+        </DsfrTabContent>
+        <DsfrTabContent panel-id="panel-add-orgs" tab-id="tab-add-orgs">
+          <OrganizationSearchAndAdd
+            :pending-org-id="universeStore.bulkAddingOrgId"
+            @add="universeStore.addOrganizationDatasets($event)"
+          />
+        </DsfrTabContent>
+      </TabsWithCounts>
     </section>
   </template>
 </template>

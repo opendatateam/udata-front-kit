@@ -94,12 +94,13 @@ const hasAppliedConfig = computed(() =>
         <span v-if="entry.role === 'user'" class="albert-chat-entry-text">{{
           entry.text
         }}</span>
-        <!-- eslint-disable-next-line vue/no-v-html -->
+        <!-- eslint-disable vue/no-v-html -->
         <span
           v-else
           class="albert-chat-entry-text"
           v-html="fromMarkdown(entry.text).html"
         />
+        <!-- eslint-enable vue/no-v-html -->
       </div>
       <div
         v-if="albertChat.loading"

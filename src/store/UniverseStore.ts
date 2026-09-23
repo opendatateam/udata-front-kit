@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import config from '@/config'
 import type { GenericElement, Topic } from '@/model/topic'
 import LocalStorageService from '@/services/LocalStorageService'
+import SearchAPI from '@/services/api/SearchAPI'
 import { useSiteId } from '@/utils/config'
 import { mergeConfigAndPersist } from '@/utils/configMerge'
 
@@ -22,6 +23,7 @@ export interface UniverseState {
   topic: Topic | null
   datasets: GenericElement[]
   pendingDatasetIds: string[]
+  bulkAddingOrgId: string | null
   loading: boolean
   error: string | null
 }
@@ -32,6 +34,7 @@ export const useUniverseStore = defineStore('universe', {
     topic: null,
     datasets: [],
     pendingDatasetIds: [],
+    bulkAddingOrgId: null,
     loading: false,
     error: null
   }),
@@ -141,6 +144,56 @@ export const useUniverseStore = defineStore('universe', {
         this.pendingDatasetIds = this.pendingDatasetIds.filter(
           (id) => id !== dataset.id
         )
+      }
+    },
+    // Bulk-adds every dataset owned by an organization in one POST (see
+    // TopicElementStore.createElements()) rather than one addDataset() call
+    // per dataset. Can legitimately be slow for a large organization
+    // (paginated fetch of every one of its datasets first) — the UI is
+    // expected to show that via bulkAddingOrgId.
+    async addOrganizationDatasets(organization: { id: string; name: string }) {
+      if (!this.topicId) return
+      if (this.bulkAddingOrgId) return
+      this.error = null
+      this.bulkAddingOrgId = organization.id
+      try {
+        const toAdd: Array<{ id: string; title: string }> = []
+        const pageSize = 100
+        // Safety cap (2000 datasets) against a runaway loop on a malformed
+        // paginated response — not a realistic org size in practice.
+        const maxPages = 20
+        for (let page = 1; page <= maxPages; page++) {
+          const response = await new SearchAPI().search('', {
+            organization: organization.id,
+            page,
+            page_size: pageSize
+          })
+          for (const dataset of response.data) {
+            if (!this.datasets.some((d) => d.element?.id === dataset.id)) {
+              toAdd.push({ id: dataset.id, title: dataset.title })
+            }
+          }
+          if (!response.next_page || response.data.length < pageSize) break
+        }
+        if (toAdd.length === 0) return
+        const elements = toAdd.map(
+          (dataset) =>
+            ({
+              element: { class: 'Dataset', id: dataset.id },
+              title: dataset.title,
+              description: null,
+              tags: []
+            }) as unknown as GenericElement
+        )
+        const created = await useTopicElementStore().createElements(
+          this.topicId,
+          elements
+        )
+        this.datasets = [...this.datasets, ...created]
+      } catch {
+        this.error = `Échec de l'ajout des jeux de données de « ${organization.name} ».`
+      } finally {
+        this.bulkAddingOrgId = null
       }
     },
     async removeDataset(elementId: string) {
