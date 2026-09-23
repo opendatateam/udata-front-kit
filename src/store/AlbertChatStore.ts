@@ -33,7 +33,9 @@ Utilise l'outil ask_question si tu manques d'éléments pour faire une propositi
 
 Ce que tu peux proposer ou ajuster via propose_config : le titre du portail, son URL (sous la forme "{thématique}.data.gouv.fr"), sa description, la page d'accueil (titre et sous-titre), la phrase de pied de page, la palette de couleurs de la bannière, les filtres de recherche de la page des jeux de données (organisation, format, licence, etc.), et l'affichage du bandeau "site de démarrage généré automatiquement" (à désactiver dès que le site a un vrai thème).
 
-Tu peux aussi bien proposer une configuration complète pour un nouveau site que corriger ou ajuster un seul de ces éléments à la demande de l'utilisateur (ex : "enlève le bandeau", "change la couleur principale", "ajoute un filtre par organisation") — dans ce cas, ne touche qu'à ce qui a été demandé.
+propose_config est un patch partiel : les champs que tu n'envoies pas gardent leur valeur actuelle. Le site est déjà configuré, tu interviens sur une configuration existante.
+Quand l'utilisateur demande un ajustement précis (ex : "enlève le bandeau", "change la couleur principale", "ajoute un filtre par organisation"), n'envoie QUE le ou les champs concernés — ne renvoie jamais le titre, la page d'accueil, le pied de page ou les couleurs si on ne t'a pas demandé de les changer : tu écraserais le travail déjà fait avec des valeurs réinventées.
+N'envoie une configuration complète que si l'utilisateur demande explicitement de (re)configurer entièrement le site.
 
 Dès que tu as assez d'éléments pour une proposition ou un ajustement, même imparfait, résume-le d'abord en texte libre et demande à l'utilisateur de le valider ou d'indiquer des ajustements — n'appelle pas encore propose_config à ce stade.
 N'appelle l'outil propose_config qu'une fois que l'utilisateur a validé cette proposition (ou demandé des ajustements que tu as intégrés dans un nouveau résumé texte, validé à son tour). Ton modèle ne peut pas produire à la fois un texte et un appel d'outil dans le même message : résume toujours d'abord, appelle l'outil seulement ensuite, jamais les deux en même temps.
@@ -89,7 +91,7 @@ function buildAlbertTools() {
       function: {
         name: 'propose_config',
         description:
-          "Propose une configuration de site data.gouv.fr une fois qu'on a assez d'informations sur le thème souhaité.",
+          "Applique une modification à la configuration du site data.gouv.fr. C'est un patch partiel : n'inclus que les champs à créer ou modifier, tout champ absent garde sa valeur actuelle. Pour un simple ajustement (une couleur, le bandeau, un filtre…), n'envoie que le champ concerné ; n'envoie une configuration complète que s'il s'agit vraiment de configurer le site de zéro.",
         parameters: {
           type: 'object',
           properties: {
@@ -103,7 +105,9 @@ function buildAlbertTools() {
                     title: { type: 'string' },
                     subtitle: { type: 'string' }
                   },
-                  required: ['title', 'subtitle'],
+                  // No required fields: changing only the subtitle must not
+                  // force Albert to restate (and often reinvent) the title.
+                  required: [],
                   additionalProperties: false
                 },
                 footer: {
@@ -153,7 +157,13 @@ function buildAlbertTools() {
                   additionalProperties: false
                 }
               },
-              required: ['title', 'homepage', 'footer', 'home_banner_colors'],
+              // Everything optional, deliberately: this tool is a partial
+              // patch (mergeConfigAndPersist with prune:false leaves absent
+              // keys alone), so requiring these made atomic edits literally
+              // impossible to express — "enlève le bandeau" had to carry a
+              // title/homepage/footer/colors payload too, which is why
+              // Albert rewrote the whole config for every small ask.
+              required: [],
               // Critical: without this, nothing stops Albert from adding an
               // unrequested key like "header" — which isn't in this schema
               // at all — and deepAssignInPlace's prune:false merge will
@@ -205,7 +215,9 @@ function buildAlbertTools() {
               additionalProperties: false
             }
           },
-          required: ['website'],
+          // Also optional: a filters-only change (e.g. "ajoute un filtre par
+          // organisation") has no business carrying a `website` payload.
+          required: [],
           additionalProperties: false
         }
       }
