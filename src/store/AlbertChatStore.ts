@@ -31,12 +31,16 @@ const DEFAULT_ALBERT_SYSTEM_PROMPT = `Tu aides à configurer un site data.gouv.f
 L'univers de données du site — c'est-à-dire quels jeux de données il expose — est défini séparément, via un Topic data.gouv.fr, dans l'éditeur d'univers : tu ne le modifies jamais et ne proposes jamais de tag pour le redéfinir. En revanche, les filtres de recherche proposés sur la page des jeux de données (organisation, format, licence, etc.) font partie de la présentation de cette page, pas de la définition de l'univers : tu peux et dois les proposer normalement.
 Utilise l'outil ask_question si tu manques d'éléments pour faire une proposition cohérente — une seule question à la fois.
 
-Ce que tu peux proposer ou ajuster via propose_config : le titre du portail, son URL (sous la forme "{thématique}.data.gouv.fr"), sa description, la page d'accueil (titre et sous-titre), la phrase de pied de page, la palette de couleurs de la bannière, les filtres de recherche de la page des jeux de données (organisation, format, licence, etc.), et l'affichage du bandeau "site de démarrage généré automatiquement" (à désactiver dès que le site a un vrai thème).
+Ce que tu peux configurer : le titre du portail, son URL (sous la forme "{thématique}.data.gouv.fr"), sa description, la page d'accueil (titre et sous-titre), la phrase de pied de page, la palette de couleurs de la bannière, les filtres de recherche de la page des jeux de données (organisation, format, licence, etc.), et l'affichage du bandeau "site de démarrage généré automatiquement" (à désactiver dès que le site a un vrai thème).
 
-Tu peux aussi bien proposer une configuration complète pour un nouveau site que corriger ou ajuster un seul de ces éléments à la demande de l'utilisateur (ex : "enlève le bandeau", "change la couleur principale", "ajoute un filtre par organisation") — dans ce cas, ne touche qu'à ce qui a été demandé.
+Deux outils pour cela, à ne pas confondre :
+- patch_config : pour un ajustement ponctuel sur un site déjà configuré (ex : "enlève le bandeau", "change la couleur principale", "ajoute un filtre par organisation"). N'y mets QUE les champs concernés ; tout champ absent garde sa valeur actuelle. C'est le cas le plus fréquent ici.
+- propose_config : uniquement si l'utilisateur veut (re)configurer entièrement le site de zéro. Il écrit la configuration complète et demande donc tous les champs principaux.
+En cas de doute, préfère patch_config : réécrire l'ensemble de la configuration pour un simple ajustement écraserait le travail déjà fait avec des valeurs réinventées.
 
-Dès que tu as assez d'éléments pour une proposition ou un ajustement, même imparfait, résume-le d'abord en texte libre et demande à l'utilisateur de le valider ou d'indiquer des ajustements — n'appelle pas encore propose_config à ce stade.
-N'appelle l'outil propose_config qu'une fois que l'utilisateur a validé cette proposition (ou demandé des ajustements que tu as intégrés dans un nouveau résumé texte, validé à son tour). Ton modèle ne peut pas produire à la fois un texte et un appel d'outil dans le même message : résume toujours d'abord, appelle l'outil seulement ensuite, jamais les deux en même temps.
+Dès que tu as assez d'éléments pour une proposition ou un ajustement, même imparfait, résume-le d'abord en texte libre et demande à l'utilisateur de le valider ou d'indiquer des ajustements — n'appelle pas encore d'outil de configuration à ce stade.
+N'appelle patch_config ou propose_config qu'une fois que l'utilisateur a validé cette proposition (ou demandé des ajustements que tu as intégrés dans un nouveau résumé texte, validé à son tour). Ton modèle ne peut pas produire à la fois un texte et un appel d'outil dans le même message : résume toujours d'abord, appelle l'outil seulement ensuite, jamais les deux en même temps.
+N'appelle jamais plus d'un outil dans la même réponse.
 Les couleurs doivent être une palette pastel harmonieuse en dégradé.`
 
 // Validated live against the real API: both models tried returned correct
@@ -89,128 +93,153 @@ function buildAlbertTools() {
       function: {
         name: 'propose_config',
         description:
-          "Propose une configuration de site data.gouv.fr une fois qu'on a assez d'informations sur le thème souhaité.",
-        parameters: {
-          type: 'object',
-          properties: {
-            website: {
-              type: 'object',
-              properties: {
-                title: { type: 'string' },
-                homepage: {
-                  type: 'object',
-                  properties: {
-                    title: { type: 'string' },
-                    subtitle: { type: 'string' }
-                  },
-                  required: ['title', 'subtitle'],
-                  additionalProperties: false
-                },
-                footer: {
-                  type: 'object',
-                  properties: { phrase: { type: 'string' } },
-                  required: ['phrase'],
-                  additionalProperties: false
-                },
-                home_banner_colors: {
-                  type: 'array',
-                  items: { type: 'string' },
-                  minItems: 3,
-                  maxItems: 3
-                },
-                seo: {
-                  type: 'object',
-                  properties: {
-                    canonical_url: {
-                      type: 'string',
-                      description:
-                        'URL du portail, sous la forme "{thématique}.data.gouv.fr" (sans https://).'
-                    },
-                    meta: {
-                      type: 'object',
-                      properties: {
-                        description: {
-                          type: 'string',
-                          description: 'Description courte du portail.'
-                        }
-                      },
-                      required: ['description'],
-                      additionalProperties: false
-                    }
-                  },
-                  additionalProperties: false
-                },
-                notice: {
-                  type: 'object',
-                  properties: {
-                    display: {
-                      type: 'boolean',
-                      description:
-                        'false pour masquer le bandeau "site de démarrage généré automatiquement".'
-                    }
-                  },
-                  required: ['display'],
-                  additionalProperties: false
-                }
-              },
-              required: ['title', 'homepage', 'footer', 'home_banner_colors'],
-              // Critical: without this, nothing stops Albert from adding an
-              // unrequested key like "header" — which isn't in this schema
-              // at all — and deepAssignInPlace's prune:false merge will
-              // then clobber config.website.header wholesale if that value
-              // isn't itself a plain object, crashing every computed() in
-              // App.vue/HeaderComponent.vue that reads it unconditionally.
-              // Confirmed live: exactly this happened mid-conversation.
-              additionalProperties: false
-            },
-            pages: {
-              type: 'object',
-              properties: {
-                datasets: {
-                  type: 'object',
-                  properties: {
-                    filters: {
-                      type: 'array',
-                      description:
-                        "Filtres de recherche à proposer sur la page des jeux de données (organisation, format, licence, etc.), pertinents pour les données déjà présentes dans l'univers. Peut être un tableau vide.",
-                      items: {
-                        type: 'object',
-                        properties: {
-                          id: {
-                            type: 'string',
-                            description:
-                              'Identifiant court et unique du filtre, ex: "organization".'
-                          },
-                          name: {
-                            type: 'string',
-                            description: 'Libellé affiché, ex: "Organisation".'
-                          },
-                          type: { type: 'string', enum: [...FILTER_TYPES] },
-                          default_option: {
-                            type: 'string',
-                            description:
-                              'Texte affiché par défaut, ex: "Toutes les organisations".'
-                          }
-                        },
-                        required: ['id', 'name', 'type'],
-                        additionalProperties: false
-                      }
-                    }
-                  },
-                  required: [],
-                  additionalProperties: false
-                }
-              },
-              required: ['datasets'],
-              additionalProperties: false
-            }
-          },
-          required: ['website'],
-          additionalProperties: false
-        }
+          "Écrit la configuration complète du site data.gouv.fr, pour sa configuration initiale. Tous les champs principaux sont obligatoires : c'est une configuration d'ensemble, pas une retouche. Pour modifier un ou deux détails d'un site déjà configuré, utilise patch_config à la place.",
+        parameters: configParameters(true)
+      }
+    },
+    {
+      type: 'function',
+      function: {
+        name: 'patch_config',
+        description:
+          "Modifie un ou plusieurs champs précis d'un site déjà configuré. C'est un patch partiel : n'inclus que les champs à changer, tout champ absent garde sa valeur actuelle. À utiliser pour tout ajustement ponctuel (une couleur, le bandeau, un filtre, un titre…) — n'y remets jamais les champs que l'utilisateur n'a pas demandé de changer, tu écraserais le travail déjà fait.",
+        parameters: configParameters(false)
       }
     }
   ]
+}
+
+// Shared property tree for propose_config (full) and patch_config
+// (partial). `full` toggles *only* the "you must supply everything"
+// constraints: the two flows have genuinely different contracts and a
+// single schema can't express both. Requiring these fields is what makes
+// the wizard's initial write reliable; allowing them to be absent is what
+// makes an atomic edit ("enlève le bandeau") expressible at all.
+//
+// The nested `required` arrays below that don't depend on `full` mean
+// something different: "if you include this object, it's meaningless
+// without this field" — true in both flows.
+function configParameters(full: boolean) {
+  return {
+    type: 'object',
+    properties: {
+      website: {
+        type: 'object',
+        properties: {
+          title: { type: 'string' },
+          homepage: {
+            type: 'object',
+            properties: {
+              title: { type: 'string' },
+              subtitle: { type: 'string' }
+            },
+            required: full ? ['title', 'subtitle'] : [],
+            additionalProperties: false
+          },
+          footer: {
+            type: 'object',
+            properties: { phrase: { type: 'string' } },
+            required: ['phrase'],
+            additionalProperties: false
+          },
+          home_banner_colors: {
+            type: 'array',
+            items: { type: 'string' },
+            minItems: 3,
+            maxItems: 3
+          },
+          seo: {
+            type: 'object',
+            properties: {
+              canonical_url: {
+                type: 'string',
+                description:
+                  'URL du portail, sous la forme "{thématique}.data.gouv.fr" (sans https://).'
+              },
+              meta: {
+                type: 'object',
+                properties: {
+                  description: {
+                    type: 'string',
+                    description: 'Description courte du portail.'
+                  }
+                },
+                required: ['description'],
+                additionalProperties: false
+              }
+            },
+            additionalProperties: false
+          },
+          notice: {
+            type: 'object',
+            properties: {
+              display: {
+                type: 'boolean',
+                description:
+                  'false pour masquer le bandeau "site de démarrage généré automatiquement".'
+              }
+            },
+            required: ['display'],
+            additionalProperties: false
+          }
+        },
+        required: full
+          ? ['title', 'homepage', 'footer', 'home_banner_colors']
+          : [],
+        // Critical: without this, nothing stops Albert from adding an
+        // unrequested key like "header" — which isn't in this schema
+        // at all — and deepAssignInPlace's prune:false merge will
+        // then clobber config.website.header wholesale if that value
+        // isn't itself a plain object, crashing every computed() in
+        // App.vue/HeaderComponent.vue that reads it unconditionally.
+        // Confirmed live: exactly this happened mid-conversation.
+        additionalProperties: false
+      },
+      pages: {
+        type: 'object',
+        properties: {
+          datasets: {
+            type: 'object',
+            properties: {
+              filters: {
+                type: 'array',
+                description:
+                  "Filtres de recherche à proposer sur la page des jeux de données (organisation, format, licence, etc.), pertinents pour les données déjà présentes dans l'univers. Peut être un tableau vide.",
+                items: {
+                  type: 'object',
+                  properties: {
+                    id: {
+                      type: 'string',
+                      description:
+                        'Identifiant court et unique du filtre, ex: "organization".'
+                    },
+                    name: {
+                      type: 'string',
+                      description: 'Libellé affiché, ex: "Organisation".'
+                    },
+                    type: { type: 'string', enum: [...FILTER_TYPES] },
+                    default_option: {
+                      type: 'string',
+                      description:
+                        'Texte affiché par défaut, ex: "Toutes les organisations".'
+                    }
+                  },
+                  required: ['id', 'name', 'type'],
+                  additionalProperties: false
+                }
+              }
+            },
+            required: [],
+            additionalProperties: false
+          }
+        },
+        required: ['datasets'],
+        additionalProperties: false
+      }
+    },
+    required: full ? ['website'] : [],
+    additionalProperties: false
+  }
 }
 
 export type AlbertToolCall = {
@@ -398,10 +427,14 @@ export const useAlbertChatStore = defineStore('albertChat', {
           const question = String(args.question ?? '')
           this.chatLog.push({ role: 'question', text: question })
           this.pendingToolCallId = toolCall.id
-        } else if (toolCall.function.name === 'propose_config') {
-          // prune: false — Albert only ever returns this small subset of
-          // fields by design; anything it doesn't mention must be left
-          // alone, not deleted.
+        } else if (
+          toolCall.function.name === 'propose_config' ||
+          toolCall.function.name === 'patch_config'
+        ) {
+          // Both apply the same way: the merge is always partial
+          // (prune: false — anything absent is left alone, not deleted).
+          // The two tools differ only in what the *schema* requires Albert
+          // to send, not in how we apply it.
           mergeConfigAndPersist(args, { prune: false })
           // Summarizing the proposal is Albert's job, not ours to
           // reconstruct field-by-field from `args` — the system prompt
