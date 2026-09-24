@@ -6,6 +6,7 @@ import type {
 } from '@datagouv/components-next'
 import { ResourceExplorer as DatagouvfrResourceExplorer } from '@datagouv/components-next'
 import { onErrorCaptured, ref } from 'vue'
+import type { RouteLocationRaw } from 'vue-router'
 import { useRouter } from 'vue-router'
 
 import BlankState from '@/components/BlankState.vue'
@@ -20,6 +21,15 @@ const props = defineProps({
   fromRouteName: {
     type: String,
     default: 'datasets_detail'
+  },
+  fullscreen: {
+    type: Boolean,
+    default: false
+  },
+  // Route to return to on exit; only used when fullscreen is enabled.
+  exitTo: {
+    type: Object as () => RouteLocationRaw,
+    default: undefined
   }
 })
 
@@ -60,6 +70,8 @@ onErrorCaptured(() => {
   <Suspense v-else>
     <DatagouvfrResourceExplorer
       :dataset="datasetForExplorer"
+      :fullscreen="fullscreen"
+      :exit-to="exitTo"
       no-results-image="/static/blank_state/file.svg"
       :explore-to="exploreTo"
       :resource-external-url="resourceExternalUrl"

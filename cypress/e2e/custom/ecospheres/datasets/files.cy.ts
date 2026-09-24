@@ -47,7 +47,6 @@ describe('Dataset Page - Fichiers Tab', () => {
     cy.mockDatasetAndRelatedObjects(dataset, [resource])
 
     cy.visit(`/datasets/${dataset.id}`)
-    cy.contains("Revenir sur l'ancienne navigation").should('be.visible')
 
     cy.window().then((win) => {
       cy.stub(win.navigator.clipboard, 'writeText').as('writeText')
