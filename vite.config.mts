@@ -32,11 +32,34 @@ const esbuildOptions = {
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
-  const configDir = `./configs/${env.VITE_SITE_ID}`
+  // Fall back to the generic starter site rather than failing the build on
+  // `configs/undefined/config.yaml`. On this branch (the "Deploy with
+  // Vercel" clone flow), VITE_SITE_ID has exactly one correct value —
+  // "default" — and relying on it reaching the build through a committed
+  // .env file proved unreliable: a fresh clone-created Vercel project
+  // built with it unset. NOTE: on a branch serving several real thematic
+  // sites this fallback would silently build the wrong site instead of
+  // failing loudly, so it belongs here, not upstream.
+  const siteId = env.VITE_SITE_ID || 'default'
+  const configDir = `./configs/${siteId}`
   const configFileUrl = new URL(`${configDir}/config.yaml`, import.meta.url)
   const config = load(readFileSync(configFileUrl, 'utf-8')) as Config
   return {
     base: '/',
+    server: {
+      // Local /api/* development: vercel.json's SPA rewrite (needed in
+      // production, see docs/architecture notes) breaks `vercel dev`'s own
+      // handling of the frontend — confirmed both empirically and via
+      // Vercel's community forum, it's a known gap in their CLI, not a
+      // misconfiguration on our side. So we don't run the frontend through
+      // `vercel dev` at all: run `pnpm run dev` (this, unaffected) for the
+      // frontend, and separately `vercel dev --listen 3210` purely to host
+      // the functions (never navigate to that port directly) — this proxy
+      // forwards /api/* calls over to it.
+      proxy: {
+        '/api': 'http://localhost:3210'
+      }
+    },
     plugins: [
       vueDevTools(),
       vue({
@@ -80,7 +103,7 @@ export default defineConfig(({ mode }) => {
           // include only the current site routes definition in the bundle
           if (id.includes('/src/router/index.ts')) {
             return files.filter((routeFile) =>
-              routeFile.includes(`custom/${env.VITE_SITE_ID}/routes.ts`)
+              routeFile.includes(`custom/${siteId}/routes.ts`)
             )
           }
         }
@@ -93,7 +116,7 @@ export default defineConfig(({ mode }) => {
             sentryVitePlugin({
               authToken: process.env.SENTRY_AUTH_TOKEN,
               org: 'sentry',
-              project: env.VITE_SITE_ID,
+              project: siteId,
               url: config.sentry.domain_url
             })
           ]

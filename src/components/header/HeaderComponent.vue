@@ -31,8 +31,15 @@ const closeModal = () => {
   }
 }
 
-const { header, rf_title, title } = useWebsiteConfig()
-const { logo, title_image, description, beta, search } = header
+const websiteConfig = useWebsiteConfig()
+const header = computed(() => websiteConfig.header)
+const rf_title = computed(() => websiteConfig.rf_title)
+const title = computed(() => websiteConfig.title)
+const logo = computed(() => header.value.logo)
+const title_image = computed(() => header.value.title_image)
+const description = computed(() => header.value.description)
+const beta = computed(() => header.value.beta)
+const search = computed(() => header.value.search)
 </script>
 
 <template>

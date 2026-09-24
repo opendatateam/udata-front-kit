@@ -1,5 +1,7 @@
 ![udata-front-kit](banner.png)
 
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/opendatateam/udata-front-kit/tree/vercel-hackathon)
+
 # udata front kit
 
 [![GitHub Actions](https://img.shields.io/github/actions/workflow/status/opendatateam/udata-front-kit/tests.yml?branch=main)](https://github.com/opendatateam/udata-front-kit/actions)

@@ -143,6 +143,19 @@ export type HeaderConf = {
     display: boolean
     placeholder?: string
   }
+  // shows a header button that downloads the live in-app-edited config as
+  // YAML (see views/ConfigEditorView.vue). Only meant for the generator's
+  // "default" starter site, never a real deployed thematic site.
+  show_config_editor?: boolean
+  // shows a header button to /universe (see views/UniverseManagerView.vue),
+  // where a logged-in user manages the datasets that back this site's
+  // pages via a data.gouv.fr Topic. Same "generator starter site only"
+  // caveat as show_config_editor.
+  show_universe_manager?: boolean
+  // shows a header button to /wizard (see views/BootstrapWizardView.vue),
+  // which sequences the universe manager then a dedicated Albert config
+  // step for the initial site bootstrap. Same caveat as show_config_editor.
+  show_bootstrap_wizard?: boolean
 }
 
 type FooterExternalLink = {

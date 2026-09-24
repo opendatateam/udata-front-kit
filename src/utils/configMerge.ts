@@ -1,0 +1,89 @@
+import { toRaw } from 'vue'
+
+import config, { configStorageKey } from '@/config'
+import LocalStorageService from '@/services/LocalStorageService'
+
+// config is a reactive singleton (see @/config.ts): mutating it in place
+// updates the same object every other component reads through computed(),
+// so HeaderComponent/App/HomeView hot-update as soon as this runs, with no
+// separate preview implementation to keep in sync.
+//
+// Crucially, "in place" has to hold all the way down the tree: some
+// consumers (HeaderComponent, App.vue) capture config.website once at setup
+// via useWebsiteConfig() rather than through a computed(). If we ever
+// replaced config.website itself with a new object (e.g. a naive
+// delete-everything-then-Object.assign), those consumers would keep
+// pointing at the old, orphaned object and stop updating forever. So the
+// merge below only ever replaces leaf values — every nested object keeps
+// its original identity.
+//
+// `prune`: when true (the manual YAML-textarea path in ConfigEditorView),
+// a target key absent from source is deleted — correct there, since the
+// textarea always holds the *complete* config. When false (the Albert
+// tool-calling path, see store/AlbertChatStore.ts), absent keys are left
+// untouched instead: Albert is only ever asked for a small subset of
+// fields, so "absent" means "not part of this proposal," not "delete
+// this." Pruning there wiped out config.website.header (and everything
+// else outside that subset) on every generation.
+const deepAssignInPlace = (
+  target: Record<string, unknown>,
+  source: Record<string, unknown>,
+  { prune = true }: { prune?: boolean } = {}
+) => {
+  if (prune) {
+    for (const key of Object.keys(target)) {
+      if (!(key in source)) delete target[key]
+    }
+  }
+  for (const key of Object.keys(source)) {
+    const sourceValue = source[key]
+    const targetValue = target[key]
+    const bothPlainObjects =
+      sourceValue !== null &&
+      typeof sourceValue === 'object' &&
+      !Array.isArray(sourceValue) &&
+      targetValue !== null &&
+      typeof targetValue === 'object' &&
+      !Array.isArray(targetValue)
+    const targetIsPlainObject =
+      targetValue !== null &&
+      typeof targetValue === 'object' &&
+      !Array.isArray(targetValue)
+
+    if (bothPlainObjects) {
+      deepAssignInPlace(
+        targetValue as Record<string, unknown>,
+        sourceValue as Record<string, unknown>,
+        { prune }
+      )
+    } else if (!prune && targetIsPlainObject) {
+      // Defense in depth against an untrusted partial source (Albert) —
+      // even with additionalProperties:false on every tool schema object,
+      // nothing guarantees the API enforces it. Without this guard, a
+      // stray out-of-schema value here (e.g. a string where an object was
+      // expected) would silently replace a whole structural object like
+      // config.website.header with a non-object, crashing every
+      // computed() that reads it unconditionally. Confirmed live. A
+      // trusted full-document merge (prune: true, the YAML editor) is
+      // exempt — there, replacing an object's shape is a deliberate edit.
+      console.warn(
+        `[configMerge] ignoring "${key}": Albert proposed a non-object value for a field that must stay an object`,
+        sourceValue
+      )
+    } else {
+      target[key] = sourceValue
+    }
+  }
+}
+
+export const mergeConfigAndPersist = (
+  parsed: Record<string, unknown>,
+  options: { prune?: boolean } = {}
+) => {
+  deepAssignInPlace(
+    config as unknown as Record<string, unknown>,
+    parsed,
+    options
+  )
+  LocalStorageService.setItem(configStorageKey, toRaw(config))
+}

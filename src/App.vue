@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { Toaster } from '@datagouv/components-next'
 
-import config from '@/config'
+import config, { rawConfig } from '@/config'
 
 import { DsfrFooter } from '@gouvminint/vue-dsfr'
+import ConfigDebugPanel from './components/ConfigDebugPanel.vue'
 import HeaderComponent from './components/header/HeaderComponent.vue'
 import type { InfoToAnnounce } from './components/LiveRegion.vue'
 import LiveRegion from './components/LiveRegion.vue'
@@ -15,8 +16,21 @@ import {
 import { useUserStore } from './store/UserStore'
 import { fromMarkdown } from './utils'
 import { useWebsiteConfig } from './utils/config'
+import { diffConfig } from './utils/configDiff'
 
 const userStore = useUserStore()
+
+// "Did this browser already have a customised config when the page
+// loaded?" — deliberately evaluated once, not a computed. `config` is
+// already seeded from localStorage by the time App.vue runs (see
+// @/config.ts), so a one-shot diff against the pristine config.yaml
+// answers exactly that, and stays stable for the session.
+//
+// Reactive would be wrong here: creating a universe in the wizard's step 1
+// writes pages.datasets.universe_query.topic (null in the shipped default
+// config), which would flip this mid-wizard and make the "Assistant de
+// démarrage" header entry vanish while the user is still inside it.
+const hasLocalConfig = diffConfig(rawConfig, config).length > 0
 const isNoticeClosed = ref(false)
 
 const skipLinks: SkipLinksProps['links'] = [
@@ -36,7 +50,7 @@ const noticeContent = computed(() => {
   return fromMarkdown(config.website.notice?.content, true).html
 })
 
-const siteID = config.site_id
+const siteID = computed(() => config.site_id)
 const isLoggedIn = computed(() => userStore.$state.isLoggedIn)
 
 const userName = computed(() => userStore.userName)
@@ -81,7 +95,55 @@ const quickLinks = computed(() => {
       }
     : null
 
-  const buttons = [userProfile, headerButton, adminShorcut, logLink]
+  // The wizard is for the initial bootstrap only — once a local config
+  // exists (Save, Albert, or the wizard's own propose_config all persist
+  // one), it's no longer a "fresh site" and offering it again is
+  // confusing at best, actively misleading at worst (its config step's
+  // prompt assumes it's the first customization pass).
+  const bootstrapWizardLink =
+    config.website.header.show_bootstrap_wizard && !hasLocalConfig
+      ? {
+          label: 'Assistant de démarrage',
+          icon: 'fr-icon-magic-line',
+          to: '/wizard',
+          iconRight: true
+        }
+      : null
+
+  // Hidden as standalone header buttons only while the wizard is offered —
+  // it already links to both /editor and /universe inline, and surfacing
+  // all three at once is more confusing than helpful. Once a local config
+  // exists (wizard link gone), these reappear. The routes themselves stay
+  // reachable either way.
+  const configEditorLink =
+    config.website.header.show_config_editor && !bootstrapWizardLink
+      ? {
+          label: 'Éditeur de config',
+          icon: 'fr-icon-edit-line',
+          to: '/editor',
+          iconRight: true
+        }
+      : null
+
+  const universeManagerLink =
+    config.website.header.show_universe_manager && !bootstrapWizardLink
+      ? {
+          label: 'Mon univers',
+          icon: 'fr-icon-database-line',
+          to: '/universe',
+          iconRight: true
+        }
+      : null
+
+  const buttons = [
+    userProfile,
+    headerButton,
+    adminShorcut,
+    bootstrapWizardLink,
+    configEditorLink,
+    universeManagerLink,
+    logLink
+  ]
 
   return buttons.filter((button) => button !== null)
 })
@@ -90,8 +152,14 @@ onMounted(() => {
   userStore.init()
 })
 
-const { footer, rf_title, title } = useWebsiteConfig()
-const { logo, phrase, external_links, mandatory_links } = footer
+const websiteConfig = useWebsiteConfig()
+const footer = computed(() => websiteConfig.footer)
+const rf_title = computed(() => websiteConfig.rf_title)
+const title = computed(() => websiteConfig.title)
+const logo = computed(() => footer.value.logo)
+const phrase = computed(() => footer.value.phrase)
+const external_links = computed(() => footer.value.external_links)
+const mandatory_links = computed(() => footer.value.mandatory_links)
 
 const skipLinksComp =
   useTemplateRef<InstanceType<typeof SkipLinks>>('skipLinksComp')
@@ -153,6 +221,8 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
     :mandatory-links="mandatory_links"
     :home-title="`Retour à l'accueil du site - ${title}`"
   />
+
+  <ConfigDebugPanel v-if="config.website.header.show_config_editor" />
 </template>
 
 <!-- global styles -->
