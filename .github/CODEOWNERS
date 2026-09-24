@@ -11,7 +11,7 @@
 # Vertical owners
 # /configs/<vertical> and /src/custom/<vertical>
 
-**/defis/         @geoffreyaldebert
+**/defis/         @geoffreyaldebert @abulte enidul
 **/ecospheres/    @opendatateam/ecospheres-admin
 **/hackathon/     @geoffreyaldebert @abulte
 **/logistique/    @johanricher
