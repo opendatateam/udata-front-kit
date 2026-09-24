@@ -1,8 +1,5 @@
-import { dump } from 'js-yaml'
 import { defineStore } from 'pinia'
-import { toRaw } from 'vue'
 
-import config from '@/config'
 import LocalStorageService from '@/services/LocalStorageService'
 import { mergeConfigAndPersist } from '@/utils/configMerge'
 
@@ -478,7 +475,3 @@ export const useAlbertChatStore = defineStore('albertChat', {
     }
   }
 })
-
-// exported for the "current config as YAML" preview refresh in
-// ConfigEditorView.vue — kept here rather than duplicated
-export const currentConfigYaml = () => dump(toRaw(config), { lineWidth: -1 })

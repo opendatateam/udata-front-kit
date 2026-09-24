@@ -25,7 +25,7 @@ import LocalStorageService from '@/services/LocalStorageService'
 // fields, so "absent" means "not part of this proposal," not "delete
 // this." Pruning there wiped out config.website.header (and everything
 // else outside that subset) on every generation.
-export const deepAssignInPlace = (
+const deepAssignInPlace = (
   target: Record<string, unknown>,
   source: Record<string, unknown>,
   { prune = true }: { prune?: boolean } = {}

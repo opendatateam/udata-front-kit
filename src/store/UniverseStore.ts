@@ -121,10 +121,13 @@ export const useUniverseStore = defineStore('universe', {
     },
     async addDataset(dataset: { id: string; title: string }) {
       if (!this.topicId) return
-      // Guards against an already-confirmed dataset, and against a second
-      // click while a request for the same id is still in flight (harmless
-      // belt-and-suspenders — the real duplication bug was the aliasing
-      // fixed in load() above, not a click race).
+      // Two distinct guards. The first skips datasets already in the
+      // universe. The second covers a genuine double-click: nothing
+      // server-side stops the same dataset being added twice as two
+      // separate topic elements, and the confirmed list can't reflect the
+      // first click until its POST comes back, so without the in-flight
+      // set both clicks would pass the first guard. It also drives the
+      // button's disabled/"Ajout…" state.
       if (this.datasets.some((d) => d.element?.id === dataset.id)) return
       if (this.pendingDatasetIds.includes(dataset.id)) return
       this.error = null

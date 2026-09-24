@@ -1,6 +1,12 @@
-// Same-origin proxy to Albert API's POST /v1/chat/completions — see
-// albert-models.ts for why this exists. Stateless relay: the token and
-// request body come in, get forwarded as-is, response streamed back.
+// Same-origin proxy to Albert API's POST /v1/chat/completions.
+//
+// Why it exists: Albert's API rejects direct browser calls (CORS) —
+// confirmed live, and Etalab's own albert-frontend goes through its own
+// backend for the same reason. A public CORS-bypass proxy was rejected:
+// the request carries the user's API token.
+//
+// Stateless relay: the token and request body come in, get forwarded
+// as-is, the response goes straight back. Nothing is stored or logged.
 export const config = { runtime: 'edge' }
 
 export default async function handler(request: Request): Promise<Response> {

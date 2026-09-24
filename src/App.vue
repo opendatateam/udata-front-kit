@@ -20,13 +20,17 @@ import { diffConfig } from './utils/configDiff'
 
 const userStore = useUserStore()
 
-// Reactive stand-in for "a local config exists": every path that persists
-// to localStorage (ConfigEditorView.vue's Save, Albert, the wizard) does so
-// by mutating the same reactive `config` singleton via
-// mergeConfigAndPersist(), so a diff against the pristine config.yaml is
-// exactly "has this site been customized" — already tracked live by
-// ConfigDebugPanel.vue, reused here instead of a separate signal.
-const hasLocalConfig = computed(() => diffConfig(rawConfig, config).length > 0)
+// "Did this browser already have a customised config when the page
+// loaded?" — deliberately evaluated once, not a computed. `config` is
+// already seeded from localStorage by the time App.vue runs (see
+// @/config.ts), so a one-shot diff against the pristine config.yaml
+// answers exactly that, and stays stable for the session.
+//
+// Reactive would be wrong here: creating a universe in the wizard's step 1
+// writes pages.datasets.universe_query.topic (null in the shipped default
+// config), which would flip this mid-wizard and make the "Assistant de
+// démarrage" header entry vanish while the user is still inside it.
+const hasLocalConfig = diffConfig(rawConfig, config).length > 0
 const isNoticeClosed = ref(false)
 
 const skipLinks: SkipLinksProps['links'] = [
@@ -97,7 +101,7 @@ const quickLinks = computed(() => {
   // confusing at best, actively misleading at worst (its config step's
   // prompt assumes it's the first customization pass).
   const bootstrapWizardLink =
-    config.website.header.show_bootstrap_wizard && !hasLocalConfig.value
+    config.website.header.show_bootstrap_wizard && !hasLocalConfig
       ? {
           label: 'Assistant de démarrage',
           icon: 'fr-icon-magic-line',

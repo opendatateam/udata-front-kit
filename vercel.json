@@ -1,6 +1,3 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
-  "env": {
-    "VITE_SITE_ID": "default"
-  }
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }
