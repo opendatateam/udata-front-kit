@@ -79,6 +79,11 @@ website:
         sub_section_cards:
           title:
           cards:
+            - id: '6ab3da9a276c4b5813751315'
+              name: 'Intégration des énergies renouvelables aux réseaux électriques locaux'
+              description: "Comment utiliser les courbes de charge fictives d'Enedis pour simuler l'évolution de la consommation et de la production électrique à diﬀérentes échelles (bâtiment, quartier, territoire) et évaluer les besoins futurs d'adaptation du réseau liés à l'électrification des usages et au développement du photovoltaïque ?"
+              url: '/defis/integration-des-energies-renouvelables-aux-reseaux-electriques-locaux-enedis'
+              image_url: 'https://gist.github.com/user-attachments/assets/e7473e0f-e944-4803-b12f-83cb34e1c544'
             - id: '69c3fbc9ff3ef0f070f2ecc4'
               name: 'Identifier et prévoir les facteurs de sévérité des allergies'
               description: 'Comment mobiliser les données de la base ACC pour définir des profils allergiques, identifier des facteurs de sévérité et comprendre comment les profils IgE peuvent aider à prédire la sévérité des allergies ?'
