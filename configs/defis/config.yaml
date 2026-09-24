@@ -313,6 +313,8 @@ website:
         - 5fda299e56f984a4b126afe1 # thanh-ha
         - 5e6f426e634f417810ab794b # geoffrey
         - 65e8b5082f2504e916c8f6da # ecospheres
+        - 596f0f5e88ee3807599a5658 # abulte
+        - 6964cd40e625073d41fe096d # enidul
 
 pages:
   # DEFIS
@@ -360,6 +362,8 @@ pages:
             name: Saison 3
           - id: saison-4
             name: Saison 4
+          - id: saison-5
+            name: Saison 5
   # DATASETS
   datasets:
     object_type: datasets
