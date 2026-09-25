@@ -1,11 +1,17 @@
 <script setup lang="ts">
-import TooltipWrapper from '@/components/TooltipWrapper.vue'
+import { Tooltip } from '@datagouv/components-next'
+
 import VIconDsfr from '@/components/VIconDsfr.vue'
 
-defineProps<{
-  publicService?: boolean
-  certified?: boolean
-}>()
+withDefaults(
+  defineProps<{
+    publicService?: boolean
+    certified?: boolean
+    // matches OrganizationNameWithCertificate's tooltip wording/component, for a consistent tick everywhere
+    certifiedBy?: string
+  }>(),
+  { certifiedBy: 'data.gouv.fr' }
+)
 </script>
 
 <template>
@@ -15,15 +21,17 @@ defineProps<{
     class="fr-icon--sm fr-mr-1v badge badge--public-service"
   />
   <slot />
-  <TooltipWrapper v-if="certified" placement="top">
-    <template #trigger>
-      <VIconDsfr
-        name="checkbox-circle-line"
-        class="fr-icon--sm fr-ml-1v badge badge--certified"
-      />
+  <Tooltip v-if="certified" class="inline-block">
+    <VIconDsfr
+      name="checkbox-circle-line"
+      class="fr-icon--sm fr-ml-1v badge badge--certified"
+    />
+    <template #tooltip>
+      <p class="fr-text--sm fr-mb-0">
+        L'identité de ce service public est certifiée par {{ certifiedBy }}
+      </p>
     </template>
-    L'identité de ce service public est certifiée par data.gouv.fr
-  </TooltipWrapper>
+  </Tooltip>
 </template>
 
 <style scoped>

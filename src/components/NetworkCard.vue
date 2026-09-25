@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 
 import EntityTypeBadges from '@/components/EntityTypeBadges.vue'
+import config from '@/config'
 import type { NetworkConf } from '@/model/config'
 
 const props = defineProps<{
@@ -35,9 +36,12 @@ const to = computed(() => ({
       <div class="fr-col fr-px-3v">
         <component :is="headingLevel" class="fr-title-v2__title fr-m-0 h4">
           <RouterLink class="fr-tile__link" :to="to">
-            <EntityTypeBadges public-service certified>{{
-              name
-            }}</EntityTypeBadges>
+            <EntityTypeBadges
+              public-service
+              certified
+              :certified-by="config.website.title"
+              >{{ name }}</EntityTypeBadges
+            >
           </RouterLink>
         </component>
       </div>

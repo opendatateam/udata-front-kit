@@ -4,6 +4,7 @@ import { computed, onMounted, ref } from 'vue'
 import EntityTypeBadges from '@/components/EntityTypeBadges.vue'
 import LogoBox from '@/components/LogoBox.vue'
 import SidebarItem from '@/components/SidebarItem.vue'
+import config from '@/config'
 import { useTopicStore } from '@/store/TopicStore'
 import { useNetworksConf, useNetworksTag } from '@/utils/config'
 
@@ -74,9 +75,12 @@ onMounted(async () => {
       <LogoBox v-if="network.logo" :src="network.logo" class="fr-mr-1-5v" />
       <p class="fr-col fr-m-0 min-width-0">
         <RouterLink class="fr-link network-link" :to="network.to">
-          <EntityTypeBadges public-service certified>{{
-            network.title
-          }}</EntityTypeBadges>
+          <EntityTypeBadges
+            public-service
+            certified
+            :certified-by="config.website.title"
+            >{{ network.title }}</EntityTypeBadges
+          >
         </RouterLink>
       </p>
     </div>
