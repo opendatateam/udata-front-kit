@@ -135,7 +135,7 @@ onMounted(() => {
       <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle">
         <div
           v-if="pageConf.banner.logo"
-          class="fr-col-12 fr-col-md-4 fr-pr-md-6w"
+          class="fr-col-12 fr-col-md-4 fr-col-lg-3 fr-pr-0"
         >
           <div class="logo">
             <img
@@ -146,7 +146,10 @@ onMounted(() => {
             />
           </div>
         </div>
-        <div class="fr-col-12 fr-col-md">
+        <div
+          class="fr-col-12 fr-col-md"
+          :class="pageConf.banner.logo ? 'fr-pl-md-4w' : ''"
+        >
           <!-- eslint-disable vue/no-v-html -->
           <p
             class="hero-banner__title"
