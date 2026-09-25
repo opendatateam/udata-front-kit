@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import TooltipWrapper from '@/components/TooltipWrapper.vue'
 import VIconDsfr from '@/components/VIconDsfr.vue'
 
 defineProps<{
@@ -14,11 +15,15 @@ defineProps<{
     class="fr-icon--sm fr-mr-1v badge badge--public-service"
   />
   <slot />
-  <VIconDsfr
-    v-if="certified"
-    name="checkbox-circle-line"
-    class="fr-icon--sm fr-mr-1v badge badge--certified"
-  />
+  <TooltipWrapper v-if="certified" placement="top">
+    <template #trigger>
+      <VIconDsfr
+        name="checkbox-circle-line"
+        class="fr-icon--sm fr-ml-1v badge badge--certified"
+      />
+    </template>
+    L'identité de ce service public est certifiée par data.gouv.fr
+  </TooltipWrapper>
 </template>
 
 <style scoped>
