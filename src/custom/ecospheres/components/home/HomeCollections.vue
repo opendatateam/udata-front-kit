@@ -82,7 +82,7 @@ onMounted(() => {
                 }"
                 @click="
                   trackEvent(
-                    'Homepage - Collections thématiques',
+                    'Accueil - Collections thématiques',
                     'Clic collection',
                     `Bloc ${index + 1} | ${collection.title}`
                   )
