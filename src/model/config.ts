@@ -154,6 +154,7 @@ export type DatasetsConf = {
   } | null
   harvest_backends_quality_warning: string[]
   show_extended_information_panel: boolean
+  resources_explorer_enabled?: boolean
 }
 
 interface Logo {
