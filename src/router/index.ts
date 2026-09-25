@@ -2,7 +2,13 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
 import config from '@/config'
 import type { StaticPageConfig } from '@/model/config'
+import type { TopicPageRouterConf } from '@/router/model'
+import {
+  useGlobalSearchPageRoutes,
+  useTopicAdminPagesRoutes
+} from '@/router/utils'
 import LocalStorageService from '@/services/LocalStorageService'
+import { usePagesConf } from '@/utils/config'
 import NotFoundView from '@/views/NotFoundView.vue'
 import StaticPageView from '@/views/StaticPageView.vue'
 import { toast } from '@datagouv/components-next'
@@ -86,13 +92,40 @@ if (config.website.sitemap != null) {
   })
 }
 
+// used for topic pages generated below
+const DEFAULT_TOPIC_CONF: TopicPageRouterConf = {
+  displayMetadata: true,
+  enableReadMore: true
+}
+
+// mirrors what a hand-written custom/<site>/routes.ts does for a plain config.pages entry:
+// one search route per page, plus topic admin routes when the page is a topics page
+function generateRoutesFromConfig(): RouteRecordRaw[] {
+  const routes: RouteRecordRaw[] = []
+  for (const [pageKey, pageConf] of Object.entries(usePagesConf())) {
+    if (pageConf.object_type === 'topics') {
+      routes.push(
+        useGlobalSearchPageRoutes({ pageKey, topicConf: DEFAULT_TOPIC_CONF })
+      )
+      routes.push(
+        ...useTopicAdminPagesRoutes({ pageKey, topicConf: DEFAULT_TOPIC_CONF })
+      )
+    } else {
+      routes.push(useGlobalSearchPageRoutes({ pageKey }))
+    }
+  }
+  return routes
+}
+
 // custom routes from site-specific routes definition
 async function loadRoutes(): Promise<RouteRecordRaw[]> {
   const importedModule = await import(
     `../custom/${import.meta.env.VITE_SITE_ID}/routes.ts`
   ).catch(() => {
-    console.info('No custom routes for this site')
-    return { routes: [] }
+    console.debug(
+      'No custom routes.ts for this site, generating routes from config.pages'
+    )
+    return { routes: generateRoutesFromConfig() }
   })
   return importedModule.routes
 }
