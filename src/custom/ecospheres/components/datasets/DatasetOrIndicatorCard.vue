@@ -7,7 +7,7 @@ import { toRef } from 'vue'
 const props = defineProps<{
   dataset: DatasetV2
   datasetUrl: object
-  organizationUrl?: string | object
+  organizationUrl?: string | object | null
   showDescription?: boolean
 }>()
 

@@ -40,6 +40,7 @@ const factorRef = toRef(props, 'factor')
       params: { item_id: datasetContent.id }
     }"
     :show-description="false"
+    :organization-url="null"
     class="dataset-card fr-my-2w fr-mx-0"
   />
   <DsfrAlert
