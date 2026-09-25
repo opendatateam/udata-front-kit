@@ -19,6 +19,9 @@ import { useWebsiteConfig } from './utils/config'
 const userStore = useUserStore()
 const isNoticeClosed = ref(false)
 
+const { footer, header, rf_title, title } = useWebsiteConfig()
+const { logo, phrase, external_links, mandatory_links } = footer
+
 const skipLinks: SkipLinksProps['links'] = [
   {
     id: 'main-content',
@@ -27,8 +30,16 @@ const skipLinks: SkipLinksProps['links'] = [
   {
     id: 'main-nav',
     text: 'Aller au menu principal'
+  },
+  ...(header.search.display
+    ? [{ id: 'header-select-search', text: 'Aller à la recherche' }]
+    : []),
+  {
+    id: 'main-footer',
+    text: 'Aller au pied de page'
   }
 ]
+
 const liveInfos: Ref<InfoToAnnounce[] | undefined> = ref()
 
 const noticeContent = computed(() => {
@@ -90,9 +101,6 @@ onMounted(() => {
   userStore.init()
 })
 
-const { footer, rf_title, title } = useWebsiteConfig()
-const { logo, phrase, external_links, mandatory_links } = footer
-
 const skipLinksComp =
   useTemplateRef<InstanceType<typeof SkipLinks>>('skipLinksComp')
 
@@ -101,16 +109,23 @@ const setAccessibilityProperties: AccessibilityPropertiesType = (
   focus = true,
   messages = []
 ): void => {
-  // announce page title to screen reader
+  // Announce page title to screen reader
   if (title) {
     liveInfos.value = [
       { text: `Page ${title} | ${config.website.title}` },
       ...messages
     ]
   }
-  // focus skip link container
-  if (focus && skipLinksComp.value?.skipLinkList) {
-    skipLinksComp.value.skipLinkList.focus()
+
+  // Reset keyboard focus to the top of the body on navigation
+  // so the next Tab press natively reaches the skip links
+  if (focus) {
+    nextTick(() => {
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur()
+      }
+      document.body.focus({ preventScroll: true })
+    })
   }
 }
 
@@ -120,7 +135,9 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
 <template>
   <Toaster rich-colors />
   <div id="tooltips" />
+
   <SkipLinks ref="skipLinksComp" :links="skipLinks" />
+
   <LiveRegion v-if="liveInfos" :infos="liveInfos" aria-live-mode="assertive" />
   <DsfrNotice
     v-if="!isNoticeClosed && noticeContent"
@@ -130,17 +147,20 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
     <!-- eslint-disable-next-line vue/no-v-html -->
     <span v-html="noticeContent"></span>
   </DsfrNotice>
+
   <HeaderComponent
     :user-name="userName"
     :quick-links="quickLinks"
     :custom-search="true"
   />
 
-  <main id="main-content" :class="siteID" role="main">
+  <main id="main-content" tabindex="-1" :class="siteID" role="main">
     <RouterView />
   </main>
 
   <DsfrFooter
+    id="main-footer"
+    tabindex="-1"
     :class="[siteID, 'fr-mt-16w']"
     :logo-text="rf_title"
     :operator-img-src="logo?.src"
