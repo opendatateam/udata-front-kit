@@ -77,6 +77,7 @@ const { logo, title_image, description, beta, search } = header
         class="custom-search"
         :search-label="searchLabel"
         :placeholder="searchLabel"
+        tracking-source="En-tête"
         @do-search="closeModal"
       />
     </template>
