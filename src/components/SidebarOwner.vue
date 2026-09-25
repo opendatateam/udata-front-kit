@@ -1,18 +1,32 @@
 <script setup lang="ts">
 import type { Owned } from '@datagouv/components-next'
 import { OrganizationNameWithCertificate } from '@datagouv/components-next'
+import { useRouter } from 'vue-router'
 
 import OrganizationLogo from '@/components/OrganizationLogo.vue'
 import { getOwnerAvatar } from '@/utils/avatar'
 
-defineProps<{ object: Owned }>()
+const props = defineProps<{ object: Owned }>()
+
+const router = useRouter()
+const organizationUrl = computed(() =>
+  props.object.organization && router.hasRoute('organization_detail')
+    ? {
+        name: 'organization_detail',
+        params: { oid: props.object.organization.id }
+      }
+    : undefined
+)
 </script>
 
 <template>
   <div v-if="object.organization" class="fr-grid-row fr-grid-row--middle">
     <OrganizationLogo :object="object" class="fr-mr-1-5v" />
     <p class="fr-col fr-m-0 min-width-0">
-      <a class="fr-link" :href="object.organization.page">
+      <RouterLink v-if="organizationUrl" class="fr-link" :to="organizationUrl">
+        <OrganizationNameWithCertificate :organization="object.organization" />
+      </RouterLink>
+      <a v-else class="fr-link" :href="object.organization.page">
         <OrganizationNameWithCertificate :organization="object.organization" />
       </a>
     </p>

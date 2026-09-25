@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import VIconDsfr from '@/components/VIconDsfr.vue'
+import EntityTypeBadges from '@/components/EntityTypeBadges.vue'
 import { stripFromMarkdown } from '@/utils'
 
 const props = defineProps({
@@ -25,7 +25,7 @@ const isPublicService = (): boolean =>
 </script>
 
 <template>
-  <div class="fr-tile-v2 fr-enlarge-link border">
+  <div class="contributor-tile fr-enlarge-link border">
     <div class="fr-grid-row fr-grid-row--middle fr-mb-8v">
       <div class="fr-col-auto">
         <div
@@ -46,23 +46,17 @@ const isPublicService = (): boolean =>
             class="fr-tile__link"
             :to="`/organizations/${organization.slug}`"
           >
-            <VIconDsfr
-              v-if="isPublicService()"
-              name="bank-line"
-              class="fr-icon--sm fr-mr-1v badge"
-            />
-            {{ organization.name }}
-            <VIconDsfr
-              v-if="isCertified()"
-              name="checkbox-circle-line"
-              class="fr-icon--sm fr-mr-1v badge"
-            />
+            <EntityTypeBadges
+              :public-service="isPublicService()"
+              :certified="isCertified()"
+              >{{ organization.name }}</EntityTypeBadges
+            >
           </RouterLink>
         </component>
       </div>
     </div>
 
-    <div v-if="organization.description" class="fr-tile-v2__body">
+    <div v-if="organization.description" class="contributor-tile__body">
       <p class="fr-tile__desc">
         <text-clamp
           :auto-resize="true"
@@ -83,25 +77,12 @@ const isPublicService = (): boolean =>
 </template>
 
 <style scoped>
-.fr-tile-v2 {
-  padding: 2rem;
-  box-shadow: 0px 4px 0px var(--border-active-blue-france);
-  height: 100%;
-}
-.fr-tile-v2:where(:hover, :focus-within) {
-  background-color: var(--hover);
-}
-
 .fr-tile__img {
   background-color: var(--background-default-grey);
 }
 
 .fr-tile__link {
   color: var(--text-default-grey);
-}
-
-.fr-title-v2__title .badge {
-  color: var(--text-active-blue-france);
 }
 
 .card__tag {
