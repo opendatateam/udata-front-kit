@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { trackEvent } from '@datagouv/components-next'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -50,6 +51,9 @@ const navItems = computed(() => {
         v-else-if="navItem.to && navItem.text"
         v-bind="navItem"
         @toggle-id="props.onClick"
+        @click="
+          trackEvent('Navigation principale', 'Clic onglet', navItem.text)
+        "
       />
     </DsfrNavigationItem>
   </DsfrNavigation>
