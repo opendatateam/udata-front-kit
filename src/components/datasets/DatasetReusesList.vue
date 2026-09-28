@@ -62,7 +62,12 @@ onMounted(fetchReuses)
         :key="reuse.id"
         class="fr-col-12 fr-col-md-6 fr-col-lg-4"
       >
-        <ReuseCard :reuse="reuse" :reuse-url="reuse.page" title-tag="p" />
+        <ReuseCard
+          :reuse="reuse"
+          :reuse-url="reuse.page"
+          :organization-url="null"
+          title-tag="p"
+        />
       </li>
     </ul>
     <Pagination
