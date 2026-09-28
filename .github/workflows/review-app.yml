@@ -17,7 +17,6 @@ on:
           - accessibilite
           - defis
           - hackathon
-          - simplifions
           - culture
       pr_number:
         description: 'Pull Request number to deploy'
@@ -42,7 +41,6 @@ jobs:
           - accessibilite
           - defis
           - hackathon
-          - simplifions
           - culture
     permissions:
       deployments: write
