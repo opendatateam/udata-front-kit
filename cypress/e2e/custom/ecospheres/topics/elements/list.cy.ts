@@ -71,8 +71,9 @@ describe('Topic Elements - Factor List Display', () => {
       const ungroupedFactors = factorFactory.many(2, {
         traits: ['missing_no_group']
       })
-      const { testTopic, testFactors } =
-        setupTopicWithExistingFactors(ungroupedFactors)
+      const { testTopic, testFactors } = setupTopicWithExistingFactors({
+        factors: ungroupedFactors
+      })
       visitTopic(testTopic.slug)
 
       cy.wait('@getElementsNone')
