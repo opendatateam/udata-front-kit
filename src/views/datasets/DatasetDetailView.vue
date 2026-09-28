@@ -4,13 +4,14 @@ import { capitalize, computed, onMounted, ref } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
+import TabsWithCounts from '@/components/TabsWithCounts.vue'
 import DatasetAddToTopicModal from '@/components/datasets/DatasetAddToTopicModal.vue'
 import DatasetDataservicesList from '@/components/datasets/DatasetDataservicesList.vue'
 import DatasetInformationPanel from '@/components/datasets/DatasetInformationPanel.vue'
 import DatasetReusesList from '@/components/datasets/DatasetReusesList.vue'
 import DatasetSidebar from '@/components/datasets/DatasetSidebar.vue'
 import ExtendedInformationPanel from '@/components/datasets/ExtendedInformationPanel.vue'
-import ResourcesList from '@/components/datasets/ResourcesList.vue'
+import ResourcesTabContent from '@/components/datasets/ResourcesTabContent.vue'
 import config from '@/config'
 import { useCurrentPageConf, useRouteParamsAsString } from '@/router/utils'
 import { useDatasetStore } from '@/store/DatasetStore'
@@ -18,6 +19,7 @@ import { useResourceStore } from '@/store/ResourceStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
 import { useDatasetsConf, usePageConf } from '@/utils/config'
+import { useResourceExplorer } from '@/utils/explorer'
 import { useLabels } from '@/utils/labels'
 import type { OgcLayerInfo } from '@/utils/ogcServices'
 import { fetchAllOgcResources } from '@/utils/ogcServices'
@@ -61,6 +63,7 @@ const topicPageKey = datasetsConf.add_to_topic?.page
 const topicPageConf = topicPageKey ? usePageConf(topicPageKey) : null
 const labels = useLabels(pageConf.labels)
 const topicLabels = topicPageConf ? useLabels(topicPageConf.labels) : null
+const { enabled: resourceExplorerEnabled } = useResourceExplorer()
 
 const canEdit = computed(() => {
   return pageConf.editable && userStore.hasEditPermissions(dataset.value)
@@ -88,12 +91,29 @@ const links = computed(() => {
   return breadcrumbs
 })
 
-const tabTitles = [
-  { title: 'Fichiers', tabId: 'tab-0', panelId: 'tab-content-0' },
-  { title: 'Réutilisations et API', tabId: 'tab-1', panelId: 'tab-content-1' },
-  { title: 'Discussions', tabId: 'tab-2', panelId: 'tab-content-2' },
+const tabs = computed(() => [
+  {
+    title: 'Fichiers',
+    count: dataset.value?.resources.total ?? 0,
+    tabId: 'tab-0',
+    panelId: 'tab-content-0'
+  },
+  {
+    title: 'Réutilisations et API',
+    count:
+      (dataset.value?.metrics.reuses ?? 0) +
+      (dataset.value?.metrics.dataservices ?? 0),
+    tabId: 'tab-1',
+    panelId: 'tab-content-1'
+  },
+  {
+    title: 'Discussions',
+    count: dataset.value?.metrics.discussions ?? 0,
+    tabId: 'tab-2',
+    panelId: 'tab-content-2'
+  },
   { title: 'Informations', tabId: 'tab-3', panelId: 'tab-content-3' }
-]
+])
 
 const activeTab = ref(0)
 
@@ -155,7 +175,10 @@ onMounted(() => {
       <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
     </div>
     <div
-      v-if="dataset && (canEdit || canAddToTopic || exploreUrl)"
+      v-if="
+        dataset &&
+        (canEdit || canAddToTopic || (exploreUrl && !resourceExplorerEnabled))
+      "
       class="fr-col-auto fr-grid-row fr-grid-row--middle flex-gap"
     >
       <!-- add dataset to topic (if enabled) -->
@@ -175,7 +198,7 @@ onMounted(() => {
         />
       </template>
       <DsfrButton
-        v-if="exploreUrl"
+        v-if="exploreUrl && !resourceExplorerEnabled"
         size="sm"
         label="Explorer les données"
         icon="fr-icon-table-line"
@@ -204,15 +227,15 @@ onMounted(() => {
       <DatasetSidebar :dataset="dataset" />
     </div>
 
-    <DsfrTabs
+    <TabsWithCounts
       v-model="activeTab"
       class="fr-mt-2w"
       tab-list-name="Groupes d'attributs du jeu de données"
-      :tab-titles="tabTitles"
+      :tabs="tabs"
     >
       <!-- Fichiers -->
       <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0">
-        <ResourcesList :dataset="dataset" />
+        <ResourcesTabContent :dataset="dataset" />
         <div v-if="ogcLayerInfo.has(dataset.id)" class="fr-mt-2w">
           <DsfrButton
             secondary
@@ -271,6 +294,6 @@ onMounted(() => {
           <DatasetInformationPanel :dataset="dataset" />
         </div>
       </DsfrTabContent>
-    </DsfrTabs>
+    </TabsWithCounts>
   </GenericContainer>
 </template>

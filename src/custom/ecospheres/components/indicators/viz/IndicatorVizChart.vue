@@ -136,7 +136,12 @@ const { hasNoData } = useIndicatorVizChart({
   stacked: isStackedArea
 })
 
-onMounted(() => {
+onMounted(async () => {
+  // resources store might not be populated by files tab (eg when using explorer)
+  await resourceStore.loadResources(
+    props.indicator.id,
+    props.indicator.resources
+  )
   debug.log(`🔍 Indicator ${props.indicator.id} extras:`, indicatorExtras.value)
 })
 </script>
