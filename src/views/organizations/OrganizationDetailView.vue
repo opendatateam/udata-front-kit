@@ -134,10 +134,7 @@ watchEffect(() => {
         <DatasetCard
           :dataset="d"
           :dataset-url="{ name: 'datasets_detail', params: { item_id: d.id } }"
-          :organization-url="{
-            name: 'organization_detail',
-            params: { oid: d.organization?.id }
-          }"
+          :organization-url="null"
         />
       </li>
     </ul>
