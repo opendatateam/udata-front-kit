@@ -4,7 +4,6 @@ declare global {
   namespace Cypress {
     interface Chainable {
       allowExternalRequests(): Chainable<void>
-      baseMocksForSimplifions(topics?: object[]): Chainable<void>
       catchUnmockedRequests(): Chainable<void>
       checkRGAAContrast(): Chainable<void>
       clickCheckbox(checkbox_name: string): Chainable<void>

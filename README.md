@@ -147,7 +147,7 @@ agent-vm setup  # creates a base VM
 Créer un fichier `.env.local` à la racine du projet (non versionné) :
 
 ```sh
-VITE_SITE_ID=simplifions
+VITE_SITE_ID=ecospheres
 ```
 
 **Lancement :**
