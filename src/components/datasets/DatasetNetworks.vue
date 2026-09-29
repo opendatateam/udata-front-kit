@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 import EntityTypeBadges from '@/components/EntityTypeBadges.vue'
 import LogoBox from '@/components/LogoBox.vue'
@@ -44,21 +44,28 @@ const networksByTopicId = computed(() => {
 
 const networks = ref<MatchedNetwork[]>([])
 
-onMounted(async () => {
-  if (!networksTag || networksByTopicId.value.size === 0) return
+watch(
+  () => props.datasetId,
+  async (datasetId) => {
+    if (!networksTag || networksByTopicId.value.size === 0) {
+      networks.value = []
+      return
+    }
 
-  try {
-    const topics = await useTopicStore().loadForDataset(
-      props.datasetId,
-      networksTag
-    )
-    networks.value = topics
-      .map((topic) => networksByTopicId.value.get(topic.id))
-      .filter((network) => network !== undefined)
-  } catch (error) {
-    console.error('Failed to fetch dataset networks', error)
-  }
-})
+    try {
+      const topics = await useTopicStore().loadForDataset(
+        datasetId,
+        networksTag
+      )
+      networks.value = topics
+        .map((topic) => networksByTopicId.value.get(topic.id))
+        .filter((network) => network !== undefined)
+    } catch (error) {
+      console.error('Failed to fetch dataset networks', error)
+    }
+  },
+  { immediate: true }
+)
 </script>
 
 <template>
