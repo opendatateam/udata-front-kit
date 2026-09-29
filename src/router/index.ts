@@ -125,13 +125,8 @@ const routerPromise = siteRoutesPromise.then((siteRoutes) => {
   siteRoutes.forEach((route) => {
     routesMap.set(route.path, route)
   })
-  // static pages never override an already registered route (default or site-specific)
-  pages.forEach((route) => {
-    if (!routesMap.has(route.path)) {
-      routesMap.set(route.path, route)
-    }
-  })
   const routes = Array.from(routesMap.values())
+  routes.push(...pages)
   // catch all 404 (keep at the end of the list)
   routes.push({
     path: '/:pathMatch(.*)',
