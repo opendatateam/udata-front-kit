@@ -4,6 +4,7 @@ import { computed } from 'vue'
 import EntityTypeBadges from '@/components/EntityTypeBadges.vue'
 import config from '@/config'
 import type { NetworkConf } from '@/model/config'
+import { networkRouteName } from '@/utils/config'
 
 const props = defineProps<{
   slug: string
@@ -16,7 +17,7 @@ const defaultSubpath = computed(() => Object.keys(props.network.pages)[0])
 const defaultPage = computed(() => props.network.pages[defaultSubpath.value])
 const name = computed(() => defaultPage.value.title)
 const to = computed(() => ({
-  name: `${props.slug}__${defaultSubpath.value}`
+  name: networkRouteName(props.slug, defaultSubpath.value)
 }))
 </script>
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import config from '@/config'
-import { useNetworksConf } from '@/utils/config'
+import { networkRouteName, useNetworksConf } from '@/utils/config'
 import { trackSearchValidated } from '@/utils/tracking'
 import { trackEvent } from '@datagouv/components-next'
 import { useRouter } from 'vue-router'
@@ -17,7 +17,7 @@ const partnerCatalogs = computed(() =>
     return {
       title,
       logo: banner.logo,
-      to: { name: `${slug}__${defaultSubpath}` }
+      to: { name: networkRouteName(slug, defaultSubpath) }
     }
   })
 )

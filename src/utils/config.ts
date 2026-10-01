@@ -18,6 +18,12 @@ export const useNetworksConf = (): NetworksConf => {
 
 export const useNetworksTag = (): string | null => config.networks?.tag ?? null
 
+// Route name for a network page, e.g. `datasets` under network `sif`. Shared
+// convention between router setup (useNetworkRoutes) and every place that
+// links to a network page.
+export const networkRouteName = (slug: string, subpath: string): string =>
+  `${slug}__${subpath}`
+
 export const useTopicsConf = (): TopicsConf => {
   const topicsConf: TopicsConf = config.website.topics
   return topicsConf

@@ -6,7 +6,11 @@ import LogoBox from '@/components/LogoBox.vue'
 import SidebarItem from '@/components/SidebarItem.vue'
 import config from '@/config'
 import { useTopicStore } from '@/store/TopicStore'
-import { useNetworksConf, useNetworksTag } from '@/utils/config'
+import {
+  networkRouteName,
+  useNetworksConf,
+  useNetworksTag
+} from '@/utils/config'
 
 const props = defineProps<{
   datasetId: string
@@ -35,7 +39,7 @@ const networksByTopicId = computed(() => {
         slug,
         title: defaultPage.title,
         logo: defaultPage.banner?.logo,
-        to: { name: `${slug}__${defaultSubpath}` }
+        to: { name: networkRouteName(slug, defaultSubpath) }
       })
     }
   }

@@ -9,7 +9,12 @@ import {
   type PageListConf,
   type PageObjectType
 } from '@/model/config'
-import { useNetworksConf, usePageConf, usePagesConf } from '@/utils/config'
+import {
+  networkRouteName,
+  useNetworksConf,
+  usePageConf,
+  usePagesConf
+} from '@/utils/config'
 import {
   getDefaultDataserviceConfig,
   getDefaultDatasetConfig,
@@ -445,7 +450,10 @@ export const useNetworkRoutes = (
   // The default page's title is also the network's own display identity (see NetworkCard.vue).
   const defaultPage = network.pages[defaultSubpath]
   const siblingPages = Object.fromEntries(
-    subpaths.map((subpath) => [`${slug}__${subpath}`, network.pages[subpath]])
+    subpaths.map((subpath) => [
+      networkRouteName(slug, subpath),
+      network.pages[subpath]
+    ])
   )
   const organizationsConfig = config.organizations as OrganizationsConfig
   const parentBreadcrumbs = [
@@ -454,7 +462,7 @@ export const useNetworkRoutes = (
       text: organizationsConfig.page?.breadcrumb_title ?? 'Contributeurs'
     },
     {
-      to: { name: `${slug}__${defaultSubpath}` },
+      to: { name: networkRouteName(slug, defaultSubpath) },
       text: defaultPage.title
     }
   ]
@@ -463,7 +471,7 @@ export const useNetworkRoutes = (
     { path: base, redirect: `${base}/${defaultSubpath}` },
     ...subpaths.map((subpath) =>
       buildListPageRoute({
-        pageKey: `${slug}__${subpath}`,
+        pageKey: networkRouteName(slug, subpath),
         pageConf: network.pages[subpath],
         basePath: `${base}/${subpath}`,
         siblingPages,
