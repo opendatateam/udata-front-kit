@@ -449,7 +449,6 @@ export const useNetworkRoutes = (
 ): RouteRecordRaw[] => {
   const base = `/contributors/${slug}`
   const subpaths = Object.keys(network.pages)
-  // The default page's title is also the network's own display identity (see NetworkCard.vue).
   const { subpath: defaultSubpath, page: defaultPage } =
     networkDefaultPage(network)
   const siblingPages = Object.fromEntries(
