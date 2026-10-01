@@ -25,10 +25,7 @@ declare module 'vue-router' {
     searchType?: PageObjectType
     searchConfig?: GlobalSearchConfig
     customFilters?: CustomFilterConfig[]
-    // Network pages (src/router/utils.ts useNetworkRoutes): pageConf is only set
-    // as an override when the page isn't in config.pages (i.e. network pages).
-    // Typed as the lighter PageListConf since network pages never carry detail-only
-    // fields; useCurrentPageConf() asserts back to PageConf for its (detail-only) callers.
+    // Override set only for network pages (not in config.pages); typed as the lighter PageListConf since those never carry detail-only fields.
     pageConf?: PageListConf
     // Overrides NavigationComponent's isActive() path-prefix matching for pages
     // whose route doesn't share a path prefix with their nav menu entry.
