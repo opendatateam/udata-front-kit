@@ -103,16 +103,12 @@ watch(
   margin-top: 0.375rem; /* fr-mt-1-5v */
 }
 
-/* DSFR underlines [href] elements via a --underline-idle/hover-width
-   background trick, not text-decoration; SidebarOwner avoids it because its
-   anchor's child is block-level, which we don't have here, so disable it
-   explicitly to match the "Producteur" block's unlined look. The hover
-   variant needs the `a` type selector to outrank core.css's own
-   `a[href]:hover { --underline-hover-width: ... }` rule. */
+/* disable DSFR's underline-via-background trick to match the "Producteur" block's unlined look */
 .network-link {
   --underline-idle-width: 0;
 }
 
+/* `a.` type selector needed to outrank core.css's a[href]:hover rule */
 a.network-link:hover,
 a.network-link:active {
   --underline-hover-width: 0;
