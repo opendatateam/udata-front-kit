@@ -416,21 +416,23 @@ export const useTopicAdminPagesRoutes = ({
 }
 
 // Org detail stays at /organizations/:oid; activeMenuLink highlights "Contributeurs" for it.
-export const useOrganizationsRoutes = (): RouteRecordRaw => {
-  return {
-    path: '/organizations',
-    // no name: the '' child is unnamed too, and naming only the parent trips a Vue Router warning
-    children: [
-      { path: '', redirect: '/contributors' },
-      {
-        path: ':oid',
-        name: 'organization_detail',
-        component: async () =>
-          await import('@/views/organizations/OrganizationDetailView.vue'),
-        meta: { activeMenuLink: '/contributors' }
-      }
-    ]
-  }
+export const useOrganizationsRoutes = (): RouteRecordRaw[] => {
+  return [
+    {
+      path: '/organizations',
+      // no name: the '' child is unnamed too, and naming only the parent trips a Vue Router warning
+      children: [
+        { path: '', redirect: '/contributors' },
+        {
+          path: ':oid',
+          name: 'organization_detail',
+          component: async () =>
+            await import('@/views/organizations/OrganizationDetailView.vue'),
+          meta: { activeMenuLink: '/contributors' }
+        }
+      ]
+    }
+  ]
 }
 
 /**
