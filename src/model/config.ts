@@ -137,7 +137,7 @@ export type NetworkPageConf = PageListConf & {
   banner: PageBannerConf & { logo: string }
 }
 
-// A network (SIF) is an ordered group of pages nested under /contributors/<slug>,
+// A network is an ordered group of pages nested under /contributors/<slug>,
 // one per URL subpath (see networkDefaultPage in utils/config.ts). Network pages
 // stop at the list view, so PageListConf (not PageConf) is enough.
 export type NetworkConf = {

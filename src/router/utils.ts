@@ -436,7 +436,7 @@ export const useOrganizationsRoutes = (): RouteRecordRaw[] => {
 }
 
 /**
- * Builds routes for one network (SIF): a redirect from the bare /contributors/<slug>
+ * Builds routes for one network: a redirect from the bare /contributors/<slug>
  * to its default (first-listed) page, plus one GlobalSearch route per page in
  * network.pages, all nested under /contributors/<slug>/<subpath> and bundled into
  * a shared type switcher. Network pages stop at the list view — item links resolve
