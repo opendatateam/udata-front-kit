@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import EntityTypeBadges from '@/components/EntityTypeBadges.vue'
+import NameWithCertificates from '@/components/NameWithCertificates.vue'
 import config from '@/config'
 import type { NetworkConf } from '@/model/config'
 import { networkDefaultPage, networkRouteName } from '@/utils/config'
@@ -33,11 +33,11 @@ const to = { name: networkRouteName(props.slug, defaultSubpath) }
       <div class="fr-col fr-px-3v">
         <component :is="headingLevel" class="fr-title-v2__title fr-m-0 h4">
           <RouterLink class="fr-tile__link" :to="to">
-            <EntityTypeBadges
+            <NameWithCertificates
               public-service
               certified
               :certified-by="config.website.title"
-              >{{ name }}</EntityTypeBadges
+              >{{ name }}</NameWithCertificates
             >
           </RouterLink>
         </component>

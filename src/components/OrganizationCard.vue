@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import EntityTypeBadges from '@/components/EntityTypeBadges.vue'
+import NameWithCertificates from '@/components/NameWithCertificates.vue'
 import { stripFromMarkdown } from '@/utils'
 
 const props = defineProps({
@@ -46,10 +46,10 @@ const isPublicService = (): boolean =>
             class="fr-tile__link"
             :to="`/organizations/${organization.slug}`"
           >
-            <EntityTypeBadges
+            <NameWithCertificates
               :public-service="isPublicService()"
               :certified="isCertified()"
-              >{{ organization.name }}</EntityTypeBadges
+              >{{ organization.name }}</NameWithCertificates
             >
           </RouterLink>
         </component>

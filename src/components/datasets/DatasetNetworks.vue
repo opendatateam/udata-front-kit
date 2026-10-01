@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 
-import EntityTypeBadges from '@/components/EntityTypeBadges.vue'
 import LogoBox from '@/components/LogoBox.vue'
+import NameWithCertificates from '@/components/NameWithCertificates.vue'
 import SidebarItem from '@/components/SidebarItem.vue'
 import config from '@/config'
 import { useTopicStore } from '@/store/TopicStore'
@@ -87,11 +87,11 @@ watch(
       <LogoBox v-if="network.logo" :src="network.logo" class="fr-mr-1-5v" />
       <p class="fr-col fr-m-0 min-width-0">
         <RouterLink class="fr-link network-link" :to="network.to">
-          <EntityTypeBadges
+          <NameWithCertificates
             public-service
             certified
             :certified-by="config.website.title"
-            >{{ network.title }}</EntityTypeBadges
+            >{{ network.title }}</NameWithCertificates
           >
         </RouterLink>
       </p>
