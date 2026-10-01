@@ -60,15 +60,22 @@ const buildSearchQueryParams = (q: string) => {
 }
 
 const doSimpleSearch = (event: string) => {
-  query.value = event
+  // DsfrSearchBar's native form submit on Enter fires @search a second time, asynchronously
+  // and after our own reset below — reading the already-emptied value. A real search is
+  // never empty, so just ignore it rather than race that delayed, duplicate event.
+  if (!event) return
+
   if (!props.isFilter) {
-    trackSearchValidated(query.value, props.trackingSource)
+    trackSearchValidated(event, props.trackingSource)
   }
-  router.push({
-    path: props.searchEndpoint || router.resolve({ name: 'datasets' }).href,
-    query: buildSearchQueryParams(query.value)
-  })
-  query.value = ''
+  router
+    .push({
+      path: props.searchEndpoint || router.resolve({ name: 'datasets' }).href,
+      query: buildSearchQueryParams(event)
+    })
+    .then(() => {
+      query.value = ''
+    })
   emits('doSearch')
 }
 </script>

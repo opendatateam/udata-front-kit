@@ -5,10 +5,12 @@ import { computed, onMounted, ref, type Ref } from 'vue'
 import { useLoading } from 'vue-loading-overlay'
 
 import GenericContainer from '@/components/GenericContainer.vue'
+import NetworkCard from '@/components/NetworkCard.vue'
 import OrganizationCard from '@/components/OrganizationCard.vue'
 import config from '@/config'
 import type { OrganizationsConfig } from '@/model/config'
 import { useOrganizationStore } from '@/store/OrganizationStore'
+import { useNetworksConf } from '@/utils/config'
 import { useCanonicalUrl, useMeta } from '@/utils/seo'
 
 const store = useOrganizationStore()
@@ -17,6 +19,11 @@ const $loading = useLoading()
 const currentPage = ref(1)
 const { pagination } = storeToRefs(store)
 const organizations: Ref<Organization[]> = ref([])
+
+const networks = useNetworksConf()
+const hasNetworks = Object.keys(networks).length > 0
+// bump card headings one level when the "Réseaux"/"Organisations" subheadings are shown
+const cardHeadingLevel = hasNetworks ? 'h3' : 'h2'
 
 const organizationsConfig = config.organizations as OrganizationsConfig
 const title = organizationsConfig.page?.breadcrumb_title || 'Organisations'
@@ -50,13 +57,36 @@ onMounted(() => {
   </div>
   <GenericContainer>
     <h1 class="fr-mb-5v">{{ title }}</h1>
+
+    <template v-if="hasNetworks">
+      <h2 class="fr-mb-3v">Réseaux</h2>
+      <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list fr-mb-8v">
+        <li
+          v-for="(network, slug) in networks"
+          :key="slug"
+          class="fr-col-12 fr-col-lg-4"
+        >
+          <NetworkCard
+            :slug="String(slug)"
+            :network="network"
+            :heading-level="cardHeadingLevel"
+          />
+        </li>
+      </ul>
+
+      <h2 class="fr-mb-3v">Organisations</h2>
+    </template>
+
     <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list">
       <li
         v-for="org in organizations"
         :key="org.id"
         class="fr-col-12 fr-col-lg-4"
       >
-        <OrganizationCard :organization="org" heading-level="h2" />
+        <OrganizationCard
+          :organization="org"
+          :heading-level="cardHeadingLevel"
+        />
       </li>
     </ul>
   </GenericContainer>

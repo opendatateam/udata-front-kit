@@ -46,4 +46,18 @@ describe('Home Page Ecologie', () => {
       cy.url().should('include', '/bouquets/')
     })
   })
+
+  describe('Catalogues partenaires', () => {
+    it('should link to the internal partner network pages', () => {
+      cy.visit('/')
+
+      cy.contains('Catalogues partenaires').should('be.visible')
+      cy.get(
+        '.partner-catalog-link[href="/contributors/sieau/datasets"]'
+      ).should('be.visible')
+      cy.get(
+        '.partner-catalog-link[href="/contributors/simm/datasets"]'
+      ).should('be.visible')
+    })
+  })
 })

@@ -20,13 +20,16 @@ import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 const router = useRouter()
 const pageKey = computed(() => route.meta.pageKey as string)
-const pageConf = computed(() => usePageConf(pageKey.value))
+const pageConf = computed(
+  () => route.meta.pageConf ?? usePageConf(pageKey.value)
+)
 
 const userStore = useUserStore()
 const labels = computed(() => useLabels(pageConf.value.labels))
 
 const links = computed(() => [
   { to: '/', text: 'Accueil' },
+  ...(route.meta.parentBreadcrumbs ?? []),
   { text: pageConf.value.breadcrumb_title ?? pageConf.value.title }
 ])
 
@@ -68,6 +71,12 @@ const localType = computed({
     window.scrollTo(0, scrollY)
   }
 })
+
+// Pages without their own detail route (e.g. network pages) defer item links to
+// another page's detail route via route.meta.detailPageKey.
+const detailRouteName = computed(
+  () => `${route.meta.detailPageKey ?? localType.value}_detail`
+)
 
 useMeta({
   description: () => pageConf.value?.meta?.description,
@@ -118,16 +127,46 @@ onMounted(() => {
     class="fr-container--fluid hero-banner fr-mb-4w"
   >
     <div class="fr-container fr-py-12v">
-      <!-- eslint-disable vue/no-v-html -->
-      <p
-        :class="!pageConf.banner.content ? 'fr-mb-0' : ''"
-        v-html="pageConf.banner.title"
-      />
-      <div
-        v-if="pageConf.banner.content"
-        v-html="fromMarkdown(pageConf.banner.content).html"
-      />
-      <!-- eslint-enable vue/no-v-html -->
+      <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle">
+        <div
+          v-if="pageConf.banner.logo"
+          class="fr-col-12 fr-col-md-4 fr-col-lg-3 fr-pr-0"
+        >
+          <div class="logo">
+            <img
+              :src="pageConf.banner.logo"
+              alt=""
+              loading="lazy"
+              class="fr-responsive-img"
+            />
+          </div>
+        </div>
+        <div
+          class="fr-col-12 fr-col-md"
+          :class="pageConf.banner.logo ? 'fr-pl-md-4w' : ''"
+        >
+          <!-- eslint-disable vue/no-v-html -->
+          <p
+            class="hero-banner__title"
+            :class="!pageConf.banner.content ? 'fr-mb-0' : ''"
+            v-html="pageConf.banner.title"
+          />
+          <div
+            v-if="pageConf.banner.content"
+            v-html="fromMarkdown(pageConf.banner.content).html"
+          />
+          <!-- eslint-enable vue/no-v-html -->
+          <a
+            v-if="pageConf.banner.external_link"
+            :href="pageConf.banner.external_link.url"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="fr-btn fr-btn--secondary fr-btn--sm fr-mt-2w"
+          >
+            {{ pageConf.banner.external_link.label }}
+          </a>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -166,7 +205,7 @@ onMounted(() => {
             "
             :dataset="dataset"
             :dataset-url="{
-              name: `${localType}_detail`,
+              name: detailRouteName,
               params: { item_id: dataset.id }
             }"
             :organization-url="null"
@@ -181,7 +220,7 @@ onMounted(() => {
             "
             :dataservice="dataservice"
             :dataservice-url="{
-              name: `${localType}_detail`,
+              name: detailRouteName,
               params: { item_id: dataservice.id }
             }"
             :organization-url="null"
@@ -197,7 +236,7 @@ onMounted(() => {
             :topic="topic as TopicV2"
             :page-key="pageKey"
             :topic-url="{
-              name: `${localType}_detail`,
+              name: detailRouteName,
               params: { item_id: (topic as TopicV2).slug }
             }"
           />
