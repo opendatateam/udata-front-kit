@@ -173,8 +173,6 @@ h1 :deep(.highlight),
 
 .partner-catalog-link {
   display: flex;
-  align-items: center;
-  justify-content: center;
   width: 10rem;
   height: 4.5rem;
   padding: 0.75rem 1rem;
