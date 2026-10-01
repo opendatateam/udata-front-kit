@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-
 import EntityTypeBadges from '@/components/EntityTypeBadges.vue'
 import config from '@/config'
 import type { NetworkConf } from '@/model/config'
-import { networkRouteName } from '@/utils/config'
+import { networkDefaultPage, networkRouteName } from '@/utils/config'
 
 const props = defineProps<{
   slug: string
@@ -12,13 +10,11 @@ const props = defineProps<{
   headingLevel: 'h2' | 'h3' | 'h4' | 'h5'
 }>()
 
-// The first page listed for a network is used as the network's display identity
-const defaultSubpath = computed(() => Object.keys(props.network.pages)[0])
-const defaultPage = computed(() => props.network.pages[defaultSubpath.value])
-const name = computed(() => defaultPage.value.title)
-const to = computed(() => ({
-  name: networkRouteName(props.slug, defaultSubpath.value)
-}))
+const { subpath: defaultSubpath, page: defaultPage } = networkDefaultPage(
+  props.network
+)
+const name = defaultPage.title
+const to = { name: networkRouteName(props.slug, defaultSubpath) }
 </script>
 
 <template>

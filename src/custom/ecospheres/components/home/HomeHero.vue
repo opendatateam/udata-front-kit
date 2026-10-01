@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import config from '@/config'
-import { networkRouteName, useNetworksConf } from '@/utils/config'
+import {
+  networkDefaultPage,
+  networkRouteName,
+  useNetworksConf
+} from '@/utils/config'
 import { trackSearchValidated } from '@/utils/tracking'
 import { trackEvent } from '@datagouv/components-next'
 import { useRouter } from 'vue-router'
@@ -12,8 +16,8 @@ const thematicTags: EcologieHomepageThematicTag[] =
 const networksConf = useNetworksConf()
 const partnerCatalogs = computed(() =>
   Object.entries(networksConf).map(([slug, network]) => {
-    const defaultSubpath = Object.keys(network.pages)[0]
-    const { title, banner } = network.pages[defaultSubpath]
+    const { subpath: defaultSubpath, page } = networkDefaultPage(network)
+    const { title, banner } = page
     return {
       title,
       logo: banner.logo,

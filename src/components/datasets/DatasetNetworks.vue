@@ -7,6 +7,7 @@ import SidebarItem from '@/components/SidebarItem.vue'
 import config from '@/config'
 import { useTopicStore } from '@/store/TopicStore'
 import {
+  networkDefaultPage,
   networkRouteName,
   useNetworksConf,
   useNetworksTag
@@ -31,8 +32,8 @@ interface MatchedNetwork {
 const networksByTopicId = computed(() => {
   const map = new Map<string, MatchedNetwork>()
   for (const [slug, network] of Object.entries(networksConf)) {
-    const defaultSubpath = Object.keys(network.pages)[0]
-    const defaultPage = network.pages[defaultSubpath]
+    const { subpath: defaultSubpath, page: defaultPage } =
+      networkDefaultPage(network)
     const topicId = defaultPage.universe_query?.topic
     if (topicId !== undefined) {
       map.set(String(topicId), {

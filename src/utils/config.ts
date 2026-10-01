@@ -1,6 +1,7 @@
 import config from '@/config'
 import type {
   DatasetsConf,
+  NetworkConf,
   NetworksConf,
   PagesConf,
   TopicsConf,
@@ -23,6 +24,12 @@ export const useNetworksTag = (): string | null => config.networks?.tag ?? null
 // links to a network page.
 export const networkRouteName = (slug: string, subpath: string): string =>
   `${slug}__${subpath}`
+
+// The first page listed for a network is its default (redirect target + display identity)
+export const networkDefaultPage = (network: NetworkConf) => {
+  const subpath = Object.keys(network.pages)[0]
+  return { subpath, page: network.pages[subpath] }
+}
 
 export const useTopicsConf = (): TopicsConf => {
   const topicsConf: TopicsConf = config.website.topics

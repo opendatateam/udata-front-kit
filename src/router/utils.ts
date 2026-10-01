@@ -10,6 +10,7 @@ import {
   type PageObjectType
 } from '@/model/config'
 import {
+  networkDefaultPage,
   networkRouteName,
   useNetworksConf,
   usePageConf,
@@ -446,9 +447,9 @@ export const useNetworkRoutes = (
 ): RouteRecordRaw[] => {
   const base = `/contributors/${slug}`
   const subpaths = Object.keys(network.pages)
-  const defaultSubpath = subpaths[0]
   // The default page's title is also the network's own display identity (see NetworkCard.vue).
-  const defaultPage = network.pages[defaultSubpath]
+  const { subpath: defaultSubpath, page: defaultPage } =
+    networkDefaultPage(network)
   const siblingPages = Object.fromEntries(
     subpaths.map((subpath) => [
       networkRouteName(slug, subpath),
