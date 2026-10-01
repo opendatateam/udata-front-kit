@@ -39,6 +39,9 @@ const noticeContent = computed(() => {
 
 const siteID = config.site_id
 const isLoggedIn = computed(() => userStore.$state.isLoggedIn)
+const hideHeaderSearch = computed(
+  () => route.name === 'home' && !!config.website.header.search.hide_on_home
+)
 
 const userName = computed(() => userStore.userName)
 const quickLinks = computed(() => {
@@ -141,6 +144,7 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
     :user-name="userName"
     :quick-links="quickLinks"
     :custom-search="true"
+    :hide-search="hideHeaderSearch"
   />
 
   <main id="main-content" :class="siteID" role="main">

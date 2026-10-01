@@ -43,11 +43,11 @@ const doSearch = (q: string) => {
             <span class="highlight">transition écologique</span>
           </h1>
           <div class="big-search">
-            <p class="fr-text--bold fr-mb-2v">Recherchez une donnée</p>
+            <p class="fr-text--bold fr-mb-2v">Recherchez dans tout le site</p>
             <DsfrSearchBar
               id="big-select-search"
               v-model="searchQuery"
-              label="Recherchez une donnée"
+              label="Recherchez dans tout le site"
               placeholder="Ex. GES, îlot de chaleur"
               button-text="Rechercher"
               :large="true"

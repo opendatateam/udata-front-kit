@@ -93,8 +93,9 @@ website:
       label: 'Donnez votre avis'
       link: https://tally.so/r/wLWrzp
     search:
-      display: false
+      display: true
       placeholder:
+      hide_on_home: true
   search_bar:
     display: true
     placeholder: Rechercher une donnée environnementale

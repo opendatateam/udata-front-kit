@@ -172,6 +172,7 @@ export type HeaderConf = {
   search: {
     display: boolean
     placeholder?: string
+    hide_on_home?: boolean
   }
 }
 
