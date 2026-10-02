@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import VIconDsfr from '@/components/VIconDsfr.vue'
+import { trackSearchValidated } from '@/utils/tracking'
 import { ref } from 'vue'
 
 import { useRouter } from 'vue-router'
@@ -22,6 +23,11 @@ const props = defineProps({
   isFilter: {
     type: Boolean,
     default: false
+  },
+  // where the search is performed from, used to distinguish sources in tracking (unused when isFilter)
+  trackingSource: {
+    type: String,
+    default: ''
   },
   labelVisible: {
     type: Boolean,
@@ -55,6 +61,9 @@ const buildSearchQueryParams = (q: string) => {
 
 const doSimpleSearch = (event: string) => {
   query.value = event
+  if (!props.isFilter) {
+    trackSearchValidated(query.value, props.trackingSource)
+  }
   router.push({
     path: props.searchEndpoint || router.resolve({ name: 'datasets' }).href,
     query: buildSearchQueryParams(query.value)

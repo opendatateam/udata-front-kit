@@ -31,5 +31,5 @@ const selectConfig = computed(() => ({
 </script>
 
 <template>
-  <SearchSelectFilter :config="selectConfig" />
+  <SearchSelectFilter :config="selectConfig" :page-key="config.pageKey" />
 </template>
