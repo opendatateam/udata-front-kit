@@ -13,7 +13,6 @@ import {
   DataserviceCard,
   DatasetCard,
   GlobalSearch,
-  type Dataset,
   type TopicV2
 } from '@datagouv/components-next'
 import { useRoute, useRouter } from 'vue-router'
@@ -23,10 +22,6 @@ const router = useRouter()
 const pageKey = computed(() => route.meta.pageKey as string)
 const pageConf = computed(() => usePageConf(pageKey.value))
 
-const organizationUrl = (id: string | undefined) =>
-  router.hasRoute('organization_detail')
-    ? { name: 'organization_detail', params: { oid: id } }
-    : undefined
 const userStore = useUserStore()
 const labels = computed(() => useLabels(pageConf.value.labels))
 
@@ -174,9 +169,7 @@ onMounted(() => {
               name: `${localType}_detail`,
               params: { item_id: dataset.id }
             }"
-            :organization-url="
-              organizationUrl((dataset as Dataset).organization?.id)
-            "
+            :organization-url="null"
           />
         </template>
         <template #dataservice="{ dataservice }">
@@ -191,6 +184,7 @@ onMounted(() => {
               name: `${localType}_detail`,
               params: { item_id: dataservice.id }
             }"
+            :organization-url="null"
           />
         </template>
         <template #topic="{ topic }">

@@ -164,6 +164,7 @@ onMounted(() => {
             :placeholder="config.pages['univers-deps'].search.placeholder"
             search-label="Rechercher"
             search-endpoint="/univers-deps"
+            tracking-source="Univers Deps"
           />
         </div>
       </template>
