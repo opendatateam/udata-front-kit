@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import config from '@/config'
+import { trackSearchValidated } from '@/utils/tracking'
 import { trackEvent } from '@datagouv/components-next'
 import { useRouter } from 'vue-router'
 import type { EcologieHomepageThematicTag } from '../../model/config'
@@ -11,6 +12,7 @@ const router = useRouter()
 const searchQuery = ref('')
 
 const doSearch = (q: string) => {
+  trackSearchValidated(q, 'Accueil')
   router
     .push({ name: 'datasets', query: { q } })
     .then(() => (searchQuery.value = ''))

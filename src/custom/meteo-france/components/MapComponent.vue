@@ -5,13 +5,15 @@
 </template>
 
 <script setup lang="ts">
-import type { StyleSpecification } from 'maplibre-gl'
-import maplibregl from 'maplibre-gl'
+import { Map as MapLibreMap, Marker as MapLibreMarker } from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { onMounted, ref, watch } from 'vue'
 
-import styleVector from '../assets/style.json'
+// ?url to avoid type-checking the JSON at build time
+import styleUrl from '../assets/style.json?url'
 import type { Feature, FeatureCollection, MapOptions, Station } from '../types'
+// Side-effect import to register the maplibre-gl v6 worker
+import '../utils/maplibreWorker'
 
 const props = defineProps<{
   options: MapOptions
@@ -21,15 +23,15 @@ const props = defineProps<{
 const emit = defineEmits(['update:postes', 'point-hover', 'point-out'])
 
 const mapContainer = ref<HTMLDivElement | null>(null)
-let map: maplibregl.Map | null = null
-const markers: maplibregl.Marker[] = []
+let map: MapLibreMap | null = null
+const markers: MapLibreMarker[] = []
 const postes = ref<Station[]>([])
 
 const initializeMap = () => {
   if (mapContainer.value) {
-    map = new maplibregl.Map({
+    map = new MapLibreMap({
       container: mapContainer.value,
-      style: styleVector as StyleSpecification,
+      style: styleUrl,
       zoom: props.options.zoom,
       center: [
         (props.options.minx + props.options.maxx) / 2,
@@ -86,7 +88,7 @@ const addPointsToMap = () => {
   if (map && props.points?.features?.length) {
     props.points.features.forEach((point: Feature) => {
       const markerElement = createCustomMarker('#AAAAAA')
-      const marker = new maplibregl.Marker({ element: markerElement })
+      const marker = new MapLibreMarker({ element: markerElement })
         .setLngLat([
           point.geometry.coordinates[0],
           point.geometry.coordinates[1]
@@ -123,9 +125,9 @@ watch(
   (newOptions) => {
     if (map) {
       map.remove()
-      map = new maplibregl.Map({
+      map = new MapLibreMap({
         container: mapContainer.value!,
-        style: styleVector as StyleSpecification,
+        style: styleUrl,
         zoom: newOptions.zoom,
         center: [
           (newOptions.minx + newOptions.maxx) / 2,
@@ -155,9 +157,9 @@ watch(
   () => {
     if (map) {
       map.remove()
-      map = new maplibregl.Map({
+      map = new MapLibreMap({
         container: mapContainer.value!,
-        style: styleVector as StyleSpecification,
+        style: styleUrl,
         zoom: props.options.zoom,
         center: [
           (props.options.minx + props.options.maxx) / 2,

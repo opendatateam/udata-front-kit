@@ -75,6 +75,7 @@ onMounted(fetchDataservices)
         <DataserviceCard
           :dataservice="dataservice"
           :dataservice-url="getDataservicePage(dataservice)"
+          :organization-url="null"
           title-tag="p"
         />
       </li>
