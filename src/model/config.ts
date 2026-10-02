@@ -154,13 +154,13 @@ type FooterExternalLink = {
 
 export interface CmsPageConfig {
   title: string
-  id: string
+  id: string // id or slug of the page on data.gouv.fr
   route: string
 }
 
 export interface CmsConfig {
   enabled: boolean
-  site_tag: string
+  topic_id?: string // scopes the CMS page list to pages attached to this topic
   pages?: CmsPageConfig[]
 }
 

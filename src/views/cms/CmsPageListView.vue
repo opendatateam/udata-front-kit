@@ -1,39 +1,39 @@
 <script lang="ts" setup>
-import type { Post } from '@datagouv/components-next'
-
 import GenericContainer from '@/components/GenericContainer.vue'
+import SidebarOwner from '@/components/SidebarOwner.vue'
 import config from '@/config'
+import type { CmsPage } from '@/model/cms'
 import type { CmsPageConfig } from '@/model/config'
-import { usePostStore } from '@/store/PostStore'
+import { useCmsPageStore } from '@/store/CmsPageStore'
 import { formatDate } from '@/utils'
 
-const postStore = usePostStore()
-const posts = ref<Post[]>([])
+const cmsPageStore = useCmsPageStore()
+const pages = ref<CmsPage[]>([])
 const loading = ref(true)
 
 const cmsPages: CmsPageConfig[] = config.website.cms?.pages ?? []
-const routeForPost = (postId: string) =>
-  cmsPages.find((p) => p.id === postId)?.route ?? null
+const routeForPage = (page: CmsPage) =>
+  cmsPages.find((p) => p.id === page.id || p.id === page.slug)?.route ?? null
 
 const links = [{ to: '/', text: 'Accueil' }, { text: 'CMS' }]
 
 onMounted(async () => {
   try {
-    posts.value = await postStore.listAdminPosts()
+    pages.value = await cmsPageStore.listSitePages()
   } finally {
     loading.value = false
   }
 })
 
-const handleDelete = async (post: Post) => {
+const handleDelete = async (page: CmsPage) => {
   if (
     !confirm(
-      `Supprimer la page « ${post.name} » ? Cette action est irréversible.`
+      `Supprimer la page « ${page.name} » ? Cette action est irréversible.`
     )
   )
     return
-  await postStore.deletePost(post.id)
-  posts.value = posts.value.filter((p) => p.id !== post.id)
+  await cmsPageStore.deletePage(page.id)
+  pages.value = pages.value.filter((p) => p.id !== page.id)
 }
 </script>
 
@@ -59,7 +59,7 @@ const handleDelete = async (post: Post) => {
       <p>Chargement…</p>
     </div>
 
-    <div v-else-if="posts.length === 0">
+    <div v-else-if="pages.length === 0">
       <p>Aucune page créée pour le moment.</p>
     </div>
 
@@ -70,61 +70,54 @@ const handleDelete = async (post: Post) => {
       <thead>
         <tr>
           <th scope="col">Titre</th>
-          <th scope="col">Identifiant</th>
           <th scope="col">Route</th>
-          <th scope="col">Tags</th>
-          <th scope="col">Statut</th>
+          <th scope="col">Propriétaire</th>
+          <th scope="col">Visibilité</th>
           <th scope="col">Dernière modification</th>
           <th scope="col">Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="post in posts" :key="post.id">
-          <td>{{ post.name }}</td>
-          <td>
-            <code>{{ post.id }}</code>
-          </td>
+        <tr v-for="page in pages" :key="page.id">
+          <td>{{ page.name }}</td>
           <td>
             <RouterLink
-              v-if="routeForPost(post.id)"
-              :to="routeForPost(post.id)!"
+              v-if="routeForPage(page)"
+              :to="routeForPage(page)!"
               class="fr-link fr-text--sm"
-              >{{ routeForPost(post.id) }}</RouterLink
+              >{{ routeForPage(page) }}</RouterLink
             >
             <span v-else class="fr-text--sm fr-text-mention--grey">—</span>
           </td>
           <td>
-            <ul v-if="post.tags.length" class="fr-tags-group">
-              <li v-for="tag in post.tags" :key="tag">
-                <span class="fr-tag fr-tag--sm">{{ tag }}</span>
-              </li>
-            </ul>
-            <span v-else class="fr-text--sm fr-text-mention--grey">—</span>
+            <SidebarOwner :object="page" />
           </td>
           <td>
-            <span v-if="post.published" class="fr-badge fr-badge--success"
-              >Publié</span
+            <span v-if="!page.private" class="fr-badge fr-badge--success"
+              >Public</span
             >
-            <span v-else class="fr-badge fr-badge--new">Brouillon</span>
+            <span v-else class="fr-badge fr-badge--new">Privé</span>
           </td>
-          <td>{{ formatDate(post.last_modified, true) }}</td>
+          <td>{{ formatDate(page.last_modified, true) }}</td>
           <td>
             <div class="fr-grid-row fr-grid-row--middle flex-gap">
               <RouterLink
-                :to="`/admin/cms/view/${post.id}`"
+                :to="`/admin/cms/view/${page.id}`"
                 class="fr-btn fr-btn--tertiary-no-outline fr-btn--sm fr-btn--icon-only fr-icon-eye-line"
                 title="Voir"
               />
               <RouterLink
-                :to="`/admin/cms/edit/${post.id}`"
+                v-if="page.permissions.edit"
+                :to="`/admin/cms/edit/${page.id}`"
                 class="fr-btn fr-btn--tertiary-no-outline fr-btn--sm fr-btn--icon-only fr-icon-edit-line"
                 title="Modifier"
               />
               <button
+                v-if="page.permissions.delete"
                 type="button"
                 class="fr-btn fr-btn--tertiary-no-outline fr-btn--sm fr-btn--icon-only fr-icon-delete-line"
                 title="Supprimer"
-                @click="handleDelete(post)"
+                @click="handleDelete(page)"
               />
             </div>
           </td>
@@ -133,3 +126,9 @@ const handleDelete = async (post: Post) => {
     </table>
   </GenericContainer>
 </template>
+
+<style scoped>
+.fr-table {
+  width: 100%;
+}
+</style>

@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-import type { PageBloc, Post } from '@datagouv/components-next'
+import type { PageBloc } from '@datagouv/components-next'
 import { useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
 import PageShow from '@/components/cms/PageShow.vue'
 import config from '@/config'
-import { usePostStore } from '@/store/PostStore'
+import type { CmsPage } from '@/model/cms'
+import { useCmsPageStore } from '@/store/CmsPageStore'
 
 const props = defineProps<{
   id?: string
@@ -13,39 +14,41 @@ const props = defineProps<{
 
 const route = useRoute()
 const router = useRouter()
-const postStore = usePostStore()
+const cmsPageStore = useCmsPageStore()
 
 const isCreate = computed(() => !props.id && !route.params.id)
-const postId = computed(
+const pageId = computed(
   () => props.id ?? (route.params.id as string | undefined)
 )
 
-const post = ref<Post | null>(null)
+const page = ref<CmsPage | null>(null)
 const loading = ref(false)
 const saving = ref(false)
-const publishing = ref(false)
+const togglingPrivate = ref(false)
 const error = ref('')
+const forbidden = ref(false)
 
 const name = ref('')
-const headline = ref('')
 
 // Stable reference so PageShow's watch on `blocs` doesn't fire (and discard
-// in-progress edits) on unrelated re-renders when post.blocs is nullish.
-const blocs = computed(() => post.value?.blocs ?? [])
+// in-progress edits) on unrelated re-renders when page.blocs is nullish.
+const blocs = computed(() => page.value?.blocs ?? [])
 
-// Post updates are a full-replace PUT: strip read-only/reference fields so we
-// don't send back nested objects (owner, datasets, reuses) the write schema rejects.
-const toWritablePost = (p: Post) => {
+// Page updates are a full-replace PUT: strip read-only fields (owner/organization/topic
+// are set at creation and rejected on update) so we don't send back nested
+// objects the write schema rejects.
+const toWritablePage = (p: CmsPage) => {
   const {
     id: _id,
     slug: _slug,
-    url: _url,
+    uri: _uri,
+    page: _page,
     owner: _owner,
-    datasets: _datasets,
-    reuses: _reuses,
+    organization: _organization,
+    topic: _topic,
     created_at: _created_at,
     last_modified: _last_modified,
-    published: _published,
+    permissions: _permissions,
     ...writable
   } = p
   return writable
@@ -57,17 +60,22 @@ const breadcrumbLinks = computed(() => {
     { to: '/admin/cms', text: 'CMS' }
   ]
   if (isCreate.value) return [...base, { text: 'Nouvelle page' }]
-  return [...base, { text: post.value?.name ?? '…' }]
+  return [...base, { text: page.value?.name ?? '…' }]
 })
 
-const loadPost = async (id: string) => {
+const loadPage = async (id: string) => {
   loading.value = true
-  post.value = null
+  page.value = null
   error.value = ''
+  forbidden.value = false
   try {
-    post.value = await postStore.fetchPostById(id)
-    name.value = post.value.name
-    headline.value = post.value.headline || ''
+    const fetched = await cmsPageStore.fetchPageById(id)
+    if (!fetched.permissions.edit) {
+      forbidden.value = true
+      return
+    }
+    page.value = fetched
+    name.value = fetched.name
   } catch {
     error.value = 'Impossible de charger la page.'
   } finally {
@@ -76,9 +84,9 @@ const loadPost = async (id: string) => {
 }
 
 watch(
-  postId,
+  pageId,
   (id) => {
-    if (id) loadPost(id)
+    if (id) loadPage(id)
   },
   { immediate: true }
 )
@@ -91,15 +99,15 @@ const handleCreate = async () => {
   saving.value = true
   error.value = ''
   try {
-    const newPost = await postStore.createPost({
+    const newPage = await cmsPageStore.createPage({
       name: name.value,
-      headline: headline.value,
-      kind: 'page',
-      body_type: 'blocs',
       blocs: [],
-      tags: config.website.cms?.site_tag ? [config.website.cms.site_tag] : []
+      private: true,
+      ...(config.website.cms?.topic_id
+        ? { topic: config.website.cms.topic_id }
+        : {})
     })
-    await router.push(`/admin/cms/edit/${newPost.id}`)
+    await router.push(`/admin/cms/edit/${newPage.id}`)
   } catch {
     error.value = 'Erreur lors de la création.'
   } finally {
@@ -110,7 +118,7 @@ const handleCreate = async () => {
 const savingMeta = ref(false)
 
 const handleSaveMeta = async () => {
-  if (!post.value) return
+  if (!page.value) return
   if (!name.value.trim()) {
     error.value = 'Le titre est obligatoire.'
     return
@@ -118,15 +126,14 @@ const handleSaveMeta = async () => {
   savingMeta.value = true
   error.value = ''
   try {
-    const currentBlocs = post.value.blocs
-    const updated = await postStore.updatePost(post.value.id, {
-      ...toWritablePost(post.value),
-      name: name.value,
-      headline: headline.value
+    const currentBlocs = page.value.blocs
+    const updated = await cmsPageStore.updatePage(page.value.id, {
+      ...toWritablePage(page.value),
+      name: name.value
     })
     // Keep the bloc editor's array reference stable so its watcher doesn't
     // discard in-progress, unsaved bloc edits on an unrelated metadata save.
-    post.value = { ...updated, blocs: currentBlocs }
+    page.value = { ...page.value, ...updated, blocs: currentBlocs }
   } catch {
     error.value = 'Erreur lors de la sauvegarde.'
   } finally {
@@ -135,31 +142,34 @@ const handleSaveMeta = async () => {
 }
 
 const handleSave = async (updatedBlocs: PageBloc[]) => {
-  if (!post.value) return
+  if (!page.value) return
   saving.value = true
   try {
-    post.value = await postStore.updatePost(post.value.id, {
-      ...toWritablePost(post.value),
-      blocs: updatedBlocs
-    })
+    page.value = {
+      ...page.value,
+      ...(await cmsPageStore.updatePage(page.value.id, {
+        ...toWritablePage(page.value),
+        blocs: updatedBlocs
+      }))
+    }
   } finally {
     saving.value = false
   }
 }
 
-const togglePublish = async () => {
-  if (!post.value) return
-  publishing.value = true
+const togglePrivate = async () => {
+  if (!page.value) return
+  togglingPrivate.value = true
   try {
-    if (post.value.published) {
-      await postStore.unpublishPost(post.value.id)
-      post.value = { ...post.value, published: null }
-    } else {
-      const updated = await postStore.publishPost(post.value.id)
-      post.value = updated
+    page.value = {
+      ...page.value,
+      ...(await cmsPageStore.updatePage(page.value.id, {
+        ...toWritablePage(page.value),
+        private: !page.value.private
+      }))
     }
   } finally {
-    publishing.value = false
+    togglingPrivate.value = false
   }
 }
 </script>
@@ -171,15 +181,15 @@ const togglePublish = async () => {
         <DsfrBreadcrumb class="fr-mb-1v" :links="breadcrumbLinks" />
       </div>
       <div
-        v-if="!isCreate && post"
+        v-if="!isCreate && page"
         class="fr-col-auto fr-grid-row fr-grid-row--middle flex-gap"
       >
-        <span v-if="post.published" class="fr-badge fr-badge--success"
-          >Publié</span
+        <span v-if="!page.private" class="fr-badge fr-badge--success"
+          >Public</span
         >
-        <span v-else class="fr-badge fr-badge--new">Brouillon</span>
+        <span v-else class="fr-badge fr-badge--new">Privé</span>
         <RouterLink
-          :to="`/admin/cms/view/${post.id}`"
+          :to="`/admin/cms/view/${page.id}`"
           class="fr-btn fr-btn--secondary fr-btn--sm fr-icon-eye-line fr-btn--icon-left"
         >
           Aperçu
@@ -187,11 +197,17 @@ const togglePublish = async () => {
         <button
           type="button"
           class="fr-btn fr-btn--sm"
-          :class="post.published ? 'fr-btn--secondary' : ''"
-          :disabled="publishing"
-          @click="togglePublish"
+          :class="!page.private ? 'fr-btn--secondary' : ''"
+          :disabled="togglingPrivate"
+          @click="togglePrivate"
         >
-          {{ publishing ? '…' : post.published ? 'Dépublier' : 'Publier' }}
+          {{
+            togglingPrivate
+              ? '…'
+              : page.private
+                ? 'Rendre publique'
+                : 'Rendre privée'
+          }}
         </button>
       </div>
     </div>
@@ -199,6 +215,12 @@ const togglePublish = async () => {
 
   <div v-if="loading" class="fr-container fr-py-6w">
     <p>Chargement…</p>
+  </div>
+
+  <div v-else-if="forbidden" class="fr-container fr-py-4w">
+    <div class="fr-alert fr-alert--error">
+      <p>Vous n'avez pas les droits pour modifier cette page.</p>
+    </div>
   </div>
 
   <template v-else-if="isCreate">
@@ -211,24 +233,15 @@ const togglePublish = async () => {
 
       <form @submit.prevent="handleCreate">
         <div class="fr-mb-3w">
-          <label for="post-name" class="fr-label">
+          <label for="page-name" class="fr-label">
             Titre <span class="fr-hint-text">Obligatoire</span>
           </label>
           <input
-            id="post-name"
+            id="page-name"
             v-model="name"
             type="text"
             class="fr-input"
             required
-          />
-        </div>
-        <div class="fr-mb-3w">
-          <label for="post-headline" class="fr-label">Sous-titre</label>
-          <input
-            id="post-headline"
-            v-model="headline"
-            type="text"
-            class="fr-input"
           />
         </div>
         <button type="submit" class="fr-btn" :disabled="saving">
@@ -238,7 +251,7 @@ const togglePublish = async () => {
     </GenericContainer>
   </template>
 
-  <template v-else-if="post">
+  <template v-else-if="page">
     <div v-if="error" class="fr-container fr-py-1w">
       <div class="fr-alert fr-alert--error">
         <p>{{ error }}</p>
@@ -247,24 +260,15 @@ const togglePublish = async () => {
     <GenericContainer>
       <form @submit.prevent="handleSaveMeta">
         <div class="fr-mb-3w">
-          <label for="post-name" class="fr-label">
+          <label for="page-name" class="fr-label">
             Titre <span class="fr-hint-text">Obligatoire</span>
           </label>
           <input
-            id="post-name"
+            id="page-name"
             v-model="name"
             type="text"
             class="fr-input"
             required
-          />
-        </div>
-        <div class="fr-mb-3w">
-          <label for="post-headline" class="fr-label">Sous-titre</label>
-          <input
-            id="post-headline"
-            v-model="headline"
-            type="text"
-            class="fr-input"
           />
         </div>
         <button
@@ -276,12 +280,7 @@ const togglePublish = async () => {
         </button>
       </form>
     </GenericContainer>
-    <PageShow
-      v-if="post.body_type === 'blocs'"
-      :blocs="blocs"
-      :edit="true"
-      @save="handleSave"
-    />
+    <PageShow :blocs="blocs" :edit="true" @save="handleSave" />
   </template>
 
   <div v-else class="fr-container fr-py-4w">

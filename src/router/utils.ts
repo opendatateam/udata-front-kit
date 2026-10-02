@@ -1,9 +1,12 @@
+import config from '@/config'
 import {
   CUSTOM_FILTER_TYPES,
   type CmsPageConfig,
   type CustomFilterType,
   type PageObjectType
 } from '@/model/config'
+import { useTopicStore } from '@/store/TopicStore'
+import { useUserStore } from '@/store/UserStore'
 import { usePageConf, usePagesConf } from '@/utils/config'
 import {
   getDefaultDataserviceConfig,
@@ -357,41 +360,62 @@ export const useOrganizationsRoutes = (): RouteRecordRaw => {
   }
 }
 
+// only users with edit rights on the site's CMS topic (config.website.cms.topic_id)
+// may reach the admin routes — the topic is the mapping, there's no separate CMS permission
+async function canManageCmsPages(): Promise<boolean | { name: string }> {
+  const userStore = useUserStore()
+  await userStore.waitForStoreInit()
+  const topicId = config.website.cms?.topic_id
+  if (!userStore.isLoggedIn || topicId == null) return { name: 'not_found' }
+  try {
+    const topic = await useTopicStore().load(topicId, { authenticated: true })
+    if (userStore.hasEditPermissions(topic)) return true
+  } catch {
+    // topic missing or unreadable — fall through to redirect
+  }
+  return { name: 'not_found' }
+}
+
 export const useCmsRoutes = (cmsPages: CmsPageConfig[]): RouteRecordRaw[] => {
-  const adminRoutes: RouteRecordRaw[] = [
-    {
-      path: '/admin/cms',
-      name: 'cms_list',
-      component: async () => await import('@/views/cms/PostListView.vue'),
-      meta: { requiresAuth: true, title: 'Pages CMS' }
-    },
-    {
-      path: '/admin/cms/add',
-      name: 'cms_add',
-      component: async () => await import('@/views/cms/PostFormView.vue'),
-      meta: { requiresAuth: true, title: 'Nouvelle page' }
-    },
-    {
-      path: '/admin/cms/view/:id',
-      name: 'cms_view',
-      component: async () => await import('@/views/cms/PostPageView.vue'),
-      meta: { requiresAuth: true, title: 'Aperçu' }
-    },
-    {
-      path: '/admin/cms/edit/:id',
-      name: 'cms_edit',
-      component: async () => await import('@/views/cms/PostFormView.vue'),
-      meta: { requiresAuth: true, title: 'Modifier la page' }
-    }
-  ]
+  const adminRoutes: RouteRecordRaw = {
+    path: '/admin/cms',
+    beforeEnter: canManageCmsPages,
+    children: [
+      {
+        path: '',
+        name: 'cms_list',
+        component: async () => await import('@/views/cms/CmsPageListView.vue'),
+        meta: { requiresAuth: true, title: 'Pages CMS' }
+      },
+      {
+        path: 'add',
+        name: 'cms_add',
+        component: async () => await import('@/views/cms/CmsPageFormView.vue'),
+        meta: { requiresAuth: true, title: 'Nouvelle page' }
+      },
+      {
+        path: 'view/:id',
+        name: 'cms_view',
+        component: async () => await import('@/views/cms/CmsPageView.vue'),
+        meta: { requiresAuth: true, title: 'Aperçu' }
+      },
+      {
+        path: 'edit/:id',
+        name: 'cms_edit',
+        component: async () => await import('@/views/cms/CmsPageFormView.vue'),
+        meta: { requiresAuth: true, title: 'Modifier la page' }
+      }
+    ]
+  }
   const publicRoutes: RouteRecordRaw[] = cmsPages.map(
     (p): RouteRecordRaw => ({
       path: p.route,
-      component: async () => await import('@/views/cms/PostPageView.vue'),
-      props: { id: p.id }
+      component: async () => await import('@/views/cms/CmsPageView.vue'),
+      props: { id: p.id },
+      meta: { title: p.title }
     })
   )
-  return [...adminRoutes, ...publicRoutes]
+  return [adminRoutes, ...publicRoutes]
 }
 
 export const useRouteMeta = () => {

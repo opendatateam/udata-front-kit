@@ -11,9 +11,9 @@ site_id: ecospheres
 
 datagouvfr:
   # data.gouv.fr base URL (use www subdomain on prod)
-  base_url: https://demo.data.gouv.fr
+  base_url: http://dev.local:7000
   # oauth settings
-  oauth_client_id: 66e30254d3cc5d5b52a4b6ec
+  oauth_client_id: 6abf88a7107c2da18dd84b86
   tabular_api_url: https://tabular-api.preprod.data.gouv.fr
 
 # UI customizations
@@ -23,14 +23,14 @@ website:
   #
   # cms:
   #   enabled: {bool}               # enable the CMS feature (routes and admin menu)
-  #   site_tag: {string}            # tag applied to all posts created via this CMS (e.g. 'ecospheres')
+  #   topic_id: {string}            # id of the topic pages are attached to, scopes the admin list to this site
   #   pages:                        # list of CMS pages mapped to local routes (optional)
   #     - title: {string}           # display title
-  #       id: {string}              # post id on data.gouv.fr
+  #       id: {string}              # page id or slug on data.gouv.fr
   #       route: {string}           # local route path (e.g. /about)
   cms:
     enabled: true
-    site_tag: 'ecospheres'
+    topic_id: 6a7ace437c3ff15d6a2ebaaa
     pages:
       - title: Test du CMS
         id: 6aa23f34d98bb8b63e32e6f3
