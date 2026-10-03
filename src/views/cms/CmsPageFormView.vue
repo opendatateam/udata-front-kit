@@ -6,7 +6,9 @@ import GenericContainer from '@/components/GenericContainer.vue'
 import PageShow from '@/components/cms/PageShow.vue'
 import config from '@/config'
 import type { CmsPage } from '@/model/cms'
+import type { CmsCategoryConfig } from '@/model/config'
 import { useCmsPageStore } from '@/store/CmsPageStore'
+import { categoryIdFromTags, withCategoryTag } from '@/utils/cms'
 
 const props = defineProps<{
   id?: string
@@ -29,6 +31,13 @@ const error = ref('')
 const forbidden = ref(false)
 
 const name = ref('')
+const categoryId = ref<string | null>(null)
+const categories = computed<CmsCategoryConfig[]>(
+  () => config.website.cms?.categories ?? []
+)
+const categoryOptions = computed(() =>
+  categories.value.map((c) => ({ value: c.id, text: c.label }))
+)
 
 // Stable reference so PageShow's watch on `blocs` doesn't fire (and discard
 // in-progress edits) on unrelated re-renders when page.blocs is nullish.
@@ -76,6 +85,7 @@ const loadPage = async (id: string) => {
     }
     page.value = fetched
     name.value = fetched.name
+    categoryId.value = categoryIdFromTags(fetched.tags)
   } catch {
     error.value = 'Impossible de charger la page.'
   } finally {
@@ -103,6 +113,7 @@ const handleCreate = async () => {
       name: name.value,
       blocs: [],
       private: true,
+      tags: withCategoryTag([], categoryId.value),
       ...(config.website.cms?.topic_id
         ? { topic: config.website.cms.topic_id }
         : {})
@@ -129,7 +140,8 @@ const handleSaveMeta = async () => {
     const currentBlocs = page.value.blocs
     const updated = await cmsPageStore.updatePage(page.value.id, {
       ...toWritablePage(page.value),
-      name: name.value
+      name: name.value,
+      tags: withCategoryTag(page.value.tags, categoryId.value)
     })
     // Keep the bloc editor's array reference stable so its watcher doesn't
     // discard in-progress, unsaved bloc edits on an unrelated metadata save.
@@ -244,6 +256,15 @@ const togglePrivate = async () => {
             required
           />
         </div>
+        <div v-if="categories.length" class="fr-mb-3w">
+          <DsfrSelect
+            id="page-category"
+            v-model="categoryId"
+            label="Catégorie"
+            default-unselected-text="Aucune (page fixe)"
+            :options="categoryOptions"
+          />
+        </div>
         <button type="submit" class="fr-btn" :disabled="saving">
           {{ saving ? 'Création en cours…' : 'Créer la page' }}
         </button>
@@ -269,6 +290,15 @@ const togglePrivate = async () => {
             type="text"
             class="fr-input"
             required
+          />
+        </div>
+        <div v-if="categories.length" class="fr-mb-3w">
+          <DsfrSelect
+            id="page-category"
+            v-model="categoryId"
+            label="Catégorie"
+            default-unselected-text="Aucune (page fixe)"
+            :options="categoryOptions"
           />
         </div>
         <button

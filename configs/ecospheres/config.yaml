@@ -24,10 +24,14 @@ website:
   # cms:
   #   enabled: {bool}               # enable the CMS feature (routes and admin menu)
   #   topic_id: {string}            # id of the topic pages are attached to, scopes the admin list to this site
-  #   pages:                        # list of CMS pages mapped to local routes (optional)
+  #   pages:                        # list of known CMS pages mapped to a fixed local route (optional)
   #     - title: {string}           # display title
   #       id: {string}              # page id or slug on data.gouv.fr
   #       route: {string}           # local route path (e.g. /about)
+  #   categories:                   # selectable categories for self-service pages, routed by slug (optional)
+  #     - id: {string}              # stored on the page as a `cms-category:{id}` tag
+  #       label: {string}           # shown in the category picker
+  #       route_prefix: {string}    # pages in this category are served at `{route_prefix}/{slug}`
   cms:
     enabled: true
     topic_id: 6a7ace437c3ff15d6a2ebaaa
@@ -35,6 +39,10 @@ website:
       - title: Test du CMS
         id: 6aa23f34d98bb8b63e32e6f3
         route: /test-du-cms
+    categories:
+      - id: news
+        label: Actualités
+        route_prefix: /actualites
   seo:
     canonical_url: https://demo.ecologie.data.gouv.fr
     # global metas injected

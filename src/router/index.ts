@@ -123,7 +123,7 @@ defaultRoutes.forEach((route) => {
   routesMap.set(route.path, route)
 })
 const cmsRoutes = config.website.cms?.enabled
-  ? useCmsRoutes(config.website.cms.pages ?? [])
+  ? useCmsRoutes(config.website.cms)
   : []
 
 const routerPromise = siteRoutesPromise.then((siteRoutes) => {

@@ -1,7 +1,7 @@
 import config from '@/config'
 import {
   CUSTOM_FILTER_TYPES,
-  type CmsPageConfig,
+  type CmsConfig,
   type CustomFilterType,
   type PageObjectType
 } from '@/model/config'
@@ -376,7 +376,7 @@ async function canManageCmsPages(): Promise<boolean | { name: string }> {
   return { name: 'not_found' }
 }
 
-export const useCmsRoutes = (cmsPages: CmsPageConfig[]): RouteRecordRaw[] => {
+export const useCmsRoutes = (cms: CmsConfig): RouteRecordRaw[] => {
   const adminRoutes: RouteRecordRaw = {
     path: '/admin/cms',
     beforeEnter: canManageCmsPages,
@@ -407,7 +407,8 @@ export const useCmsRoutes = (cmsPages: CmsPageConfig[]): RouteRecordRaw[] => {
       }
     ]
   }
-  const publicRoutes: RouteRecordRaw[] = cmsPages.map(
+  // known pages, statically mapped to a fixed route
+  const pageRoutes: RouteRecordRaw[] = (cms.pages ?? []).map(
     (p): RouteRecordRaw => ({
       path: p.route,
       component: async () => await import('@/views/cms/CmsPageView.vue'),
@@ -415,7 +416,19 @@ export const useCmsRoutes = (cmsPages: CmsPageConfig[]): RouteRecordRaw[] => {
       meta: { title: p.title }
     })
   )
-  return [adminRoutes, ...publicRoutes]
+  // arbitrary pages self-registered under a configured category (see utils/cms.ts),
+  // resolved by slug at runtime so no deploy is needed to add a new one
+  const categoryRoutes: RouteRecordRaw[] = (cms.categories ?? []).map(
+    (c): RouteRecordRaw => ({
+      path: `${c.route_prefix}/:slug`,
+      component: async () => await import('@/views/cms/CmsPageView.vue'),
+      props: (route: RouteLocationNormalizedLoaded) => ({
+        id: route.params.slug as string
+      }),
+      meta: { title: c.label }
+    })
+  )
+  return [adminRoutes, ...pageRoutes, ...categoryRoutes]
 }
 
 export const useRouteMeta = () => {

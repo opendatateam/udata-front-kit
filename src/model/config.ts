@@ -158,10 +158,19 @@ export interface CmsPageConfig {
   route: string
 }
 
+// a selectable collection of CMS pages (e.g. news articles), routed as
+// `${route_prefix}/:slug` and marked on the page via a tag (see utils/cms.ts)
+export interface CmsCategoryConfig {
+  id: string
+  label: string
+  route_prefix: string
+}
+
 export interface CmsConfig {
   enabled: boolean
   topic_id?: string // scopes the CMS page list to pages attached to this topic
   pages?: CmsPageConfig[]
+  categories?: CmsCategoryConfig[]
 }
 
 type FooterMandatoryLink = {
