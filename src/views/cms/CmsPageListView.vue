@@ -131,7 +131,11 @@ const handleDelete = async (page: CmsPage) => {
                       class="fr-badge fr-badge--success"
                       >Publié</span
                     >
-                    <span v-else class="fr-badge fr-badge--new">Brouillon</span>
+                    <span
+                      v-else
+                      class="fr-badge fr-badge--new fr-badge--no-icon"
+                      >Brouillon</span
+                    >
                   </td>
                   <td>{{ formatDate(page.last_modified, true) }}</td>
                   <td>

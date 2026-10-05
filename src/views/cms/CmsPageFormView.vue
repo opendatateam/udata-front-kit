@@ -209,7 +209,9 @@ const togglePublish = async () => {
         <span v-if="page.published" class="fr-badge fr-badge--success"
           >Publié</span
         >
-        <span v-else class="fr-badge fr-badge--new">Brouillon</span>
+        <span v-else class="fr-badge fr-badge--new fr-badge--no-icon"
+          >Brouillon</span
+        >
         <RouterLink
           :to="`/admin/cms/view/${page.id}`"
           class="fr-btn fr-btn--secondary fr-btn--sm fr-icon-eye-line fr-btn--icon-left"
@@ -249,9 +251,7 @@ const togglePublish = async () => {
 
       <form @submit.prevent="handleCreate">
         <div class="fr-mb-3w">
-          <label for="page-name" class="fr-label">
-            Titre <span class="fr-hint-text">Obligatoire</span>
-          </label>
+          <label for="page-name" class="fr-label"> Titre (obligatoire) </label>
           <input
             id="page-name"
             v-model="name"
@@ -302,9 +302,7 @@ const togglePublish = async () => {
     <form @submit.prevent="handleSave">
       <GenericContainer>
         <div class="fr-mb-3w">
-          <label for="page-name" class="fr-label">
-            Titre <span class="fr-hint-text">Obligatoire</span>
-          </label>
+          <label for="page-name" class="fr-label"> Titre (obligatoire) </label>
           <input
             id="page-name"
             v-model="name"
