@@ -4,6 +4,7 @@ import config from '@/config'
 import type { GenericResponse } from '@/model/api'
 import type { CmsPage } from '@/model/cms'
 import CmsPagesAPI from '@/services/api/resources/CmsPagesAPI'
+import { categoryTag } from '@/utils/cms'
 
 const cmsPagesAPI = new CmsPagesAPI()
 
@@ -27,6 +28,23 @@ export const useCmsPageStore = defineStore('cmsPage', {
           sort: '-last_modified'
         },
         authenticated: true
+      })
+      return response.data as CmsPage[]
+    },
+    // public, unauthenticated: only published pages (no with_drafts), for
+    // front-of-site widgets like the homepage news list.
+    async listPublishedByCategory(
+      categoryId: string,
+      limit?: number
+    ): Promise<CmsPage[]> {
+      const topicId = config.website.cms?.topic_id
+      const response: GenericResponse = await cmsPagesAPI.list({
+        params: {
+          ...(topicId ? { topic: topicId } : {}),
+          tag: categoryTag(categoryId),
+          sort: '-published',
+          ...(limit ? { page_size: limit } : {})
+        }
       })
       return response.data as CmsPage[]
     },
