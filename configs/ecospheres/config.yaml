@@ -7,7 +7,7 @@ sentry:
   dsn: https://a72e28ddb7b20ea56b0c8e43d52b3ffc@errors.data.gouv.fr/49
   domain_url: https://errors.data.gouv.fr
   environment: prod
-  tracesSampleRate: 0.1  # enables performance monitoring for 10% of navigations
+  tracesSampleRate: 0.1 # enables performance monitoring for 10% of navigations
 
 datagouvfr:
   # data.gouv.fr base URL (use www subdomain on prod)
