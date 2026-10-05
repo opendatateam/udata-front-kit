@@ -187,7 +187,7 @@ export type SentryConfig = {
   domain_url?: string // Mandatory to send sourcemaps to Sentry. This is not used in sentry options, it is only used in vite.config.mts to send sourcemaps to the correct domain.
   environment?: string
   tracePropagationTargets?: RegExp[]
-  tracesSampleRate?: number
+  tracesSampleRate?: number // Enables performance monitoring (page loads, navigations, requests) when set
   replaysSessionSampleRate?: number
   replaysOnErrorSampleRate?: number
 }
