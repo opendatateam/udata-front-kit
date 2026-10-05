@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { PageBloc } from '@datagouv/components-next'
+import { toast, type PageBloc } from '@datagouv/components-next'
 import { useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
@@ -46,9 +46,9 @@ const categoryOptions = computed(() =>
   categories.value.map((c) => ({ value: c.id, text: c.label }))
 )
 
-// Stable reference so PageShow's watch on `blocs` doesn't fire (and discard
-// in-progress edits) on unrelated re-renders when page.blocs is nullish.
-const blocs = computed(() => page.value?.blocs ?? [])
+// Draft kept separate from `page.blocs` until the single save button is
+// clicked, same as the other metadata fields below.
+const draftBlocs = ref<PageBloc[]>([])
 
 // Page updates are a full-replace PUT: strip read-only fields (owner/organization
 // are set at creation and rejected on update, published only changes via the publish
@@ -94,6 +94,7 @@ const loadPage = async (id: string) => {
     name.value = fetched.name
     description.value = fetched.description ?? ''
     categoryId.value = categoryIdFromTags(fetched.tags)
+    draftBlocs.value = [...fetched.blocs]
   } catch {
     error.value = 'Impossible de charger la page.'
   } finally {
@@ -150,45 +151,27 @@ const handleCreate = async () => {
   }
 }
 
-const savingMeta = ref(false)
-
-const handleSaveMeta = async () => {
+const handleSave = async () => {
   if (!page.value) return
   if (!name.value.trim()) {
     error.value = 'Le titre est obligatoire.'
     return
   }
-  savingMeta.value = true
+  saving.value = true
   error.value = ''
   try {
-    const currentBlocs = page.value.blocs
     const updated = await cmsPageStore.updatePage(page.value.id, {
       ...toWritablePage(page.value),
       name: name.value,
       description: description.value.trim() || null,
-      tags: withCategoryTag(page.value.tags, categoryId.value)
+      tags: withCategoryTag(page.value.tags, categoryId.value),
+      blocs: draftBlocs.value
     })
-    // Keep the bloc editor's array reference stable so its watcher doesn't
-    // discard in-progress, unsaved bloc edits on an unrelated metadata save.
-    page.value = { ...page.value, ...updated, blocs: currentBlocs }
+    page.value = { ...page.value, ...updated }
+    draftBlocs.value = [...updated.blocs]
+    toast.success('Page enregistrée.')
   } catch {
     error.value = 'Erreur lors de la sauvegarde.'
-  } finally {
-    savingMeta.value = false
-  }
-}
-
-const handleSave = async (updatedBlocs: PageBloc[]) => {
-  if (!page.value) return
-  saving.value = true
-  try {
-    page.value = {
-      ...page.value,
-      ...(await cmsPageStore.updatePage(page.value.id, {
-        ...toWritablePage(page.value),
-        blocs: updatedBlocs
-      }))
-    }
   } finally {
     saving.value = false
   }
@@ -316,8 +299,8 @@ const togglePublish = async () => {
         <p>{{ error }}</p>
       </div>
     </div>
-    <GenericContainer>
-      <form @submit.prevent="handleSaveMeta">
+    <form @submit.prevent="handleSave">
+      <GenericContainer>
         <div class="fr-mb-3w">
           <label for="page-name" class="fr-label">
             Titre <span class="fr-hint-text">Obligatoire</span>
@@ -353,16 +336,14 @@ const togglePublish = async () => {
             :options="categoryOptions"
           />
         </div>
-        <button
-          type="submit"
-          class="fr-btn fr-btn--secondary fr-btn--sm"
-          :disabled="savingMeta"
-        >
-          {{ savingMeta ? 'Sauvegarde…' : 'Enregistrer les métadonnées' }}
+      </GenericContainer>
+      <PageShow v-model:blocs="draftBlocs" :edit="true" />
+      <GenericContainer>
+        <button type="submit" class="fr-btn" :disabled="saving">
+          {{ saving ? 'Enregistrement…' : 'Enregistrer' }}
         </button>
-      </form>
-    </GenericContainer>
-    <PageShow :blocs="blocs" :edit="true" @save="handleSave" />
+      </GenericContainer>
+    </form>
   </template>
 
   <div v-else class="fr-container fr-py-4w">
