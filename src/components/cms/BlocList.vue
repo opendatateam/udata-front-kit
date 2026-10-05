@@ -73,29 +73,37 @@ const addBlocAtStart = (bloc: PageBloc) => {
 
 <template>
   <div>
-    <div v-if="edit" :class="nested ? 'fr-py-2w' : 'fr-container fr-py-2w'">
+    <div v-if="edit" :class="nested ? '' : 'fr-container'">
       <AddBlocDropdown :allowed="allowed" @add="addBlocAtStart" />
     </div>
 
     <template v-for="(bloc, index) in blocs" :key="bloc.id">
-      <!-- HeroBloc — full width -->
+      <!-- HeroBloc — full width when displayed, contained like other blocs while editing -->
       <template v-if="bloc.class === 'HeroBloc'">
+        <div v-if="edit" :class="nested ? 'fr-py-3w' : 'fr-container fr-py-3w'">
+          <HeroBlocComponent
+            :model-value="bloc"
+            :edit="edit"
+            @update:model-value="updateBloc(index, $event)"
+          />
+          <div class="fr-mt-1w">
+            <BlocControls
+              :index="index"
+              :total="blocs.length"
+              :allowed="allowed"
+              @move-up="moveUp"
+              @move-down="moveDown"
+              @remove="removeBloc"
+              @add="addBlocAt"
+            />
+          </div>
+        </div>
         <HeroBlocComponent
+          v-else
           :model-value="bloc"
           :edit="edit"
           @update:model-value="updateBloc(index, $event)"
         />
-        <div v-if="edit" class="fr-container fr-py-1w">
-          <BlocControls
-            :index="index"
-            :total="blocs.length"
-            :allowed="allowed"
-            @move-up="moveUp"
-            @move-down="moveDown"
-            @remove="removeBloc"
-            @add="addBlocAt"
-          />
-        </div>
       </template>
 
       <!-- other bloc types — contained -->

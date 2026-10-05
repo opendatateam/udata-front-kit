@@ -34,7 +34,7 @@ const update = (patch: Partial<AccordionListBloc>) => {
 }
 
 const addItem = () => {
-  const item: AccordionItemBloc = { title: 'Nouvelle section', content: [] }
+  const item: AccordionItemBloc = { title: '', content: [] }
   update({ items: [...props.modelValue.items, item] })
 }
 
@@ -78,7 +78,7 @@ const updateItemContent = (index: number, content: ContentBloc[]) => {
   <div v-else class="fr-p-3w fr-background-alt--blue-france">
     <div class="fr-mb-2w">
       <label :for="`accordion-title-${modelValue.id}`" class="fr-label"
-        >Titre</label
+        >Titre (facultatif)</label
       >
       <input
         :id="`accordion-title-${modelValue.id}`"
@@ -92,7 +92,7 @@ const updateItemContent = (index: number, content: ContentBloc[]) => {
     </div>
     <div class="fr-mb-3w">
       <label :for="`accordion-description-${modelValue.id}`" class="fr-label"
-        >Description</label
+        >Description (facultatif)</label
       >
       <textarea
         :id="`accordion-description-${modelValue.id}`"
@@ -116,15 +116,23 @@ const updateItemContent = (index: number, content: ContentBloc[]) => {
       <div
         class="fr-grid-row fr-grid-row--middle fr-grid-row--space-between fr-mb-1w"
       >
-        <input
-          type="text"
-          class="fr-input"
-          style="max-width: 60%"
-          :value="item.title"
-          @input="
-            updateItemTitle(index, ($event.target as HTMLInputElement).value)
-          "
-        />
+        <div style="max-width: 60%; width: 100%">
+          <label
+            :for="`accordion-item-title-${modelValue.id}-${index}`"
+            class="fr-label"
+            >Titre de la section (obligatoire)</label
+          >
+          <input
+            :id="`accordion-item-title-${modelValue.id}-${index}`"
+            type="text"
+            class="fr-input"
+            :value="item.title"
+            required
+            @input="
+              updateItemTitle(index, ($event.target as HTMLInputElement).value)
+            "
+          />
+        </div>
         <button
           type="button"
           class="fr-btn fr-btn--tertiary-no-outline fr-btn--sm fr-icon-delete-line"

@@ -69,19 +69,20 @@ const addLink = () => {
   <div v-else class="fr-p-3w fr-background-alt--blue-france">
     <div class="fr-mb-2w">
       <label :for="`links-title-${modelValue.id}`" class="fr-label"
-        >Titre</label
+        >Titre (obligatoire)</label
       >
       <input
         :id="`links-title-${modelValue.id}`"
         type="text"
         class="fr-input"
         :value="modelValue.title"
+        required
         @input="update({ title: ($event.target as HTMLInputElement).value })"
       />
     </div>
     <div class="fr-mb-2w">
       <label :for="`links-subtitle-${modelValue.id}`" class="fr-label"
-        >Sous-titre</label
+        >Sous-titre (facultatif)</label
       >
       <input
         :id="`links-subtitle-${modelValue.id}`"
@@ -97,7 +98,7 @@ const addLink = () => {
     </div>
     <div class="fr-mb-2w">
       <label :for="`links-paragraph-${modelValue.id}`" class="fr-label"
-        >Paragraphe</label
+        >Paragraphe (facultatif)</label
       >
       <textarea
         :id="`links-paragraph-${modelValue.id}`"
@@ -115,7 +116,7 @@ const addLink = () => {
     <div class="fr-grid-row fr-grid-row--gutters fr-mb-2w">
       <div class="fr-col-6">
         <label :for="`links-main-title-${modelValue.id}`" class="fr-label">
-          Titre du lien principal (optionnel)
+          Titre du lien principal (facultatif)
         </label>
         <input
           :id="`links-main-title-${modelValue.id}`"
@@ -131,7 +132,7 @@ const addLink = () => {
       </div>
       <div class="fr-col-6">
         <label :for="`links-main-url-${modelValue.id}`" class="fr-label">
-          URL du lien principal (optionnel)
+          URL du lien principal (facultatif)
         </label>
         <input
           :id="`links-main-url-${modelValue.id}`"
@@ -157,13 +158,14 @@ const addLink = () => {
         <label
           :for="`links-link-title-${modelValue.id}-${index}`"
           class="fr-label"
-          >Titre</label
+          >Titre (obligatoire)</label
         >
         <input
           :id="`links-link-title-${modelValue.id}-${index}`"
           type="text"
           class="fr-input"
           :value="link.title"
+          required
           @input="
             updateLink(index, {
               title: ($event.target as HTMLInputElement).value
@@ -175,13 +177,14 @@ const addLink = () => {
         <label
           :for="`links-link-url-${modelValue.id}-${index}`"
           class="fr-label"
-          >URL</label
+          >URL (obligatoire)</label
         >
         <input
           :id="`links-link-url-${modelValue.id}-${index}`"
           type="url"
           class="fr-input"
           :value="link.url"
+          required
           @input="
             updateLink(index, {
               url: ($event.target as HTMLInputElement).value
@@ -193,7 +196,7 @@ const addLink = () => {
         <label
           :for="`links-link-color-${modelValue.id}-${index}`"
           class="fr-label"
-          >Couleur (optionnel)</label
+          >Couleur (facultatif)</label
         >
         <input
           :id="`links-link-color-${modelValue.id}-${index}`"

@@ -13,7 +13,7 @@ datagouvfr:
   # data.gouv.fr base URL (use www subdomain on prod)
   base_url: http://dev.local:7000
   # oauth settings
-  oauth_client_id: 6abf88a7107c2da18dd84b86
+  oauth_client_id: 6ac3a94496e64b262aa3fd3e
   tabular_api_url: https://tabular-api.preprod.data.gouv.fr
 
 # UI customizations
@@ -34,7 +34,7 @@ website:
   #       route_prefix: {string}    # pages in this category are served at `{route_prefix}/{slug}`
   cms:
     enabled: true
-    topic_id: 6a7ace437c3ff15d6a2ebaaa
+    topic_id: 6ac3aa2bf28defa350b0579e
     pages:
       - title: Test du CMS
         id: 6aa23f34d98bb8b63e32e6f3

@@ -4,6 +4,8 @@ import { useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
 import PageShow from '@/components/cms/PageShow.vue'
+import ErrorMessage from '@/components/forms/ErrorMessage.vue'
+import ErrorSummary from '@/components/forms/ErrorSummary.vue'
 import CmsPageOwnerForm from '@/components/forms/cms/CmsPageOwnerForm.vue'
 import config from '@/config'
 import type { CmsPage } from '@/model/cms'
@@ -46,6 +48,45 @@ const categoryOptions = computed(() =>
   categories.value.map((c) => ({ value: c.id, text: c.label }))
 )
 
+const errorSummary = ref()
+const formErrors: Ref<string[]> = ref([])
+const inputErrorMessages = new Map([
+  ['name', 'Le titre est obligatoire.'],
+  ['organization', 'Veuillez sélectionner une organisation.']
+])
+const hasError = (field: string) => formErrors.value.includes(field)
+const getErrorMessage = (field: string) => inputErrorMessages.get(field) || ''
+
+// Mirrors TopicForm's validateFields(): the owner radio defaults to
+// "organization" with nothing selected yet, so that case must be caught
+// explicitly or the page silently gets created without one.
+const validateCreateFields = (): boolean => {
+  const errors: string[] = []
+  if (!name.value.trim()) errors.push('name')
+  if (ownerDraft.value.owner == null && ownerDraft.value.organization == null) {
+    errors.push('organization')
+  }
+  formErrors.value = errors
+  return errors.length === 0
+}
+
+const validateEditFields = (): boolean => {
+  const errors: string[] = []
+  if (!name.value.trim()) errors.push('name')
+  formErrors.value = errors
+  return errors.length === 0
+}
+
+const focusErrorSummary = () => {
+  setTimeout(() => {
+    errorSummary.value?.$el.focus({ preventScroll: true })
+    errorSummary.value?.$el.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    })
+  }, 0)
+}
+
 // Draft kept separate from `page.blocs` until the single save button is
 // clicked, same as the other metadata fields below.
 const draftBlocs = ref<PageBloc[]>([])
@@ -83,6 +124,7 @@ const loadPage = async (id: string) => {
   loading.value = true
   page.value = null
   error.value = ''
+  formErrors.value = []
   forbidden.value = false
   try {
     const fetched = await cmsPageStore.fetchPageById(id)
@@ -111,8 +153,8 @@ watch(
 )
 
 const handleCreate = async () => {
-  if (!name.value.trim()) {
-    error.value = 'Le titre est obligatoire.'
+  if (!validateCreateFields()) {
+    focusErrorSummary()
     return
   }
   saving.value = true
@@ -153,8 +195,8 @@ const handleCreate = async () => {
 
 const handleSave = async () => {
   if (!page.value) return
-  if (!name.value.trim()) {
-    error.value = 'Le titre est obligatoire.'
+  if (!validateEditFields()) {
+    focusErrorSummary()
     return
   }
   saving.value = true
@@ -243,57 +285,91 @@ const togglePublish = async () => {
 
   <template v-else-if="isCreate">
     <GenericContainer>
-      <h1 class="fr-h2">Nouvelle page</h1>
+      <h1 class="fr-col-auto fr-mb-2v">Nouvelle page</h1>
 
       <div v-if="error" class="fr-alert fr-alert--error fr-mb-3w">
         <p>{{ error }}</p>
       </div>
 
       <form @submit.prevent="handleCreate">
-        <div class="fr-mb-3w">
-          <label for="page-name" class="fr-label"> Titre (obligatoire) </label>
-          <input
-            id="page-name"
-            v-model="name"
-            type="text"
-            class="fr-input"
-            required
-          />
-        </div>
-        <div class="fr-mb-3w">
-          <label for="page-description" class="fr-label">
-            Description
-            <span class="fr-hint-text"
-              >Utilisée comme description pour le référencement (SEO).</span
-            >
-          </label>
-          <textarea
-            id="page-description"
-            v-model="description"
-            class="fr-input"
-            rows="3"
-          />
-        </div>
-        <div v-if="categories.length" class="fr-mb-3w">
-          <DsfrSelect
-            id="page-category"
-            v-model="categoryId"
-            label="Catégorie"
-            default-unselected-text="Aucune (page fixe)"
-            :options="categoryOptions"
-          />
-        </div>
-        <div class="fr-mb-3w">
+        <ErrorSummary
+          v-show="formErrors.length"
+          ref="errorSummary"
+          :form-error-messages-map="inputErrorMessages"
+          :form-errors="formErrors"
+          heading-level="h3"
+        />
+        <fieldset>
+          <legend class="fr-fieldset__legend fr-text--lead">
+            Informations de la page
+          </legend>
+          <div class="fr-mb-3w">
+            <label for="input-name" class="fr-label">
+              Titre (obligatoire)
+            </label>
+            <input
+              id="input-name"
+              v-model="name"
+              type="text"
+              class="fr-input"
+              :aria-invalid="hasError('name') ? true : undefined"
+              :aria-errormessage="hasError('name') ? 'errors-name' : undefined"
+            />
+            <ErrorMessage
+              v-if="hasError('name')"
+              input-name="name"
+              :error-message="getErrorMessage('name')"
+            />
+          </div>
+          <div class="fr-mb-3w">
+            <label for="page-description" class="fr-label">
+              Description (facultatif)
+              <span class="fr-hint-text"
+                >Utilisée comme description pour le référencement (SEO).</span
+              >
+            </label>
+            <textarea
+              id="page-description"
+              v-model="description"
+              class="fr-input"
+              rows="3"
+            />
+          </div>
+          <div v-if="categories.length" class="fr-mb-3w">
+            <DsfrSelect
+              id="page-category"
+              v-model="categoryId"
+              label="Catégorie (facultatif)"
+              hint="Détermine le préfixe d'URL de la page. Sans catégorie, la page est une page statique dont la route est définie dans la configuration du site."
+              default-unselected-text="Aucune (page statique)"
+              :options="categoryOptions"
+            />
+          </div>
+        </fieldset>
+        <fieldset id="input-organization">
+          <legend class="fr-fieldset__legend fr-text--lead">
+            Propriétaire de la page
+          </legend>
           <CmsPageOwnerForm v-model="ownerDraft" />
+          <ErrorMessage
+            v-if="hasError('organization')"
+            input-name="organization"
+            :error-message="getErrorMessage('organization')"
+          />
+        </fieldset>
+        <div class="fr-mt-4w">
+          <button type="submit" class="fr-btn" :disabled="saving">
+            {{ saving ? 'Création en cours…' : 'Créer la page' }}
+          </button>
         </div>
-        <button type="submit" class="fr-btn" :disabled="saving">
-          {{ saving ? 'Création en cours…' : 'Créer la page' }}
-        </button>
       </form>
     </GenericContainer>
   </template>
 
   <template v-else-if="page">
+    <GenericContainer>
+      <h1 class="fr-col-auto fr-mb-2v">{{ page.name }}</h1>
+    </GenericContainer>
     <div v-if="error" class="fr-container fr-py-1w">
       <div class="fr-alert fr-alert--error">
         <p>{{ error }}</p>
@@ -301,41 +377,67 @@ const togglePublish = async () => {
     </div>
     <form @submit.prevent="handleSave">
       <GenericContainer>
-        <div class="fr-mb-3w">
-          <label for="page-name" class="fr-label"> Titre (obligatoire) </label>
-          <input
-            id="page-name"
-            v-model="name"
-            type="text"
-            class="fr-input"
-            required
-          />
-        </div>
-        <div class="fr-mb-3w">
-          <label for="page-description" class="fr-label">
-            Description
-            <span class="fr-hint-text"
-              >Utilisée comme description pour le référencement (SEO).</span
-            >
-          </label>
-          <textarea
-            id="page-description"
-            v-model="description"
-            class="fr-input"
-            rows="3"
-          />
-        </div>
-        <div v-if="categories.length" class="fr-mb-3w">
-          <DsfrSelect
-            id="page-category"
-            v-model="categoryId"
-            label="Catégorie"
-            default-unselected-text="Aucune (page fixe)"
-            :options="categoryOptions"
-          />
-        </div>
+        <ErrorSummary
+          v-show="formErrors.length"
+          ref="errorSummary"
+          :form-error-messages-map="inputErrorMessages"
+          :form-errors="formErrors"
+          heading-level="h3"
+        />
+        <fieldset>
+          <legend class="fr-fieldset__legend fr-text--lead">
+            Informations de la page
+          </legend>
+          <div class="fr-mb-3w">
+            <label for="input-name" class="fr-label">
+              Titre (obligatoire)
+            </label>
+            <input
+              id="input-name"
+              v-model="name"
+              type="text"
+              class="fr-input"
+              :aria-invalid="hasError('name') ? true : undefined"
+              :aria-errormessage="hasError('name') ? 'errors-name' : undefined"
+            />
+            <ErrorMessage
+              v-if="hasError('name')"
+              input-name="name"
+              :error-message="getErrorMessage('name')"
+            />
+          </div>
+          <div class="fr-mb-3w">
+            <label for="page-description" class="fr-label">
+              Description (facultatif)
+              <span class="fr-hint-text"
+                >Utilisée comme description pour le référencement (SEO).</span
+              >
+            </label>
+            <textarea
+              id="page-description"
+              v-model="description"
+              class="fr-input"
+              rows="3"
+            />
+          </div>
+          <div v-if="categories.length" class="fr-mb-3w">
+            <DsfrSelect
+              id="page-category"
+              v-model="categoryId"
+              label="Catégorie (facultatif)"
+              hint="Détermine le préfixe d'URL de la page. Sans catégorie, la page est une page statique dont la route est définie dans la configuration du site."
+              default-unselected-text="Aucune (page statique)"
+              :options="categoryOptions"
+            />
+          </div>
+        </fieldset>
       </GenericContainer>
-      <PageShow v-model:blocs="draftBlocs" :edit="true" />
+      <fieldset>
+        <legend class="content-legend fr-fieldset__legend fr-text--lead">
+          <div class="fr-container">Contenu de la page</div>
+        </legend>
+        <PageShow v-model:blocs="draftBlocs" :edit="true" />
+      </fieldset>
       <GenericContainer>
         <button type="submit" class="fr-btn" :disabled="saving">
           {{ saving ? 'Enregistrement…' : 'Enregistrer' }}
@@ -348,3 +450,21 @@ const togglePublish = async () => {
     <p>{{ error || 'Page introuvable.' }}</p>
   </div>
 </template>
+
+<style scoped>
+fieldset,
+:deep(fieldset:not(fieldset fieldset)) {
+  padding: 0;
+  margin: 2rem 0 0;
+  border: none;
+}
+fieldset legend {
+  padding: 0;
+  margin-inline: 0;
+}
+.content-legend {
+  display: block;
+  width: 100%;
+  margin-bottom: -0.5rem;
+}
+</style>

@@ -80,7 +80,7 @@ const update = (patch: Partial<ReusesListBloc>) => {
   <div v-else class="fr-p-3w fr-background-alt--blue-france">
     <div class="fr-mb-2w">
       <label :for="`reuses-title-${modelValue.id}`" class="fr-label">
-        Titre <span class="fr-hint-text">Obligatoire</span>
+        Titre (obligatoire)
       </label>
       <input
         :id="`reuses-title-${modelValue.id}`"

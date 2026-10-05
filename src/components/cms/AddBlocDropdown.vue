@@ -24,7 +24,7 @@ const isOpen = ref(false)
 const createHeroBloc = (): HeroBloc => ({
   id: crypto.randomUUID(),
   class: 'HeroBloc',
-  title: 'Titre du bandeau',
+  title: '',
   description: null,
   color: 'primary',
   main_link_title: null,
@@ -42,7 +42,7 @@ const createMarkdownBloc = (): MarkdownBloc => ({
 const createDatasetsListBloc = (): DatasetsListBloc => ({
   id: crypto.randomUUID(),
   class: 'DatasetsListBloc',
-  title: 'Jeux de données',
+  title: '',
   subtitle: null,
   datasets: []
 })
@@ -50,7 +50,7 @@ const createDatasetsListBloc = (): DatasetsListBloc => ({
 const createDataservicesListBloc = (): DataservicesListBloc => ({
   id: crypto.randomUUID(),
   class: 'DataservicesListBloc',
-  title: 'API',
+  title: '',
   subtitle: null,
   dataservices: []
 })
@@ -58,7 +58,7 @@ const createDataservicesListBloc = (): DataservicesListBloc => ({
 const createReusesListBloc = (): ReusesListBloc => ({
   id: crypto.randomUUID(),
   class: 'ReusesListBloc',
-  title: 'Réutilisations',
+  title: '',
   subtitle: null,
   reuses: []
 })
@@ -66,7 +66,7 @@ const createReusesListBloc = (): ReusesListBloc => ({
 const createLinksListBloc = (): LinksListBloc => ({
   id: crypto.randomUUID(),
   class: 'LinksListBloc',
-  title: 'Liens',
+  title: '',
   subtitle: null,
   paragraph: null,
   main_link_title: null,

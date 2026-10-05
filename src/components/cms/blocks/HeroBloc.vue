@@ -46,7 +46,7 @@ const update = (patch: Partial<HeroBloc>) => {
       <a
         v-if="modelValue.main_link_title && modelValue.main_link_url"
         :href="modelValue.main_link_url"
-        class="fr-btn fr-btn--secondary"
+        class="fr-btn fr-btn--secondary hero-link"
       >
         {{ modelValue.main_link_title }}
       </a>
@@ -76,18 +76,21 @@ const update = (patch: Partial<HeroBloc>) => {
       </div>
     </div>
     <div class="fr-mb-2w">
-      <label :for="`hero-title-${modelValue.id}`" class="fr-label">Titre</label>
+      <label :for="`hero-title-${modelValue.id}`" class="fr-label"
+        >Titre (obligatoire)</label
+      >
       <input
         :id="`hero-title-${modelValue.id}`"
         type="text"
         class="fr-input"
         :value="modelValue.title"
+        required
         @input="update({ title: ($event.target as HTMLInputElement).value })"
       />
     </div>
     <div class="fr-mb-2w">
       <label :for="`hero-desc-${modelValue.id}`" class="fr-label"
-        >Description</label
+        >Description (facultatif)</label
       >
       <textarea
         :id="`hero-desc-${modelValue.id}`"
@@ -103,7 +106,7 @@ const update = (patch: Partial<HeroBloc>) => {
     </div>
     <div class="fr-mb-2w">
       <label :for="`hero-link-title-${modelValue.id}`" class="fr-label">
-        Titre du lien (optionnel)
+        Titre du lien (facultatif)
       </label>
       <input
         :id="`hero-link-title-${modelValue.id}`"
@@ -119,7 +122,7 @@ const update = (patch: Partial<HeroBloc>) => {
     </div>
     <div>
       <label :for="`hero-link-url-${modelValue.id}`" class="fr-label">
-        URL du lien (optionnel)
+        URL du lien (facultatif)
       </label>
       <input
         :id="`hero-link-url-${modelValue.id}`"
@@ -135,3 +138,12 @@ const update = (patch: Partial<HeroBloc>) => {
     </div>
   </div>
 </template>
+
+<style scoped>
+/* fr-btn--secondary is tied to the blue-france brand color, unreadable against
+   a same-colored (or any) hero background — match the inverted title/description */
+.hero-link {
+  color: var(--text-inverted-grey);
+  box-shadow: inset 0 0 0 1px var(--text-inverted-grey);
+}
+</style>

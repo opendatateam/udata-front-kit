@@ -31,25 +31,27 @@ const update = (patch: Partial<MarkdownBloc>) => {
   <div v-else class="fr-p-3w fr-background-alt--blue-france">
     <div class="fr-mb-2w">
       <label :for="`markdown-title-${modelValue.id}`" class="fr-label"
-        >Titre</label
+        >Titre (obligatoire)</label
       >
       <input
         :id="`markdown-title-${modelValue.id}`"
         type="text"
         class="fr-input"
         :value="modelValue.title"
+        required
         @input="update({ title: ($event.target as HTMLInputElement).value })"
       />
     </div>
     <div>
       <label :for="`markdown-content-${modelValue.id}`" class="fr-label">
-        Contenu (Markdown)
+        Contenu (Markdown, obligatoire)
       </label>
       <textarea
         :id="`markdown-content-${modelValue.id}`"
         class="fr-input"
         rows="10"
         :value="modelValue.content"
+        required
         @input="
           update({ content: ($event.target as HTMLTextAreaElement).value })
         "

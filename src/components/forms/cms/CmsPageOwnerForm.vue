@@ -18,8 +18,9 @@ const page = defineModel({
 
 const userStore = useUserStore()
 
+// defaults to organization (recommended) unless an owner was already explicitly set
 const choice: Ref<'organization' | 'owner'> = ref(
-  page.value.organization != null ? 'organization' : 'owner'
+  page.value.owner != null ? 'owner' : 'organization'
 )
 
 const organizations = computed(() => userStore.data?.organizations || [])
