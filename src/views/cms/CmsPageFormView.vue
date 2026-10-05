@@ -4,11 +4,15 @@ import { useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
 import PageShow from '@/components/cms/PageShow.vue'
+import CmsPageOwnerForm from '@/components/forms/cms/CmsPageOwnerForm.vue'
 import config from '@/config'
 import type { CmsPage } from '@/model/cms'
 import type { CmsCategoryConfig } from '@/model/config'
+import { Availability } from '@/model/topic'
 import { useCmsPageStore } from '@/store/CmsPageStore'
+import { useTopicElementStore } from '@/store/TopicElementStore'
 import { categoryIdFromTags, withCategoryTag } from '@/utils/cms'
+import { useSiteId } from '@/utils/config'
 
 const props = defineProps<{
   id?: string
@@ -17,6 +21,7 @@ const props = defineProps<{
 const route = useRoute()
 const router = useRouter()
 const cmsPageStore = useCmsPageStore()
+const topicElementStore = useTopicElementStore()
 
 const isCreate = computed(() => !props.id && !route.params.id)
 const pageId = computed(
@@ -26,11 +31,13 @@ const pageId = computed(
 const page = ref<CmsPage | null>(null)
 const loading = ref(false)
 const saving = ref(false)
-const togglingPrivate = ref(false)
+const publishing = ref(false)
 const error = ref('')
 const forbidden = ref(false)
 
 const name = ref('')
+const description = ref('')
+const ownerDraft = ref<Partial<CmsPage>>({})
 const categoryId = ref<string | null>(null)
 const categories = computed<CmsCategoryConfig[]>(
   () => config.website.cms?.categories ?? []
@@ -43,9 +50,9 @@ const categoryOptions = computed(() =>
 // in-progress edits) on unrelated re-renders when page.blocs is nullish.
 const blocs = computed(() => page.value?.blocs ?? [])
 
-// Page updates are a full-replace PUT: strip read-only fields (owner/organization/topic
-// are set at creation and rejected on update) so we don't send back nested
-// objects the write schema rejects.
+// Page updates are a full-replace PUT: strip read-only fields (owner/organization
+// are set at creation and rejected on update, published only changes via the publish
+// endpoints) so we don't send back nested objects the write schema rejects.
 const toWritablePage = (p: CmsPage) => {
   const {
     id: _id,
@@ -54,7 +61,7 @@ const toWritablePage = (p: CmsPage) => {
     page: _page,
     owner: _owner,
     organization: _organization,
-    topic: _topic,
+    published: _published,
     created_at: _created_at,
     last_modified: _last_modified,
     permissions: _permissions,
@@ -85,6 +92,7 @@ const loadPage = async (id: string) => {
     }
     page.value = fetched
     name.value = fetched.name
+    description.value = fetched.description ?? ''
     categoryId.value = categoryIdFromTags(fetched.tags)
   } catch {
     error.value = 'Impossible de charger la page.'
@@ -111,13 +119,29 @@ const handleCreate = async () => {
   try {
     const newPage = await cmsPageStore.createPage({
       name: name.value,
+      description: description.value.trim() || null,
       blocs: [],
-      private: true,
       tags: withCategoryTag([], categoryId.value),
-      ...(config.website.cms?.topic_id
-        ? { topic: config.website.cms.topic_id }
+      ...(ownerDraft.value.organization
+        ? { organization: ownerDraft.value.organization.id }
         : {})
     })
+    // the topic link lives on the topic side (POST /topics/:id/elements/), not on the page
+    const topicId = config.website.cms?.topic_id
+    if (topicId) {
+      await topicElementStore.createElement(topicId, {
+        title: newPage.name,
+        description: null,
+        tags: [],
+        element: { class: 'Page', id: newPage.id },
+        extras: {
+          [useSiteId()]: {
+            uri: newPage.page,
+            availability: Availability.LOCAL_AVAILABLE
+          }
+        }
+      })
+    }
     await router.push(`/admin/cms/edit/${newPage.id}`)
   } catch {
     error.value = 'Erreur lors de la création.'
@@ -141,6 +165,7 @@ const handleSaveMeta = async () => {
     const updated = await cmsPageStore.updatePage(page.value.id, {
       ...toWritablePage(page.value),
       name: name.value,
+      description: description.value.trim() || null,
       tags: withCategoryTag(page.value.tags, categoryId.value)
     })
     // Keep the bloc editor's array reference stable so its watcher doesn't
@@ -169,19 +194,21 @@ const handleSave = async (updatedBlocs: PageBloc[]) => {
   }
 }
 
-const togglePrivate = async () => {
+const togglePublish = async () => {
   if (!page.value) return
-  togglingPrivate.value = true
+  publishing.value = true
   try {
-    page.value = {
-      ...page.value,
-      ...(await cmsPageStore.updatePage(page.value.id, {
-        ...toWritablePage(page.value),
-        private: !page.value.private
-      }))
+    if (page.value.published) {
+      await cmsPageStore.unpublishPage(page.value.id)
+      page.value = { ...page.value, published: null }
+    } else {
+      page.value = {
+        ...page.value,
+        ...(await cmsPageStore.publishPage(page.value.id))
+      }
     }
   } finally {
-    togglingPrivate.value = false
+    publishing.value = false
   }
 }
 </script>
@@ -196,10 +223,10 @@ const togglePrivate = async () => {
         v-if="!isCreate && page"
         class="fr-col-auto fr-grid-row fr-grid-row--middle flex-gap"
       >
-        <span v-if="!page.private" class="fr-badge fr-badge--success"
-          >Public</span
+        <span v-if="page.published" class="fr-badge fr-badge--success"
+          >Publié</span
         >
-        <span v-else class="fr-badge fr-badge--new">Privé</span>
+        <span v-else class="fr-badge fr-badge--new">Brouillon</span>
         <RouterLink
           :to="`/admin/cms/view/${page.id}`"
           class="fr-btn fr-btn--secondary fr-btn--sm fr-icon-eye-line fr-btn--icon-left"
@@ -209,17 +236,11 @@ const togglePrivate = async () => {
         <button
           type="button"
           class="fr-btn fr-btn--sm"
-          :class="!page.private ? 'fr-btn--secondary' : ''"
-          :disabled="togglingPrivate"
-          @click="togglePrivate"
+          :class="page.published ? 'fr-btn--secondary' : ''"
+          :disabled="publishing"
+          @click="togglePublish"
         >
-          {{
-            togglingPrivate
-              ? '…'
-              : page.private
-                ? 'Rendre publique'
-                : 'Rendre privée'
-          }}
+          {{ publishing ? '…' : page.published ? 'Dépublier' : 'Publier' }}
         </button>
       </div>
     </div>
@@ -256,6 +277,20 @@ const togglePrivate = async () => {
             required
           />
         </div>
+        <div class="fr-mb-3w">
+          <label for="page-description" class="fr-label">
+            Description
+            <span class="fr-hint-text"
+              >Utilisée comme description pour le référencement (SEO).</span
+            >
+          </label>
+          <textarea
+            id="page-description"
+            v-model="description"
+            class="fr-input"
+            rows="3"
+          />
+        </div>
         <div v-if="categories.length" class="fr-mb-3w">
           <DsfrSelect
             id="page-category"
@@ -264,6 +299,9 @@ const togglePrivate = async () => {
             default-unselected-text="Aucune (page fixe)"
             :options="categoryOptions"
           />
+        </div>
+        <div class="fr-mb-3w">
+          <CmsPageOwnerForm v-model="ownerDraft" />
         </div>
         <button type="submit" class="fr-btn" :disabled="saving">
           {{ saving ? 'Création en cours…' : 'Créer la page' }}
@@ -290,6 +328,20 @@ const togglePrivate = async () => {
             type="text"
             class="fr-input"
             required
+          />
+        </div>
+        <div class="fr-mb-3w">
+          <label for="page-description" class="fr-label">
+            Description
+            <span class="fr-hint-text"
+              >Utilisée comme description pour le référencement (SEO).</span
+            >
+          </label>
+          <textarea
+            id="page-description"
+            v-model="description"
+            class="fr-input"
+            rows="3"
           />
         </div>
         <div v-if="categories.length" class="fr-mb-3w">

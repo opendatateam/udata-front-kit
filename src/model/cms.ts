@@ -6,11 +6,11 @@ export type CmsPage = Owned & {
   id: string
   name: string
   slug: string
+  description: string | null
   blocs: PageBloc[]
   tags: string[]
-  // the topic this page is attached to, used to scope the CMS page list to a site
-  topic: { id: string } | null
-  private: boolean
+  // null means draft; set via POST/DELETE /pages/:id/publish/, not writable via PUT
+  published: string | null
   created_at: string
   last_modified: string
   uri: string

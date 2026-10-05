@@ -16,12 +16,14 @@ export const useCmsPageStore = defineStore('cmsPage', {
       })
     },
     // scoped to this site's topic — not the caller's own pages, so
-    // multiple admins managing the same site see the same list
+    // multiple admins managing the same site see the same list.
+    // with_drafts: admins manage unpublished pages too, not just live ones
     async listSitePages(): Promise<CmsPage[]> {
       const topicId = config.website.cms?.topic_id
       const response: GenericResponse = await cmsPagesAPI.list({
         params: {
           ...(topicId ? { topic: topicId } : {}),
+          with_drafts: 'true',
           sort: '-last_modified'
         },
         authenticated: true
@@ -36,6 +38,12 @@ export const useCmsPageStore = defineStore('cmsPage', {
     },
     async deletePage(pageId: string): Promise<void> {
       await cmsPagesAPI.delete({ entityId: pageId })
+    },
+    async publishPage(pageId: string): Promise<CmsPage> {
+      return await cmsPagesAPI.publish(pageId)
+    },
+    async unpublishPage(pageId: string): Promise<void> {
+      await cmsPagesAPI.unpublish(pageId)
     }
   }
 })

@@ -93,7 +93,7 @@ const handleDelete = async (page: CmsPage) => {
                   <th scope="col">Route</th>
                   <th scope="col">Catégorie</th>
                   <th scope="col">Propriétaire</th>
-                  <th scope="col">Visibilité</th>
+                  <th scope="col">Statut</th>
                   <th scope="col">Dernière modification</th>
                   <th scope="col">Actions</th>
                 </tr>
@@ -127,11 +127,11 @@ const handleDelete = async (page: CmsPage) => {
                   </td>
                   <td>
                     <span
-                      v-if="!page.private"
+                      v-if="page.published"
                       class="fr-badge fr-badge--success"
-                      >Public</span
+                      >Publié</span
                     >
-                    <span v-else class="fr-badge fr-badge--new">Privé</span>
+                    <span v-else class="fr-badge fr-badge--new">Brouillon</span>
                   </td>
                   <td>{{ formatDate(page.last_modified, true) }}</td>
                   <td>

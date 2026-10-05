@@ -37,7 +37,7 @@ onMounted(async () => {
 
 useMeta({
   title: () => page.value?.name,
-  description: () => undefined,
+  description: () => page.value?.description ?? undefined,
   canonicalUrl: useCanonicalUrl()
 })
 </script>
