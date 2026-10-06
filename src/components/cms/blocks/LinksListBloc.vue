@@ -8,6 +8,9 @@ import {
 const props = defineProps<{
   modelValue: LinksListBloc
   edit: boolean
+  // true when rendered inside an accordion section (its own title is an h3),
+  // so this bloc's title must step down to h4 to keep the heading order valid
+  nested?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -38,7 +41,9 @@ const addLink = () => {
 
 <template>
   <div v-if="!edit">
-    <h2 v-if="modelValue.title" class="fr-h3">{{ modelValue.title }}</h2>
+    <component :is="nested ? 'h4' : 'h2'" v-if="modelValue.title" class="fr-h3">
+      {{ modelValue.title }}
+    </component>
     <p v-if="modelValue.subtitle" class="fr-text--lead">
       {{ modelValue.subtitle }}
     </p>

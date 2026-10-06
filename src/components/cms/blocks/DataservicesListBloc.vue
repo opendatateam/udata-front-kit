@@ -10,6 +10,9 @@ import DataservicesAPI from '@/services/api/resources/DataservicesAPI'
 const props = defineProps<{
   modelValue: DataservicesListBloc
   edit: boolean
+  // true when rendered inside an accordion section (its own title is an h3),
+  // so this bloc's title must step down to h4 to keep the heading order valid
+  nested?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -68,9 +71,13 @@ const update = (patch: Partial<DataservicesListBloc>) => {
 
 <template>
   <div v-if="!edit">
-    <h2 v-if="modelValue.title" class="fr-h3 fr-mb-2w">
+    <component
+      :is="nested ? 'h4' : 'h2'"
+      v-if="modelValue.title"
+      class="fr-h3 fr-mb-2w"
+    >
       {{ modelValue.title }}
-    </h2>
+    </component>
     <div class="fr-grid-row fr-grid-row--gutters">
       <div
         v-for="dataservice in modelValue.dataservices"

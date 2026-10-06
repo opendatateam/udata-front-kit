@@ -6,6 +6,9 @@ import { fromMarkdown } from '@/utils'
 const props = defineProps<{
   modelValue: MarkdownBloc
   edit: boolean
+  // true when rendered inside an accordion section (its own title is an h3),
+  // so this bloc's title must step down to h4 to keep the heading order valid
+  nested?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -23,7 +26,9 @@ const update = (patch: Partial<MarkdownBloc>) => {
 
 <template>
   <div v-if="!edit">
-    <h2 v-if="modelValue.title" class="fr-h3">{{ modelValue.title }}</h2>
+    <component :is="nested ? 'h4' : 'h2'" v-if="modelValue.title" class="fr-h3">
+      {{ modelValue.title }}
+    </component>
     <!-- eslint-disable-next-line vue/no-v-html -->
     <div class="fr-prose" v-html="renderedContent" />
   </div>

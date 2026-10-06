@@ -113,30 +113,35 @@ const addBlocAtStart = (bloc: PageBloc) => {
             v-if="bloc.class === 'MarkdownBloc'"
             :model-value="bloc"
             :edit="edit"
+            :nested="nested"
             @update:model-value="updateBloc(index, $event)"
           />
           <DatasetsListBlocComponent
             v-else-if="bloc.class === 'DatasetsListBloc'"
             :model-value="bloc"
             :edit="edit"
+            :nested="nested"
             @update:model-value="updateBloc(index, $event)"
           />
           <DataservicesListBlocComponent
             v-else-if="bloc.class === 'DataservicesListBloc'"
             :model-value="bloc"
             :edit="edit"
+            :nested="nested"
             @update:model-value="updateBloc(index, $event)"
           />
           <ReusesListBlocComponent
             v-else-if="bloc.class === 'ReusesListBloc'"
             :model-value="bloc"
             :edit="edit"
+            :nested="nested"
             @update:model-value="updateBloc(index, $event)"
           />
           <LinksListBlocComponent
             v-else-if="bloc.class === 'LinksListBloc'"
             :model-value="bloc"
             :edit="edit"
+            :nested="nested"
             @update:model-value="updateBloc(index, $event)"
           />
           <AccordionListBlocComponent
