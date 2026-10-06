@@ -3,7 +3,9 @@ import { defineStore } from 'pinia'
 import config from '@/config'
 import type { GenericResponse } from '@/model/api'
 import type { CmsPage } from '@/model/cms'
+import type { Topic } from '@/model/topic'
 import CmsPagesAPI from '@/services/api/resources/CmsPagesAPI'
+import { useTopicStore } from '@/store/TopicStore'
 import { categoryTag } from '@/utils/cms'
 
 const cmsPagesAPI = new CmsPagesAPI()
@@ -11,12 +13,14 @@ const cmsPagesAPI = new CmsPagesAPI()
 export interface CmsPageStoreState {
   sitePages: CmsPage[]
   sitePagesTotal: number
+  cmsTopic: Topic | null
 }
 
 export const useCmsPageStore = defineStore('cmsPage', {
   state: (): CmsPageStoreState => ({
     sitePages: [],
-    sitePagesTotal: 0
+    sitePagesTotal: 0,
+    cmsTopic: null
   }),
   getters: {
     sitePagesPagination() {
@@ -33,6 +37,20 @@ export const useCmsPageStore = defineStore('cmsPage', {
     }
   },
   actions: {
+    // caches the CMS topic in state so repeat calls skip the fetch
+    async loadCmsTopic(): Promise<Topic | null> {
+      if (this.cmsTopic !== null) return this.cmsTopic
+      const topicId = config.website.cms?.topic_id
+      if (!topicId) return null
+      try {
+        this.cmsTopic = await useTopicStore().load(topicId, {
+          authenticated: true
+        })
+      } catch {
+        return null
+      }
+      return this.cmsTopic
+    },
     async fetchPageById(idOrSlug: string): Promise<CmsPage> {
       return await cmsPagesAPI.get({
         entityId: idOrSlug,

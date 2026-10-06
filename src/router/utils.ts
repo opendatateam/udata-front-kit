@@ -1,12 +1,10 @@
-import config from '@/config'
 import {
   CUSTOM_FILTER_TYPES,
   type CmsConfig,
   type CustomFilterType,
   type PageObjectType
 } from '@/model/config'
-import { useTopicStore } from '@/store/TopicStore'
-import { useUserStore } from '@/store/UserStore'
+import { hasCmsAccess } from '@/utils/cmsAccess'
 import { usePageConf, usePagesConf } from '@/utils/config'
 import {
   getDefaultDataserviceConfig,
@@ -360,26 +358,12 @@ export const useOrganizationsRoutes = (): RouteRecordRaw => {
   }
 }
 
-// only users with edit rights on the site's CMS topic (config.website.cms.topic_id)
-// may reach the admin routes — the topic is the mapping, there's no separate CMS permission
-async function canManageCmsPages(): Promise<boolean | { name: string }> {
-  const userStore = useUserStore()
-  await userStore.waitForStoreInit()
-  const topicId = config.website.cms?.topic_id
-  if (!userStore.isLoggedIn || topicId == null) return { name: 'not_found' }
-  try {
-    const topic = await useTopicStore().load(topicId, { authenticated: true })
-    if (userStore.hasEditPermissions(topic)) return true
-  } catch {
-    // topic missing or unreadable — fall through to redirect
-  }
-  return { name: 'not_found' }
-}
-
 export const useCmsRoutes = (cms: CmsConfig): RouteRecordRaw[] => {
   const adminRoutes: RouteRecordRaw = {
     path: '/admin/cms',
-    beforeEnter: canManageCmsPages,
+    // there's no separate CMS permission — edit rights on the CMS topic is the guard
+    beforeEnter: async () =>
+      (await hasCmsAccess()) ? true : { name: 'not_found' },
     children: [
       {
         path: '',
