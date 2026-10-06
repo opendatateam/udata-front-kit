@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { HeroBloc } from '@datagouv/components-next'
+import { isSafeHttpUrl, type HeroBloc } from '@datagouv/components-next'
 
 const props = defineProps<{
   modelValue: HeroBloc
@@ -44,7 +44,9 @@ const update = (patch: Partial<HeroBloc>) => {
         {{ modelValue.description }}
       </p>
       <a
-        v-if="modelValue.main_link_title && modelValue.main_link_url"
+        v-if="
+          modelValue.main_link_title && isSafeHttpUrl(modelValue.main_link_url)
+        "
         :href="modelValue.main_link_url"
         class="fr-btn fr-btn--secondary hero-link"
       >

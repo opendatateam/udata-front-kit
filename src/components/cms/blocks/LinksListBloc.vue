@@ -1,5 +1,9 @@
 <script lang="ts" setup>
-import type { LinkInBloc, LinksListBloc } from '@datagouv/components-next'
+import {
+  isSafeHttpUrl,
+  type LinkInBloc,
+  type LinksListBloc
+} from '@datagouv/components-next'
 
 const props = defineProps<{
   modelValue: LinksListBloc
@@ -45,6 +49,7 @@ const addLink = () => {
     >
       <li v-for="(link, index) in modelValue.links" :key="index">
         <a
+          v-if="isSafeHttpUrl(link.url)"
           :href="link.url"
           class="fr-btn fr-btn--secondary"
           :style="
@@ -58,7 +63,7 @@ const addLink = () => {
       </li>
     </ul>
     <a
-      v-if="modelValue.main_link_url"
+      v-if="isSafeHttpUrl(modelValue.main_link_url)"
       :href="modelValue.main_link_url"
       class="fr-btn fr-mt-2w"
     >
