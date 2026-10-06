@@ -155,20 +155,30 @@ const handleDelete = async (page: CmsPage) => {
                         :to="`/admin/cms/view/${page.id}`"
                         class="fr-btn fr-btn--tertiary-no-outline fr-btn--sm fr-btn--icon-only fr-icon-eye-line"
                         title="Voir"
-                      />
+                      >
+                        <span class="fr-sr-only">Voir « {{ page.name }} »</span>
+                      </RouterLink>
                       <RouterLink
                         v-if="page.permissions.edit"
                         :to="`/admin/cms/edit/${page.id}`"
                         class="fr-btn fr-btn--tertiary-no-outline fr-btn--sm fr-btn--icon-only fr-icon-edit-line"
                         title="Modifier"
-                      />
+                      >
+                        <span class="fr-sr-only"
+                          >Modifier « {{ page.name }} »</span
+                        >
+                      </RouterLink>
                       <button
                         v-if="page.permissions.delete"
                         type="button"
                         class="fr-btn fr-btn--tertiary-no-outline fr-btn--sm fr-btn--icon-only fr-icon-delete-line"
                         title="Supprimer"
                         @click="handleDelete(page)"
-                      />
+                      >
+                        <span class="fr-sr-only"
+                          >Supprimer « {{ page.name }} »</span
+                        >
+                      </button>
                     </div>
                   </td>
                 </tr>

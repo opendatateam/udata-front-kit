@@ -226,7 +226,9 @@ const addLink = () => {
           class="fr-btn fr-btn--tertiary-no-outline fr-btn--sm fr-btn--icon-only fr-icon-delete-line"
           title="Supprimer le lien"
           @click="removeLink(index)"
-        />
+        >
+          <span class="fr-sr-only">Supprimer le lien</span>
+        </button>
       </div>
     </div>
 

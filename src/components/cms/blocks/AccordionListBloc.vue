@@ -138,7 +138,9 @@ const updateItemContent = (index: number, content: ContentBloc[]) => {
           class="fr-btn fr-btn--tertiary-no-outline fr-btn--sm fr-icon-delete-line"
           title="Supprimer la section"
           @click="removeItem(index)"
-        />
+        >
+          <span class="fr-sr-only">Supprimer la section</span>
+        </button>
       </div>
       <BlocList
         :blocs="item.content"
