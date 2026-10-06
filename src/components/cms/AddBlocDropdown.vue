@@ -9,6 +9,7 @@ import type {
   PageBloc,
   ReusesListBloc
 } from '@datagouv/components-next'
+import { useRandomId } from '@gouvminint/vue-dsfr'
 
 const props = defineProps<{
   // Restricts which bloc types can be added here (e.g. accordion sections can't nest Hero/Accordion blocs).
@@ -19,7 +20,37 @@ const emit = defineEmits<{
   add: [bloc: PageBloc]
 }>()
 
+const menuId = useRandomId('add-bloc-menu')
+const root = ref<HTMLElement>()
 const isOpen = ref(false)
+
+const close = () => {
+  isOpen.value = false
+}
+
+// matches DsfrLanguageSelector's own toggle-menu pattern, which doesn't
+// close on Escape/outside click either — nothing upstream covers that part
+const onKeydown = (event: KeyboardEvent) => {
+  if (event.key === 'Escape') close()
+}
+const onClickOutside = (event: MouseEvent) => {
+  if (root.value && !root.value.contains(event.target as Node)) close()
+}
+
+watch(isOpen, (open) => {
+  if (open) {
+    document.addEventListener('keydown', onKeydown)
+    document.addEventListener('click', onClickOutside)
+  } else {
+    document.removeEventListener('keydown', onKeydown)
+    document.removeEventListener('click', onClickOutside)
+  }
+})
+
+onUnmounted(() => {
+  document.removeEventListener('keydown', onKeydown)
+  document.removeEventListener('click', onClickOutside)
+})
 
 const createHeroBloc = (): HeroBloc => ({
   id: crypto.randomUUID(),
@@ -133,16 +164,25 @@ const addBloc = (factory: () => PageBloc) => {
 </script>
 
 <template>
-  <div class="fr-my-2w" style="position: relative; display: inline-block">
+  <div
+    ref="root"
+    class="fr-my-2w"
+    style="position: relative; display: inline-block"
+  >
     <button
       type="button"
       class="fr-btn fr-btn--secondary fr-btn--sm fr-icon-add-circle-line fr-btn--icon-left"
+      :aria-expanded="isOpen"
+      :aria-controls="menuId"
+      aria-haspopup="true"
       @click="isOpen = !isOpen"
     >
       Ajouter un bloc
     </button>
     <ul
       v-if="isOpen"
+      :id="menuId"
+      role="menu"
       class="fr-menu__list"
       style="
         position: absolute;
@@ -155,9 +195,10 @@ const addBloc = (factory: () => PageBloc) => {
         min-width: 180px;
       "
     >
-      <li v-for="item in visibleMenuItems" :key="item.class">
+      <li v-for="item in visibleMenuItems" :key="item.class" role="none">
         <button
           type="button"
+          role="menuitem"
           class="fr-btn fr-btn--tertiary-no-outline fr-btn--sm"
           style="width: 100%; text-align: left"
           @click="addBloc(item.factory)"
