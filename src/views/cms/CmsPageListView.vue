@@ -1,8 +1,8 @@
 <script lang="ts" setup>
+import { OrganizationNameWithCertificate } from '@datagouv/components-next'
 import { storeToRefs } from 'pinia'
 
 import GenericContainer from '@/components/GenericContainer.vue'
-import SidebarOwner from '@/components/SidebarOwner.vue'
 import config from '@/config'
 import type { CmsPage } from '@/model/cms'
 import type { CmsPageConfig } from '@/model/config'
@@ -85,11 +85,7 @@ const handleDelete = async (page: CmsPage) => {
     </div>
 
     <!-- DSFR's outer-frame border only draws once this attribute is set -->
-    <div
-      v-else
-      class="fr-table fr-table--bordered fr-table--no-caption"
-      data-fr-js-table="true"
-    >
+    <div v-else class="fr-table fr-table--no-caption" data-fr-js-table="true">
       <div class="fr-table__wrapper">
         <div class="fr-table__container">
           <div class="fr-table__content">
@@ -103,7 +99,7 @@ const handleDelete = async (page: CmsPage) => {
                   <th scope="col">Route</th>
                   <th scope="col">Catégorie</th>
                   <th scope="col">Propriétaire</th>
-                  <th scope="col">Statut</th>
+                  <th scope="col">Publié</th>
                   <th scope="col">Dernière modification</th>
                   <th scope="col">Actions</th>
                 </tr>
@@ -133,19 +129,27 @@ const handleDelete = async (page: CmsPage) => {
                     >
                   </td>
                   <td>
-                    <SidebarOwner :object="page" />
+                    <a
+                      v-if="page.organization"
+                      class="fr-link fr-text--sm"
+                      :href="page.organization.page"
+                    >
+                      <OrganizationNameWithCertificate
+                        :organization="page.organization"
+                      />
+                    </a>
+                    <span v-else-if="page.owner" class="fr-text--sm">
+                      {{ page.owner.first_name }} {{ page.owner.last_name }}
+                    </span>
+                    <span v-else class="fr-text--sm fr-text-mention--grey"
+                      >—</span
+                    >
                   </td>
                   <td>
-                    <span
-                      v-if="page.published"
-                      class="fr-badge fr-badge--success"
-                      >Publié</span
-                    >
-                    <span
-                      v-else
-                      class="fr-badge fr-badge--new fr-badge--no-icon"
-                      >Brouillon</span
-                    >
+                    <span v-if="page.published" aria-hidden="true">✅</span>
+                    <span class="fr-sr-only">
+                      {{ page.published ? 'Publié' : 'Brouillon' }}
+                    </span>
                   </td>
                   <td>{{ formatDate(page.last_modified, true) }}</td>
                   <td>

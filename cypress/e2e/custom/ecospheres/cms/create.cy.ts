@@ -40,12 +40,16 @@ describe('Ecospheres - CMS Page Creation', () => {
     cy.mockDatagouvObject('pages', createdPage.id, createdPage)
 
     cy.get('#input-name').type('Test CMS Page')
-    cy.contains('label', 'En votre propre nom').click()
+    // owner is inherited from the CMS topic, not chosen by the user
+    cy.contains("Cette page appartiendra à l'utilisateur Test User").should(
+      'be.visible'
+    )
     cy.contains('button', 'Créer la page').click()
 
     cy.wait('@createPage').then((interception) => {
       const requestBody = interception.request.body
       expect(requestBody).to.have.property('name', 'Test CMS Page')
+      expect(requestBody).to.have.property('owner', 'test-user-id')
       expect(requestBody).to.have.property('tags')
       expect(requestBody.tags).to.be.an('array')
     })
@@ -59,18 +63,5 @@ describe('Ecospheres - CMS Page Creation', () => {
     })
 
     cy.url().should('match', new RegExp(`/admin/cms/edit/${createdPage.id}`))
-  })
-
-  it('should block creating a page as an organization with none selected', () => {
-    cy.visit('/admin/cms/add')
-
-    cy.get('#input-name').type('Test CMS Page')
-    // "En tant qu'organisation" is the default choice — left untouched, no
-    // organization picked, so submitting shouldn't call the create API at all
-    // (catchUnmockedRequests fails the test if it does)
-    cy.contains('button', 'Créer la page').click()
-
-    cy.contains('Veuillez sélectionner une organisation').should('be.visible')
-    cy.url().should('include', '/admin/cms/add')
   })
 })

@@ -6,11 +6,10 @@ import GenericContainer from '@/components/GenericContainer.vue'
 import PageShow from '@/components/cms/PageShow.vue'
 import ErrorMessage from '@/components/forms/ErrorMessage.vue'
 import ErrorSummary from '@/components/forms/ErrorSummary.vue'
-import CmsPageOwnerForm from '@/components/forms/cms/CmsPageOwnerForm.vue'
 import config from '@/config'
 import type { CmsPage } from '@/model/cms'
 import type { CmsCategoryConfig } from '@/model/config'
-import { Availability } from '@/model/topic'
+import { Availability, type Topic } from '@/model/topic'
 import { useCmsPageStore } from '@/store/CmsPageStore'
 import { useTopicElementStore } from '@/store/TopicElementStore'
 import { categoryIdFromTags, withCategoryTag } from '@/utils/cms'
@@ -39,8 +38,30 @@ const forbidden = ref(false)
 
 const name = ref('')
 const description = ref('')
-const ownerDraft = ref<Partial<CmsPage>>({})
 const categoryId = ref<string | null>(null)
+// a new page always inherits the CMS topic's own owner/organization, so
+// anyone who can manage the topic can also manage every page under it
+const cmsTopic = ref<Topic | null>(null)
+const cmsTopicLoaded = ref(false)
+const pageOwnerLabel = computed(() => {
+  const topic = cmsTopic.value
+  if (!topic) return ''
+  if (topic.organization) return `l'organisation ${topic.organization.name}`
+  if (topic.owner)
+    return `l'utilisateur ${topic.owner.first_name} ${topic.owner.last_name}`
+  return ''
+})
+// only admins can reach this form for a topic with neither — a normal user's
+// edit rights always come from matching one of the two
+const topicUnowned = computed(() => {
+  const topic = cmsTopic.value
+  return (
+    cmsTopicLoaded.value &&
+    topic !== null &&
+    !topic.organization &&
+    !topic.owner
+  )
+})
 const categories = computed<CmsCategoryConfig[]>(
   () => config.website.cms?.categories ?? []
 )
@@ -50,25 +71,11 @@ const categoryOptions = computed(() =>
 
 const errorSummary = ref()
 const formErrors: Ref<string[]> = ref([])
-const inputErrorMessages = new Map([
-  ['name', 'Le titre est obligatoire.'],
-  ['organization', 'Veuillez sélectionner une organisation.']
-])
+const inputErrorMessages = new Map([['name', 'Le titre est obligatoire.']])
 const hasError = (field: string) => formErrors.value.includes(field)
 const getErrorMessage = (field: string) => inputErrorMessages.get(field) || ''
 
-// the owner radio defaults to "organization" with nothing picked yet, so that must be caught explicitly
-const validateCreateFields = (): boolean => {
-  const errors: string[] = []
-  if (!name.value.trim()) errors.push('name')
-  if (ownerDraft.value.owner == null && ownerDraft.value.organization == null) {
-    errors.push('organization')
-  }
-  formErrors.value = errors
-  return errors.length === 0
-}
-
-const validateEditFields = (): boolean => {
+const validateFields = (): boolean => {
   const errors: string[] = []
   if (!name.value.trim()) errors.push('name')
   formErrors.value = errors
@@ -180,8 +187,16 @@ watch(
   { immediate: true }
 )
 
+if (isCreate.value) {
+  cmsPageStore.loadCmsTopic().then((topic) => {
+    cmsTopic.value = topic
+    cmsTopicLoaded.value = true
+  })
+}
+
 const handleCreate = async () => {
-  if (!validateCreateFields()) {
+  if (topicUnowned.value) return
+  if (!validateFields()) {
     focusErrorSummary()
     return
   }
@@ -194,9 +209,11 @@ const handleCreate = async () => {
       description: description.value.trim() || null,
       blocs: [],
       tags: withCategoryTag([], categoryId.value),
-      ...(ownerDraft.value.organization
-        ? { organization: ownerDraft.value.organization.id }
-        : {})
+      ...(cmsTopic.value?.organization
+        ? { organization: cmsTopic.value.organization.id }
+        : cmsTopic.value?.owner
+          ? { owner: cmsTopic.value.owner.id }
+          : {})
     })
     // the topic link lives on the topic side (POST /topics/:id/elements/), not on the page
     const topicId = config.website.cms?.topic_id
@@ -238,7 +255,7 @@ const handleCreate = async () => {
 
 const handleSave = async () => {
   if (!page.value) return
-  if (!validateEditFields()) {
+  if (!validateFields()) {
     focusErrorSummary()
     return
   }
@@ -335,6 +352,17 @@ const togglePublish = async () => {
         <p>{{ error }}</p>
       </div>
 
+      <div v-if="topicUnowned" class="fr-alert fr-alert--error fr-mb-3w">
+        <p>
+          Le topic CMS n'a ni propriétaire ni organisation. Impossible de créer
+          une page tant que ce n'est pas corrigé.
+        </p>
+      </div>
+
+      <div v-if="pageOwnerLabel" class="fr-alert fr-alert--info fr-mb-3w">
+        <p>Cette page appartiendra à {{ pageOwnerLabel }}.</p>
+      </div>
+
       <form @submit.prevent="handleCreate">
         <ErrorSummary
           v-show="formErrors.length"
@@ -390,19 +418,12 @@ const togglePublish = async () => {
             />
           </div>
         </fieldset>
-        <fieldset id="input-organization">
-          <legend class="fr-fieldset__legend fr-text--lead">
-            Propriétaire de la page
-          </legend>
-          <CmsPageOwnerForm v-model="ownerDraft" />
-          <ErrorMessage
-            v-if="hasError('organization')"
-            input-name="organization"
-            :error-message="getErrorMessage('organization')"
-          />
-        </fieldset>
         <div class="fr-mt-4w">
-          <button type="submit" class="fr-btn" :disabled="saving">
+          <button
+            type="submit"
+            class="fr-btn"
+            :disabled="saving || topicUnowned"
+          >
             {{ saving ? 'Création en cours…' : 'Créer la page' }}
           </button>
         </div>
