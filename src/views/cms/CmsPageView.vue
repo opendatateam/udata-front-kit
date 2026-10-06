@@ -30,9 +30,12 @@ const breadcrumbLinks = computed(() => {
   return [...base, { text: page.value?.name ?? '…' }]
 })
 
-onMounted(async () => {
+const loadPage = async (pageId: string) => {
+  loading.value = true
+  page.value = null
+  error.value = false
   try {
-    const fetched = await cmsPageStore.fetchPageById(id.value)
+    const fetched = await cmsPageStore.fetchPageById(pageId)
     if (
       props.categoryId &&
       categoryIdFromTags(fetched.tags) !== props.categoryId
@@ -46,7 +49,9 @@ onMounted(async () => {
   } finally {
     loading.value = false
   }
-})
+}
+
+watch(id, (newId) => loadPage(newId), { immediate: true })
 
 useMeta({
   title: () => page.value?.name,
