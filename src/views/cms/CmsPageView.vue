@@ -86,6 +86,7 @@ useMeta({
   </div>
 
   <template v-else-if="page">
+    <h1 class="fr-sr-only">{{ page.name }}</h1>
     <PageShow :blocs="page.blocs" :edit="false" />
   </template>
 </template>

@@ -37,9 +37,9 @@ const update = (patch: Partial<HeroBloc>) => {
     ]"
   >
     <div class="fr-container">
-      <h1 class="fr-h2 fr-mb-2w fr-text-inverted--grey">
+      <h2 class="fr-h2 fr-mb-2w fr-text-inverted--grey">
         {{ modelValue.title }}
-      </h1>
+      </h2>
       <p v-if="modelValue.description" class="fr-text--lg fr-mb-3w">
         {{ modelValue.description }}
       </p>
