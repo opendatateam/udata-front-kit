@@ -14,12 +14,20 @@ export const datagouvResponseBuilder = (data: object[]) => {
   }
 }
 
+// matches the configured datagouvfr.base_url, not a hardcoded domain, so
+// mocks still work when a site points at a non-data.gouv.fr backend
+const escapeRegex = (value: string) =>
+  value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
 const datagouvUrlRegex = (
   resourceName: string,
   resourceId: string | null = null
 ) => {
+  const host = escapeRegex(
+    new URL(Cypress.env('siteConfig').datagouvfr.base_url).host
+  )
   return new RegExp(
-    `.*data\\.gouv\\.fr/api/\\d/${resourceName}${resourceId ? `/${resourceId}` : ''}.*`
+    `.*${host}/api/\\d/${resourceName}${resourceId ? `/${resourceId}` : ''}.*`
   )
 }
 
