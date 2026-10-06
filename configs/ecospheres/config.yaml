@@ -11,8 +11,10 @@ site_id: ecospheres
 
 datagouvfr:
   # data.gouv.fr base URL (use www subdomain on prod)
+  # FIXME: local dev value, revert to https://demo.data.gouv.fr before merge
   base_url: http://dev.local:7000
   # oauth settings
+  # FIXME: local dev value, revert to 66e30254d3cc5d5b52a4b6ec before merge
   oauth_client_id: 6ac3a94496e64b262aa3fd3e
   tabular_api_url: https://tabular-api.preprod.data.gouv.fr
 
@@ -34,9 +36,11 @@ website:
   #       route_prefix: {string}    # pages in this category are served at `{route_prefix}/{slug}`
   cms:
     enabled: true
+    # FIXME: local dev value (local-only topic), replace with a real demo/prod topic id before merge
     topic_id: 6ac3aa2bf28defa350b0579e
     pages:
       - title: Test du CMS
+        # FIXME: local dev value (local-only page), replace with a real demo/prod page id before merge
         id: 6aa23f34d98bb8b63e32e6f3
         route: /test-du-cms
     categories:
