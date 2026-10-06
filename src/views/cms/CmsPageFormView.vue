@@ -193,8 +193,9 @@ const handleCreate = async () => {
   }
   saving.value = true
   error.value = ''
+  let newPage: CmsPage | null = null
   try {
-    const newPage = await cmsPageStore.createPage({
+    newPage = await cmsPageStore.createPage({
       name: name.value,
       description: description.value.trim() || null,
       blocs: [],
@@ -219,9 +220,24 @@ const handleCreate = async () => {
         }
       })
     }
-    await router.push(`/admin/cms/edit/${newPage.id}`)
   } catch {
-    error.value = 'Erreur lors de la création.'
+    // the page was created but the topic link failed — roll it back so a
+    // retry doesn't leave an orphaned, invisible duplicate behind
+    if (newPage) {
+      try {
+        await cmsPageStore.deletePage(newPage.id)
+        error.value = 'Erreur lors de la création.'
+      } catch {
+        error.value = `La page a été créée (id ${newPage.id}) mais n'a pas pu être liée au site. Contactez un administrateur.`
+      }
+    } else {
+      error.value = 'Erreur lors de la création.'
+    }
+    saving.value = false
+    return
+  }
+  try {
+    await router.push(`/admin/cms/edit/${newPage.id}`)
   } finally {
     saving.value = false
   }
