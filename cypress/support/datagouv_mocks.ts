@@ -19,7 +19,7 @@ export const datagouvResponseBuilder = (data: object[]) => {
 const escapeRegex = (value: string) =>
   value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
-const datagouvUrlRegex = (
+export const datagouvUrlRegex = (
   resourceName: string,
   resourceId: string | null = null
 ) => {

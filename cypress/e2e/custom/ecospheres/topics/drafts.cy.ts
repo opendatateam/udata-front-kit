@@ -1,4 +1,5 @@
 import type { Topic } from '@/model/topic'
+import { datagouvUrlRegex } from 'cypress/support/datagouv_mocks'
 import { topicFactory } from 'cypress/support/factories/topics_factory'
 
 describe('Topics - Drafts Page', () => {
@@ -11,7 +12,7 @@ describe('Topics - Drafts Page', () => {
     drafts: Topic[],
     { total, page = 1 }: { total?: number; page?: number } = {}
   ) => {
-    cy.intercept('GET', /.*data\.gouv\.fr\/api\/2\/topics.*/, {
+    cy.intercept('GET', datagouvUrlRegex('topics'), {
       statusCode: 200,
       body: {
         data: drafts,
