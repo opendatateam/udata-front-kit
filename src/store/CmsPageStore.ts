@@ -8,7 +8,30 @@ import { categoryTag } from '@/utils/cms'
 
 const cmsPagesAPI = new CmsPagesAPI()
 
+export interface CmsPageStoreState {
+  sitePages: CmsPage[]
+  sitePagesTotal: number
+}
+
 export const useCmsPageStore = defineStore('cmsPage', {
+  state: (): CmsPageStoreState => ({
+    sitePages: [],
+    sitePagesTotal: 0
+  }),
+  getters: {
+    sitePagesPagination() {
+      const pageSize = config.website.pagination_sizes.cms_pages_list
+      const nbPages = Math.ceil(this.sitePagesTotal / pageSize)
+      return [...Array(nbPages).keys()].map((page) => {
+        page += 1
+        return {
+          label: page.toString(),
+          href: '#',
+          title: `Page ${page}`
+        }
+      })
+    }
+  },
   actions: {
     async fetchPageById(idOrSlug: string): Promise<CmsPage> {
       return await cmsPagesAPI.get({
@@ -19,17 +42,20 @@ export const useCmsPageStore = defineStore('cmsPage', {
     // scoped to this site's topic — not the caller's own pages, so
     // multiple admins managing the same site see the same list.
     // with_drafts: admins manage unpublished pages too, not just live ones
-    async listSitePages(): Promise<CmsPage[]> {
+    async listSitePages(page = 1): Promise<void> {
       const topicId = config.website.cms?.topic_id
       const response: GenericResponse = await cmsPagesAPI.list({
         params: {
           ...(topicId ? { topic: topicId } : {}),
           with_drafts: 'true',
-          sort: '-last_modified'
+          sort: '-last_modified',
+          page,
+          page_size: config.website.pagination_sizes.cms_pages_list
         },
         authenticated: true
       })
-      return response.data as CmsPage[]
+      this.sitePages = response.data as CmsPage[]
+      this.sitePagesTotal = response.total
     },
     // public, unauthenticated: only published pages (no with_drafts), for
     // front-of-site widgets like the homepage news list.

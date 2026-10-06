@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
+
 import GenericContainer from '@/components/GenericContainer.vue'
 import SidebarOwner from '@/components/SidebarOwner.vue'
 import config from '@/config'
@@ -9,7 +11,8 @@ import { formatDate } from '@/utils'
 import { categoryFromTags } from '@/utils/cms'
 
 const cmsPageStore = useCmsPageStore()
-const pages = ref<CmsPage[]>([])
+const { sitePages: pages, sitePagesPagination } = storeToRefs(cmsPageStore)
+const currentPage = ref(1)
 const loading = ref(true)
 
 const cmsPages: CmsPageConfig[] = config.website.cms?.pages ?? []
@@ -27,13 +30,21 @@ const routeForPage = (page: CmsPage) => {
 
 const links = [{ to: '/', text: 'Accueil' }, { text: 'CMS' }]
 
-onMounted(async () => {
+const loadPages = async (page = 1) => {
+  loading.value = true
   try {
-    pages.value = await cmsPageStore.listSitePages()
+    await cmsPageStore.listSitePages(page)
   } finally {
     loading.value = false
   }
-})
+}
+
+onMounted(() => loadPages())
+
+const onUpdatePage = (page: number) => {
+  currentPage.value = page + 1
+  loadPages(currentPage.value)
+}
 
 const handleDelete = async (page: CmsPage) => {
   if (
@@ -43,7 +54,7 @@ const handleDelete = async (page: CmsPage) => {
   )
     return
   await cmsPageStore.deletePage(page.id)
-  pages.value = pages.value.filter((p) => p.id !== page.id)
+  await loadPages(currentPage.value)
 }
 </script>
 
@@ -166,6 +177,15 @@ const handleDelete = async (page: CmsPage) => {
           </div>
         </div>
       </div>
+    </div>
+
+    <div v-if="sitePagesPagination.length > 1" class="fr-container">
+      <DsfrPagination
+        :trunc-limit="3"
+        :current-page="currentPage - 1"
+        :pages="sitePagesPagination"
+        @update:current-page="onUpdatePage"
+      />
     </div>
   </GenericContainer>
 </template>
