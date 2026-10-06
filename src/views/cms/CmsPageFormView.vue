@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { toast, type PageBloc } from '@datagouv/components-next'
-import { useRouter } from 'vue-router'
+import { onBeforeRouteLeave, useRouter } from 'vue-router'
 
 import GenericContainer from '@/components/GenericContainer.vue'
 import PageShow from '@/components/cms/PageShow.vue'
@@ -91,6 +91,39 @@ const focusErrorSummary = () => {
 // clicked, same as the other metadata fields below.
 const draftBlocs = ref<PageBloc[]>([])
 
+// Snapshot taken right after load and after each successful save — compared
+// against current field values to warn before an unsaved edit is lost.
+const editSnapshot = () =>
+  JSON.stringify({
+    name: name.value,
+    description: description.value,
+    categoryId: categoryId.value,
+    blocs: draftBlocs.value
+  })
+const savedSnapshot = ref('')
+const isDirty = computed(
+  () =>
+    !isCreate.value &&
+    page.value !== null &&
+    editSnapshot() !== savedSnapshot.value
+)
+const UNSAVED_CHANGES_WARNING =
+  'Des modifications non enregistrées seront perdues. Quitter quand même ?'
+
+onBeforeRouteLeave(() => {
+  if (isDirty.value) return window.confirm(UNSAVED_CHANGES_WARNING)
+})
+
+const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+  if (!isDirty.value) return
+  event.preventDefault()
+  event.returnValue = ''
+}
+onMounted(() => window.addEventListener('beforeunload', handleBeforeUnload))
+onUnmounted(() =>
+  window.removeEventListener('beforeunload', handleBeforeUnload)
+)
+
 // Page updates are a full-replace PUT: strip read-only fields (owner/organization
 // are set at creation and rejected on update, published only changes via the publish
 // endpoints) so we don't send back nested objects the write schema rejects.
@@ -137,6 +170,7 @@ const loadPage = async (id: string) => {
     description.value = fetched.description ?? ''
     categoryId.value = categoryIdFromTags(fetched.tags)
     draftBlocs.value = [...fetched.blocs]
+    savedSnapshot.value = editSnapshot()
   } catch {
     error.value = 'Impossible de charger la page.'
   } finally {
@@ -211,6 +245,7 @@ const handleSave = async () => {
     })
     page.value = { ...page.value, ...updated }
     draftBlocs.value = [...updated.blocs]
+    savedSnapshot.value = editSnapshot()
     toast.success('Page enregistrée.')
   } catch {
     error.value = 'Erreur lors de la sauvegarde.'
