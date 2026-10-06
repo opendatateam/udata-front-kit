@@ -19,17 +19,30 @@ export const datagouvResponseBuilder = (data: object[]) => {
 const escapeRegex = (value: string) =>
   value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
+export const datagouvHost = () =>
+  escapeRegex(new URL(Cypress.env('siteConfig').datagouvfr.base_url).host)
+
 export const datagouvUrlRegex = (
   resourceName: string,
   resourceId: string | null = null
 ) => {
-  const host = escapeRegex(
-    new URL(Cypress.env('siteConfig').datagouvfr.base_url).host
-  )
   return new RegExp(
-    `.*${host}/api/\\d/${resourceName}${resourceId ? `/${resourceId}` : ''}.*`
+    `.*${datagouvHost()}/api/\\d/${resourceName}${resourceId ? `/${resourceId}` : ''}.*`
   )
 }
+
+// the ecospheres homepage fetches CMS pages by category tag on every visit,
+// logged in or not; default to empty so unrelated tests aren't left unmocked
+// (narrowed to the tag query so a real page-by-slug fetch still falls through)
+Cypress.Commands.add('mockCmsNewsDefault', () => {
+  cy.intercept('GET', datagouvUrlRegex('pages'), (req) => {
+    if (req.url.includes('tag=cms-category')) {
+      req.reply({ statusCode: 200, body: datagouvResponseBuilder([]) })
+    } else {
+      req.continue()
+    }
+  }).as('getCmsNewsDefault')
+})
 
 Cypress.Commands.add('mockDatagouvObjectList', (resourceName, data = []) => {
   cy.intercept('GET', datagouvUrlRegex(resourceName), {

@@ -1,5 +1,5 @@
 import type { Topic } from '@/model/topic'
-import { datagouvUrlRegex } from 'cypress/support/datagouv_mocks'
+import { datagouvHost } from 'cypress/support/datagouv_mocks'
 import { topicFactory } from 'cypress/support/factories/topics_factory'
 
 describe('Topics - Drafts Page', () => {
@@ -12,17 +12,24 @@ describe('Topics - Drafts Page', () => {
     drafts: Topic[],
     { total, page = 1 }: { total?: number; page?: number } = {}
   ) => {
-    cy.intercept('GET', datagouvUrlRegex('topics'), {
-      statusCode: 200,
-      body: {
-        data: drafts,
-        total: total ?? drafts.length,
-        page,
-        page_size: pageSize,
-        next_page: null,
-        previous_page: null
+    // requires private=true so this never also matches the CMS-topic
+    // self-check fired by every authenticated page load (same resource,
+    // no query string)
+    cy.intercept(
+      'GET',
+      new RegExp(`.*${datagouvHost()}/api/\\d/topics/?\\?.*private=true.*`),
+      {
+        statusCode: 200,
+        body: {
+          data: drafts,
+          total: total ?? drafts.length,
+          page,
+          page_size: pageSize,
+          next_page: null,
+          previous_page: null
+        }
       }
-    }).as('get_drafts')
+    ).as('get_drafts')
   }
 
   beforeEach(() => {
