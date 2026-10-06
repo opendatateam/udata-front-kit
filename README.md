@@ -379,6 +379,7 @@ sentry:
   domain_url: 'https://errors.data.gouv.fr/' # Ou tout autre domaine où vous hébergez votre sentry
   dsn: 'https://c8268303ac0799edda45ced7faa7e0a0@errors.data.gouv.fr/38' # Vous trouverez ce DSN lors de l'initialisation de votre projet dans Sentry
   environment: 'preprod' # Ou autre (par exemple 'production'), selon la branche de déploiement
+  tracesSampleRate: 0.1 # Optionnel, active le suivi des performances (chargements de page, navigations, requêtes) sur 10 % des navigations
 ```
 
 D'autres éléments de configuration sont disponibles dans le fichier [src/model/config.ts](./src/model/config.ts)
