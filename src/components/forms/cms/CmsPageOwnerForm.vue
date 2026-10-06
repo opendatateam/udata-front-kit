@@ -101,6 +101,11 @@ watch(choice, () => {
   if (choice.value === 'owner' && userStore.data?.id) {
     page.value.owner = userStore.userReference
     page.value.organization = null
+  } else if (choice.value === 'organization') {
+    page.value.owner = null
+    page.value.organization = null
+    selectedOwnOrganization.value = null
+    clear()
   }
 })
 </script>
