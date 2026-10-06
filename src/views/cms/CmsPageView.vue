@@ -2,10 +2,15 @@
 import PageShow from '@/components/cms/PageShow.vue'
 import type { CmsPage } from '@/model/cms'
 import { useCmsPageStore } from '@/store/CmsPageStore'
+import { categoryIdFromTags } from '@/utils/cms'
 import { useCanonicalUrl, useMeta } from '@/utils/seo'
 
 const props = defineProps<{
   id?: string
+  // set only for category routes (e.g. /actualites/:slug) — pages must carry
+  // the matching category tag, otherwise any page could be reached under any
+  // category's URL prefix
+  categoryId?: string
 }>()
 
 const route = useRoute()
@@ -27,7 +32,15 @@ const breadcrumbLinks = computed(() => {
 
 onMounted(async () => {
   try {
-    page.value = await cmsPageStore.fetchPageById(id.value)
+    const fetched = await cmsPageStore.fetchPageById(id.value)
+    if (
+      props.categoryId &&
+      categoryIdFromTags(fetched.tags) !== props.categoryId
+    ) {
+      error.value = true
+      return
+    }
+    page.value = fetched
   } catch {
     error.value = true
   } finally {

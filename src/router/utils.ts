@@ -423,7 +423,8 @@ export const useCmsRoutes = (cms: CmsConfig): RouteRecordRaw[] => {
       path: `${c.route_prefix}/:slug`,
       component: async () => await import('@/views/cms/CmsPageView.vue'),
       props: (route: RouteLocationNormalizedLoaded) => ({
-        id: route.params.slug as string
+        id: route.params.slug as string,
+        categoryId: c.id
       }),
       meta: { title: c.label }
     })
