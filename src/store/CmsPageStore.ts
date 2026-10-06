@@ -33,6 +33,8 @@ export const useCmsPageStore = defineStore('cmsPage', {
     },
     // public, unauthenticated: only published pages (no with_drafts), for
     // front-of-site widgets like the homepage news list.
+    // toasted: false — this is a non-critical widget, a fetch failure shouldn't
+    // surface an error toast to every site visitor.
     async listPublishedByCategory(
       categoryId: string,
       limit?: number
@@ -44,7 +46,8 @@ export const useCmsPageStore = defineStore('cmsPage', {
           tag: categoryTag(categoryId),
           sort: '-published',
           ...(limit ? { page_size: limit } : {})
-        }
+        },
+        toasted: false
       })
       return response.data as CmsPage[]
     },
