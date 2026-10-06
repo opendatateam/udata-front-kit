@@ -158,8 +158,7 @@ export interface CmsPageConfig {
   route: string
 }
 
-// a selectable collection of CMS pages (e.g. news articles), routed as
-// `${route_prefix}/:slug` and marked on the page via a tag (see utils/cms.ts)
+// a selectable, tag-marked collection of CMS pages (e.g. news articles)
 export interface CmsCategoryConfig {
   id: string
   label: string

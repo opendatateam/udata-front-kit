@@ -400,8 +400,7 @@ export const useCmsRoutes = (cms: CmsConfig): RouteRecordRaw[] => {
       meta: { title: p.title }
     })
   )
-  // arbitrary pages self-registered under a configured category (see utils/cms.ts),
-  // resolved by slug at runtime so no deploy is needed to add a new one
+  // self-service pages, resolved by slug so no deploy is needed to add one
   const categoryRoutes: RouteRecordRaw[] = (cms.categories ?? []).map(
     (c): RouteRecordRaw => ({
       path: `${c.route_prefix}/:slug`,

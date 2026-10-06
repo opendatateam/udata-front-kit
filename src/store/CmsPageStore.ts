@@ -57,9 +57,7 @@ export const useCmsPageStore = defineStore('cmsPage', {
         authenticated: true
       })
     },
-    // scoped to this site's topic — not the caller's own pages, so
-    // multiple admins managing the same site see the same list.
-    // with_drafts: admins manage unpublished pages too, not just live ones
+    // scoped to this site's topic so every admin sees the same list, drafts included
     async listSitePages(page = 1): Promise<void> {
       const topicId = config.website.cms?.topic_id
       const response: GenericResponse = await cmsPagesAPI.list({
@@ -75,10 +73,7 @@ export const useCmsPageStore = defineStore('cmsPage', {
       this.sitePages = response.data as CmsPage[]
       this.sitePagesTotal = response.total
     },
-    // public, unauthenticated: only published pages (no with_drafts), for
-    // front-of-site widgets like the homepage news list.
-    // toasted: false — this is a non-critical widget, a fetch failure shouldn't
-    // surface an error toast to every site visitor.
+    // public: published pages only, failures stay silent for this non-critical widget
     async listPublishedByCategory(
       categoryId: string,
       limit?: number

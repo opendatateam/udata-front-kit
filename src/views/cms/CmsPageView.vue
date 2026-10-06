@@ -7,9 +7,7 @@ import { useCanonicalUrl, useMeta } from '@/utils/seo'
 
 const props = defineProps<{
   id?: string
-  // set only for category routes (e.g. /actualites/:slug) — pages must carry
-  // the matching category tag, otherwise any page could be reached under any
-  // category's URL prefix
+  // set only for category routes — the fetched page must carry this tag
   categoryId?: string
 }>()
 

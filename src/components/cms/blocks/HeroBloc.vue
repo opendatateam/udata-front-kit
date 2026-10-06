@@ -142,8 +142,7 @@ const update = (patch: Partial<HeroBloc>) => {
 </template>
 
 <style scoped>
-/* fr-btn--secondary is tied to the blue-france brand color, unreadable against
-   a same-colored (or any) hero background — match the inverted title/description */
+/* fr-btn--secondary's brand-blue is unreadable on the hero background */
 .hero-link {
   color: var(--text-inverted-grey);
   box-shadow: inset 0 0 0 1px var(--text-inverted-grey);

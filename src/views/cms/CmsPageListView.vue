@@ -84,8 +84,7 @@ const handleDelete = async (page: CmsPage) => {
       <p>Aucune page créée pour le moment.</p>
     </div>
 
-    <!-- DSFR's outer-frame border is only drawn once this attribute is set — normally
-    done by its vanilla JS (unused here), but the rule itself is static CSS -->
+    <!-- DSFR's outer-frame border only draws once this attribute is set -->
     <div
       v-else
       class="fr-table fr-table--bordered fr-table--no-caption"

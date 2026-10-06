@@ -28,8 +28,7 @@ const close = () => {
   isOpen.value = false
 }
 
-// matches DsfrLanguageSelector's own toggle-menu pattern, which doesn't
-// close on Escape/outside click either — nothing upstream covers that part
+// not covered by any upstream pattern — closes on Escape or outside click
 const onKeydown = (event: KeyboardEvent) => {
   if (event.key === 'Escape') close()
 }

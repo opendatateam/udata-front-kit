@@ -57,9 +57,7 @@ const inputErrorMessages = new Map([
 const hasError = (field: string) => formErrors.value.includes(field)
 const getErrorMessage = (field: string) => inputErrorMessages.get(field) || ''
 
-// Mirrors TopicForm's validateFields(): the owner radio defaults to
-// "organization" with nothing selected yet, so that case must be caught
-// explicitly or the page silently gets created without one.
+// the owner radio defaults to "organization" with nothing picked yet, so that must be caught explicitly
 const validateCreateFields = (): boolean => {
   const errors: string[] = []
   if (!name.value.trim()) errors.push('name')
@@ -87,12 +85,10 @@ const focusErrorSummary = () => {
   }, 0)
 }
 
-// Draft kept separate from `page.blocs` until the single save button is
-// clicked, same as the other metadata fields below.
+// kept separate from `page.blocs` until the single save button is clicked
 const draftBlocs = ref<PageBloc[]>([])
 
-// Snapshot taken right after load and after each successful save — compared
-// against current field values to warn before an unsaved edit is lost.
+// taken after load/save, diffed against current values to warn on unsaved edits
 const editSnapshot = () =>
   JSON.stringify({
     name: name.value,
@@ -124,9 +120,7 @@ onUnmounted(() =>
   window.removeEventListener('beforeunload', handleBeforeUnload)
 )
 
-// Page updates are a full-replace PUT: strip read-only fields (owner/organization
-// are set at creation and rejected on update, published only changes via the publish
-// endpoints) so we don't send back nested objects the write schema rejects.
+// full-replace PUT: strip read-only fields the write schema rejects
 const toWritablePage = (p: CmsPage) => {
   const {
     id: _id,
@@ -221,8 +215,7 @@ const handleCreate = async () => {
       })
     }
   } catch {
-    // the page was created but the topic link failed — roll it back so a
-    // retry doesn't leave an orphaned, invisible duplicate behind
+    // topic link failed — roll back so a retry doesn't leave an orphaned duplicate
     if (newPage) {
       try {
         await cmsPageStore.deletePage(newPage.id)

@@ -6,8 +6,7 @@ import { fromMarkdown } from '@/utils'
 const props = defineProps<{
   modelValue: MarkdownBloc
   edit: boolean
-  // true when rendered inside an accordion section (its own title is an h3),
-  // so this bloc's title must step down to h4 to keep the heading order valid
+  // true inside an accordion section, so the title steps down to h4
   nested?: boolean
 }>()
 

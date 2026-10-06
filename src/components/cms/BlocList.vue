@@ -11,8 +11,7 @@ import LinksListBlocComponent from './blocks/LinksListBloc.vue'
 import MarkdownBlocComponent from './blocks/MarkdownBloc.vue'
 import ReusesListBlocComponent from './blocks/ReusesListBloc.vue'
 
-// Loaded lazily: AccordionListBloc.vue renders this component for its own
-// nested content, so a static import here would create a circular import.
+// loaded lazily to avoid a circular import with its own nested content
 const AccordionListBlocComponent = defineAsyncComponent(
   () => import('./blocks/AccordionListBloc.vue')
 )
@@ -20,11 +19,9 @@ const AccordionListBlocComponent = defineAsyncComponent(
 const props = defineProps<{
   blocs: PageBloc[]
   edit: boolean
-  // Restricts which bloc types can be added to this list (e.g. accordion
-  // sections only accept content blocs, not Hero/Accordion).
+  // restricts which bloc types can be added here (e.g. no Hero in an accordion)
   allowed?: PageBloc['class'][]
-  // Set when rendering inside another bloc (e.g. an accordion section) so we
-  // don't nest fr-container inside an already-contained layout.
+  // true when already inside a contained layout, to avoid nesting fr-container
   nested?: boolean
 }>()
 

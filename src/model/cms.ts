@@ -1,7 +1,6 @@
 import type { Owned, PageBloc } from '@datagouv/components-next'
 
-// the backend's Page model (not to be confused with PageConf/PageObjectType,
-// which describe this app's own search/listing pages)
+// the backend's Page model (distinct from this app's own PageConf/PageObjectType)
 export type CmsPage = Owned & {
   id: string
   name: string
