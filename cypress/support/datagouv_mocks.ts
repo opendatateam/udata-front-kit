@@ -35,7 +35,7 @@ export const datagouvUrlRegex = (
 // logged in or not; default to empty so unrelated tests aren't left unmocked
 // (narrowed to the tag query so a real page-by-slug fetch still falls through)
 Cypress.Commands.add('mockCmsNewsDefault', () => {
-  cy.intercept('GET', datagouvUrlRegex('pages'), (req) => {
+  cy.intercept('GET', datagouvUrlRegex('posts'), (req) => {
     if (req.url.includes('tag=cms-category')) {
       req.reply({ statusCode: 200, body: datagouvResponseBuilder([]) })
     } else {

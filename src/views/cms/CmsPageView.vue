@@ -53,7 +53,7 @@ watch(id, (newId) => loadPage(newId), { immediate: true })
 
 useMeta({
   title: () => page.value?.name,
-  description: () => page.value?.description ?? undefined,
+  description: () => page.value?.headline ?? undefined,
   canonicalUrl: useCanonicalUrl()
 })
 </script>

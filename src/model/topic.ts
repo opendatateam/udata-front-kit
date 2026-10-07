@@ -23,7 +23,7 @@ export interface SiteElementExtras {
 
 export type ElementExtras = Record<SiteId, SiteElementExtras>
 
-export type ElementClass = 'Dataset' | 'Reuse' | 'Page'
+export type ElementClass = 'Dataset' | 'Reuse' | 'Post'
 
 export interface GenericElement {
   id?: string

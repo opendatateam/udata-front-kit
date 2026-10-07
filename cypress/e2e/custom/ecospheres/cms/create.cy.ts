@@ -24,7 +24,7 @@ describe('Ecospheres - CMS Page Creation', () => {
 
     const createdPage = createTestPage({ slug: 'test-cms-page' })
 
-    cy.intercept('POST', '**/pages/', (req) => {
+    cy.intercept('POST', '**/posts/', (req) => {
       req.reply({ statusCode: 201, body: { ...createdPage, ...req.body } })
     }).as('createPage')
 
@@ -37,7 +37,7 @@ describe('Ecospheres - CMS Page Creation', () => {
     }).as('createElement')
 
     // mocks what the edit view loads right after the redirect
-    cy.mockDatagouvObject('pages', createdPage.id, createdPage)
+    cy.mockDatagouvObject('posts', createdPage.id, createdPage)
 
     cy.get('#input-name').type('Test CMS Page')
     // owner is inherited from the CMS topic, not chosen by the user
@@ -50,6 +50,8 @@ describe('Ecospheres - CMS Page Creation', () => {
       const requestBody = interception.request.body
       expect(requestBody).to.have.property('name', 'Test CMS Page')
       expect(requestBody).to.have.property('owner', 'test-user-id')
+      expect(requestBody).to.have.property('kind', 'external_page')
+      expect(requestBody).to.have.property('body_type', 'blocs')
       expect(requestBody).to.have.property('tags')
       expect(requestBody.tags).to.be.an('array')
     })
@@ -57,7 +59,7 @@ describe('Ecospheres - CMS Page Creation', () => {
     cy.wait('@createElement').then((interception) => {
       const [element] = interception.request.body
       expect(element.element).to.deep.equal({
-        class: 'Page',
+        class: 'Post',
         id: createdPage.id
       })
     })

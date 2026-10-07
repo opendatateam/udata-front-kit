@@ -2,7 +2,7 @@ import type { CmsPage } from '@/model/cms'
 import DatagouvfrAPI from '@/services/api/DatagouvfrAPI'
 
 export default class CmsPagesAPI extends DatagouvfrAPI {
-  endpoint = 'pages'
+  endpoint = 'posts'
 
   async publish(id: string): Promise<CmsPage> {
     return await this.request({

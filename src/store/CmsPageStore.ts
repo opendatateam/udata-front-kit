@@ -62,6 +62,7 @@ export const useCmsPageStore = defineStore('cmsPage', {
       const topicId = config.website.cms?.topic_id
       const response: GenericResponse = await cmsPagesAPI.list({
         params: {
+          kind: 'external_page',
           ...(topicId ? { topic: topicId } : {}),
           with_drafts: 'true',
           sort: '-last_modified',
@@ -81,6 +82,7 @@ export const useCmsPageStore = defineStore('cmsPage', {
       const topicId = config.website.cms?.topic_id
       const response: GenericResponse = await cmsPagesAPI.list({
         params: {
+          kind: 'external_page',
           ...(topicId ? { topic: topicId } : {}),
           tag: categoryTag(categoryId),
           sort: '-published',

@@ -37,7 +37,7 @@ const error = ref('')
 const forbidden = ref(false)
 
 const name = ref('')
-const description = ref('')
+const headline = ref('')
 const categoryId = ref<string | null>(null)
 // a new page always inherits the CMS topic's own owner/organization, so
 // anyone who can manage the topic can also manage every page under it
@@ -99,7 +99,7 @@ const draftBlocs = ref<PageBloc[]>([])
 const editSnapshot = () =>
   JSON.stringify({
     name: name.value,
-    description: description.value,
+    headline: headline.value,
     categoryId: categoryId.value,
     blocs: draftBlocs.value
   })
@@ -168,7 +168,7 @@ const loadPage = async (id: string) => {
     }
     page.value = fetched
     name.value = fetched.name
-    description.value = fetched.description ?? ''
+    headline.value = fetched.headline ?? ''
     categoryId.value = categoryIdFromTags(fetched.tags)
     draftBlocs.value = [...fetched.blocs]
     savedSnapshot.value = editSnapshot()
@@ -206,7 +206,9 @@ const handleCreate = async () => {
   try {
     newPage = await cmsPageStore.createPage({
       name: name.value,
-      description: description.value.trim() || null,
+      headline: headline.value.trim() || null,
+      kind: 'external_page',
+      body_type: 'blocs',
       blocs: [],
       tags: withCategoryTag([], categoryId.value),
       ...(cmsTopic.value?.organization
@@ -222,7 +224,7 @@ const handleCreate = async () => {
         title: newPage.name,
         description: null,
         tags: [],
-        element: { class: 'Page', id: newPage.id },
+        element: { class: 'Post', id: newPage.id },
         extras: {
           [useSiteId()]: {
             uri: newPage.page,
@@ -265,7 +267,7 @@ const handleSave = async () => {
     const updated = await cmsPageStore.updatePage(page.value.id, {
       ...toWritablePage(page.value),
       name: name.value,
-      description: description.value.trim() || null,
+      headline: headline.value.trim() || null,
       tags: withCategoryTag(page.value.tags, categoryId.value),
       blocs: draftBlocs.value
     })
@@ -394,15 +396,15 @@ const togglePublish = async () => {
             />
           </div>
           <div class="fr-mb-3w">
-            <label for="page-description" class="fr-label">
+            <label for="page-headline" class="fr-label">
               Description (facultatif)
               <span class="fr-hint-text"
                 >Utilisée comme description pour le référencement (SEO).</span
               >
             </label>
             <textarea
-              id="page-description"
-              v-model="description"
+              id="page-headline"
+              v-model="headline"
               class="fr-input"
               rows="3"
             />
@@ -472,15 +474,15 @@ const togglePublish = async () => {
             />
           </div>
           <div class="fr-mb-3w">
-            <label for="page-description" class="fr-label">
+            <label for="page-headline" class="fr-label">
               Description (facultatif)
               <span class="fr-hint-text"
                 >Utilisée comme description pour le référencement (SEO).</span
               >
             </label>
             <textarea
-              id="page-description"
-              v-model="description"
+              id="page-headline"
+              v-model="headline"
               class="fr-input"
               rows="3"
             />

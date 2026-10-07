@@ -50,7 +50,7 @@ describe('Ecospheres - CMS Page Public View', () => {
         }
       ]
     })
-    cy.mockDatagouvObject('pages', page.slug, page)
+    cy.mockDatagouvObject('posts', page.slug, page)
 
     cy.visit(`${category.route_prefix}/${page.slug}`)
 
@@ -78,7 +78,7 @@ describe('Ecospheres - CMS Page Public View', () => {
       tags: [],
       published: new Date().toISOString()
     })
-    cy.mockDatagouvObject('pages', page.slug, page)
+    cy.mockDatagouvObject('posts', page.slug, page)
 
     cy.visit(`${category.route_prefix}/${page.slug}`)
 
