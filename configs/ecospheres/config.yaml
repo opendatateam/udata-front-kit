@@ -11,14 +11,42 @@ site_id: ecospheres
 
 datagouvfr:
   # data.gouv.fr base URL (use www subdomain on prod)
-  base_url: https://demo.data.gouv.fr
+  # FIXME: local dev value, revert to https://demo.data.gouv.fr before merge
+  base_url: http://dev.local:7000
   # oauth settings
-  oauth_client_id: 66e30254d3cc5d5b52a4b6ec
+  # FIXME: local dev value, revert to 66e30254d3cc5d5b52a4b6ec before merge
+  oauth_client_id: 6ac3a94496e64b262aa3fd3e
   tabular_api_url: https://tabular-api.preprod.data.gouv.fr
 
 # UI customizations
 website:
   title: 'ecologie.data.gouv.fr'
+  # Configuration format for cms:
+  #
+  # cms:
+  #   enabled: {bool}               # enable the CMS feature (routes and admin menu)
+  #   topic_id: {string}            # id of the topic pages are attached to, scopes the admin list to this site
+  #   pages:                        # list of known CMS pages mapped to a fixed local route (optional)
+  #     - title: {string}           # display title
+  #       id: {string}              # page id or slug on data.gouv.fr
+  #       route: {string}           # local route path (e.g. /about)
+  #   categories:                   # selectable categories for self-service pages, routed by slug (optional)
+  #     - id: {string}              # stored on the page as a `cms-category:{id}` tag
+  #       label: {string}           # shown in the category picker
+  #       route_prefix: {string}    # pages in this category are served at `{route_prefix}/{slug}`
+  cms:
+    enabled: true
+    # FIXME: local dev value (local-only topic), replace with a real demo/prod topic id before merge
+    topic_id: 6ac3aa2bf28defa350b0579e
+    pages:
+      - title: Test du CMS
+        # FIXME: local dev value (local-only page), replace with a real demo/prod page id before merge
+        id: 6aa23f34d98bb8b63e32e6f3
+        route: /test-du-cms
+    categories:
+      - id: news
+        label: Actualités
+        route_prefix: /actualites
   seo:
     canonical_url: https://demo.ecologie.data.gouv.fr
     # global metas injected
@@ -170,6 +198,7 @@ website:
     organizations_list: 9
     topics_drafts_list: 9
     files_list: 6
+    cms_pages_list: 10
   contact_email: ecospheres@developpement-durable.gouv.fr
   home_banner_colors:
     - '#D6E3A1'
@@ -682,13 +711,3 @@ ecospheres:
         maille: Communal
         slug: elaboration-ou-evolution-dun-document-durbanisme
     about_text: "ecologie.data.gouv.fr est animé par l'Ecolab, le laboratoire d'innovation au service de la transition écologique, au sein du Commissariat Général au Développement Durable (CGDD)."
-    news:
-      - date: 11 juin 2026
-        title: Recherche unifiée
-        href: https://guides.data.gouv.fr/ecologie.data.gouv.fr/le-projet/actualites#id-11-juin-2026-recherche-unifiee
-      - date: 8 juin 2026
-        title: Nouveaux indicateurs sur la forêt
-        href: https://guides.data.gouv.fr/ecologie.data.gouv.fr/le-projet/actualites#id-8-juin-2026-nouveaux-indicateurs-sur-la-forets
-      - date: 25 mai 2026
-        title: Vers la mutualisation de plugins QGIS pour l'analyse territoriale
-        href: https://guides.data.gouv.fr/ecologie.data.gouv.fr/le-projet/actualites#id-25-mai-2026-vers-la-mutualisation-de-plugin-qgis-pour-lanalyse-territoriale
