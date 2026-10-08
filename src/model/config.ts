@@ -133,13 +133,13 @@ export type PagesListConf = {
   [key: string]: PageListConf
 }
 
+// Network pages stop at the list view, so PageListConf (not PageConf) is enough.
 export type NetworkPageConf = PageListConf & {
   banner: PageBannerConf & { logo: string }
 }
 
 // A network is an ordered group of pages nested under /contributors/<slug>,
-// one per URL subpath (see networkDefaultPage in utils/config.ts). Network pages
-// stop at the list view, so PageListConf (not PageConf) is enough.
+// one per URL subpath (see networkDefaultPage in utils/config.ts).
 export type NetworkConf = {
   pages: { [subpath: string]: NetworkPageConf }
 }
