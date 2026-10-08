@@ -25,10 +25,7 @@ const organizationsConfig = config.organizations as OrganizationsConfig
 
 const breadcrumbLinks: Ref<BreadcrumbItem[]> = ref([
   { to: '/', text: 'Accueil' },
-  {
-    to: '/contributors',
-    text: organizationsConfig.page?.breadcrumb_title || 'Organisations'
-  }
+  ...(route.meta.parentBreadcrumbs ?? [])
 ])
 
 const currentPage = ref(1)
@@ -99,8 +96,8 @@ watchEffect(() => {
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="breadcrumbLinks" />
   </div>
-  <GenericContainer>
-    <h1 class="fr-mb-2v">{{ org?.name }}</h1>
+  <GenericContainer v-if="org">
+    <h1 class="fr-mb-2v">{{ org.name }}</h1>
     <!-- eslint-disable-next-line vue/no-v-html -->
     <div v-html="description"></div>
 

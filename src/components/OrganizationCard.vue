@@ -44,7 +44,10 @@ const isPublicService = (): boolean =>
         <component :is="headingLevel" class="fr-title-v2__title fr-m-0 h4">
           <RouterLink
             class="fr-tile__link"
-            :to="`/organizations/${organization.slug}`"
+            :to="{
+              name: 'organization_detail',
+              params: { oid: organization.slug }
+            }"
           >
             <NameWithCertificates
               :public-service="isPublicService()"

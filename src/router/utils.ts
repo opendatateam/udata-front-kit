@@ -415,24 +415,69 @@ export const useTopicAdminPagesRoutes = ({
   ]
 }
 
-// Org detail stays at /organizations/:oid; activeMenuLink highlights "Contributeurs" for it.
-export const useOrganizationsRoutes = (): RouteRecordRaw[] => {
-  return [
+interface OrganizationsRoutesOptions {
+  // Owning list page path (e.g. /contributors); nests org routes under it to avoid slug collisions.
+  listPath?: string
+  listLabel?: string
+}
+
+export const useOrganizationsRoutes = (
+  opts: OrganizationsRoutesOptions = {}
+): RouteRecordRaw[] => {
+  const organizationsConfig = config.organizations as OrganizationsConfig
+  const listPath = opts.listPath ?? '/organizations'
+  const basePath = opts.listPath
+    ? `${opts.listPath}/organizations`
+    : '/organizations'
+  const listLabel =
+    opts.listLabel ??
+    organizationsConfig.page?.breadcrumb_title ??
+    'Organisations'
+  const parentBreadcrumbs: BreadcrumbItem[] = [
+    { to: listPath, text: listLabel }
+  ]
+  if (opts.listPath) {
+    parentBreadcrumbs.push({ to: basePath, text: 'Organisations' })
+  }
+
+  const routes: RouteRecordRaw[] = [
     {
-      path: '/organizations',
+      path: basePath,
       // no name: the '' child is unnamed too, and naming only the parent trips a Vue Router warning
       children: [
-        { path: '', redirect: '/contributors' },
+        opts.listPath
+          ? { path: '', redirect: opts.listPath }
+          : {
+              path: '',
+              component: async () =>
+                await import('@/views/organizations/ContributorsListView.vue')
+            },
         {
           path: ':oid',
           name: 'organization_detail',
           component: async () =>
             await import('@/views/organizations/OrganizationDetailView.vue'),
-          meta: { activeMenuLink: '/contributors' }
+          meta: {
+            activeMenuLink: listPath,
+            parentBreadcrumbs
+          }
         }
       ]
     }
   ]
+
+  // Keeps old /organizations/:oid links working once basePath moves elsewhere.
+  if (opts.listPath) {
+    routes.push({
+      path: '/organizations/:oid',
+      redirect: (to) => ({
+        name: 'organization_detail',
+        params: { oid: to.params.oid }
+      })
+    })
+  }
+
+  return routes
 }
 
 /**
