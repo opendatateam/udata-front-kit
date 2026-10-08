@@ -12,7 +12,7 @@ import {
 import {
   networkDefaultPage,
   networkRouteName,
-  useNetworksConf,
+  useNetworksEntries,
   usePageConf,
   usePagesConf
 } from '@/utils/config'
@@ -537,7 +537,7 @@ export const useNetworkRoutes = (
 export const useContributorsRoutes = (
   path = '/contributors'
 ): RouteRecordRaw[] => {
-  const networks = useNetworksConf()
+  const networks = useNetworksEntries()
   return [
     ...useOrganizationsRoutes({ listPath: path }),
     {

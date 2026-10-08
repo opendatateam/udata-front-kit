@@ -10,7 +10,7 @@ import OrganizationCard from '@/components/OrganizationCard.vue'
 import config from '@/config'
 import type { OrganizationsConfig } from '@/model/config'
 import { useOrganizationStore } from '@/store/OrganizationStore'
-import { useNetworksConf } from '@/utils/config'
+import { useNetworksEntries } from '@/utils/config'
 import { useCanonicalUrl, useMeta } from '@/utils/seo'
 
 const store = useOrganizationStore()
@@ -20,7 +20,7 @@ const currentPage = ref(1)
 const { pagination } = storeToRefs(store)
 const organizations: Ref<Organization[]> = ref([])
 
-const networks = useNetworksConf()
+const networks = useNetworksEntries()
 const hasNetworks = Object.keys(networks).length > 0
 // bump card headings one level when the "Réseaux"/"Organisations" subheadings are shown
 const cardHeadingLevel = hasNetworks ? 'h3' : 'h2'

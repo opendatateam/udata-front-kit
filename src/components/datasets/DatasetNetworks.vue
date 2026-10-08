@@ -10,15 +10,15 @@ import {
   networkDefaultPage,
   networkRouteName,
   useNetworksConf,
-  useNetworksTag
+  useNetworksEntries
 } from '@/utils/config'
 
 const props = defineProps<{
   datasetId: string
 }>()
 
-const networksTag = useNetworksTag()
-const networksConf = useNetworksConf()
+const networksTag = useNetworksConf().tag
+const networksEntries = useNetworksEntries()
 
 interface MatchedNetwork {
   slug: string
@@ -31,7 +31,7 @@ interface MatchedNetwork {
 // topic id returned by the API can be resolved back to a network to link to
 const networksByTopicId = computed(() => {
   const map = new Map<string, MatchedNetwork>()
-  for (const [slug, network] of Object.entries(networksConf)) {
+  for (const [slug, network] of Object.entries(networksEntries)) {
     const { subpath: defaultSubpath, page: defaultPage } =
       networkDefaultPage(network)
     const topicId = defaultPage.universe_query?.topic

@@ -3,7 +3,7 @@ import config from '@/config'
 import {
   networkDefaultPage,
   networkRouteName,
-  useNetworksConf
+  useNetworksEntries
 } from '@/utils/config'
 import { trackSearchValidated } from '@/utils/tracking'
 import { trackEvent } from '@datagouv/components-next'
@@ -13,9 +13,9 @@ import type { EcologieHomepageThematicTag } from '../../model/config'
 const thematicTags: EcologieHomepageThematicTag[] =
   config.ecospheres.homepage?.thematic_tags ?? []
 
-const networksConf = useNetworksConf()
+const networksEntries = useNetworksEntries()
 const networksCatalogs = computed(() =>
-  Object.entries(networksConf).map(([slug, network]) => {
+  Object.entries(networksEntries).map(([slug, network]) => {
     const { subpath: defaultSubpath, page } = networkDefaultPage(network)
     const { title, banner } = page
     return {

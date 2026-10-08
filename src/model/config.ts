@@ -144,8 +144,13 @@ export type NetworkConf = {
   pages: { [subpath: string]: NetworkPageConf }
 }
 
-export type NetworksConf = {
+export type NetworkEntriesConf = {
   [slug: string]: NetworkConf
+}
+
+export type NetworksConf = {
+  tag?: string
+  entries: NetworkEntriesConf
 }
 
 export type DatasetsConf = {

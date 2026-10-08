@@ -2,6 +2,7 @@ import config from '@/config'
 import type {
   DatasetsConf,
   NetworkConf,
+  NetworkEntriesConf,
   NetworksConf,
   PagesConf,
   TopicsConf,
@@ -12,12 +13,12 @@ import type { SiteId } from '@/model/topic'
 export const usePagesConf = (): PagesConf => config.pages
 
 export const useNetworksConf = (): NetworksConf => {
-  // `tag` is a reserved key on `networks`, not a network slug
-  const { tag: _tag, ...networks } = config.networks ?? {}
-  return networks
+  const networks = config.networks ?? {}
+  return { ...networks, entries: networks.entries ?? {} }
 }
 
-export const useNetworksTag = (): string | null => config.networks?.tag ?? null
+export const useNetworksEntries = (): NetworkEntriesConf =>
+  useNetworksConf().entries
 
 // Route name for a network page, e.g. `datasets` under network `acme`. Shared
 // convention between router setup (useNetworkRoutes) and every place that
