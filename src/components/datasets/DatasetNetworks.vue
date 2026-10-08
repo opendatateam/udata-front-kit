@@ -1,0 +1,117 @@
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue'
+
+import LogoBox from '@/components/LogoBox.vue'
+import NameWithCertificates from '@/components/NameWithCertificates.vue'
+import SidebarItem from '@/components/SidebarItem.vue'
+import config from '@/config'
+import { useTopicStore } from '@/store/TopicStore'
+import {
+  networkDefaultPage,
+  networkRouteName,
+  useNetworksConf,
+  useNetworksEntries
+} from '@/utils/config'
+
+const props = defineProps<{
+  datasetId: string
+}>()
+
+const networksTag = useNetworksConf().tag
+const networksEntries = useNetworksEntries()
+
+interface MatchedNetwork {
+  slug: string
+  title: string
+  logo?: string
+  to: { name: string }
+}
+
+// map a network's configured universe topic id to its display info, so a
+// topic id returned by the API can be resolved back to a network to link to
+const networksByTopicId = computed(() => {
+  const map = new Map<string, MatchedNetwork>()
+  for (const [slug, network] of Object.entries(networksEntries)) {
+    const { subpath: defaultSubpath, page: defaultPage } =
+      networkDefaultPage(network)
+    const topicId = defaultPage.universe_query?.topic
+    if (topicId !== undefined) {
+      map.set(String(topicId), {
+        slug,
+        title: defaultPage.title,
+        logo: defaultPage.banner?.logo,
+        to: { name: networkRouteName(slug, defaultSubpath) }
+      })
+    }
+  }
+  return map
+})
+
+const networks = ref<MatchedNetwork[]>([])
+
+watch(
+  () => props.datasetId,
+  async (datasetId) => {
+    if (!networksTag || networksByTopicId.value.size === 0) {
+      networks.value = []
+      return
+    }
+
+    try {
+      const topics = await useTopicStore().loadForDataset(
+        datasetId,
+        networksTag
+      )
+      networks.value = topics
+        .map((topic) => networksByTopicId.value.get(topic.id))
+        .filter((network) => network !== undefined)
+    } catch (error) {
+      console.error('Failed to fetch dataset networks', error)
+    }
+  },
+  { immediate: true }
+)
+</script>
+
+<template>
+  <SidebarItem
+    v-if="networks.length > 0"
+    id="networks"
+    :term="networks.length === 1 ? 'Réseau' : 'Réseaux'"
+  >
+    <div
+      v-for="network in networks"
+      :key="network.slug"
+      class="fr-grid-row fr-grid-row--middle network-row"
+    >
+      <LogoBox v-if="network.logo" :src="network.logo" class="fr-mr-1-5v" />
+      <p class="fr-col fr-m-0 min-width-0">
+        <RouterLink class="fr-link network-link" :to="network.to">
+          <NameWithCertificates
+            public-service
+            certified
+            :certified-by="config.website.title"
+            >{{ network.title }}</NameWithCertificates
+          >
+        </RouterLink>
+      </p>
+    </div>
+  </SidebarItem>
+</template>
+
+<style scoped>
+.network-row + .network-row {
+  margin-top: 0.375rem; /* fr-mt-1-5v */
+}
+
+/* disable DSFR's underline-via-background trick to match the "Producteur" block's unlined look */
+.network-link {
+  --underline-idle-width: 0;
+}
+
+/* `a.` type selector needed to outrank core.css's a[href]:hover rule */
+a.network-link:hover,
+a.network-link:active {
+  --underline-hover-width: 0;
+}
+</style>

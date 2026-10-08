@@ -1,5 +1,10 @@
 <script setup lang="ts">
 import config from '@/config'
+import {
+  networkDefaultPage,
+  networkRouteName,
+  useNetworksEntries
+} from '@/utils/config'
 import { trackSearchValidated } from '@/utils/tracking'
 import { trackEvent } from '@datagouv/components-next'
 import { useRouter } from 'vue-router'
@@ -7,6 +12,19 @@ import type { EcologieHomepageThematicTag } from '../../model/config'
 
 const thematicTags: EcologieHomepageThematicTag[] =
   config.ecospheres.homepage?.thematic_tags ?? []
+
+const networksEntries = useNetworksEntries()
+const networksCatalogs = computed(() =>
+  Object.entries(networksEntries).map(([slug, network]) => {
+    const { subpath: defaultSubpath, page } = networkDefaultPage(network)
+    const { title, banner } = page
+    return {
+      title,
+      logo: banner.logo,
+      to: { name: networkRouteName(slug, defaultSubpath) }
+    }
+  })
+)
 
 const router = useRouter()
 const searchQuery = ref('')
@@ -29,11 +47,11 @@ const doSearch = (q: string) => {
             <span class="highlight">transition écologique</span>
           </h1>
           <div class="big-search">
-            <p class="fr-text--bold fr-mb-2v">Recherchez une donnée</p>
+            <p class="fr-text--bold fr-mb-2v">Recherchez dans tout le site</p>
             <DsfrSearchBar
               id="big-select-search"
               v-model="searchQuery"
-              label="Recherchez une donnée"
+              label="Recherchez dans tout le site"
               placeholder="Ex. GES, îlot de chaleur"
               button-text="Rechercher"
               :large="true"
@@ -55,6 +73,30 @@ const doSearch = (q: string) => {
               </RouterLink>
             </li>
           </ul>
+          <div v-if="networksCatalogs.length" class="fr-mt-5w">
+            <p class="fr-text--bold fr-mb-2v">Catalogues partenaires</p>
+            <ul class="networks-catalogs" role="list">
+              <li v-for="network in networksCatalogs" :key="network.title">
+                <RouterLink
+                  :to="network.to"
+                  class="fr-raw-link network-catalog-link"
+                  @click="
+                    trackEvent(
+                      'Accueil',
+                      'Clic catalogue partenaire',
+                      network.title
+                    )
+                  "
+                >
+                  <img
+                    :src="network.logo"
+                    :alt="network.title"
+                    loading="lazy"
+                  />
+                </RouterLink>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -120,5 +162,33 @@ h1 :deep(.highlight),
   .fr-input {
     box-shadow: inset 0 -2px 0 0 var(--text-default-grey);
   }
+}
+
+.networks-catalogs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding-inline-start: 0;
+}
+
+.network-catalog-link {
+  display: flex;
+  width: 10rem;
+  height: 4.5rem;
+  padding: 0.75rem 1rem;
+  background-color: #fff;
+  border: 1px solid var(--border-default-grey);
+  border-radius: 0.25rem;
+}
+
+.network-catalog-link:hover,
+.network-catalog-link:focus-within {
+  background-color: var(--hover);
+}
+
+.network-catalog-link img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 </style>

@@ -66,6 +66,11 @@ export type PageUniverseQueryConf = {
 export type PageBannerConf = {
   title: string
   content: string
+  logo?: string
+  external_link?: {
+    url: string
+    label: string
+  }
 }
 
 export type PageSearchConf = {
@@ -82,7 +87,9 @@ export type PageLabelsConf = {
 
 export type PageObjectType = 'datasets' | 'dataservices' | 'topics'
 
-export type PageConf = {
+// Minimum a GlobalSearch list page needs. PageConf below adds the fields only
+// read by the detail-view chain (DatasetDetailView, DiscussionsList, etc.).
+export type PageListConf = {
   object_type: PageObjectType
   list_all: boolean
   filter_prefix: string | null
@@ -94,6 +101,14 @@ export type PageConf = {
   search: PageSearchConf
   banner: PageBannerConf | null
   default_sort: string | null
+  meta?: {
+    title?: string
+    description?: string
+  }
+  filters: PageFilterConf[]
+}
+
+export type PageConf = PageListConf & {
   resources_tabs: {
     discussions: {
       display: boolean
@@ -108,15 +123,34 @@ export type PageConf = {
     }
   }
   editable: boolean
-  meta?: {
-    title?: string
-    description?: string
-  }
-  filters: PageFilterConf[]
 }
 
 export type PagesConf = {
   [key: string]: PageConf
+}
+
+export type PagesListConf = {
+  [key: string]: PageListConf
+}
+
+// Network pages stop at the list view, so PageListConf (not PageConf) is enough.
+export type NetworkPageConf = PageListConf & {
+  banner: PageBannerConf & { logo: string }
+}
+
+// A network is an ordered group of pages nested under /contributors/<slug>,
+// one per URL subpath (see networkDefaultPage in utils/config.ts).
+export type NetworkConf = {
+  pages: { [subpath: string]: NetworkPageConf }
+}
+
+export type NetworkEntriesConf = {
+  [slug: string]: NetworkConf
+}
+
+export type NetworksConf = {
+  tag?: string
+  entries: NetworkEntriesConf
 }
 
 export type DatasetsConf = {
@@ -143,6 +177,7 @@ export type HeaderConf = {
   search: {
     display: boolean
     placeholder?: string
+    hide_on_home?: boolean
   }
 }
 
@@ -192,18 +227,23 @@ export type SentryConfig = {
   replaysOnErrorSampleRate?: number
 }
 
+export type OrganizationsPageConf = {
+  breadcrumb_title?: string
+  labels?: {
+    singular?: string
+  }
+  meta?: {
+    title?: string
+    description?: string
+  }
+}
+
 export type OrganizationsConfig = {
   datasets?: string
   dataservices?: string
   bouquets?: string
-  page?: {
-    breadcrumb_title?: string
-    labels?: {
-      singular?: string
-    }
-    meta?: {
-      title?: string
-      description?: string
-    }
-  }
+  page?: OrganizationsPageConf
+} & {
+  // Networks register their org-list URLs nested under their slug, e.g. organizations.simm.datasets.
+  [networkSlug: string]: Record<string, string> | undefined
 }
