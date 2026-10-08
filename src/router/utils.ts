@@ -481,18 +481,20 @@ export const useOrganizationsRoutes = (
 }
 
 /**
- * Builds routes for one network: a redirect from the bare /contributors/<slug>
+ * Builds routes for one network: a redirect from the bare <contributorsPath>/<slug>
  * to its default (first-listed) page, plus one GlobalSearch route per page in
- * network.pages, all nested under /contributors/<slug>/<subpath> and bundled into
- * a shared type switcher. Network pages stop at the list view — item links resolve
- * to the standard page sharing their subpath's name (e.g. `datasets` -> /datasets/:item_id),
- * relying on the convention that a network subpath matches its standard page's pageKey.
+ * network.pages, all nested under <contributorsPath>/<slug>/<subpath> and bundled
+ * into a shared type switcher. Network pages stop at the list view — item links
+ * resolve to the standard page sharing their subpath's name (e.g. `datasets` ->
+ * /datasets/:item_id), relying on the convention that a network subpath matches
+ * its standard page's pageKey.
  */
 export const useNetworkRoutes = (
   slug: string,
-  network: NetworkConf
+  network: NetworkConf,
+  contributorsPath: string
 ): RouteRecordRaw[] => {
-  const base = `/contributors/${slug}`
+  const base = `${contributorsPath}/${slug}`
   const subpaths = Object.keys(network.pages)
   const { subpath: defaultSubpath, page: defaultPage } =
     networkDefaultPage(network)
@@ -505,7 +507,7 @@ export const useNetworkRoutes = (
   const organizationsConfig = config.organizations as OrganizationsConfig
   const parentBreadcrumbs = [
     {
-      to: '/contributors',
+      to: contributorsPath,
       text: organizationsConfig.page?.breadcrumb_title ?? 'Contributeurs'
     },
     {
@@ -522,7 +524,7 @@ export const useNetworkRoutes = (
         pageConf: network.pages[subpath],
         basePath: `${base}/${subpath}`,
         siblingPages,
-        activeMenuLink: '/contributors',
+        activeMenuLink: contributorsPath,
         parentBreadcrumbs,
         detailPageKey: subpath,
         switcher: slug
@@ -531,18 +533,22 @@ export const useNetworkRoutes = (
   ]
 }
 
-export const useContributorsRoutes = (): RouteRecordRaw[] => {
+// Combined networks+organizations page: organizations nest under `${path}/organizations`.
+export const useContributorsRoutes = (
+  path = '/contributors'
+): RouteRecordRaw[] => {
   const networks = useNetworksConf()
   return [
+    ...useOrganizationsRoutes({ listPath: path }),
     {
-      path: '/contributors',
+      path,
       name: 'contributors',
-      meta: { activeMenuLink: '/contributors' },
+      meta: { activeMenuLink: path },
       component: async () =>
         await import('@/views/organizations/ContributorsListView.vue')
     },
     ...Object.entries(networks).flatMap(([slug, network]) =>
-      useNetworkRoutes(slug, network)
+      useNetworkRoutes(slug, network, path)
     )
   ]
 }

@@ -1,7 +1,6 @@
 import {
   useContributorsRoutes,
   useGlobalSearchPageRoutes,
-  useOrganizationsRoutes,
   useTopicAdminPagesRoutes
 } from '@/router/utils'
 import type { RouteRecordRaw } from 'vue-router'
@@ -57,6 +56,5 @@ export const routes: RouteRecordRaw[] = [
     pageKey: 'bouquets',
     topicConf
   }),
-  ...useOrganizationsRoutes({ listPath: '/contributors' }),
   ...useContributorsRoutes()
 ]
