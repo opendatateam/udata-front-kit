@@ -318,6 +318,15 @@ definitions: &definitions
     type: select
     use_filter_prefix: false
     values: *inspire_themes
+  label_datasets: &label_datasets
+    singular: jeu de données
+    plural: jeux de données
+    extended: jeu de données
+  label_dataservices: &label_dataservices
+    singular: API
+    plural: APIs
+    extended: API
+    feminine: true
 
 # Configuration format for pages:
 #
@@ -380,10 +389,7 @@ pages:
     filter_prefix:
     title: Toutes les données
     breadcrumb_title: Toutes les données
-    labels:
-      singular: jeu de données
-      plural: jeux de données
-      extended: jeu de données
+    labels: *label_datasets
     search:
       input: Rechercher un jeu de données
       placeholder: null
@@ -569,11 +575,7 @@ pages:
     filter_prefix:
     title: API
     breadcrumb_title: API
-    labels:
-      singular: API
-      plural: APIs
-      extended: API
-      feminine: true
+    labels: *label_dataservices
     search:
       input: Rechercher une API
       placeholder: null
@@ -686,10 +688,7 @@ networks:
           <<: *sieau_common
           object_type: datasets
           breadcrumb_title: Jeux de données
-          labels:
-            singular: jeu de données
-            plural: jeux de données
-            extended: jeu de données
+          labels: *label_datasets
           search:
             input: Rechercher dans les données du réseau Eaufrance
             placeholder: null
@@ -701,11 +700,7 @@ networks:
           <<: *sieau_common
           object_type: dataservices
           breadcrumb_title: API
-          labels:
-            singular: API
-            plural: APIs
-            extended: API
-            feminine: true
+          labels: *label_dataservices
           search:
             input: Rechercher dans les API du réseau Eaufrance
             placeholder: null
@@ -731,10 +726,7 @@ networks:
           <<: *simm_common
           object_type: datasets
           breadcrumb_title: Jeux de données
-          labels:
-            singular: jeu de données
-            plural: jeux de données
-            extended: jeu de données
+          labels: *label_datasets
           search:
             input: Rechercher dans les données du réseau SIMM
             placeholder: null
@@ -746,11 +738,7 @@ networks:
           <<: *simm_common
           object_type: dataservices
           breadcrumb_title: API
-          labels:
-            singular: API
-            plural: APIs
-            extended: API
-            feminine: true
+          labels: *label_dataservices
           search:
             input: Rechercher dans les API du réseau SIMM
             placeholder: null
