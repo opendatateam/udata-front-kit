@@ -302,6 +302,22 @@ definitions: &definitions
       name: Zones de gestion, de restriction ou de réglementation et unités de déclaration
     - id: zones-a-risque-naturel
       name: Zones à risque naturel
+  filter_badge: &filter_badge
+    id: badge
+    name: Label de donnée
+    type: badge
+  filter_org: &filter_org
+    id: org
+    name: Organisation
+    default_option: Toutes les organisations
+    type: organization_custom
+  filter_inspire: &filter_inspire
+    id: inspire
+    name: Thème INSPIRE
+    default_option: Tous les thèmes
+    type: select
+    use_filter_prefix: false
+    values: *inspire_themes
 
 # Configuration format for pages:
 #
@@ -392,19 +408,9 @@ pages:
       - id: last_update_range
         name: Date de mise à jour
         type: last_update_range
-      - id: badge
-        name: Label de donnée
-        type: badge
-      - id: org
-        name: Organisation
-        default_option: Toutes les organisations
-        type: organization_custom
-      - id: inspire
-        name: Thème INSPIRE
-        default_option: Tous les thèmes
-        type: select
-        use_filter_prefix: false
-        values: *inspire_themes
+      - *filter_badge
+      - *filter_org
+      - *filter_inspire
   # INDICATORS
   indicators:
     object_type: datasets # indicators are datasets filtered by universe_query
@@ -590,10 +596,7 @@ pages:
       - id: last_update_range
         name: Date de mise à jour
         type: last_update_range
-      - id: org
-        name: Organisation
-        default_option: Toutes les organisations
-        type: organization_custom
+      - *filter_org
   # BOUQUETS
   bouquets:
     object_type: topics
@@ -633,10 +636,7 @@ pages:
       - id: last_update_range
         name: Date de mise à jour
         type: last_update_range
-      - id: org
-        name: Organisation
-        default_option: Toutes les organisations
-        type: organization_custom
+      - *filter_org
       - id: theme
         name: Thématique
         default_option: Toutes les thématiques
@@ -681,20 +681,6 @@ networks:
             url: https://www.eaufrance.fr/
             label: Accéder au site
         list_all: true
-        filters:
-          - id: badge
-            name: Label de donnée
-            type: badge
-          - id: org
-            name: Organisation
-            default_option: Toutes les organisations
-            type: organization_custom
-          - id: inspire
-            name: Thème INSPIRE
-            default_option: Tous les thèmes
-            type: select
-            use_filter_prefix: false
-            values: *inspire_themes
       pages:
         datasets:
           <<: *sieau_common
@@ -707,6 +693,10 @@ networks:
           search:
             input: Rechercher dans les données du réseau Eaufrance
             placeholder: null
+          filters:
+            - *filter_badge
+            - *filter_org
+            - *filter_inspire
         dataservices:
           <<: *sieau_common
           object_type: dataservices
@@ -719,6 +709,9 @@ networks:
           search:
             input: Rechercher dans les API du réseau Eaufrance
             placeholder: null
+          filters:
+            - *filter_badge
+            - *filter_org
     simm:
       x-simm-common: &simm_common
         universe_query:
@@ -733,20 +726,6 @@ networks:
             url: https://www.milieumarinfrance.fr/
             label: Accéder au site
         list_all: true
-        filters:
-          - id: badge
-            name: Label de donnée
-            type: badge
-          - id: org
-            name: Organisation
-            default_option: Toutes les organisations
-            type: organization_custom
-          - id: inspire
-            name: Thème INSPIRE
-            default_option: Tous les thèmes
-            type: select
-            use_filter_prefix: false
-            values: *inspire_themes
       pages:
         datasets:
           <<: *simm_common
@@ -759,6 +738,10 @@ networks:
           search:
             input: Rechercher dans les données du réseau SIMM
             placeholder: null
+          filters:
+            - *filter_badge
+            - *filter_org
+            - *filter_inspire
         dataservices:
           <<: *simm_common
           object_type: dataservices
@@ -771,6 +754,9 @@ networks:
           search:
             input: Rechercher dans les API du réseau SIMM
             placeholder: null
+          filters:
+            - *filter_badge
+            - *filter_org
 
 ecospheres:
   homepage:
