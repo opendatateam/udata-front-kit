@@ -14,7 +14,7 @@ const thematicTags: EcologieHomepageThematicTag[] =
   config.ecospheres.homepage?.thematic_tags ?? []
 
 const networksConf = useNetworksConf()
-const partnersCatalogs = computed(() =>
+const networksCatalogs = computed(() =>
   Object.entries(networksConf).map(([slug, network]) => {
     const { subpath: defaultSubpath, page } = networkDefaultPage(network)
     const { title, banner } = page
@@ -73,24 +73,24 @@ const doSearch = (q: string) => {
               </RouterLink>
             </li>
           </ul>
-          <div v-if="partnersCatalogs.length" class="fr-mt-5w">
+          <div v-if="networksCatalogs.length" class="fr-mt-5w">
             <p class="fr-text--bold fr-mb-2v">Catalogues partenaires</p>
-            <ul class="partners-catalogs" role="list">
-              <li v-for="partner in partnersCatalogs" :key="partner.title">
+            <ul class="networks-catalogs" role="list">
+              <li v-for="network in networksCatalogs" :key="network.title">
                 <RouterLink
-                  :to="partner.to"
-                  class="fr-raw-link partner-catalog-link"
+                  :to="network.to"
+                  class="fr-raw-link network-catalog-link"
                   @click="
                     trackEvent(
                       'Accueil',
                       'Clic catalogue partenaire',
-                      partner.title
+                      network.title
                     )
                   "
                 >
                   <img
-                    :src="partner.logo"
-                    :alt="partner.title"
+                    :src="network.logo"
+                    :alt="network.title"
                     loading="lazy"
                   />
                 </RouterLink>
@@ -164,14 +164,14 @@ h1 :deep(.highlight),
   }
 }
 
-.partners-catalogs {
+.networks-catalogs {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
   padding-inline-start: 0;
 }
 
-.partner-catalog-link {
+.network-catalog-link {
   display: flex;
   width: 10rem;
   height: 4.5rem;
@@ -181,12 +181,12 @@ h1 :deep(.highlight),
   border-radius: 0.25rem;
 }
 
-.partner-catalog-link:hover,
-.partner-catalog-link:focus-within {
+.network-catalog-link:hover,
+.network-catalog-link:focus-within {
   background-color: var(--hover);
 }
 
-.partner-catalog-link img {
+.network-catalog-link img {
   width: 100%;
   height: 100%;
   object-fit: contain;
