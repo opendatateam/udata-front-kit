@@ -181,9 +181,10 @@ onMounted(() => {
         :auto-focus="false"
       >
         <template v-if="route.meta.customFilters?.length" #custom-filters-top>
+          <!-- pageKey in key forces remount so shared urlParams (eg org) re-register typeKeys -->
           <template
             v-for="filter in route.meta.customFilters"
-            :key="filter.urlParam"
+            :key="`${filter.urlParam}-${pageKey}`"
           >
             <SearchSelectFilter
               v-if="'values' in filter"
