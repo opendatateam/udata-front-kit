@@ -53,10 +53,10 @@ describe('Home Page Ecologie', () => {
 
       cy.contains('Catalogues partenaires').should('be.visible')
       cy.get(
-        '.partner-catalog-link[href="/contributors/sieau/datasets"]'
+        '.network-catalog-link[href="/contributors/sieau/datasets"]'
       ).should('be.visible')
       cy.get(
-        '.partner-catalog-link[href="/contributors/simm/datasets"]'
+        '.network-catalog-link[href="/contributors/simm/datasets"]'
       ).should('be.visible')
     })
   })

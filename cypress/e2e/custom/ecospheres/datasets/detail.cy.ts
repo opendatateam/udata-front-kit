@@ -3,7 +3,8 @@ import { datasetFactory } from 'cypress/support/factories/datasets_factory'
 import { resourceFactory } from 'cypress/support/factories/resources_factory'
 
 const SIMM_TOPIC_ID: string =
-  Cypress.env('siteConfig').networks.simm.pages.datasets.universe_query.topic
+  Cypress.env('siteConfig').networks.entries.simm.pages.datasets.universe_query
+    .topic
 
 describe('Dataset Detail View - Networks (univers)', () => {
   let dataset: DatasetV2
