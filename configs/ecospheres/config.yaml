@@ -705,7 +705,6 @@ networks:
             input: Rechercher dans les API du réseau Eaufrance
             placeholder: null
           filters:
-            - *filter_badge
             - *filter_org
     simm:
       x-simm-common: &simm_common
@@ -743,7 +742,6 @@ networks:
             input: Rechercher dans les API du réseau SIMM
             placeholder: null
           filters:
-            - *filter_badge
             - *filter_org
 
 ecospheres:
