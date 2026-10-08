@@ -303,128 +303,6 @@ definitions: &definitions
     - id: zones-a-risque-naturel
       name: Zones à risque naturel
 
-# Configuration format for networks (SIF — Systèmes d'Information Fédérateurs):
-#
-# networks:
-#   tag: {string}            # tag on the udata side identifying a network's backing topic, so a
-#                             # dataset's page can look up "which network(s) is this in"
-#   {slug}:                  # network identifier, used as /contributors/{slug}
-#     pages:                  # one entry per object type this network exposes, keyed by URL subpath
-#                              # (rendered at /contributors/{slug}/{subpath}); the FIRST key listed is
-#                              # the default — used for the bare /contributors/{slug} redirect and as
-#                              # the network's display identity (title/logo) on the /contributors list.
-#       {subpath}:             # reuses the exact `pages.{page_id}` format documented below; its
-#                               # `banner.logo`/`banner.external_link` render above the page's search.
-#                               # Network pages stop at the list view — items link to the standard
-#                               # page sharing their subpath's name (e.g. `datasets` -> /datasets/:id),
-#                               # so `resources_tabs`/`editable` (detail-view-only) can be omitted.
-networks:
-  tag: ecospheres-networks
-  sieau:
-    x-sieau-common: &sieau_common
-      universe_query:
-        topic: 6a8eff5ce148bf49b3267152
-      filter_prefix:
-      title: Eaufrance
-      banner:
-        title: Le service public d'information sur l'eau
-        content: Eaufrance fédère et diffuse les données et informations publiques sur l'eau et les milieux aquatiques en France, dans le cadre du Système d'information sur l'eau (SIE).
-        logo: /static/ecospheres/logos/networks/sieau.svg
-        external_link:
-          url: https://www.eaufrance.fr/
-          label: Accéder au site
-      list_all: true
-      filters:
-        - id: badge
-          name: Label de donnée
-          type: badge
-        - id: org
-          name: Organisation
-          default_option: Toutes les organisations
-          type: organization_custom
-        - id: inspire
-          name: Thème INSPIRE
-          default_option: Tous les thèmes
-          type: select
-          use_filter_prefix: false
-          values: *inspire_themes
-    pages:
-      datasets:
-        <<: *sieau_common
-        object_type: datasets
-        breadcrumb_title: Jeux de données
-        labels:
-          singular: jeu de données
-          plural: jeux de données
-          extended: jeu de données
-        search:
-          input: Rechercher dans les données du réseau Eaufrance
-          placeholder: null
-      dataservices:
-        <<: *sieau_common
-        object_type: dataservices
-        breadcrumb_title: API
-        labels:
-          singular: API
-          plural: APIs
-          extended: API
-          feminine: true
-        search:
-          input: Rechercher dans les API du réseau Eaufrance
-          placeholder: null
-  simm:
-    x-simm-common: &simm_common
-      universe_query:
-        topic: 6a82baef02381db0dc7229cf
-      filter_prefix:
-      title: Milieu Marin France
-      banner:
-        title: L'accès de référence aux données publiques sur le milieu marin français
-        content: Milieu Marin France fédère et diffuse les données des politiques publiques françaises sur le milieu marin dans le cadre du Système d’information sur le milieu marin (SIMM).
-        logo: /static/ecospheres/logos/networks/simm.svg
-        external_link:
-          url: https://www.milieumarinfrance.fr/
-          label: Accéder au site
-      list_all: true
-      filters:
-        - id: badge
-          name: Label de donnée
-          type: badge
-        - id: org
-          name: Organisation
-          default_option: Toutes les organisations
-          type: organization_custom
-        - id: inspire
-          name: Thème INSPIRE
-          default_option: Tous les thèmes
-          type: select
-          use_filter_prefix: false
-          values: *inspire_themes
-    pages:
-      datasets:
-        <<: *simm_common
-        object_type: datasets
-        breadcrumb_title: Jeux de données
-        labels:
-          singular: jeu de données
-          plural: jeux de données
-          extended: jeu de données
-        search:
-          input: Rechercher dans les données du réseau SIMM
-          placeholder: null
-      dataservices:
-        <<: *simm_common
-        object_type: dataservices
-        breadcrumb_title: API
-        labels:
-          singular: API
-          plural: APIs
-          extended: API
-          feminine: true
-        search:
-          input: Rechercher dans les API du réseau SIMM
-          placeholder: null
-
 # Configuration format for pages:
 #
 # pages:
@@ -769,6 +647,128 @@ pages:
         form:
           required: true
         values: *fnv_themes
+
+# Configuration format for networks (SIF — Systèmes d'Information Fédérateurs):
+#
+# networks:
+#   tag: {string}            # tag on the udata side identifying a network's backing topic, so a
+#                             # dataset's page can look up "which network(s) is this in"
+#   {slug}:                  # network identifier, used as /contributors/{slug}
+#     pages:                  # one entry per object type this network exposes, keyed by URL subpath
+#                              # (rendered at /contributors/{slug}/{subpath}); the FIRST key listed is
+#                              # the default — used for the bare /contributors/{slug} redirect and as
+#                              # the network's display identity (title/logo) on the /contributors list.
+#       {subpath}:             # reuses the exact `pages.{page_id}` format documented below; its
+#                               # `banner.logo`/`banner.external_link` render above the page's search.
+#                               # Network pages stop at the list view — items link to the standard
+#                               # page sharing their subpath's name (e.g. `datasets` -> /datasets/:id),
+#                               # so `resources_tabs`/`editable` (detail-view-only) can be omitted.
+networks:
+  tag: ecospheres-networks
+  sieau:
+    x-sieau-common: &sieau_common
+      universe_query:
+        topic: 6a8eff5ce148bf49b3267152
+      filter_prefix:
+      title: Eaufrance
+      banner:
+        title: Le service public d'information sur l'eau
+        content: Eaufrance fédère et diffuse les données et informations publiques sur l'eau et les milieux aquatiques en France, dans le cadre du Système d'information sur l'eau (SIE).
+        logo: /static/ecospheres/logos/networks/sieau.svg
+        external_link:
+          url: https://www.eaufrance.fr/
+          label: Accéder au site
+      list_all: true
+      filters:
+        - id: badge
+          name: Label de donnée
+          type: badge
+        - id: org
+          name: Organisation
+          default_option: Toutes les organisations
+          type: organization_custom
+        - id: inspire
+          name: Thème INSPIRE
+          default_option: Tous les thèmes
+          type: select
+          use_filter_prefix: false
+          values: *inspire_themes
+    pages:
+      datasets:
+        <<: *sieau_common
+        object_type: datasets
+        breadcrumb_title: Jeux de données
+        labels:
+          singular: jeu de données
+          plural: jeux de données
+          extended: jeu de données
+        search:
+          input: Rechercher dans les données du réseau Eaufrance
+          placeholder: null
+      dataservices:
+        <<: *sieau_common
+        object_type: dataservices
+        breadcrumb_title: API
+        labels:
+          singular: API
+          plural: APIs
+          extended: API
+          feminine: true
+        search:
+          input: Rechercher dans les API du réseau Eaufrance
+          placeholder: null
+  simm:
+    x-simm-common: &simm_common
+      universe_query:
+        topic: 6a82baef02381db0dc7229cf
+      filter_prefix:
+      title: Milieu Marin France
+      banner:
+        title: L'accès de référence aux données publiques sur le milieu marin français
+        content: Milieu Marin France fédère et diffuse les données des politiques publiques françaises sur le milieu marin dans le cadre du Système d’information sur le milieu marin (SIMM).
+        logo: /static/ecospheres/logos/networks/simm.svg
+        external_link:
+          url: https://www.milieumarinfrance.fr/
+          label: Accéder au site
+      list_all: true
+      filters:
+        - id: badge
+          name: Label de donnée
+          type: badge
+        - id: org
+          name: Organisation
+          default_option: Toutes les organisations
+          type: organization_custom
+        - id: inspire
+          name: Thème INSPIRE
+          default_option: Tous les thèmes
+          type: select
+          use_filter_prefix: false
+          values: *inspire_themes
+    pages:
+      datasets:
+        <<: *simm_common
+        object_type: datasets
+        breadcrumb_title: Jeux de données
+        labels:
+          singular: jeu de données
+          plural: jeux de données
+          extended: jeu de données
+        search:
+          input: Rechercher dans les données du réseau SIMM
+          placeholder: null
+      dataservices:
+        <<: *simm_common
+        object_type: dataservices
+        breadcrumb_title: API
+        labels:
+          singular: API
+          plural: APIs
+          extended: API
+          feminine: true
+        search:
+          input: Rechercher dans les API du réseau SIMM
+          placeholder: null
 
 ecospheres:
   homepage:
