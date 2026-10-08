@@ -14,7 +14,7 @@ const thematicTags: EcologieHomepageThematicTag[] =
   config.ecospheres.homepage?.thematic_tags ?? []
 
 const networksConf = useNetworksConf()
-const partnerCatalogs = computed(() =>
+const partnersCatalogs = computed(() =>
   Object.entries(networksConf).map(([slug, network]) => {
     const { subpath: defaultSubpath, page } = networkDefaultPage(network)
     const { title, banner } = page
@@ -73,10 +73,10 @@ const doSearch = (q: string) => {
               </RouterLink>
             </li>
           </ul>
-          <div v-if="partnerCatalogs.length" class="fr-mt-5w">
+          <div v-if="partnersCatalogs.length" class="fr-mt-5w">
             <p class="fr-text--bold fr-mb-2v">Catalogues partenaires</p>
-            <ul class="partner-catalogs" role="list">
-              <li v-for="partner in partnerCatalogs" :key="partner.title">
+            <ul class="partners-catalogs" role="list">
+              <li v-for="partner in partnersCatalogs" :key="partner.title">
                 <RouterLink
                   :to="partner.to"
                   class="fr-raw-link partner-catalog-link"
@@ -164,7 +164,7 @@ h1 :deep(.highlight),
   }
 }
 
-.partner-catalogs {
+.partners-catalogs {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
