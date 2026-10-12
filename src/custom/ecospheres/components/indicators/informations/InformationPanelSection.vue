@@ -9,7 +9,7 @@ defineProps({
 
 <template>
   <div class="fr-py-2w">
-    <h3 v-if="title" class="uppercase text-sm text-gray-title font-bold mb-1">
+    <h3 v-if="title" class="subtitle subtitle--uppercase fr-mb-1v">
       {{ title }}
     </h3>
     <p v-if="$slots.description"><slot name="description" /></p>

@@ -27,7 +27,7 @@ const _class = props.isRow ? ['fr-col-12'] : ['fr-col-12', 'fr-col-sm-6']
 <template>
   <!-- eslint-disable vue/no-v-html -->
   <div :class="_class">
-    <dt class="fr-p-0 mb-1 text-sm text-gray-title font-bold">{{ title }}</dt>
+    <dt class="fr-mb-1v fr-p-0 text-sm font-bold">{{ title }}</dt>
     <dd class="fr-p-0 fr-m-0 text-sm text-gray-medium">
       <slot v-if="$slots.default" />
       <div
@@ -41,6 +41,11 @@ const _class = props.isRow ? ['fr-col-12'] : ['fr-col-12', 'fr-col-sm-6']
 </template>
 
 <style scoped>
+dt {
+  line-height: 1.25rem;
+  color: var(--text-title-grey);
+}
+
 :deep(.markdown > p) {
   margin-block-end: 0.5em;
   font-size: 0.875rem;
