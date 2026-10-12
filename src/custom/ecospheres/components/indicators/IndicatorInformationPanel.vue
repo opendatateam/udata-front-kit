@@ -31,38 +31,44 @@ const { unite, mailles } = useIndicatorExtras(indicator)
 <template>
   <div class="divide-y">
     <!-- Couverture -->
-    <InformationPanelSection title="Couverture">
+    <InformationPanelSection title="Couverture" small>
       <InformationPanelItem
         title="Couverture géographique"
         :value="spatialCoverage"
+        small
       />
       <InformationPanelItem
         v-if="indicator.temporal_coverage"
         title="Couverture temporelle"
+        small
       >
         <DateRangeDetails :range="indicator.temporal_coverage" />
       </InformationPanelItem>
     </InformationPanelSection>
 
     <!-- Détails techniques -->
-    <InformationPanelSection title="Détails techniques">
-      <InformationPanelItem title="Unité" :value="unite" />
+    <InformationPanelSection title="Détails techniques" small>
+      <InformationPanelItem title="Unité" :value="unite" small />
       <InformationPanelItem
         title="Mailles"
         :value="mailles.length ? mailles.join(', ') : UNFILLED_LABEL"
+        small
       />
       <InformationPanelItem
         title="Date de création"
         :value="formatDate(indicator.created_at)"
+        small
       />
       <InformationPanelItem
         title="Date de mise à jour"
         :value="formatDate(indicator.last_update)"
+        small
       />
       <InformationPanelItem
         v-if="indicator.frequency"
         title="Fréquence de mise à jour"
         :value="indicator.frequency.label"
+        small
       />
       <InformationPanelItem
         v-if="
@@ -75,8 +81,9 @@ const { unite, mailles } = useIndicatorExtras(indicator)
             'ecospheres-indicateurs'
           ].next_expected_update_quarter.replace('Q', 'T')
         "
+        small
       />
-      <InformationPanelItem title="Identifiant">
+      <InformationPanelItem title="Identifiant" small>
         {{ indicator.id }}
         <CopyButton
           class="!-mt-0.5"
@@ -86,13 +93,14 @@ const { unite, mailles } = useIndicatorExtras(indicator)
           :hide-label="true"
         />
       </InformationPanelItem>
-      <InformationPanelItem v-if="indicator.license" title="Licence">
+      <InformationPanelItem v-if="indicator.license" title="Licence" small>
         <LicenseBadge :license="indicator.license" />
       </InformationPanelItem>
       <InformationPanelItem
         v-if="indicator.tags && indicator.tags.length"
         title="Mots-clés"
         is-row
+        small
       >
         <DescriptionListDetails class="flex flex-wrap gap-2 items-start">
           <Tag v-for="tag in indicator.tags" :key="tag" type="secondary">
@@ -103,7 +111,7 @@ const { unite, mailles } = useIndicatorExtras(indicator)
     </InformationPanelSection>
 
     <!-- Extras -->
-    <div class="pt-6">
+    <div class="pt-6 informations-extras">
       <ExtraAccordion
         v-if="indicator.extras && Object.keys(indicator.extras).length"
         button-text="Voir les extras"

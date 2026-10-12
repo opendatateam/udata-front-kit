@@ -234,5 +234,9 @@ onMounted(() => {
   :deep(.dataset-sidebar .subtitle) {
     font-size: 0.875rem !important;
   }
+  /* override previous rule for the Informations tab's Extras accordion, which matches the dataset page's smaller style */
+  :deep(.informations-extras .subtitle) {
+    font-size: 0.875rem !important;
+  }
 }
 </style>
