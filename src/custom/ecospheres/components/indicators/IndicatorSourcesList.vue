@@ -19,46 +19,53 @@ const { sources, calcul } = useIndicatorExtras(indicator)
 </script>
 
 <template>
-  <InformationPanelSection
-    v-for="(source, idx) in sources"
-    :key="source.url"
-    :title="`Source ${idx + 1} : ${source.nom}`"
-  >
-    <template #description>
-      <!-- eslint-disable-next-line vue/no-v-html -->
-      <div v-html="fromMarkdown(source.description).html"></div>
-    </template>
-    <InformationPanelItem title="URL source" :is-row="true">
-      <a :href="source.url" target="_blank">{{ source.url }}</a>
-    </InformationPanelItem>
-    <InformationPanelItem title="Distributeur" :value="source.distributeur" />
-    <InformationPanelItem title="Producteur" :value="source.producteur" />
-    <InformationPanelItem
-      v-if="source.plage_temporelle"
-      title="Plage temporelle"
-    >
-      {{ formatDate(source.plage_temporelle.start, true) }} -
-      {{ formatDate(source.plage_temporelle.end, true) }}
-    </InformationPanelItem>
-  </InformationPanelSection>
-  <!-- Informations calcul -->
-  <InformationPanelSection title="Informations calcul">
-    <template #description
-      >Nous documentons les hypothèses de traitement utilisées pour le calcul
-      des indicateurs dans la section "Méthode calcul". L'équipe en charge de
-      leur application est indiquée dans le champ "Responsable
-      calcul".</template
-    >
-    <InformationPanelItem
-      title="Responsable calcul"
-      :is-row="true"
-      :value="calcul?.responsable"
-    />
-    <InformationPanelItem
-      title="Méthode calcul"
-      :is-row="true"
-      :value="calcul?.methode"
-      :is-markdown="true"
-    />
-  </InformationPanelSection>
+  <div class="divide-y">
+    <div v-if="sources.length">
+      <InformationPanelSection
+        v-for="(source, idx) in sources"
+        :key="source.url"
+        :title="`Source ${idx + 1} : ${source.nom}`"
+      >
+        <template #description>
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <div v-html="fromMarkdown(source.description).html"></div>
+        </template>
+        <InformationPanelItem title="URL source" :is-row="true">
+          <a :href="source.url" target="_blank">{{ source.url }}</a>
+        </InformationPanelItem>
+        <InformationPanelItem
+          title="Distributeur"
+          :value="source.distributeur"
+        />
+        <InformationPanelItem title="Producteur" :value="source.producteur" />
+        <InformationPanelItem
+          v-if="source.plage_temporelle"
+          title="Plage temporelle"
+        >
+          {{ formatDate(source.plage_temporelle.start, true) }} -
+          {{ formatDate(source.plage_temporelle.end, true) }}
+        </InformationPanelItem>
+      </InformationPanelSection>
+    </div>
+    <!-- Informations calcul -->
+    <InformationPanelSection title="Informations calcul">
+      <template #description
+        >Nous documentons les hypothèses de traitement utilisées pour le calcul
+        des indicateurs dans la section "Méthode calcul". L'équipe en charge de
+        leur application est indiquée dans le champ "Responsable
+        calcul".</template
+      >
+      <InformationPanelItem
+        title="Responsable calcul"
+        :is-row="true"
+        :value="calcul?.responsable"
+      />
+      <InformationPanelItem
+        title="Méthode calcul"
+        :is-row="true"
+        :value="calcul?.methode"
+        :is-markdown="true"
+      />
+    </InformationPanelSection>
+  </div>
 </template>
