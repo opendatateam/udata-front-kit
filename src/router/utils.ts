@@ -10,6 +10,7 @@ import {
   type PageObjectType
 } from '@/model/config'
 import {
+  networkBaseRouteName,
   networkDefaultPage,
   networkRouteName,
   useNetworksEntries,
@@ -511,13 +512,17 @@ export const useNetworkRoutes = (
       text: organizationsConfig.page?.breadcrumb_title ?? 'Contributeurs'
     },
     {
-      to: { name: networkRouteName(slug, defaultSubpath) },
+      to: { name: networkBaseRouteName(slug) },
       text: defaultPage.title
     }
   ]
 
   return [
-    { path: base, redirect: `${base}/${defaultSubpath}` },
+    {
+      path: base,
+      name: networkBaseRouteName(slug),
+      redirect: `${base}/${defaultSubpath}`
+    },
     ...subpaths.map((subpath) =>
       buildListPageRoute({
         pageKey: networkRouteName(slug, subpath),

@@ -52,12 +52,12 @@ describe('Home Page Ecologie', () => {
       cy.visit('/')
 
       cy.contains('Catalogues partenaires').should('be.visible')
-      cy.get(
-        '.network-catalog-link[href="/contributors/sieau/datasets"]'
-      ).should('be.visible')
-      cy.get(
-        '.network-catalog-link[href="/contributors/simm/datasets"]'
-      ).should('be.visible')
+      cy.get('.network-catalog-link[href="/contributors/sieau"]').should(
+        'be.visible'
+      )
+      cy.get('.network-catalog-link[href="/contributors/simm"]').should(
+        'be.visible'
+      )
     })
   })
 })

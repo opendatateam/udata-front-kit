@@ -2,7 +2,7 @@
 import NameWithCertificates from '@/components/NameWithCertificates.vue'
 import config from '@/config'
 import type { NetworkConf } from '@/model/config'
-import { networkDefaultPage, networkRouteName } from '@/utils/config'
+import { networkBaseRouteName, networkDefaultPage } from '@/utils/config'
 
 const props = defineProps<{
   slug: string
@@ -10,11 +10,9 @@ const props = defineProps<{
   headingLevel: 'h2' | 'h3' | 'h4' | 'h5'
 }>()
 
-const { subpath: defaultSubpath, page: defaultPage } = networkDefaultPage(
-  props.network
-)
+const { page: defaultPage } = networkDefaultPage(props.network)
 const name = defaultPage.title
-const to = { name: networkRouteName(props.slug, defaultSubpath) }
+const to = { name: networkBaseRouteName(props.slug) }
 </script>
 
 <template>

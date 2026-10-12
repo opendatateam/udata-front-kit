@@ -26,6 +26,10 @@ export const useNetworksEntries = (): NetworkEntriesConf =>
 export const networkRouteName = (slug: string, subpath: string): string =>
   `${slug}__${subpath}`
 
+// Route name for a network's bare root (redirects to its default subpath). Used
+// everywhere a network link should show the short URL instead of the default page's.
+export const networkBaseRouteName = (slug: string): string => `${slug}__base`
+
 // The first page listed for a network is its default (redirect target + display identity)
 export const networkDefaultPage = (network: NetworkConf) => {
   const subpath = Object.keys(network.pages)[0]

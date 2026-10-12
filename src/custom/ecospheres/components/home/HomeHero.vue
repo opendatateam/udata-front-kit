@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import config from '@/config'
 import {
+  networkBaseRouteName,
   networkDefaultPage,
-  networkRouteName,
   useNetworksEntries
 } from '@/utils/config'
 import { trackSearchValidated } from '@/utils/tracking'
@@ -16,12 +16,12 @@ const thematicTags: EcologieHomepageThematicTag[] =
 const networksEntries = useNetworksEntries()
 const networksCatalogs = computed(() =>
   Object.entries(networksEntries).map(([slug, network]) => {
-    const { subpath: defaultSubpath, page } = networkDefaultPage(network)
+    const { page } = networkDefaultPage(network)
     const { title, banner } = page
     return {
       title,
       logo: banner.logo,
-      to: { name: networkRouteName(slug, defaultSubpath) }
+      to: { name: networkBaseRouteName(slug) }
     }
   })
 )
