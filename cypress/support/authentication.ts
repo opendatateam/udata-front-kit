@@ -1,3 +1,5 @@
+import { topicFactory } from './factories/topics_factory'
+
 Cypress.Commands.add('simulateConnectedUser', (userData = {}) => {
   const defaultUser = {
     id: 'test-user-id',
@@ -10,6 +12,7 @@ Cypress.Commands.add('simulateConnectedUser', (userData = {}) => {
     avatar_thumbnail: null,
     website: null,
     about: null,
+    organizations: [],
     ...userData
   }
 
@@ -28,6 +31,16 @@ Cypress.Commands.add('simulateConnectedUser', (userData = {}) => {
     statusCode: 200,
     body: {}
   }).as('revokeToken')
+
+  // default CMS edit access to false, checked on every logged-in page load
+  const cmsTopicId = Cypress.env('siteConfig').website.cms?.topic_id
+  if (cmsTopicId) {
+    cy.intercept(
+      'GET',
+      `**/api/*/topics/${cmsTopicId}/`,
+      topicFactory.one({ overrides: { id: cmsTopicId } })
+    ).as('getCmsTopicDefault')
+  }
 })
 
 Cypress.Commands.add('simulateDisconnectedUser', () => {

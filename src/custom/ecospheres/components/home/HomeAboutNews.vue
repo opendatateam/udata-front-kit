@@ -1,10 +1,32 @@
 <script setup lang="ts">
 import config from '@/config'
 import type { EcologieHomepageConf } from '@/custom/ecospheres/model/config'
+import type { CmsPage } from '@/model/cms'
+import type { CmsCategoryConfig } from '@/model/config'
+import { useCmsPageStore } from '@/store/CmsPageStore'
+import { formatDate } from '@/utils'
+
+const NEWS_CATEGORY_ID = 'news'
+const NEWS_LIMIT = 3
 
 const homepage = config.ecospheres.homepage as EcologieHomepageConf | undefined
 const aboutText = homepage?.about_text ?? ''
-const news = homepage?.news ?? []
+
+const newsCategory = config.website.cms?.categories?.find(
+  (c: CmsCategoryConfig) => c.id === NEWS_CATEGORY_ID
+)
+
+const news = ref<CmsPage[]>([])
+const routeForNewsItem = (page: CmsPage) =>
+  `${newsCategory?.route_prefix}/${page.slug}`
+
+onMounted(async () => {
+  if (!newsCategory) return
+  news.value = await useCmsPageStore().listPublishedByCategory(
+    NEWS_CATEGORY_ID,
+    NEWS_LIMIT
+  )
+})
 </script>
 
 <template>
@@ -24,17 +46,21 @@ const news = homepage?.news ?? []
           </RouterLink>
         </div>
         <div>
-          <h2 class="news-header-title">Actualités</h2>
-          <ul class="news-list fr-m-0 fr-p-0 fr-mb-4w" role="list">
-            <li v-for="item in news" :key="item.title" class="fr-pb-1w">
-              <p class="news-date fr-text--sm">{{ item.date }}</p>
-              <a
-                :href="item.href"
-                class="news-title fr-link fr-icon-arrow-right-line fr-link--icon-right"
-                >{{ item.title }}</a
-              >
-            </li>
-          </ul>
+          <template v-if="news.length">
+            <h2 class="news-header-title">Actualités</h2>
+            <ul class="news-list fr-m-0 fr-p-0 fr-mb-4w" role="list">
+              <li v-for="item in news" :key="item.id" class="fr-pb-1w">
+                <p v-if="item.published" class="news-date fr-text--sm">
+                  {{ formatDate(item.published, true) }}
+                </p>
+                <RouterLink
+                  :to="routeForNewsItem(item)"
+                  class="news-title fr-link fr-icon-arrow-right-line fr-link--icon-right"
+                  >{{ item.name }}</RouterLink
+                >
+              </li>
+            </ul>
+          </template>
           <div class="news-cta fr-mt-4v">
             <a
               href="https://grist.numerique.gouv.fr/o/ecolabservicesdonnees/forms/mCtZDvP6vKbMcorvXM7sGK/55"

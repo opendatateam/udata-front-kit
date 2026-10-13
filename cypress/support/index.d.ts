@@ -11,6 +11,7 @@ declare global {
       expectNoConsoleErrors(): Chainable<void>
       expectRequestWithParams(resourceName: string, requestParamsString: string | RegExp): Chainable<void>
       isInViewport(options?: { threshold?: number; wait?: number }): Chainable<Element>
+      mockCmsNewsDefault(): Chainable<void>
       mockDatagouvObject(resourceName: string, resourceId: string, data?: object): Chainable<void>
       mockDatagouvObjectList(resourceName: string, data?: object[]): Chainable<void>
       mockDatagouvObjectListWithTags(resourceName: string, tags?: string[], data?: object[]): Chainable<void>

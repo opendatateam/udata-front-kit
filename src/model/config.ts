@@ -152,6 +152,26 @@ type FooterExternalLink = {
   title: string
 }
 
+export interface CmsPageConfig {
+  title: string
+  id: string // id or slug of the page on data.gouv.fr
+  route: string
+}
+
+// a selectable, tag-marked collection of CMS pages (e.g. news articles)
+export interface CmsCategoryConfig {
+  id: string
+  label: string
+  route_prefix: string
+}
+
+export interface CmsConfig {
+  enabled: boolean
+  topic_id?: string // scopes the CMS page list to pages attached to this topic
+  pages?: CmsPageConfig[]
+  categories?: CmsCategoryConfig[]
+}
+
 type FooterMandatoryLink = {
   label: string
   to: string | undefined
@@ -179,6 +199,7 @@ export type WebsiteConfig = {
   }
   header: HeaderConf
   footer: FooterConf
+  cms?: CmsConfig
 }
 
 // https://docs.sentry.io/platforms/javascript/guides/vue/configuration/options/
