@@ -142,6 +142,8 @@ export type NetworkPageConf = PageListConf & {
 // one per URL subpath (see networkDefaultPage in utils/config.ts).
 export type NetworkConf = {
   pages: { [subpath: string]: NetworkPageConf }
+  // Org-list URLs for this network, keyed like `pages` (e.g. organizations.datasets).
+  organizations?: Record<string, string>
 }
 
 export type NetworkEntriesConf = {
@@ -243,7 +245,4 @@ export type OrganizationsConfig = {
   dataservices?: string
   bouquets?: string
   page?: OrganizationsPageConf
-} & {
-  // Networks register their org-list URLs nested under their slug, e.g. organizations.simm.datasets.
-  [networkSlug: string]: Record<string, string> | undefined
 }

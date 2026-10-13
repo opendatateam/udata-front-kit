@@ -31,9 +31,11 @@ describe('Dataset Detail View - Networks (univers)', () => {
     cy.wait(`@get_dataset_networks_${dataset.id}`)
 
     cy.contains('dt', 'Réseau').should('be.visible')
-    cy.contains('Milieu Marin France')
-      .should('have.attr', 'href')
-      .and('include', '/contributors/simm')
+    cy.contains('Milieu Marin France').should(
+      'have.attr',
+      'href',
+      '/contributors/simm'
+    )
   })
 
   it('does not display the network block when the dataset belongs to no network', () => {
