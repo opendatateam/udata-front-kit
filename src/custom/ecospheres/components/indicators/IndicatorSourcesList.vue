@@ -20,17 +20,11 @@ const { sources, calcul } = useIndicatorExtras(indicator)
 
 <template>
   <template v-for="(source, idx) in sources" :key="source.url">
-    <h3 class="subtitle subtitle--uppercase">
-      {{ `Source ${idx + 1} : ${source.nom}` }}
-    </h3>
-    <InformationPanelSection>
+    <InformationPanelSection :title="`Source ${idx + 1} : ${source.nom}`">
       <template #description>
         <!-- eslint-disable-next-line vue/no-v-html -->
         <div v-html="fromMarkdown(source.description).html"></div>
       </template>
-      <InformationPanelItem title="URL source" :is-row="true">
-        <a :href="source.url" target="_blank">{{ source.url }}</a>
-      </InformationPanelItem>
       <InformationPanelItem title="Distributeur" :value="source.distributeur" />
       <InformationPanelItem title="Producteur" :value="source.producteur" />
       <InformationPanelItem
@@ -40,10 +34,16 @@ const { sources, calcul } = useIndicatorExtras(indicator)
         {{ formatDate(source.plage_temporelle.start, true) }} -
         {{ formatDate(source.plage_temporelle.end, true) }}
       </InformationPanelItem>
+      <InformationPanelItem title="URL source">
+        <a :href="source.url" target="_blank">{{ source.url }}</a>
+      </InformationPanelItem>
     </InformationPanelSection>
   </template>
   <!-- Informations calcul -->
-  <InformationPanelSection title="Informations calcul">
+  <InformationPanelSection
+    title="Informations calcul"
+    :class="{ 'border-top': sources.length }"
+  >
     <template #description
       >Nous documentons les hypothèses de traitement utilisées pour le calcul
       des indicateurs dans la section "Méthode calcul". L'équipe en charge de
