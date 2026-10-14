@@ -7,10 +7,11 @@ import { useRoute, useRouter } from 'vue-router'
 import BlankState from '@/components/BlankState.vue'
 import config from '@/config'
 import type {
+  Comment,
+  Discussion,
   DiscussionForm,
   DiscussionId,
   DiscussionResponse,
-  Post,
   PostForm,
   SubjectClass
 } from '@/model/discussion'
@@ -59,6 +60,20 @@ const discussionForm: Ref<DiscussionForm> = ref({
 
 const postForm: Ref<PostForm> = ref({ comment: '' })
 
+const editDiscussionId: Ref<DiscussionId | null> = ref(null)
+const editDiscussionForm: Ref<{ title: string; comment: string }> = ref({
+  title: '',
+  comment: ''
+})
+
+interface EditPostInfo {
+  discussionId: DiscussionId
+  index: number
+}
+
+const editPostInfo: Ref<EditPostInfo | null> = ref(null)
+const editPostForm: Ref<PostForm> = ref({ comment: '' })
+
 const discussions: ComputedRef<DiscussionResponse | undefined> = computed(
   () => {
     return discussionStore.getDiscussionsForSubject(
@@ -87,7 +102,7 @@ const getNotificationExternalUrl = (): string | null => {
   return `${canonicalUrl}${path}`
 }
 
-const getUserAvatar = (post: Post) => {
+const getUserAvatar = (post: Comment) => {
   if (post.posted_by.avatar_thumbnail) {
     return post.posted_by.avatar_thumbnail
   }
@@ -126,6 +141,87 @@ const createPost = (discussionId: DiscussionId) => {
         postFormId.value = null
       }
     })
+}
+
+const startEditDiscussion = (discussion: Discussion) => {
+  postFormId.value = null
+  editPostInfo.value = null
+  editDiscussionForm.value = {
+    title: discussion.title,
+    comment: discussion.discussion[0].content
+  }
+  editDiscussionId.value = discussion.id
+}
+
+const cancelEditDiscussion = () => {
+  editDiscussionId.value = null
+}
+
+const submitEditDiscussion = async (discussion: Discussion) => {
+  const firstPost = discussion.discussion[0]
+  if (editDiscussionForm.value.title !== discussion.title) {
+    await discussionStore.updateDiscussionTitle(
+      props.subject.id,
+      discussion.id,
+      editDiscussionForm.value.title
+    )
+  }
+  if (editDiscussionForm.value.comment !== firstPost.content) {
+    await discussionStore.updateComment(
+      props.subject.id,
+      discussion.id,
+      0,
+      editDiscussionForm.value.comment
+    )
+  }
+  editDiscussionId.value = null
+}
+
+const deleteDiscussion = (discussion: Discussion) => {
+  if (
+    !window.confirm(
+      'Êtes-vous sûr de vouloir supprimer cette discussion et tous ses commentaires ?'
+    )
+  )
+    return
+  discussionStore.deleteDiscussion(props.subject.id, discussion.id)
+}
+
+const startEditPost = (
+  discussionId: DiscussionId,
+  index: number,
+  post: Comment
+) => {
+  postFormId.value = null
+  editDiscussionId.value = null
+  editPostForm.value = { comment: post.content }
+  editPostInfo.value = { discussionId, index }
+}
+
+const cancelEditPost = () => {
+  editPostInfo.value = null
+}
+
+const submitEditPost = async () => {
+  if (editPostInfo.value === null) return
+  await discussionStore.updateComment(
+    props.subject.id,
+    editPostInfo.value.discussionId,
+    editPostInfo.value.index,
+    editPostForm.value.comment
+  )
+  editPostInfo.value = null
+}
+
+const deleteComment = (discussionId: DiscussionId, index: number) => {
+  if (!window.confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?'))
+    return
+  // Deleting shifts every later index, so a stale open edit form on this
+  // discussion could end up pointing at the wrong comment.
+  if (editPostInfo.value?.discussionId === discussionId) {
+    editPostInfo.value = null
+  }
+  discussionStore.deleteComment(props.subject.id, discussionId, index)
 }
 
 watch(
@@ -236,59 +332,195 @@ defineExpose({ navigateToDiscussion })
       :key="discussion.id"
       class="fr-mb-6w"
     >
-      <p :id="`discussion-${discussion.id}`" class="discussion-title fr-mb-3v">
-        {{ discussion.title }}
-      </p>
-      <div class="discussion-subtitle">
-        <div class="avatar">
-          <img
-            :src="getUserAvatar(discussion.discussion[0])"
-            alt=""
-            loading="lazy"
-            width="20"
-            height="20"
+      <div class="fr-grid-row fr-grid-row--middle discussion-title-row">
+        <p
+          :id="`discussion-${discussion.id}`"
+          class="discussion-title fr-col fr-mb-3v"
+        >
+          {{ discussion.title }}
+        </p>
+        <div
+          v-if="discussion.permissions.edit || discussion.permissions.delete"
+          class="discussion-item-actions"
+        >
+          <button
+            v-if="discussion.permissions.edit"
+            type="button"
+            class="fr-btn fr-btn--sm fr-btn--tertiary fr-icon-edit-line"
+            title="Modifier la discussion"
+            aria-label="Modifier la discussion"
+            @click.stop.prevent="startEditDiscussion(discussion)"
+          ></button>
+          <button
+            v-if="discussion.permissions.delete"
+            type="button"
+            class="fr-btn fr-btn--sm fr-btn--tertiary fr-icon-delete-line"
+            title="Supprimer la discussion"
+            aria-label="Supprimer la discussion"
+            @click.stop.prevent="deleteDiscussion(discussion)"
+          ></button>
+        </div>
+      </div>
+
+      <form
+        v-if="editDiscussionId === discussion.id"
+        class="fr-mb-4w"
+        @submit.stop.prevent="submitEditDiscussion(discussion)"
+      >
+        <div class="fr-input-group">
+          <label
+            class="fr-label"
+            :for="`edit-discussion-title-${discussion.id}`"
+          >
+            Titre (obligatoire)</label
+          >
+          <input
+            :id="`edit-discussion-title-${discussion.id}`"
+            v-model="editDiscussionForm.title"
+            required
+            class="fr-input"
+            name="title"
           />
         </div>
-        <p class="user-name">
-          {{ discussion.discussion[0].posted_by.first_name }}
-          {{ discussion.discussion[0].posted_by.last_name }}
+        <div class="fr-input-group">
+          <label
+            class="fr-label"
+            :for="`edit-discussion-comment-${discussion.id}`"
+          >
+            Message (obligatoire)</label
+          >
+          <textarea
+            :id="`edit-discussion-comment-${discussion.id}`"
+            v-model="editDiscussionForm.comment"
+            required
+            class="fr-input"
+            name="message"
+          ></textarea>
+        </div>
+        <div class="align-right">
+          <button
+            type="button"
+            class="fr-btn fr-btn--secondary fr-mr-1w"
+            @click.stop.prevent="cancelEditDiscussion()"
+          >
+            Annuler
+          </button>
+          <button type="submit" class="fr-btn">Mettre à jour</button>
+        </div>
+      </form>
+      <template v-else>
+        <div class="discussion-subtitle">
+          <div class="avatar">
+            <img
+              :src="getUserAvatar(discussion.discussion[0])"
+              alt=""
+              loading="lazy"
+              width="20"
+              height="20"
+            />
+          </div>
+          <p class="user-name">
+            {{ discussion.discussion[0].posted_by.first_name }}
+            {{ discussion.discussion[0].posted_by.last_name }}
+          </p>
+          <time
+            :datetime="discussion.discussion[0].posted_on"
+            class="comment-date"
+          >
+            - le {{ formatDate(discussion.discussion[0].posted_on) }}
+          </time>
+        </div>
+        <p class="comment comment-text fr-mt-2v">
+          {{ discussion.discussion[0].content }}
         </p>
-        <time
-          :datetime="discussion.discussion[0].posted_on"
-          class="comment-date"
-        >
-          - le {{ formatDate(discussion.discussion[0].posted_on) }}
-        </time>
-      </div>
-      <p class="comment comment-text fr-mt-2v">
-        {{ discussion.discussion[0].content }}
-      </p>
+      </template>
       <template v-if="discussion.discussion.length > 1">
         <div class="discussion-answers">
           <div
-            v-for="comment in discussion.discussion.slice(1)"
-            :key="comment.content"
+            v-for="(comment, commentIndex) in discussion.discussion.slice(1)"
+            :key="comment.id"
             class="discussion-answer fr-mt-3w"
           >
-            <div class="discussion-subtitle">
-              <div class="avatar">
-                <img
-                  :src="getUserAvatar(comment)"
-                  alt=""
-                  loading="lazy"
-                  width="20"
-                  height="20"
-                />
+            <div class="fr-grid-row fr-grid-row--middle">
+              <div class="discussion-subtitle fr-col">
+                <div class="avatar">
+                  <img
+                    :src="getUserAvatar(comment)"
+                    alt=""
+                    loading="lazy"
+                    width="20"
+                    height="20"
+                  />
+                </div>
+                <p class="user-name">
+                  {{ comment.posted_by.first_name }}
+                  {{ comment.posted_by.last_name }}
+                </p>
+                <time :datetime="comment.posted_on" class="comment-date">
+                  - le {{ formatDate(comment.posted_on) }}
+                </time>
               </div>
-              <p class="user-name">
-                {{ comment.posted_by.first_name }}
-                {{ comment.posted_by.last_name }}
-              </p>
-              <time :datetime="comment.posted_on" class="comment-date">
-                - le {{ formatDate(comment.posted_on) }}
-              </time>
+              <div
+                v-if="comment.permissions.edit || comment.permissions.delete"
+                class="discussion-item-actions"
+              >
+                <button
+                  v-if="comment.permissions.edit"
+                  type="button"
+                  class="fr-btn fr-btn--sm fr-btn--tertiary fr-icon-edit-line"
+                  title="Modifier le commentaire"
+                  aria-label="Modifier le commentaire"
+                  @click.stop.prevent="
+                    startEditPost(discussion.id, commentIndex + 1, comment)
+                  "
+                ></button>
+                <button
+                  v-if="comment.permissions.delete"
+                  type="button"
+                  class="fr-btn fr-btn--sm fr-btn--tertiary fr-icon-delete-line"
+                  title="Supprimer le commentaire"
+                  aria-label="Supprimer le commentaire"
+                  @click.stop.prevent="
+                    deleteComment(discussion.id, commentIndex + 1)
+                  "
+                ></button>
+              </div>
             </div>
+            <form
+              v-if="
+                editPostInfo?.discussionId === discussion.id &&
+                editPostInfo.index === commentIndex + 1
+              "
+              @submit.stop.prevent="submitEditPost()"
+            >
+              <div class="fr-input-group">
+                <label
+                  class="fr-label"
+                  :for="`edit-comment-${discussion.id}-${commentIndex + 1}`"
+                >
+                  Commentaire (obligatoire)
+                </label>
+                <textarea
+                  :id="`edit-comment-${discussion.id}-${commentIndex + 1}`"
+                  v-model="editPostForm.comment"
+                  required
+                  class="fr-input"
+                  name="message"
+                ></textarea>
+              </div>
+              <div class="align-right">
+                <button
+                  type="button"
+                  class="fr-btn fr-btn--secondary fr-mr-1w"
+                  @click.stop.prevent="cancelEditPost()"
+                >
+                  Annuler
+                </button>
+                <button type="submit" class="fr-btn">Mettre à jour</button>
+              </div>
+            </form>
             <p
+              v-else
               class="secondary-comment-content comment-text fr-ml-md-7v fr-mt-2v"
             >
               {{ comment.content }}
@@ -307,6 +539,8 @@ defineExpose({ navigateToDiscussion })
             () => {
               postForm.comment = ''
               postFormId = discussion.id
+              editDiscussionId = null
+              editPostInfo = null
             }
           "
         >
@@ -363,6 +597,14 @@ defineExpose({ navigateToDiscussion })
 <style scoped>
 .discussion-header {
   justify-content: space-between;
+}
+.discussion-title-row {
+  justify-content: space-between;
+}
+.discussion-item-actions {
+  display: flex;
+  flex: 0 0 auto;
+  column-gap: 0.25rem;
 }
 .start-discussion {
   flex: 1 1 auto;

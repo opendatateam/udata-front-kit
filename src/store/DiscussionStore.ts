@@ -19,6 +19,18 @@ export const useDiscussionStore = defineStore('discussion', {
   },
   actions: {
     /**
+     * Replace a discussion in every cached page for a subject
+     */
+    replaceDiscussion(subjectId: SubjectId, discussion: Discussion) {
+      if (this.data[subjectId] === undefined) return
+      this.data[subjectId] = this.data[subjectId].map((dPage) => {
+        dPage.data = dPage.data.map((d) => {
+          return d.id === discussion.id ? discussion : d
+        })
+        return dPage
+      })
+    },
+    /**
      * Add a post to a discussion
      */
     async createPost(
@@ -29,13 +41,71 @@ export const useDiscussionStore = defineStore('discussion', {
       const discussion: Discussion | undefined =
         await discussionsAPI.createPost(discussionId, postForm)
       if (discussion === undefined) return
+      this.replaceDiscussion(subjectId, discussion)
+      return discussion
+    },
+    /**
+     * Update a discussion's title
+     */
+    async updateDiscussionTitle(
+      subjectId: SubjectId,
+      discussionId: DiscussionId,
+      title: string
+    ): Promise<Discussion | undefined> {
+      const discussion: Discussion | undefined =
+        await discussionsAPI.updateDiscussion(discussionId, title)
+      if (discussion === undefined) return
+      this.replaceDiscussion(subjectId, discussion)
+      return discussion
+    },
+    /**
+     * Update a comment given its index in the discussion
+     */
+    async updateComment(
+      subjectId: SubjectId,
+      discussionId: DiscussionId,
+      index: number,
+      comment: string
+    ): Promise<Discussion | undefined> {
+      const discussion: Discussion | undefined =
+        await discussionsAPI.updateComment(discussionId, index, comment)
+      if (discussion === undefined) return
+      this.replaceDiscussion(subjectId, discussion)
+      return discussion
+    },
+    /**
+     * Delete a discussion and all its comments
+     */
+    async deleteDiscussion(
+      subjectId: SubjectId,
+      discussionId: DiscussionId
+    ): Promise<void> {
+      await discussionsAPI.deleteDiscussion(discussionId)
+      if (this.data[subjectId] === undefined) return
+      this.data[subjectId] = this.data[subjectId].map((dPage) => {
+        dPage.data = dPage.data.filter((d) => d.id !== discussionId)
+        dPage.total -= 1
+        return dPage
+      })
+    },
+    /**
+     * Delete a comment given its index in the discussion
+     */
+    async deleteComment(
+      subjectId: SubjectId,
+      discussionId: DiscussionId,
+      index: number
+    ): Promise<void> {
+      await discussionsAPI.deleteComment(discussionId, index)
+      if (this.data[subjectId] === undefined) return
       this.data[subjectId] = this.data[subjectId].map((dPage) => {
         dPage.data = dPage.data.map((d) => {
-          return d.id === discussionId ? discussion : d
+          if (d.id !== discussionId) return d
+          d.discussion = d.discussion.filter((_, i) => i !== index)
+          return d
         })
         return dPage
       })
-      return discussion
     },
     /**
      * Refresh discussions for a subject, by loading the first page

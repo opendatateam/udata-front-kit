@@ -1,12 +1,18 @@
-import type { User } from '@datagouv/components-next'
+import type {
+  Thread,
+  Comment as UpstreamComment
+} from '@datagouv/components-next'
 
 import type { GenericResponse } from './api'
 
-interface Discussion {
-  discussion: Post[]
-  id: DiscussionId
+interface Discussion extends Thread {
+  discussion: Comment[]
+  permissions: {
+    delete: boolean
+    edit: boolean
+    close: boolean
+  }
   subject: Subject
-  title: string
 }
 
 type DiscussionId = string
@@ -24,10 +30,12 @@ interface DiscussionExtras {
   }
 }
 
-interface Post {
-  content: string
-  posted_by: User
-  posted_on: string
+interface Comment extends UpstreamComment {
+  id: string
+  permissions: {
+    delete: boolean
+    edit: boolean
+  }
 }
 
 interface PostForm {
@@ -48,12 +56,12 @@ interface DiscussionResponse extends GenericResponse {
 }
 
 export type {
+  Comment,
   Discussion,
   DiscussionExtras,
   DiscussionForm,
   DiscussionId,
   DiscussionResponse,
-  Post,
   PostForm,
   Subject,
   SubjectClass,
