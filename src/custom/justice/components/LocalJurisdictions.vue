@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { DatasetV2 } from '@datagouv/components-next'
+import type { DatasetV2WithFullObject } from '@datagouv/components-next'
 import { onMounted, ref } from 'vue'
 
 import JurisdictionMap, {
@@ -37,7 +37,7 @@ const COURTS = [
 ] as const
 
 const layers = ref<JurisdictionLayer[]>([])
-const dataset = ref<DatasetV2 | null>(null)
+const dataset = ref<DatasetV2WithFullObject | null>(null)
 const error = ref(false)
 const loading = ref(true)
 

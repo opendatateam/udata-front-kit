@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { DatasetCard } from '@datagouv/components-next'
+import { DatasetCard, type DatasetV2 } from '@datagouv/components-next'
+import { computed } from 'vue'
 
 import { useJusticeDataset } from '@/custom/justice/utils/dataset'
 
@@ -10,6 +11,13 @@ defineProps<{
 }>()
 
 const { dataset, datasetUrl } = useJusticeDataset()
+
+const datasetForCard = computed((): DatasetV2 | null => {
+  if (!dataset.value) return null
+  // FIXME: DatasetCard should accept DatasetV2WithFullObject — upstream bug in @datagouv/components-next
+  // @ts-expect-error dataset prop is typed as Dataset | DatasetV2, not DatasetV2WithFullObject
+  return dataset.value
+})
 </script>
 
 <template>
@@ -26,9 +34,9 @@ const { dataset, datasetUrl } = useJusticeDataset()
           <p v-if="source">{{ source }}</p>
         </slot>
         <DatasetCard
-          v-if="dataset && datasetUrl"
+          v-if="datasetForCard && datasetUrl"
           class="fr-mt-2w"
-          :dataset="dataset"
+          :dataset="datasetForCard"
           :dataset-url="datasetUrl"
           :organization-url="null"
         />

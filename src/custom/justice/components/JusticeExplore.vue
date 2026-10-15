@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { DatasetV2 } from '@datagouv/components-next'
+import type { DatasetV2WithFullObject } from '@datagouv/components-next'
 import { computed, onMounted, ref } from 'vue'
 
 import JusticeSection from '@/custom/justice/components/JusticeSection.vue'
@@ -27,7 +27,7 @@ const DUREE_REFERES = 'duree_moyenne_mois_referes'
 
 const labels = ACTIVITY_YEARS.map(String)
 const rows = ref<ActivityRow[]>([])
-const dataset = ref<DatasetV2 | null>(null)
+const dataset = ref<DatasetV2WithFullObject | null>(null)
 const error = ref(false)
 const loading = ref(true)
 
@@ -101,7 +101,7 @@ onMounted(async () => {
             :series="volume"
             stacked
             y-title="Nombre d'affaires"
-            aria-label="Histogramme empilé des affaires nouvelles au fond et des référés, de 2020 à 2024"
+            accessible-label="Histogramme empilé des affaires nouvelles au fond et des référés, de 2020 à 2024"
             :height="320"
           />
         </VizCard>
@@ -117,7 +117,7 @@ onMounted(async () => {
             :series="durations"
             value-format="month"
             y-title="Durée moyenne (mois)"
-            aria-label="Courbes de la durée moyenne de traitement des affaires au fond, des référés, et des deux réunis, de 2020 à 2024"
+            accessible-label="Courbes de la durée moyenne de traitement des affaires au fond, des référés, et des deux réunis, de 2020 à 2024"
             :height="320"
           />
         </VizCard>

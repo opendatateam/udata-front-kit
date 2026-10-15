@@ -13,7 +13,7 @@ import {
 const props = withDefaults(
   defineProps<{
     slices: PieSlice[]
-    ariaLabel: string
+    accessibleLabel: string
     height?: number
     colors?: string[]
   }>(),
@@ -84,7 +84,7 @@ onUnmounted(() => chart?.destroy())
 
 <template>
   <div class="chart-box" :style="{ height: `${height}px` }">
-    <canvas ref="canvas" role="img" :aria-label="ariaLabel" />
+    <canvas ref="canvas" role="img" :aria-label="accessibleLabel" />
   </div>
 </template>
 

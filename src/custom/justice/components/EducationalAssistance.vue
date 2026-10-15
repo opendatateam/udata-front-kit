@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { DatasetV2 } from '@datagouv/components-next'
+import type { DatasetV2WithFullObject } from '@datagouv/components-next'
 import { computed, onMounted, ref } from 'vue'
 
 import JusticeSection from '@/custom/justice/components/JusticeSection.vue'
@@ -64,7 +64,7 @@ const LABELS: Record<string, string> = {
 
 const rows = ref<TabularRow[]>([])
 const ageRows = ref<TabularRow[]>([])
-const dataset = ref<DatasetV2 | null>(null)
+const dataset = ref<DatasetV2WithFullObject | null>(null)
 const error = ref(false)
 const loading = ref(true)
 
@@ -138,13 +138,14 @@ const girlsSeries = computed(() => ageSeries('filles'))
 
 function ageTitle(category: string, noun: string): string {
   const year = ageLatest.value
+  if (year == null) return `Les ${noun} selon l’âge`
   const total = cellNumber(findRow(ageRows.value, category), year)
-  if (year == null || total == null) return `Les ${noun} selon l’âge`
+  if (total == null) return `Les ${noun} selon l’âge`
   return `${integerFormat.format(total)} saisines concernant des ${noun} en ${year}`
 }
 
 function displayLabel(category: string): string {
-  return LABELS[category] ?? category.replaceAll('_', ' ')
+  return LABELS[category] ?? category.replace(/_/g, ' ')
 }
 
 function valueFor(category: string, year: number | null): number | null {
@@ -205,7 +206,7 @@ onMounted(async () => {
             :labels="yearLabels"
             :series="originSeries"
             y-title="Nombre de saisines"
-            aria-label="Histogramme du total des saisines par année, avec les courbes des saisines du parquet, d’office et par le mineur ou un proche"
+            accessible-label="Histogramme du total des saisines par année, avec les courbes des saisines du parquet, d’office et par le mineur ou un proche"
             :height="460"
           />
         </VizCard>
@@ -219,7 +220,7 @@ onMounted(async () => {
           <PieChart
             :slices="detailSlices"
             :colors="PIE_COLORS"
-            :aria-label="`Répartition des saisines en ${latest ?? ''} selon l’origine détaillée, hors totaux`"
+            :accessible-label="`Répartition des saisines en ${latest ?? ''} selon l’origine détaillée, hors totaux`"
           />
         </VizCard>
       </div>
@@ -239,7 +240,7 @@ onMounted(async () => {
             :series="boysSeries"
             stacked
             y-title="Effectif"
-            aria-label="Histogramme empilé des garçons par classe d’âge et par année"
+            accessible-label="Histogramme empilé des garçons par classe d’âge et par année"
             :height="360"
           />
         </VizCard>
@@ -255,7 +256,7 @@ onMounted(async () => {
             :series="girlsSeries"
             stacked
             y-title="Effectif"
-            aria-label="Histogramme empilé des filles par classe d’âge et par année"
+            accessible-label="Histogramme empilé des filles par classe d’âge et par année"
             :height="360"
           />
         </VizCard>

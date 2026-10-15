@@ -1,4 +1,4 @@
-import type { DatasetV2 } from '@datagouv/components-next'
+import type { DatasetV2WithFullObject } from '@datagouv/components-next'
 import {
   computed,
   inject,
@@ -11,16 +11,19 @@ import {
 import { ACTIVITY_DATASET_SLUG } from '@/custom/justice/utils/activityData'
 import { useDatasetStore } from '@/store/DatasetStore'
 
-const JUSTICE_DATASET: InjectionKey<ComputedRef<DatasetV2 | null>> =
-  Symbol('justice-dataset')
+const JUSTICE_DATASET: InjectionKey<
+  ComputedRef<DatasetV2WithFullObject | null>
+> = Symbol('justice-dataset')
 
-export async function loadJusticeDataset(): Promise<DatasetV2 | null> {
+export async function loadJusticeDataset(): Promise<DatasetV2WithFullObject | null> {
   return useDatasetStore()
     .load(ACTIVITY_DATASET_SLUG)
     .catch(() => null)
 }
 
-export function provideJusticeDataset(dataset: Ref<DatasetV2 | null>) {
+export function provideJusticeDataset(
+  dataset: Ref<DatasetV2WithFullObject | null>
+) {
   provide(
     JUSTICE_DATASET,
     computed(() => dataset.value)
