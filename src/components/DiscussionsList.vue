@@ -1,17 +1,21 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import type { ComputedRef, Ref } from 'vue'
+import type { ComputedRef, PropType, Ref } from 'vue'
 import { computed, nextTick, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import BlankState from '@/components/BlankState.vue'
+import DiscussionAuthor from '@/components/DiscussionAuthor.vue'
+import DiscussionCommentMeta from '@/components/DiscussionCommentMeta.vue'
+import DiscussionIdentitySelect from '@/components/DiscussionIdentitySelect.vue'
 import config from '@/config'
 import type {
+  Comment,
+  CommentForm,
+  Discussion,
   DiscussionForm,
   DiscussionId,
   DiscussionResponse,
-  Post,
-  PostForm,
   SubjectClass
 } from '@/model/discussion'
 import { useCurrentPageConf } from '@/router/utils'
@@ -31,11 +35,18 @@ const { pageKey, pageConf } = useCurrentPageConf()
 const { loggedIn } = storeToRefs(userStore)
 const currentPage: Ref<number> = ref(1)
 const showDiscussionForm: Ref<boolean> = ref(false)
-const postFormId: Ref<DiscussionId | null> = ref(null)
+const commentFormId: Ref<DiscussionId | null> = ref(null)
+
+interface DiscussionSubject {
+  id: string
+  slug?: string
+  owner?: { id: string } | null
+  organization?: { id: string } | null
+}
 
 const props = defineProps({
   subject: {
-    type: Object,
+    type: Object as PropType<DiscussionSubject>,
     required: true
   },
   subjectClass: {
@@ -57,7 +68,34 @@ const discussionForm: Ref<DiscussionForm> = ref({
   }
 })
 
-const postForm: Ref<PostForm> = ref({ comment: '' })
+const commentForm: Ref<CommentForm> = ref({ comment: '' })
+
+// null means posting as yourself
+const discussionOrganization: Ref<string | null> = ref(null)
+const commentOrganization: Ref<string | null> = ref(null)
+
+const editDiscussionId: Ref<DiscussionId | null> = ref(null)
+const editDiscussionForm: Ref<{ title: string; comment: string }> = ref({
+  title: '',
+  comment: ''
+})
+
+interface EditCommentInfo {
+  discussionId: DiscussionId
+  commentId: string
+}
+
+const editCommentInfo: Ref<EditCommentInfo | null> = ref(null)
+const editCommentForm: Ref<CommentForm> = ref({ comment: '' })
+
+const expandedDiscussions: Ref<Set<DiscussionId>> = ref(new Set())
+const toggleDiscussionExpansion = (discussionId: DiscussionId) => {
+  if (expandedDiscussions.value.has(discussionId)) {
+    expandedDiscussions.value.delete(discussionId)
+  } else {
+    expandedDiscussions.value.add(discussionId)
+  }
+}
 
 const discussions: ComputedRef<DiscussionResponse | undefined> = computed(
   () => {
@@ -71,6 +109,18 @@ const pages = computed(() => {
   return discussionStore.getDiscussionsPaginationForSubject(props.subject.id)
 })
 
+const closedCount = computed(() =>
+  discussionStore.getClosedCountForSubject(props.subject.id)
+)
+
+const discussionsCountLabel = computed(() => {
+  const total = discussions.value?.total ?? 0
+  const label = total > 1 ? `${total} discussions` : `${total} discussion`
+  if (!closedCount.value) return label
+  const closedLabel = closedCount.value > 1 ? 'clôturées' : 'clôturée'
+  return `${label} dont ${closedCount.value} ${closedLabel}`
+})
+
 const allowDiscussionCreation = pageConf.resources_tabs.discussions.create
 
 // If configured, construct an external notification url from canonical_url for udata to use
@@ -78,7 +128,7 @@ const getNotificationExternalUrl = (): string | null => {
   if (!pageConf.resources_tabs.discussions.notify_url_override) return null
   const canonicalUrl = config.website.seo?.canonical_url
   if (!canonicalUrl) return null
-  const slug = (props.subject as { slug?: string }).slug
+  const slug = props.subject.slug
   if (!slug) return null
   const path = router.resolve({
     name: `${pageKey}_detail`,
@@ -87,11 +137,14 @@ const getNotificationExternalUrl = (): string | null => {
   return `${canonicalUrl}${path}`
 }
 
-const getUserAvatar = (post: Post) => {
-  if (post.posted_by.avatar_thumbnail) {
-    return post.posted_by.avatar_thumbnail
+const isProducer = (comment: Comment): boolean => {
+  if (props.subject.owner && !comment.posted_by_organization) {
+    return props.subject.owner.id === comment.posted_by.id
   }
-  return `${config.datagouvfr.base_url}/api/1/avatars/${post.posted_by.id}/20`
+  if (props.subject.organization && comment.posted_by_organization) {
+    return props.subject.organization.id === comment.posted_by_organization.id
+  }
+  return false
 }
 
 const triggerLogin = () => {
@@ -103,6 +156,9 @@ const createDiscussion = () => {
   const externalUrl = getNotificationExternalUrl()
   const payload: DiscussionForm = {
     ...discussionForm.value,
+    ...(discussionOrganization.value
+      ? { organization: discussionOrganization.value }
+      : {}),
     ...(externalUrl
       ? { extras: { notification: { external_url: externalUrl } } }
       : {})
@@ -111,21 +167,129 @@ const createDiscussion = () => {
     if (d !== undefined) {
       discussionForm.value.title = ''
       discussionForm.value.comment = ''
+      discussionOrganization.value = null
       showDiscussionForm.value = false
       currentPage.value = 1
     }
   })
 }
 
-const createPost = (discussionId: DiscussionId) => {
+const cancelCreateDiscussion = () => {
+  showDiscussionForm.value = false
+  discussionOrganization.value = null
+}
+
+const createComment = (discussionId: DiscussionId, close = false) => {
   discussionStore
-    .createPost(props.subject.id, discussionId, postForm.value)
+    .createComment(props.subject.id, discussionId, {
+      ...commentForm.value,
+      ...(commentOrganization.value
+        ? { organization: commentOrganization.value }
+        : {}),
+      close
+    })
     .then((d) => {
       if (d !== undefined) {
-        postForm.value.comment = ''
-        postFormId.value = null
+        commentForm.value.comment = ''
+        commentOrganization.value = null
+        commentFormId.value = null
       }
     })
+}
+
+const cancelComment = () => {
+  commentFormId.value = null
+  commentOrganization.value = null
+}
+
+const openCommentForm = (discussionId: DiscussionId) => {
+  commentForm.value.comment = ''
+  commentOrganization.value = null
+  commentFormId.value = discussionId
+  editDiscussionId.value = null
+  editCommentInfo.value = null
+}
+
+const startEditDiscussion = (discussion: Discussion) => {
+  commentFormId.value = null
+  editCommentInfo.value = null
+  editDiscussionForm.value = {
+    title: discussion.title,
+    comment: discussion.discussion[0].content
+  }
+  editDiscussionId.value = discussion.id
+}
+
+const cancelEditDiscussion = () => {
+  editDiscussionId.value = null
+}
+
+const submitEditDiscussion = async (discussion: Discussion) => {
+  const firstComment = discussion.discussion[0]
+  try {
+    if (editDiscussionForm.value.title !== discussion.title) {
+      await discussionStore.updateDiscussionTitle(
+        props.subject.id,
+        discussion.id,
+        editDiscussionForm.value.title
+      )
+    }
+    // Title and first-comment content live on two separate udata endpoints,
+    // so changing both takes two requests.
+    if (editDiscussionForm.value.comment !== firstComment.content) {
+      await discussionStore.updateComment(
+        props.subject.id,
+        discussion.id,
+        firstComment.id,
+        editDiscussionForm.value.comment
+      )
+    }
+  } catch {
+    // Toasted by the API layer; keep the form open so the user can retry.
+    return
+  }
+  editDiscussionId.value = null
+}
+
+const deleteDiscussion = (discussion: Discussion) => {
+  if (
+    !window.confirm(
+      'Êtes-vous sûr de vouloir supprimer cette discussion et tous ses commentaires ?'
+    )
+  )
+    return
+  discussionStore.deleteDiscussion(props.subject.id, discussion.id)
+}
+
+const startEditComment = (discussionId: DiscussionId, comment: Comment) => {
+  commentFormId.value = null
+  editDiscussionId.value = null
+  editCommentForm.value = { comment: comment.content }
+  editCommentInfo.value = { discussionId, commentId: comment.id }
+}
+
+const cancelEditComment = () => {
+  editCommentInfo.value = null
+}
+
+const submitEditComment = async () => {
+  if (editCommentInfo.value === null) return
+  await discussionStore.updateComment(
+    props.subject.id,
+    editCommentInfo.value.discussionId,
+    editCommentInfo.value.commentId,
+    editCommentForm.value.comment
+  )
+  editCommentInfo.value = null
+}
+
+const deleteComment = (discussionId: DiscussionId, commentId: string) => {
+  if (!window.confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?'))
+    return
+  if (editCommentInfo.value?.commentId === commentId) {
+    editCommentInfo.value = null
+  }
+  discussionStore.deleteComment(props.subject.id, discussionId, commentId)
 }
 
 watch(
@@ -133,6 +297,7 @@ watch(
   ([subjectId, page, subjectClass]) => {
     if (!subjectId) return
     discussionStore.loadDiscussionsForSubject(subjectId, page)
+    discussionStore.loadClosedCountForSubject(subjectId)
     discussionForm.value.subject = {
       id: subjectId,
       class: subjectClass
@@ -164,30 +329,36 @@ defineExpose({ navigateToDiscussion })
 <template>
   <div class="fr-grid-row fr-grid-row--middle discussion-header">
     <div class="fr-col">
-      <h2 class="fr-mt-4w">Discussions</h2>
+      <h2 v-if="discussions" class="discussions-count-title fr-mt-4w">
+        {{ discussionsCountLabel }}
+      </h2>
+      <h2 v-else class="discussions-count-title fr-mt-4w">Discussions</h2>
     </div>
     <template v-if="allowDiscussionCreation">
-      <button
+      <DsfrButton
         v-if="loggedIn"
+        size="sm"
+        secondary
         type="button"
-        class="fr-btn fr-btn--sm fr-btn--secondary fr-icon-add-line fr-btn--icon-left"
-        @click.stop.prevent="showDiscussionForm = true"
-      >
-        Démarrer une nouvelle discussion
-      </button>
-      <button
+        icon="fr-icon-add-line"
+        label="Démarrer une nouvelle discussion"
+        @click="showDiscussionForm = true"
+      />
+      <DsfrButton
         v-else
+        size="sm"
+        secondary
         type="button"
-        class="fr-btn fr-btn--sm fr-btn--secondary fr-icon-account-line fr-btn--icon-left"
-        @click.stop.prevent="triggerLogin()"
-      >
-        Connectez-vous pour démarrer une discussion
-      </button>
+        icon="fr-icon-account-line"
+        label="Connectez-vous pour démarrer une discussion"
+        @click="triggerLogin()"
+      />
     </template>
   </div>
 
   <div v-if="showDiscussionForm" class="fr-mb-4w">
-    <form @submit.stop.prevent="createDiscussion()">
+    <form @submit.prevent="createDiscussion()">
+      <DiscussionIdentitySelect v-model="discussionOrganization" />
       <div class="fr-input-group">
         <label class="fr-label" for="discussion-title">
           Titre (obligatoire)</label
@@ -202,7 +373,7 @@ defineExpose({ navigateToDiscussion })
       </div>
       <div class="fr-input-group">
         <label class="fr-label" for="discussion-message">
-          Message (obligatoire)</label
+          Votre message (obligatoire)</label
         >
         <textarea
           id="discussion-message"
@@ -213,14 +384,15 @@ defineExpose({ navigateToDiscussion })
         ></textarea>
       </div>
       <div class="align-right">
-        <button
+        <DsfrButton
+          size="sm"
+          tertiary
           type="button"
-          class="fr-btn fr-btn--secondary fr-mr-1w"
-          @click.stop.prevent="showDiscussionForm = false"
-        >
-          Annuler
-        </button>
-        <button type="submit" class="fr-btn">Soumettre</button>
+          label="Annuler"
+          class="fr-mr-1w"
+          @click="cancelCreateDiscussion()"
+        />
+        <DsfrButton size="sm" type="submit" label="Envoyer" />
       </div>
     </form>
   </div>
@@ -230,124 +402,281 @@ defineExpose({ navigateToDiscussion })
     image="/static/blank_state/discussion.svg"
     :message="emptyMessage"
   />
-  <div v-else class="fr-mt-4w">
+  <div v-else>
     <div
       v-for="discussion in discussions?.data"
       :key="discussion.id"
-      class="fr-mb-6w"
+      class="discussion-item fr-mb-3w"
     >
-      <p :id="`discussion-${discussion.id}`" class="discussion-title fr-mb-3v">
-        {{ discussion.title }}
-      </p>
-      <div class="discussion-subtitle">
-        <div class="avatar">
-          <img
-            :src="getUserAvatar(discussion.discussion[0])"
-            alt=""
-            loading="lazy"
-            width="20"
-            height="20"
+      <div
+        class="fr-grid-row fr-grid-row--middle discussion-title-row fr-mb-1v"
+      >
+        <div
+          :id="`discussion-${discussion.id}`"
+          class="discussion-title fr-col"
+        >
+          <span
+            v-if="discussion.closed"
+            class="fr-icon-lock-line fr-icon--sm"
+            aria-hidden="true"
+          ></span>
+          {{ discussion.title }}
+        </div>
+        <div
+          v-if="discussion.permissions.edit || discussion.permissions.delete"
+          class="discussion-item-actions"
+        >
+          <DsfrButton
+            v-if="discussion.permissions.edit"
+            size="sm"
+            tertiary
+            icon-only
+            type="button"
+            icon="fr-icon-edit-line"
+            label="Modifier la discussion"
+            @click="startEditDiscussion(discussion)"
+          />
+          <DsfrButton
+            v-if="discussion.permissions.delete"
+            size="sm"
+            tertiary
+            icon-only
+            type="button"
+            icon="fr-icon-delete-line"
+            label="Supprimer la discussion"
+            @click="deleteDiscussion(discussion)"
           />
         </div>
-        <p class="user-name">
-          {{ discussion.discussion[0].posted_by.first_name }}
-          {{ discussion.discussion[0].posted_by.last_name }}
-        </p>
-        <time
-          :datetime="discussion.discussion[0].posted_on"
-          class="comment-date"
+      </div>
+
+      <DiscussionCommentMeta
+        class="fr-mb-3v"
+        :comment="discussion.discussion[0]"
+        :is-producer="isProducer(discussion.discussion[0])"
+      />
+
+      <div
+        v-if="discussion.closed"
+        class="discussion-subtitle closed-banner fr-mb-3v"
+      >
+        <span v-if="discussion.closed_by || discussion.closed_by_organization"
+          >Discussion close par</span
         >
-          - le {{ formatDate(discussion.discussion[0].posted_on) }}
+        <span v-else>Discussion close</span>
+        <DiscussionAuthor
+          v-if="discussion.closed_by || discussion.closed_by_organization"
+          :owner="discussion.closed_by"
+          :organization="discussion.closed_by_organization"
+        />
+        <time :datetime="discussion.closed" class="comment-date">
+          le {{ formatDate(discussion.closed, 'medium') }}
         </time>
       </div>
-      <p class="comment comment-text fr-mt-2v">
-        {{ discussion.discussion[0].content }}
-      </p>
-      <template v-if="discussion.discussion.length > 1">
-        <div class="discussion-answers">
-          <div
-            v-for="comment in discussion.discussion.slice(1)"
-            :key="comment.content"
-            class="discussion-answer fr-mt-3w"
-          >
-            <div class="discussion-subtitle">
-              <div class="avatar">
-                <img
-                  :src="getUserAvatar(comment)"
-                  alt=""
-                  loading="lazy"
-                  width="20"
-                  height="20"
-                />
-              </div>
-              <p class="user-name">
-                {{ comment.posted_by.first_name }}
-                {{ comment.posted_by.last_name }}
-              </p>
-              <time :datetime="comment.posted_on" class="comment-date">
-                - le {{ formatDate(comment.posted_on) }}
-              </time>
-            </div>
-            <p
-              class="secondary-comment-content comment-text fr-ml-md-7v fr-mt-2v"
-            >
-              {{ comment.content }}
-            </p>
-          </div>
-        </div>
-      </template>
-      <div v-if="allowDiscussionCreation" class="fr-mt-3w">
-        <button
-          v-if="postFormId !== discussion.id && loggedIn"
-          type="button"
-          class="fr-btn fr-btn--sm fr-btn--secondary fr-icon-chat-3-line fr-btn--icon-left"
-          aria-label="Répondre à la discussion"
-          :aria-describedby="`discussion-${discussion.id}`"
-          @click.stop.prevent="
-            () => {
-              postForm.comment = ''
-              postFormId = discussion.id
-            }
-          "
-        >
-          Répondre
-        </button>
-        <button
-          v-if="!loggedIn"
-          type="button"
-          class="fr-btn fr-btn--sm fr-btn--secondary fr-icon-account-line fr-btn--icon-left"
-          @click.stop.prevent="triggerLogin()"
-        >
-          Connectez-vous pour répondre
-        </button>
+
+      <template
+        v-if="!discussion.closed || expandedDiscussions.has(discussion.id)"
+      >
         <form
-          v-if="postFormId === discussion.id"
-          @submit.stop.prevent="createPost(discussion.id)"
+          v-if="editDiscussionId === discussion.id"
+          class="fr-mb-4w"
+          @submit.prevent="submitEditDiscussion(discussion)"
         >
           <div class="fr-input-group">
-            <label class="fr-label" for="input-discussion-comment">
-              Commentaire (obligatoire)
-            </label>
+            <label
+              class="fr-label"
+              :for="`edit-discussion-title-${discussion.id}`"
+            >
+              Titre (obligatoire)</label
+            >
+            <input
+              :id="`edit-discussion-title-${discussion.id}`"
+              v-model="editDiscussionForm.title"
+              required
+              class="fr-input"
+              name="title"
+            />
+          </div>
+          <div class="fr-input-group">
+            <label
+              class="fr-label"
+              :for="`edit-discussion-comment-${discussion.id}`"
+            >
+              Votre message (obligatoire)</label
+            >
             <textarea
-              id="input-discussion-comment"
-              v-model="postForm.comment"
+              :id="`edit-discussion-comment-${discussion.id}`"
+              v-model="editDiscussionForm.comment"
               required
               class="fr-input"
               name="message"
             ></textarea>
           </div>
           <div class="align-right">
-            <button
+            <DsfrButton
+              size="sm"
+              tertiary
               type="button"
-              class="fr-btn fr-btn--secondary fr-mr-1w"
-              @click.stop.prevent="postFormId = null"
-            >
-              Annuler
-            </button>
-            <button type="submit" class="fr-btn">Soumettre</button>
+              label="Annuler"
+              class="fr-mr-1w"
+              @click="cancelEditDiscussion()"
+            />
+            <DsfrButton size="sm" type="submit" label="Mettre à jour" />
           </div>
         </form>
+        <div v-else class="comment-text">
+          {{ discussion.discussion[0].content }}
+        </div>
+        <template v-if="discussion.discussion.length > 1">
+          <div class="discussion-answers">
+            <div
+              v-for="comment in discussion.discussion.slice(1)"
+              :key="comment.id"
+              class="discussion-answer fr-mt-3v"
+              :class="{ 'discussion-answer--producer': isProducer(comment) }"
+            >
+              <div class="fr-grid-row fr-grid-row--middle">
+                <DiscussionCommentMeta
+                  class="fr-col"
+                  :comment="comment"
+                  :is-producer="isProducer(comment)"
+                />
+                <div
+                  v-if="comment.permissions.edit || comment.permissions.delete"
+                  class="discussion-item-actions"
+                >
+                  <DsfrButton
+                    v-if="comment.permissions.edit"
+                    size="sm"
+                    tertiary
+                    icon-only
+                    type="button"
+                    icon="fr-icon-edit-line"
+                    label="Modifier le commentaire"
+                    @click="startEditComment(discussion.id, comment)"
+                  />
+                  <DsfrButton
+                    v-if="comment.permissions.delete"
+                    size="sm"
+                    tertiary
+                    icon-only
+                    type="button"
+                    icon="fr-icon-delete-line"
+                    label="Supprimer le commentaire"
+                    @click="deleteComment(discussion.id, comment.id)"
+                  />
+                </div>
+              </div>
+              <form
+                v-if="editCommentInfo?.commentId === comment.id"
+                @submit.prevent="submitEditComment()"
+              >
+                <div class="fr-input-group">
+                  <label class="fr-label" :for="`edit-comment-${comment.id}`">
+                    Votre message (obligatoire)
+                  </label>
+                  <textarea
+                    :id="`edit-comment-${comment.id}`"
+                    v-model="editCommentForm.comment"
+                    required
+                    class="fr-input"
+                    name="message"
+                  ></textarea>
+                </div>
+                <div class="align-right">
+                  <DsfrButton
+                    size="sm"
+                    tertiary
+                    type="button"
+                    label="Annuler"
+                    class="fr-mr-1w"
+                    @click="cancelEditComment()"
+                  />
+                  <DsfrButton size="sm" type="submit" label="Mettre à jour" />
+                </div>
+              </form>
+              <div v-else class="comment-text fr-mt-2v">
+                {{ comment.content }}
+              </div>
+            </div>
+          </div>
+        </template>
+      </template>
+
+      <div v-if="discussion.closed" class="discussion-footer fr-mt-3v">
+        <DsfrButton
+          size="sm"
+          secondary
+          type="button"
+          :label="
+            expandedDiscussions.has(discussion.id)
+              ? 'Cacher la discussion'
+              : 'Voir la discussion'
+          "
+          @click="toggleDiscussionExpansion(discussion.id)"
+        />
       </div>
+      <template v-else-if="allowDiscussionCreation">
+        <form
+          v-if="commentFormId === discussion.id"
+          class="fr-mt-3w"
+          @submit.prevent="createComment(discussion.id)"
+        >
+          <DiscussionIdentitySelect v-model="commentOrganization" />
+          <div class="fr-input-group">
+            <label class="fr-label" for="input-discussion-comment">
+              Votre message (obligatoire)
+            </label>
+            <textarea
+              id="input-discussion-comment"
+              v-model="commentForm.comment"
+              required
+              class="fr-input"
+              name="message"
+            ></textarea>
+          </div>
+          <div class="align-right">
+            <DsfrButton
+              size="sm"
+              tertiary
+              type="button"
+              label="Annuler"
+              class="fr-mr-1w"
+              @click="cancelComment()"
+            />
+            <DsfrButton
+              v-if="discussion.permissions.close"
+              size="sm"
+              secondary
+              type="button"
+              icon="fr-icon-lock-line"
+              label="Répondre et clôturer"
+              class="fr-mr-1w"
+              @click="createComment(discussion.id, true)"
+            />
+            <DsfrButton size="sm" type="submit" label="Répondre" />
+          </div>
+        </form>
+        <div v-else class="discussion-footer fr-mt-3v">
+          <DsfrButton
+            v-if="loggedIn"
+            size="sm"
+            secondary
+            type="button"
+            label="Répondre"
+            :aria-describedby="`discussion-${discussion.id}`"
+            @click="openCommentForm(discussion.id)"
+          />
+          <DsfrButton
+            v-else
+            size="sm"
+            secondary
+            type="button"
+            icon="fr-icon-account-line"
+            label="Connectez-vous pour répondre"
+            @click="triggerLogin()"
+          />
+        </div>
+      </template>
     </div>
     <div v-if="pages?.length > 1" class="fr-container">
       <DsfrPagination
@@ -364,11 +693,40 @@ defineExpose({ navigateToDiscussion })
 .discussion-header {
   justify-content: space-between;
 }
+.discussions-count-title {
+  font-size: 0.875rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--text-title-grey);
+}
+.discussion-item {
+  border: 1px solid var(--border-default-grey);
+  border-radius: 0.25rem;
+  padding: 1rem;
+}
+.discussion-title-row {
+  justify-content: space-between;
+}
+.discussion-item-actions {
+  display: flex;
+  flex: 0 0 auto;
+  column-gap: 0.25rem;
+}
+.discussion-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* An icon-left button sits on a different text baseline than a plain one, misaligning the row. */
+.align-right .fr-btn {
+  vertical-align: middle;
+}
 .start-discussion {
   flex: 1 1 auto;
 }
 .discussion-title {
-  font-size: 1.125rem;
+  margin: 0;
+  font-size: 1rem;
   font-weight: bold;
   color: var(--text-title-grey);
 }
@@ -381,38 +739,29 @@ defineExpose({ navigateToDiscussion })
   row-gap: 0.25rem;
 }
 
-.user-name {
-  margin: 0;
-  font-size: 0.875rem;
-  color: var(--text-action-high-blue-france);
-}
-
-.avatar {
-  display: flex;
-  align-items: center;
-}
-.avatar > img {
-  border-radius: 50%;
-}
-
-.comment-date {
+.comment-date,
+.separator {
   color: #666;
-  font-style: italic;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
 }
 
-.comment {
-  font-size: 0.875rem;
+.closed-banner {
+  font-size: 0.75rem;
+  color: var(--text-mention-grey);
 }
 
-.secondary-comment-content {
-  font-size: 0.875rem;
+.discussion-answer {
   border-left: 2px solid var(--grey-900-175);
   padding-left: 10px;
-  margin-bottom: 10px;
+}
+.discussion-answer--producer {
+  border-left-color: var(--text-action-high-blue-france);
 }
 
 .comment-text {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }

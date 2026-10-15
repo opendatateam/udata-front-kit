@@ -156,7 +156,7 @@ onMounted(() => {
           </SidebarItem>
           <!-- last update -->
           <SidebarItem term="Dernière mise à jour">
-            {{ formatDate(dataservice.metadata_modified_at, true) }}
+            {{ formatDate(dataservice.metadata_modified_at, 'short') }}
           </SidebarItem>
           <!-- rate limiting -->
           <SidebarItem v-if="dataservice.rate_limiting" term="Limite d'appels">
