@@ -37,9 +37,6 @@ const currentPage: Ref<number> = ref(1)
 const showDiscussionForm: Ref<boolean> = ref(false)
 const postFormId: Ref<DiscussionId | null> = ref(null)
 
-// What this component actually reads off the subject (a dataset, dataservice,
-// topic or indicator): owner/organization for the producer badge, slug for
-// the notification URL.
 interface DiscussionSubject {
   id: string
   slug?: string
@@ -73,7 +70,7 @@ const discussionForm: Ref<DiscussionForm> = ref({
 
 const postForm: Ref<PostForm> = ref({ comment: '' })
 
-// null means posting as yourself, matching data.gouv.fr's ProducerSelect default
+// null means posting as yourself
 const discussionOrganization: Ref<string | null> = ref(null)
 const postOrganization: Ref<string | null> = ref(null)
 
