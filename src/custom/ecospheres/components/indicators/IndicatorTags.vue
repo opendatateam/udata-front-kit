@@ -20,9 +20,9 @@ const tags = useTags('indicators', props.indicator, props.type, EXCLUDE_TAGS)
 </script>
 
 <template>
-  <ul v-if="tags.length > 0" class="fr-badges-group fr-mb-1w">
+  <ul v-if="tags.length > 0" class="fr-badges-group">
     <li v-for="t in tags" :key="`${t.type}-${t.id}`">
-      <TagComponent :tag="t" />
+      <TagComponent :tag="t" :outlined="t.type === 'levier'" />
     </li>
   </ul>
 </template>

@@ -27,7 +27,7 @@ const url = computed(() =>
       class="fr-badge fr-badge--sm fr-badge--mention-grey text-grey-425 indicator-badge"
     >
       <span
-        class="fr-icon-lightbulb-line fr-icon--sm"
+        class="fr-icon-bar-chart-2-line fr-icon--sm"
         aria-hidden="true"
       ></span>
       Indicateur

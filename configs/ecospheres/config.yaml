@@ -415,7 +415,7 @@ pages:
   indicators:
     object_type: datasets # indicators are datasets filtered by universe_query
     list_all: true
-    icon: fr-icon-lightbulb-line
+    icon: fr-icon-bar-chart-2-line
     universe_query:
       tag: ecospheres-indicateurs
     filter_prefix: ecospheres-indicateurs
@@ -480,7 +480,7 @@ pages:
         name: Levier
         default_option: Tous les leviers
         type: select
-        color: green-archipel
+        color: purple-glycine
         use_filter_prefix: true
         values:
           - id: 2-roues-elec-efficacite

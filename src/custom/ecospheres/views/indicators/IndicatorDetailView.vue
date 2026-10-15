@@ -151,7 +151,7 @@ onMounted(() => {
       <div class="fr-col-12 fr-col-md-8">
         <div class="fr-mb-4v">
           <h1 class="fr-mb-1v fr-mr-2v">{{ indicator.title }}</h1>
-          <IndicatorTags :indicator="indicator" />
+          <IndicatorTags :indicator="indicator" class="fr-mb-1w" />
         </div>
         <ReadMore max-height="600">
           <!-- eslint-disable-next-line vue/no-v-html -->
