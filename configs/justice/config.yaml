@@ -78,7 +78,7 @@ website:
   menu:
     - text: Accueil
       to: /
-    - text: Accéder aux données brutes
+    - text: Jeux de données
       to: /datasets
     - text: La démarche
       to: /demarche
@@ -126,7 +126,7 @@ pages:
       topic: 6acf9f741c489f42a17feee0
     filter_prefix:
     title: Jeux de données
-    breadcrumb_title: Données
+    breadcrumb_title: Jeux de données
     labels:
       singular: jeu de données
       plural: jeux de données

@@ -45,12 +45,12 @@ useMeta({
     </div>
     <div class="band fr-py-6w">
       <div class="fr-container">
-        <JusticeCustody />
+        <LocalJurisdictions />
       </div>
     </div>
     <div class="band fr-py-6w">
       <div class="fr-container">
-        <LocalJurisdictions />
+        <JusticeCustody />
       </div>
     </div>
   </div>
