@@ -1,0 +1,169 @@
+# config file for justice.data.gouv.fr
+
+site_id: justice
+
+datagouvfr:
+  # data.gouv.fr base URL
+  base_url: https://demo.data.gouv.fr
+  # oauth settings — no dedicated client for this vertical
+  oauth_client_id:
+  tabular_api_url: https://tabular-api.preprod.data.gouv.fr
+
+# UI customizations
+website:
+  title: 'justice.data.gouv.fr'
+  seo:
+    canonical_url: https://justice.data.gouv.fr
+    meta:
+      keywords:
+      description:
+      robots: 'noindex, nofollow'
+    robots_txt:
+      disallow:
+        - /admin
+    sitemap_xml:
+      topics_pages: []
+      datasets_pages: []
+      dataservices_pages: []
+  formatted_title: '<i>justice.</i><b>data.gouv</b><i>.fr</i>'
+  rf_title: 'MINISTERE<br>
+    DE LA JUSTICE'
+  homepage:
+    title: 'Explorer les données de la justice'
+    subtitle: 'justice.data.gouv.fr vise à diffuser et valoriser les données publiques de la justice, pour les rendre compréhensibles par le grand public. Vous y trouverez des visualisations commentées, ainsi que les données sources, téléchargeables et utilisables librement.'
+    sections: []
+    meta_description: justice.data.gouv.fr vise à diffuser et valoriser les données publiques de la justice, pour les rendre compréhensibles par le grand public.
+  footer:
+    logo:
+    logo_text: 'Ministère<br>de la justice'
+    phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives au domaine de la justice, réalisé par le ministère de la Justice.'
+    external_links:
+      - label: 'justice.gouv.fr'
+        href: 'https://www.justice.gouv.fr/'
+        title: 'justice.gouv.fr - nouvelle fenêtre'
+      - label: 'data.gouv.fr'
+        href: 'https://www.data.gouv.fr'
+        title: 'data.gouv.fr - nouvelle fenêtre'
+    mandatory_links:
+      - label: 'Licences'
+        href: 'https://www.data.gouv.fr/fr/pages/legal/licences/'
+      - label: "Conditions générales d'utilisation"
+        href: 'https://www.data.gouv.fr/fr/terms/'
+      - label: 'Politique de confidentialité'
+        href: 'https://www.data.gouv.fr/fr/suivi/'
+      - label: 'Accessibilité : non conforme'
+        to: '/accessibility'
+  header:
+    logo:
+    title_image:
+      src: /static/logos/justice-logo.svg
+      width: 205px
+      height: 35px
+    admin_shortcut: false
+    beta: true
+    button:
+      display: false
+      label:
+      link:
+    search:
+      display: false
+      placeholder: Rechercher...
+  search_bar:
+    display: false
+    placeholder: 'Rechercher un jeu de données'
+  secondary_search:
+    display: false
+    name:
+    link:
+  menu:
+    - text: Accueil
+      to: /
+    - text: Jeux de données
+      to: /datasets
+    - text: La démarche
+      to: /demarche
+  router:
+    static_pages:
+      - title: 'Accessibilité'
+        id: 'accessibility'
+        route: '/accessibility'
+        url: '/static/justice/pages/accessibility.md'
+  show_quality_component: true
+  oauth_option: false
+  notice:
+    display: true
+    content: ⚠️ Vous naviguez sur une version de démonstration de justice.data.gouv.fr ⚠️
+    closeable: false
+  default_debounce_wait: 600
+  pagination_sizes:
+    organizations_list: 9
+    topics_drafts_list: 9
+    files_list: 6
+  home_banner_colors:
+    - '#F6F6F6'
+    - '#F6F6F6'
+    - '#F6F6F6'
+  contact_email:
+  matomo:
+    host: 'https://stats.data.gouv.fr'
+    siteId:
+  datasets:
+    open_in_qgis: false
+    add_to_topic:
+    harvest_backends_quality_warning: []
+    show_extended_information_panel: false
+  topics:
+    can_add_topics:
+      everyone: false
+      authorized_users: []
+
+# cf configs/ecospheres/config.yaml for pages config format details
+pages:
+  datasets:
+    object_type: datasets
+    list_all: true
+    universe_query:
+      topic: 6acf9f741c489f42a17feee0
+    filter_prefix:
+    title: Jeux de données
+    breadcrumb_title: Jeux de données
+    labels:
+      singular: jeu de données
+      plural: jeux de données
+      extended: jeu de données
+    search:
+      input: Rechercher un jeu de données
+      placeholder: null
+    banner:
+    resources_tabs:
+      discussions:
+        display: true
+        create: true
+        notify_url_override: false
+      datasets:
+        display: true
+      reuses:
+        display: true
+    editable: true
+    filters:
+      - name: Catégorie
+        default_option: Toutes les catégories
+        id: categorie
+        type: select
+        color: blue-ecume
+        use_filter_prefix: false
+        form:
+          required: false
+        values:
+          - id: codes
+            name: Codes
+          - id: contravention
+            name: Contravention
+          - id: crime
+            name: Crime
+          - id: delit
+            name: Delit
+          - id: infractions
+            name: Infractions
+          - id: juridictions
+            name: Juridictions
