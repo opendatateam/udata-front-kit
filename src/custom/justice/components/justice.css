@@ -1,0 +1,94 @@
+.justice-col {
+  display: flex;
+}
+
+.justice-figure {
+  margin: 0 0 0.5rem;
+  color: var(--text-title-blue-france, #000091);
+  font-size: clamp(2rem, 1.5vw + 1.25rem, 2.75rem);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.justice-stat-title {
+  margin-bottom: 0.25rem;
+  font-size: 1.125rem;
+  text-wrap: balance;
+}
+
+.justice-year {
+  margin-bottom: 0.5rem;
+  color: var(--text-mention-grey, #666);
+}
+
+.justice-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.justice-toolbar .fr-btns-group {
+  margin-bottom: 0;
+}
+
+.justice-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  color: var(--text-mention-grey, #666);
+  font-size: 0.875rem;
+}
+
+.justice-ramp {
+  width: 8rem;
+  height: 0.65rem;
+  background: linear-gradient(to right, #e3e3fd, #000091);
+}
+
+.justice-legend-caption {
+  flex-basis: 100%;
+}
+
+.justice-map {
+  height: 560px;
+  border: 1px solid var(--border-default-grey, #ddd);
+}
+
+.justice-map .maplibregl-popup-content {
+  padding: 0.5rem 0.75rem;
+  font-family: Marianne, arial, sans-serif;
+}
+
+.justice-map .maplibregl-popup-content strong {
+  display: block;
+  margin-bottom: 0.15rem;
+}
+
+.justice-table-scroll {
+  max-inline-size: 100%;
+  overflow-x: auto;
+}
+
+.justice-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.justice-table th,
+.justice-table td {
+  padding: 0.35rem 0.5rem;
+  border-bottom: 1px solid var(--border-default-grey, #ddd);
+  text-align: left;
+  vertical-align: top;
+}
+
+.justice-table .number {
+  text-align: right;
+  white-space: nowrap;
+}
