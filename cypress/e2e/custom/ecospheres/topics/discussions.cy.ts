@@ -96,7 +96,7 @@ describe('Topic Discussions', () => {
       body: updatedDiscussion
     }).as('reply')
 
-    cy.get(`[aria-label="Répondre à la discussion"]`).click()
+    cy.contains('button', 'Répondre').click()
     cy.get('#input-discussion-comment').type('A reply from e2e')
     cy.contains('button', 'Répondre').click()
 
@@ -123,7 +123,7 @@ describe('Topic Discussions', () => {
       body: updatedDiscussion
     }).as('editDiscussion')
 
-    cy.get('[aria-label="Modifier la discussion"]').click()
+    cy.get('[title="Modifier la discussion"]').click()
     cy.get('input[name="title"]').clear().type('An edited title')
     cy.contains('button', 'Mettre à jour').click()
     cy.wait('@editDiscussion')
@@ -133,7 +133,7 @@ describe('Topic Discussions', () => {
       statusCode: 204
     }).as('deleteDiscussion')
 
-    cy.get('[aria-label="Supprimer la discussion"]').click()
+    cy.get('[title="Supprimer la discussion"]').click()
     cy.wait('@deleteDiscussion')
     cy.contains('An edited title').should('not.exist')
   })
@@ -178,10 +178,11 @@ describe('Topic Discussions', () => {
       body: updatedDiscussion
     }).as('replyAsOrg')
 
-    cy.get(`[aria-label="Répondre à la discussion"]`).click()
-    cy.get(`#discussion-identity-reply-${discussion.id}`).select(
-      organization.name
-    )
+    cy.contains('button', 'Répondre').click()
+    cy.get('#input-discussion-comment')
+      .closest('form')
+      .find('select')
+      .select(organization.name)
     cy.get('#input-discussion-comment').type('A reply as an organization')
     cy.contains('button', 'Répondre').click()
 

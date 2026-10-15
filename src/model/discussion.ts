@@ -44,7 +44,7 @@ interface Comment extends UpstreamComment {
   }
 }
 
-interface PostForm {
+interface CommentForm {
   comment: string
   close?: boolean
   organization?: string
@@ -65,12 +65,12 @@ interface DiscussionResponse extends GenericResponse {
 
 export type {
   Comment,
+  CommentForm,
   Discussion,
   DiscussionExtras,
   DiscussionForm,
   DiscussionId,
   DiscussionResponse,
-  PostForm,
   Subject,
   SubjectClass,
   SubjectId

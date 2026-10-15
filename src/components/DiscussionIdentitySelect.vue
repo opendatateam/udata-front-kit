@@ -1,37 +1,27 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
+import { computed } from 'vue'
 
+import SelectComponent from '@/components/SelectComponent.vue'
 import { useUserStore } from '@/store/UserStore'
 
-const props = defineProps<{ id: string }>()
 const organizationId = defineModel<string | null>({ default: null })
 
-const userStore = useUserStore()
-const { data, userName } = storeToRefs(userStore)
+const { data, userName } = storeToRefs(useUserStore())
 const organizations = computed(() => data.value?.organizations ?? [])
 
-// sentinel avoiding collision with DsfrSelect's own placeholder option (value "")
-const SELF = 'self'
-
-const options = computed(() => [
-  ...organizations.value.map((org) => ({ value: org.id, text: org.name })),
-  { value: SELF, text: userName.value ?? '' }
-])
-
-// left unselected (placeholder shown) until the user explicitly picks an identity
-const selected = ref<string>()
-watch(selected, (value) => {
-  organizationId.value = !value || value === SELF ? null : value
-})
+const options = computed(() =>
+  organizations.value.map((org) => ({ id: org.id, name: org.name }))
+)
 </script>
 
 <template>
-  <DsfrSelect
+  <SelectComponent
     v-if="organizations.length"
-    :id="`discussion-identity-${props.id}`"
-    v-model="selected"
-    label="Choisissez l'identité avec laquelle vous souhaitez publier ce message"
+    v-model="organizationId"
     required
+    :default-option="userName ?? null"
     :options="options"
+    label="Choisissez l'identité avec laquelle vous souhaitez publier ce message"
   />
 </template>

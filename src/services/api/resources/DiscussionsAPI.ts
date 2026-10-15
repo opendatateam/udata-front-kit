@@ -1,8 +1,8 @@
 import type {
+  CommentForm,
   Discussion,
   DiscussionId,
   DiscussionResponse,
-  PostForm,
   SubjectId
 } from '@/model/discussion'
 import DatagouvfrAPI from '@/services/api/DatagouvfrAPI'
@@ -40,24 +40,23 @@ export default class DiscussionsAPI extends DatagouvfrAPI {
         for: subjectId,
         closed: 'true',
         page_size: 1
-      },
-      authenticated: true
+      }
     })
     return response.total
   }
 
   /**
-   * Create a post on a discussion
+   * Create a comment on a discussion
    */
-  async createPost(
+  async createComment(
     discussionId: DiscussionId,
-    postForm: PostForm
+    commentForm: CommentForm
   ): Promise<Discussion> {
     const url = `${this.url()}/${discussionId}/`
     return await this.request({
       url,
       method: 'post',
-      data: postForm,
+      data: commentForm,
       authenticated: true,
       toasted: true
     })

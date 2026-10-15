@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia'
 
 import type {
+  CommentForm,
   Discussion,
   DiscussionForm,
   DiscussionId,
   DiscussionResponse,
-  PostForm,
   SubjectId
 } from '@/model/discussion'
 import DiscussionsAPI from '@/services/api/resources/DiscussionsAPI'
@@ -32,22 +32,18 @@ export const useDiscussionStore = defineStore('discussion', {
       })
     },
     /**
-     * Add a post to a discussion
+     * Add a comment to a discussion
      */
-    async createPost(
+    async createComment(
       subjectId: SubjectId,
       discussionId: DiscussionId,
-      postForm: PostForm
+      commentForm: CommentForm
     ): Promise<Discussion | undefined> {
       const discussion: Discussion | undefined =
-        await discussionsAPI.createPost(discussionId, postForm)
+        await discussionsAPI.createComment(discussionId, commentForm)
       if (discussion === undefined) return
-      if (
-        postForm.close &&
-        discussion.closed &&
-        this.closedCount[subjectId] !== undefined
-      ) {
-        this.closedCount[subjectId] += 1
+      if (commentForm.close && discussion.closed) {
+        await this.refreshClosedCountForSubject(subjectId)
       }
       this.replaceDiscussion(subjectId, discussion)
       return discussion
@@ -93,8 +89,8 @@ export const useDiscussionStore = defineStore('discussion', {
       const wasClosed = this.data[subjectId]
         .flatMap((dPage) => dPage.data)
         .find((d) => d.id === discussionId)?.closed
-      if (wasClosed && this.closedCount[subjectId] !== undefined) {
-        this.closedCount[subjectId] -= 1
+      if (wasClosed) {
+        await this.refreshClosedCountForSubject(subjectId)
       }
       this.data[subjectId] = this.data[subjectId].map((dPage) => {
         dPage.data = dPage.data.filter((d) => d.id !== discussionId)
@@ -187,6 +183,13 @@ export const useDiscussionStore = defineStore('discussion', {
       const count = await discussionsAPI.getClosedCount(subjectId)
       this.closedCount[subjectId] = count
       return count
+    },
+    /**
+     * Refresh the closed discussions count for a subject, by refetching it
+     */
+    async refreshClosedCountForSubject(subjectId: SubjectId): Promise<number> {
+      delete this.closedCount[subjectId]
+      return await this.loadClosedCountForSubject(subjectId)
     },
     /**
      * Get a discussions pagination object for a given dataset, from store infos

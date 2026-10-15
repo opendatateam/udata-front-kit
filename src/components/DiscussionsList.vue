@@ -11,11 +11,11 @@ import DiscussionIdentitySelect from '@/components/DiscussionIdentitySelect.vue'
 import config from '@/config'
 import type {
   Comment,
+  CommentForm,
   Discussion,
   DiscussionForm,
   DiscussionId,
   DiscussionResponse,
-  PostForm,
   SubjectClass
 } from '@/model/discussion'
 import { useCurrentPageConf } from '@/router/utils'
@@ -35,7 +35,7 @@ const { pageKey, pageConf } = useCurrentPageConf()
 const { loggedIn } = storeToRefs(userStore)
 const currentPage: Ref<number> = ref(1)
 const showDiscussionForm: Ref<boolean> = ref(false)
-const postFormId: Ref<DiscussionId | null> = ref(null)
+const commentFormId: Ref<DiscussionId | null> = ref(null)
 
 interface DiscussionSubject {
   id: string
@@ -68,11 +68,11 @@ const discussionForm: Ref<DiscussionForm> = ref({
   }
 })
 
-const postForm: Ref<PostForm> = ref({ comment: '' })
+const commentForm: Ref<CommentForm> = ref({ comment: '' })
 
 // null means posting as yourself
 const discussionOrganization: Ref<string | null> = ref(null)
-const postOrganization: Ref<string | null> = ref(null)
+const commentOrganization: Ref<string | null> = ref(null)
 
 const editDiscussionId: Ref<DiscussionId | null> = ref(null)
 const editDiscussionForm: Ref<{ title: string; comment: string }> = ref({
@@ -80,20 +80,20 @@ const editDiscussionForm: Ref<{ title: string; comment: string }> = ref({
   comment: ''
 })
 
-interface EditPostInfo {
+interface EditCommentInfo {
   discussionId: DiscussionId
   commentId: string
 }
 
-const editPostInfo: Ref<EditPostInfo | null> = ref(null)
-const editPostForm: Ref<PostForm> = ref({ comment: '' })
+const editCommentInfo: Ref<EditCommentInfo | null> = ref(null)
+const editCommentForm: Ref<CommentForm> = ref({ comment: '' })
 
-const openClosedDiscussions: Ref<Set<DiscussionId>> = ref(new Set())
-const toggleClosedDiscussion = (discussionId: DiscussionId) => {
-  if (openClosedDiscussions.value.has(discussionId)) {
-    openClosedDiscussions.value.delete(discussionId)
+const expandedDiscussions: Ref<Set<DiscussionId>> = ref(new Set())
+const toggleDiscussionExpansion = (discussionId: DiscussionId) => {
+  if (expandedDiscussions.value.has(discussionId)) {
+    expandedDiscussions.value.delete(discussionId)
   } else {
-    openClosedDiscussions.value.add(discussionId)
+    expandedDiscussions.value.add(discussionId)
   }
 }
 
@@ -174,27 +174,45 @@ const createDiscussion = () => {
   })
 }
 
-const createPost = (discussionId: DiscussionId, close = false) => {
+const cancelCreateDiscussion = () => {
+  showDiscussionForm.value = false
+  discussionOrganization.value = null
+}
+
+const createComment = (discussionId: DiscussionId, close = false) => {
   discussionStore
-    .createPost(props.subject.id, discussionId, {
-      ...postForm.value,
-      ...(postOrganization.value
-        ? { organization: postOrganization.value }
+    .createComment(props.subject.id, discussionId, {
+      ...commentForm.value,
+      ...(commentOrganization.value
+        ? { organization: commentOrganization.value }
         : {}),
       close
     })
     .then((d) => {
       if (d !== undefined) {
-        postForm.value.comment = ''
-        postOrganization.value = null
-        postFormId.value = null
+        commentForm.value.comment = ''
+        commentOrganization.value = null
+        commentFormId.value = null
       }
     })
 }
 
+const cancelComment = () => {
+  commentFormId.value = null
+  commentOrganization.value = null
+}
+
+const openCommentForm = (discussionId: DiscussionId) => {
+  commentForm.value.comment = ''
+  commentOrganization.value = null
+  commentFormId.value = discussionId
+  editDiscussionId.value = null
+  editCommentInfo.value = null
+}
+
 const startEditDiscussion = (discussion: Discussion) => {
-  postFormId.value = null
-  editPostInfo.value = null
+  commentFormId.value = null
+  editCommentInfo.value = null
   editDiscussionForm.value = {
     title: discussion.title,
     comment: discussion.discussion[0].content
@@ -207,7 +225,7 @@ const cancelEditDiscussion = () => {
 }
 
 const submitEditDiscussion = async (discussion: Discussion) => {
-  const firstPost = discussion.discussion[0]
+  const firstComment = discussion.discussion[0]
   try {
     if (editDiscussionForm.value.title !== discussion.title) {
       await discussionStore.updateDiscussionTitle(
@@ -216,11 +234,13 @@ const submitEditDiscussion = async (discussion: Discussion) => {
         editDiscussionForm.value.title
       )
     }
-    if (editDiscussionForm.value.comment !== firstPost.content) {
+    // Title and first-comment content live on two separate udata endpoints,
+    // so changing both takes two requests.
+    if (editDiscussionForm.value.comment !== firstComment.content) {
       await discussionStore.updateComment(
         props.subject.id,
         discussion.id,
-        firstPost.id,
+        firstComment.id,
         editDiscussionForm.value.comment
       )
     }
@@ -241,33 +261,33 @@ const deleteDiscussion = (discussion: Discussion) => {
   discussionStore.deleteDiscussion(props.subject.id, discussion.id)
 }
 
-const startEditPost = (discussionId: DiscussionId, post: Comment) => {
-  postFormId.value = null
+const startEditComment = (discussionId: DiscussionId, comment: Comment) => {
+  commentFormId.value = null
   editDiscussionId.value = null
-  editPostForm.value = { comment: post.content }
-  editPostInfo.value = { discussionId, commentId: post.id }
+  editCommentForm.value = { comment: comment.content }
+  editCommentInfo.value = { discussionId, commentId: comment.id }
 }
 
-const cancelEditPost = () => {
-  editPostInfo.value = null
+const cancelEditComment = () => {
+  editCommentInfo.value = null
 }
 
-const submitEditPost = async () => {
-  if (editPostInfo.value === null) return
+const submitEditComment = async () => {
+  if (editCommentInfo.value === null) return
   await discussionStore.updateComment(
     props.subject.id,
-    editPostInfo.value.discussionId,
-    editPostInfo.value.commentId,
-    editPostForm.value.comment
+    editCommentInfo.value.discussionId,
+    editCommentInfo.value.commentId,
+    editCommentForm.value.comment
   )
-  editPostInfo.value = null
+  editCommentInfo.value = null
 }
 
 const deleteComment = (discussionId: DiscussionId, commentId: string) => {
   if (!window.confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?'))
     return
-  if (editPostInfo.value?.commentId === commentId) {
-    editPostInfo.value = null
+  if (editCommentInfo.value?.commentId === commentId) {
+    editCommentInfo.value = null
   }
   discussionStore.deleteComment(props.subject.id, discussionId, commentId)
 }
@@ -315,31 +335,30 @@ defineExpose({ navigateToDiscussion })
       <h2 v-else class="discussions-count-title fr-mt-4w">Discussions</h2>
     </div>
     <template v-if="allowDiscussionCreation">
-      <button
+      <DsfrButton
         v-if="loggedIn"
+        size="sm"
+        secondary
         type="button"
-        class="fr-btn fr-btn--sm fr-btn--secondary fr-icon-add-line fr-btn--icon-left"
-        @click.stop.prevent="showDiscussionForm = true"
-      >
-        Démarrer une nouvelle discussion
-      </button>
-      <button
+        icon="fr-icon-add-line"
+        label="Démarrer une nouvelle discussion"
+        @click="showDiscussionForm = true"
+      />
+      <DsfrButton
         v-else
+        size="sm"
+        secondary
         type="button"
-        class="fr-btn fr-btn--sm fr-btn--secondary fr-icon-account-line fr-btn--icon-left"
-        @click.stop.prevent="triggerLogin()"
-      >
-        Connectez-vous pour démarrer une discussion
-      </button>
+        icon="fr-icon-account-line"
+        label="Connectez-vous pour démarrer une discussion"
+        @click="triggerLogin()"
+      />
     </template>
   </div>
 
   <div v-if="showDiscussionForm" class="fr-mb-4w">
-    <form @submit.stop.prevent="createDiscussion()">
-      <DiscussionIdentitySelect
-        id="new-discussion"
-        v-model="discussionOrganization"
-      />
+    <form @submit.prevent="createDiscussion()">
+      <DiscussionIdentitySelect v-model="discussionOrganization" />
       <div class="fr-input-group">
         <label class="fr-label" for="discussion-title">
           Titre (obligatoire)</label
@@ -354,7 +373,7 @@ defineExpose({ navigateToDiscussion })
       </div>
       <div class="fr-input-group">
         <label class="fr-label" for="discussion-message">
-          Message (obligatoire)</label
+          Votre message (obligatoire)</label
         >
         <textarea
           id="discussion-message"
@@ -365,19 +384,15 @@ defineExpose({ navigateToDiscussion })
         ></textarea>
       </div>
       <div class="align-right">
-        <button
+        <DsfrButton
+          size="sm"
+          tertiary
           type="button"
-          class="fr-btn fr-btn--sm fr-btn--tertiary fr-mr-1w"
-          @click.stop.prevent="
-            () => {
-              showDiscussionForm = false
-              discussionOrganization = null
-            }
-          "
-        >
-          Annuler
-        </button>
-        <button type="submit" class="fr-btn fr-btn--sm">Envoyer</button>
+          label="Annuler"
+          class="fr-mr-1w"
+          @click="cancelCreateDiscussion()"
+        />
+        <DsfrButton size="sm" type="submit" label="Envoyer" />
       </div>
     </form>
   </div>
@@ -411,22 +426,26 @@ defineExpose({ navigateToDiscussion })
           v-if="discussion.permissions.edit || discussion.permissions.delete"
           class="discussion-item-actions"
         >
-          <button
+          <DsfrButton
             v-if="discussion.permissions.edit"
+            size="sm"
+            tertiary
+            icon-only
             type="button"
-            class="fr-btn fr-btn--sm fr-btn--tertiary fr-icon-edit-line"
-            title="Modifier la discussion"
-            aria-label="Modifier la discussion"
-            @click.stop.prevent="startEditDiscussion(discussion)"
-          ></button>
-          <button
+            icon="fr-icon-edit-line"
+            label="Modifier la discussion"
+            @click="startEditDiscussion(discussion)"
+          />
+          <DsfrButton
             v-if="discussion.permissions.delete"
+            size="sm"
+            tertiary
+            icon-only
             type="button"
-            class="fr-btn fr-btn--sm fr-btn--tertiary fr-icon-delete-line"
-            title="Supprimer la discussion"
-            aria-label="Supprimer la discussion"
-            @click.stop.prevent="deleteDiscussion(discussion)"
-          ></button>
+            icon="fr-icon-delete-line"
+            label="Supprimer la discussion"
+            @click="deleteDiscussion(discussion)"
+          />
         </div>
       </div>
 
@@ -455,12 +474,12 @@ defineExpose({ navigateToDiscussion })
       </div>
 
       <template
-        v-if="!discussion.closed || openClosedDiscussions.has(discussion.id)"
+        v-if="!discussion.closed || expandedDiscussions.has(discussion.id)"
       >
         <form
           v-if="editDiscussionId === discussion.id"
           class="fr-mb-4w"
-          @submit.stop.prevent="submitEditDiscussion(discussion)"
+          @submit.prevent="submitEditDiscussion(discussion)"
         >
           <div class="fr-input-group">
             <label
@@ -482,7 +501,7 @@ defineExpose({ navigateToDiscussion })
               class="fr-label"
               :for="`edit-discussion-comment-${discussion.id}`"
             >
-              Message (obligatoire)</label
+              Votre message (obligatoire)</label
             >
             <textarea
               :id="`edit-discussion-comment-${discussion.id}`"
@@ -493,16 +512,15 @@ defineExpose({ navigateToDiscussion })
             ></textarea>
           </div>
           <div class="align-right">
-            <button
+            <DsfrButton
+              size="sm"
+              tertiary
               type="button"
-              class="fr-btn fr-btn--sm fr-btn--tertiary fr-mr-1w"
-              @click.stop.prevent="cancelEditDiscussion()"
-            >
-              Annuler
-            </button>
-            <button type="submit" class="fr-btn fr-btn--sm">
-              Mettre à jour
-            </button>
+              label="Annuler"
+              class="fr-mr-1w"
+              @click="cancelEditDiscussion()"
+            />
+            <DsfrButton size="sm" type="submit" label="Mettre à jour" />
           </div>
         </form>
         <div v-else class="comment-text">
@@ -526,53 +544,54 @@ defineExpose({ navigateToDiscussion })
                   v-if="comment.permissions.edit || comment.permissions.delete"
                   class="discussion-item-actions"
                 >
-                  <button
+                  <DsfrButton
                     v-if="comment.permissions.edit"
+                    size="sm"
+                    tertiary
+                    icon-only
                     type="button"
-                    class="fr-btn fr-btn--sm fr-btn--tertiary fr-icon-edit-line"
-                    title="Modifier le commentaire"
-                    aria-label="Modifier le commentaire"
-                    @click.stop.prevent="startEditPost(discussion.id, comment)"
-                  ></button>
-                  <button
+                    icon="fr-icon-edit-line"
+                    label="Modifier le commentaire"
+                    @click="startEditComment(discussion.id, comment)"
+                  />
+                  <DsfrButton
                     v-if="comment.permissions.delete"
+                    size="sm"
+                    tertiary
+                    icon-only
                     type="button"
-                    class="fr-btn fr-btn--sm fr-btn--tertiary fr-icon-delete-line"
-                    title="Supprimer le commentaire"
-                    aria-label="Supprimer le commentaire"
-                    @click.stop.prevent="
-                      deleteComment(discussion.id, comment.id)
-                    "
-                  ></button>
+                    icon="fr-icon-delete-line"
+                    label="Supprimer le commentaire"
+                    @click="deleteComment(discussion.id, comment.id)"
+                  />
                 </div>
               </div>
               <form
-                v-if="editPostInfo?.commentId === comment.id"
-                @submit.stop.prevent="submitEditPost()"
+                v-if="editCommentInfo?.commentId === comment.id"
+                @submit.prevent="submitEditComment()"
               >
                 <div class="fr-input-group">
                   <label class="fr-label" :for="`edit-comment-${comment.id}`">
-                    Commentaire (obligatoire)
+                    Votre message (obligatoire)
                   </label>
                   <textarea
                     :id="`edit-comment-${comment.id}`"
-                    v-model="editPostForm.comment"
+                    v-model="editCommentForm.comment"
                     required
                     class="fr-input"
                     name="message"
                   ></textarea>
                 </div>
                 <div class="align-right">
-                  <button
+                  <DsfrButton
+                    size="sm"
+                    tertiary
                     type="button"
-                    class="fr-btn fr-btn--sm fr-btn--tertiary fr-mr-1w"
-                    @click.stop.prevent="cancelEditPost()"
-                  >
-                    Annuler
-                  </button>
-                  <button type="submit" class="fr-btn fr-btn--sm">
-                    Mettre à jour
-                  </button>
+                    label="Annuler"
+                    class="fr-mr-1w"
+                    @click="cancelEditComment()"
+                  />
+                  <DsfrButton size="sm" type="submit" label="Mettre à jour" />
                 </div>
               </form>
               <div v-else class="comment-text fr-mt-2v">
@@ -584,91 +603,78 @@ defineExpose({ navigateToDiscussion })
       </template>
 
       <div v-if="discussion.closed" class="discussion-footer fr-mt-3v">
-        <button
+        <DsfrButton
+          size="sm"
+          secondary
           type="button"
-          class="fr-btn fr-btn--sm fr-btn--secondary"
-          @click.stop.prevent="toggleClosedDiscussion(discussion.id)"
-        >
-          {{
-            openClosedDiscussions.has(discussion.id)
+          :label="
+            expandedDiscussions.has(discussion.id)
               ? 'Cacher la discussion'
               : 'Voir la discussion'
-          }}
-        </button>
+          "
+          @click="toggleDiscussionExpansion(discussion.id)"
+        />
       </div>
       <template v-else-if="allowDiscussionCreation">
         <form
-          v-if="postFormId === discussion.id"
+          v-if="commentFormId === discussion.id"
           class="fr-mt-3w"
-          @submit.stop.prevent="createPost(discussion.id)"
+          @submit.prevent="createComment(discussion.id)"
         >
-          <DiscussionIdentitySelect
-            :id="`reply-${discussion.id}`"
-            v-model="postOrganization"
-          />
+          <DiscussionIdentitySelect v-model="commentOrganization" />
           <div class="fr-input-group">
             <label class="fr-label" for="input-discussion-comment">
-              Commentaire (obligatoire)
+              Votre message (obligatoire)
             </label>
             <textarea
               id="input-discussion-comment"
-              v-model="postForm.comment"
+              v-model="commentForm.comment"
               required
               class="fr-input"
               name="message"
             ></textarea>
           </div>
           <div class="align-right">
-            <button
+            <DsfrButton
+              size="sm"
+              tertiary
               type="button"
-              class="fr-btn fr-btn--sm fr-btn--tertiary fr-mr-1w"
-              @click.stop.prevent="
-                () => {
-                  postFormId = null
-                  postOrganization = null
-                }
-              "
-            >
-              Annuler
-            </button>
-            <button
+              label="Annuler"
+              class="fr-mr-1w"
+              @click="cancelComment()"
+            />
+            <DsfrButton
               v-if="discussion.permissions.close"
+              size="sm"
+              secondary
               type="button"
-              class="fr-btn fr-btn--sm fr-btn--secondary fr-icon-lock-line fr-btn--icon-left fr-mr-1w"
-              @click.stop.prevent="createPost(discussion.id, true)"
-            >
-              Répondre et clôturer
-            </button>
-            <button type="submit" class="fr-btn fr-btn--sm">Répondre</button>
+              icon="fr-icon-lock-line"
+              label="Répondre et clôturer"
+              class="fr-mr-1w"
+              @click="createComment(discussion.id, true)"
+            />
+            <DsfrButton size="sm" type="submit" label="Répondre" />
           </div>
         </form>
         <div v-else class="discussion-footer fr-mt-3v">
-          <button
+          <DsfrButton
             v-if="loggedIn"
+            size="sm"
+            secondary
             type="button"
-            class="fr-btn fr-btn--sm fr-btn--secondary"
-            aria-label="Répondre à la discussion"
+            label="Répondre"
             :aria-describedby="`discussion-${discussion.id}`"
-            @click.stop.prevent="
-              () => {
-                postForm.comment = ''
-                postOrganization = null
-                postFormId = discussion.id
-                editDiscussionId = null
-                editPostInfo = null
-              }
-            "
-          >
-            Répondre
-          </button>
-          <button
+            @click="openCommentForm(discussion.id)"
+          />
+          <DsfrButton
             v-else
+            size="sm"
+            secondary
             type="button"
-            class="fr-btn fr-btn--sm fr-btn--secondary fr-icon-account-line fr-btn--icon-left"
-            @click.stop.prevent="triggerLogin()"
-          >
-            Connectez-vous pour répondre
-          </button>
+            icon="fr-icon-account-line"
+            label="Connectez-vous pour répondre"
+            @click="triggerLogin()"
+          />
         </div>
       </template>
     </div>
