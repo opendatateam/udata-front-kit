@@ -105,9 +105,9 @@ onMounted(async () => {
         fetchResourceGeoJson(GEOJSON_RESOURCE),
         loadJusticeDataset()
       ])
-    series.value = [...seriesRows].sort((a, b) =>
-      String(a.date).localeCompare(String(b.date))
-    )
+    series.value = [...seriesRows]
+      .filter((row) => String(row.date).slice(0, 4) !== '2026')
+      .sort((a, b) => String(a.date).localeCompare(String(b.date)))
     territories.value = joinTerritories(features, territoryRows)
     dataset.value = loadedDataset
   } catch {
@@ -129,7 +129,7 @@ onMounted(async () => {
     <VizCard
       :title="headline"
       source-id="sources-main-justice"
-      source="Chaque barre additionne les personnes écrouées et les personnes suivies en milieu ouvert. Les personnes détenues font partie des personnes écrouées : elles ne sont pas empilées en plus. En 2026, le milieu ouvert n’est pas encore renseigné."
+      source="Chaque barre additionne les personnes écrouées et les personnes suivies en milieu ouvert. Les personnes détenues font partie des personnes écrouées : elles ne sont pas empilées en plus. L’année 2026 n’est pas affichée : le milieu ouvert n’y est pas encore renseigné."
     >
       <TimeSeriesChart
         :labels="yearLabels"
@@ -144,7 +144,7 @@ onMounted(async () => {
     </VizCard>
     <VizCard
       class="fr-mt-4w"
-      title="Par direction interrégionale"
+      title="Répartition de la population pénitentiaire"
       source-id="sources-main-justice-carte"
       source="Chaque direction est colorée selon le nombre de personnes pour l’indicateur choisi. L’outre-mer est accessible par le bouton dédié."
     >

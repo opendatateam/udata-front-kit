@@ -138,8 +138,8 @@ onMounted(async () => {
 
 <template>
   <JusticeSection
-    title="Affaires pénales"
-    description="Trois indicateurs du traitement des affaires pénales par les parquets : le volume traité, les classements sans poursuite et les poursuites engagées."
+    title="L’activité pénale"
+    description="Les trois étapes clés du travail du parquet le long de la chaîne pénale : les affaires traitées en entrée, les classements sans suite et la décision de poursuivre devant un juge"
     loading-label="Préparation des indicateurs…"
     error-label="Les indicateurs n’ont pas pu être chargés."
     :loading="loading"
@@ -178,27 +178,27 @@ onMounted(async () => {
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-4w">
       <div class="fr-col-12 fr-col-md-6 justice-col">
         <VizCard
-          title="Les victimes des affaires traitées"
+          title="Les victimes selon le type d’infraction traitées par le parquet"
           source-id="sources-victimes"
           source="Effectifs de victimes traitées selon la nature de l’affaire."
         >
           <PieChart
             :slices="victimesSlices"
             :height="420"
-            accessible-label="Répartition des victimes selon la nature de l’affaire, hors total"
+            accessible-label="Répartition des victimes selon le type d’infraction traitées par le parquet, hors total"
           />
         </VizCard>
       </div>
       <div class="fr-col-12 fr-col-md-6 justice-col">
         <VizCard
-          title="Les victimes des affaires jugées"
+          title="Les victimes selon le type d’infraction devant le tribunal"
           source-id="sources-jugees"
           source="Effectifs de victimes jugées selon la nature de l’affaire."
         >
           <PieChart
             :slices="jugeesSlices"
             :height="420"
-            accessible-label="Répartition des victimes des affaires jugées selon la nature de l’affaire, hors total"
+            accessible-label="Répartition des victimes selon le type d’infraction devant le tribunal, hors total"
           />
         </VizCard>
       </div>

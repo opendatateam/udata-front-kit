@@ -108,7 +108,7 @@ onMounted(async () => {
       </div>
       <div class="fr-col-12 fr-col-md-6 justice-col">
         <VizCard
-          title="Combien de mois pour traiter une affaire ?"
+          title="Délais de jugement"
           source-id="sources-durees"
           source="La durée moyenne est exprimée en mois. La courbe « Au fond et référés » réunit les deux procédures. Les affaires au fond prennent plus de temps que les référés, traités en urgence. Les valeurs couvrent les années 2020 à 2024."
         >

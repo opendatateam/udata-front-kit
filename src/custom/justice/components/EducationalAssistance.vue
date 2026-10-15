@@ -2,16 +2,14 @@
 import type { DatasetV2WithFullObject } from '@datagouv/components-next'
 import { computed, onMounted, ref } from 'vue'
 
+import HorizontalBars from '@/custom/justice/components/HorizontalBars.vue'
 import JusticeSection from '@/custom/justice/components/JusticeSection.vue'
-import PieChart from '@/custom/justice/components/PieChart.vue'
 import TimeSeriesChart from '@/custom/justice/components/TimeSeriesChart.vue'
 import VizCard from '@/custom/justice/components/VizCard.vue'
 import {
-  BAR_PALE,
   BLUE,
   integerFormat,
   ORANGE,
-  PIE_COLORS,
   PURPLE,
   RED,
   TEAL,
@@ -82,10 +80,10 @@ const headline = computed(() => {
   return `${integerFormat.format(total)} saisines en ${year}`
 })
 
-const pieTitle = computed(() =>
+const originTitle = computed(() =>
   latest.value == null
-    ? 'Le détail des origines'
-    : `Le détail des origines en ${latest.value}`
+    ? 'Origine des saisines'
+    : `Origine des saisines en ${latest.value}`
 )
 
 const boysTitle = computed(() => ageTitle('total_garcons', 'garçons'))
@@ -93,30 +91,18 @@ const girlsTitle = computed(() => ageTitle('total_filles', 'filles'))
 
 const originSeries = computed<ChartSeries[]>(() => [
   {
-    label: displayLabel(TOTAL),
-    color: BLUE,
-    fill: BAR_PALE,
-    data: series(TOTAL)
-  },
-  {
     label: displayLabel(PARQUET),
     color: BLUE,
-    kind: 'line',
-    markers: true,
     data: series(PARQUET)
   },
   {
     label: displayLabel(OFFICE),
     color: RED,
-    kind: 'line',
-    markers: true,
     data: series(OFFICE)
   },
   {
     label: displayLabel(MINEUR),
     color: PURPLE,
-    kind: 'line',
-    markers: true,
     data: series(MINEUR)
   }
 ])
@@ -200,27 +186,27 @@ onMounted(async () => {
         <VizCard
           :title="headline"
           source-id="sources-saisines"
-          source="Chaque barre est le total des saisines de l’année. Les courbes distinguent les trois origines qui le composent : le parquet, la saisine d’office du juge, et le mineur ou un proche."
+          source="Les barres empilent les saisines selon leur origine : le parquet, la saisine d’office du juge, et le mineur ou un proche. Une saisine peut concerner plusieurs enfants : les effectifs de filles et de garçons ne s’additionnent donc pas au nombre de saisines."
         >
           <TimeSeriesChart
             :labels="yearLabels"
             :series="originSeries"
+            stacked
             y-title="Nombre de saisines"
-            accessible-label="Histogramme du total des saisines par année, avec les courbes des saisines du parquet, d’office et par le mineur ou un proche"
+            accessible-label="Histogramme empilé des saisines par origine et par année"
             :height="460"
           />
         </VizCard>
       </div>
       <div class="fr-col-12 fr-col-md-6 justice-col">
         <VizCard
-          :title="pieTitle"
+          :title="originTitle"
           source-id="sources-saisines-detail"
-          :source="`Répartition des saisines en ${latest ?? ''} selon l’origine détaillée. Les lignes « toutes les saisines », « saisines du parquet » et « saisines d’office » ne figurent pas : elles additionnent les autres catégories.`"
+          :source="`Répartition des saisines en ${latest ?? ''} selon l’origine détaillée, avec l’effectif et la part de chaque origine. Les lignes « toutes les saisines », « saisines du parquet » et « saisines d’office » ne figurent pas : elles additionnent les autres catégories.`"
         >
-          <PieChart
+          <HorizontalBars
             :slices="detailSlices"
-            :colors="PIE_COLORS"
-            :accessible-label="`Répartition des saisines en ${latest ?? ''} selon l’origine détaillée, hors totaux`"
+            :accessible-label="`Origine des saisines en ${latest ?? ''}, en effectifs et en pourcentages, hors totaux`"
           />
         </VizCard>
       </div>
