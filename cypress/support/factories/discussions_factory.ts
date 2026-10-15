@@ -11,6 +11,9 @@ export const discussionFactory = build<Discussion>({
     user: UserReferenceFactory.one(),
     organization: null,
     created: '2026-02-10T20:28:06.645000+00:00',
+    closed: null,
+    closed_by: null,
+    closed_by_organization: null,
     discussion: [
       {
         id: sequence((x) => `comment-${x}`),

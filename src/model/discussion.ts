@@ -1,11 +1,16 @@
 import type {
+  OrganizationReference,
   Thread,
-  Comment as UpstreamComment
+  Comment as UpstreamComment,
+  UserReference
 } from '@datagouv/components-next'
 
 import type { GenericResponse } from './api'
 
 interface Discussion extends Thread {
+  closed: string | null
+  closed_by: UserReference | null
+  closed_by_organization: OrganizationReference | null
   discussion: Comment[]
   permissions: {
     delete: boolean

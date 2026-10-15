@@ -15,7 +15,8 @@ const discussionsAPI = new DiscussionsAPI()
 export const useDiscussionStore = defineStore('discussion', {
   state: () => {
     const data: Record<SubjectId, DiscussionResponse[]> = {}
-    return { data }
+    const closedCount: Record<SubjectId, number> = {}
+    return { data, closedCount }
   },
   actions: {
     /**
@@ -59,16 +60,16 @@ export const useDiscussionStore = defineStore('discussion', {
       return discussion
     },
     /**
-     * Update a comment given its index in the discussion
+     * Update a comment given its id
      */
     async updateComment(
       subjectId: SubjectId,
       discussionId: DiscussionId,
-      index: number,
+      commentId: string,
       comment: string
     ): Promise<Discussion | undefined> {
       const discussion: Discussion | undefined =
-        await discussionsAPI.updateComment(discussionId, index, comment)
+        await discussionsAPI.updateComment(discussionId, commentId, comment)
       if (discussion === undefined) return
       this.replaceDiscussion(subjectId, discussion)
       return discussion
@@ -82,6 +83,12 @@ export const useDiscussionStore = defineStore('discussion', {
     ): Promise<void> {
       await discussionsAPI.deleteDiscussion(discussionId)
       if (this.data[subjectId] === undefined) return
+      const wasClosed = this.data[subjectId]
+        .flatMap((dPage) => dPage.data)
+        .find((d) => d.id === discussionId)?.closed
+      if (wasClosed && this.closedCount[subjectId] !== undefined) {
+        this.closedCount[subjectId] -= 1
+      }
       this.data[subjectId] = this.data[subjectId].map((dPage) => {
         dPage.data = dPage.data.filter((d) => d.id !== discussionId)
         dPage.total -= 1
@@ -89,19 +96,19 @@ export const useDiscussionStore = defineStore('discussion', {
       })
     },
     /**
-     * Delete a comment given its index in the discussion
+     * Delete a comment given its id
      */
     async deleteComment(
       subjectId: SubjectId,
       discussionId: DiscussionId,
-      index: number
+      commentId: string
     ): Promise<void> {
-      await discussionsAPI.deleteComment(discussionId, index)
+      await discussionsAPI.deleteComment(discussionId, commentId)
       if (this.data[subjectId] === undefined) return
       this.data[subjectId] = this.data[subjectId].map((dPage) => {
         dPage.data = dPage.data.map((d) => {
           if (d.id !== discussionId) return d
-          d.discussion = d.discussion.filter((_, i) => i !== index)
+          d.discussion = d.discussion.filter((c) => c.id !== commentId)
           return d
         })
         return dPage
@@ -157,6 +164,22 @@ export const useDiscussionStore = defineStore('discussion', {
     addDiscussions(subjectId: SubjectId, res: DiscussionResponse) {
       const existing = this.data[subjectId] ?? []
       this.data[subjectId] = [...existing, res]
+    },
+    /**
+     * Get the cached closed discussions count for a subject
+     */
+    getClosedCountForSubject(subjectId: SubjectId): number | undefined {
+      return this.closedCount[subjectId]
+    },
+    /**
+     * Async function to trigger API fetch of the closed discussions count for a subject
+     */
+    async loadClosedCountForSubject(subjectId: SubjectId): Promise<number> {
+      const existing = this.getClosedCountForSubject(subjectId)
+      if (existing !== undefined) return existing
+      const count = await discussionsAPI.getClosedCount(subjectId)
+      this.closedCount[subjectId] = count
+      return count
     },
     /**
      * Get a discussions pagination object for a given dataset, from store infos

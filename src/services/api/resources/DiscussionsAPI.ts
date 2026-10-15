@@ -10,8 +10,8 @@ import DatagouvfrAPI from '@/services/api/DatagouvfrAPI'
 export default class DiscussionsAPI extends DatagouvfrAPI {
   endpoint = 'discussions'
 
-  commentUrl(discussionId: DiscussionId, index: number): string {
-    return `${this.url()}/${discussionId}/comments/${index}/`
+  commentUrl(discussionId: DiscussionId, commentId: string): string {
+    return `${this.url()}/${discussionId}/comments/${commentId}/`
   }
 
   /**
@@ -29,6 +29,21 @@ export default class DiscussionsAPI extends DatagouvfrAPI {
       // Needed so the API resolves `permissions` against the current user
       authenticated: true
     })
+  }
+
+  /**
+   * Get the number of closed discussions for an object
+   */
+  async getClosedCount(subjectId: SubjectId): Promise<number> {
+    const response: DiscussionResponse = await this.list({
+      params: {
+        for: subjectId,
+        closed: 'true',
+        page_size: 1
+      },
+      authenticated: true
+    })
+    return response.total
   }
 
   /**
@@ -68,32 +83,34 @@ export default class DiscussionsAPI extends DatagouvfrAPI {
   }
 
   /**
-   * Update a comment given its index in the discussion
+   * Update a comment given its id
    */
   async updateComment(
     discussionId: DiscussionId,
-    index: number,
+    commentId: string,
     comment: string
   ): Promise<Discussion> {
     return await this.request({
-      url: this.commentUrl(discussionId, index),
+      url: this.commentUrl(discussionId, commentId),
       method: 'put',
       data: { comment },
-      authenticated: true
+      authenticated: true,
+      toasted: true
     })
   }
 
   /**
-   * Delete a comment given its index in the discussion
+   * Delete a comment given its id
    */
   async deleteComment(
     discussionId: DiscussionId,
-    index: number
+    commentId: string
   ): Promise<void> {
     await this.request({
-      url: this.commentUrl(discussionId, index),
+      url: this.commentUrl(discussionId, commentId),
       method: 'delete',
-      authenticated: true
+      authenticated: true,
+      toasted: true
     })
   }
 }
