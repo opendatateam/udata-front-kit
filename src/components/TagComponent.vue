@@ -5,10 +5,6 @@ defineProps({
   tag: {
     type: Object as () => ResolvedTag,
     default: null
-  },
-  outlined: {
-    type: Boolean,
-    default: false
   }
 })
 </script>
@@ -19,10 +15,10 @@ defineProps({
     :class="[
       'fr-badge',
       `fr-badge--${tag.color}`,
-      { 'fr-badge--outlined': outlined }
+      { 'fr-badge--outlined': tag.outlined }
     ]"
     :style="
-      outlined
+      tag.outlined
         ? { '--tag-border-color': `var(--border-action-low-${tag.color})` }
         : undefined
     "
