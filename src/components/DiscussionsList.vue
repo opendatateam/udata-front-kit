@@ -349,12 +349,12 @@ defineExpose({ navigateToDiscussion })
       <div class="align-right">
         <button
           type="button"
-          class="fr-btn fr-btn--secondary fr-mr-1w"
+          class="fr-btn fr-btn--sm fr-btn--secondary fr-mr-1w"
           @click.stop.prevent="showDiscussionForm = false"
         >
           Annuler
         </button>
-        <button type="submit" class="fr-btn">Soumettre</button>
+        <button type="submit" class="fr-btn fr-btn--sm">Envoyer</button>
       </div>
     </form>
   </div>
@@ -485,12 +485,14 @@ defineExpose({ navigateToDiscussion })
           <div class="align-right">
             <button
               type="button"
-              class="fr-btn fr-btn--secondary fr-mr-1w"
+              class="fr-btn fr-btn--sm fr-btn--secondary fr-mr-1w"
               @click.stop.prevent="cancelEditDiscussion()"
             >
               Annuler
             </button>
-            <button type="submit" class="fr-btn">Mettre à jour</button>
+            <button type="submit" class="fr-btn fr-btn--sm">
+              Mettre à jour
+            </button>
           </div>
         </form>
         <div v-else class="comment-text">
@@ -562,12 +564,14 @@ defineExpose({ navigateToDiscussion })
                 <div class="align-right">
                   <button
                     type="button"
-                    class="fr-btn fr-btn--secondary fr-mr-1w"
+                    class="fr-btn fr-btn--sm fr-btn--secondary fr-mr-1w"
                     @click.stop.prevent="cancelEditPost()"
                   >
                     Annuler
                   </button>
-                  <button type="submit" class="fr-btn">Mettre à jour</button>
+                  <button type="submit" class="fr-btn fr-btn--sm">
+                    Mettre à jour
+                  </button>
                 </div>
               </form>
               <div v-else class="comment-text fr-mt-2v">
@@ -612,12 +616,12 @@ defineExpose({ navigateToDiscussion })
           <div class="align-right">
             <button
               type="button"
-              class="fr-btn fr-btn--secondary fr-mr-1w"
+              class="fr-btn fr-btn--sm fr-btn--secondary fr-mr-1w"
               @click.stop.prevent="postFormId = null"
             >
               Annuler
             </button>
-            <button type="submit" class="fr-btn">Soumettre</button>
+            <button type="submit" class="fr-btn fr-btn--sm">Répondre</button>
           </div>
         </form>
         <div v-else class="discussion-footer fr-mt-3v">
