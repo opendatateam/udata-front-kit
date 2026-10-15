@@ -6,6 +6,7 @@ import { useRoute, useRouter } from 'vue-router'
 
 import BlankState from '@/components/BlankState.vue'
 import DiscussionAuthor from '@/components/DiscussionAuthor.vue'
+import DiscussionCommentMeta from '@/components/DiscussionCommentMeta.vue'
 import DiscussionIdentitySelect from '@/components/DiscussionIdentitySelect.vue'
 import config from '@/config'
 import type {
@@ -432,24 +433,11 @@ defineExpose({ navigateToDiscussion })
         </div>
       </div>
 
-      <div class="discussion-subtitle fr-mb-3v">
-        <DiscussionAuthor
-          :owner="discussion.discussion[0].posted_by"
-          :organization="discussion.discussion[0].posted_by_organization"
-        />
-        <span class="separator">—</span>
-        <time
-          :datetime="discussion.discussion[0].posted_on"
-          class="comment-date"
-        >
-          Posté le
-          {{ formatDate(discussion.discussion[0].posted_on, 'medium') }}
-        </time>
-        <template v-if="isProducer(discussion.discussion[0])">
-          <span class="separator">—</span>
-          <DsfrBadge type="info" small no-icon label="Producteur" />
-        </template>
-      </div>
+      <DiscussionCommentMeta
+        class="fr-mb-3v"
+        :comment="discussion.discussion[0]"
+        :is-producer="isProducer(discussion.discussion[0])"
+      />
 
       <div
         v-if="discussion.closed"
@@ -532,20 +520,11 @@ defineExpose({ navigateToDiscussion })
               :class="{ 'discussion-answer--producer': isProducer(comment) }"
             >
               <div class="fr-grid-row fr-grid-row--middle">
-                <div class="discussion-subtitle fr-col">
-                  <DiscussionAuthor
-                    :owner="comment.posted_by"
-                    :organization="comment.posted_by_organization"
-                  />
-                  <span class="separator">—</span>
-                  <time :datetime="comment.posted_on" class="comment-date">
-                    Posté le {{ formatDate(comment.posted_on, 'medium') }}
-                  </time>
-                  <template v-if="isProducer(comment)">
-                    <span class="separator">—</span>
-                    <DsfrBadge type="info" small no-icon label="Producteur" />
-                  </template>
-                </div>
+                <DiscussionCommentMeta
+                  class="fr-col"
+                  :comment="comment"
+                  :is-producer="isProducer(comment)"
+                />
                 <div
                   v-if="comment.permissions.edit || comment.permissions.delete"
                   class="discussion-item-actions"
