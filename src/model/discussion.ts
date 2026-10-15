@@ -26,6 +26,7 @@ interface DiscussionForm {
   title: string
   comment: string
   subject: Subject
+  organization?: string
   extras?: DiscussionExtras
 }
 
@@ -46,6 +47,7 @@ interface Comment extends UpstreamComment {
 interface PostForm {
   comment: string
   close?: boolean
+  organization?: string
 }
 
 interface Subject {

@@ -6,6 +6,7 @@ import { useRoute, useRouter } from 'vue-router'
 
 import BlankState from '@/components/BlankState.vue'
 import DiscussionAuthor from '@/components/DiscussionAuthor.vue'
+import DiscussionIdentitySelect from '@/components/DiscussionIdentitySelect.vue'
 import config from '@/config'
 import type {
   Comment,
@@ -70,6 +71,10 @@ const discussionForm: Ref<DiscussionForm> = ref({
 })
 
 const postForm: Ref<PostForm> = ref({ comment: '' })
+
+// null means posting as yourself, matching data.gouv.fr's ProducerSelect default
+const discussionOrganization: Ref<string | null> = ref(null)
+const postOrganization: Ref<string | null> = ref(null)
 
 const editDiscussionId: Ref<DiscussionId | null> = ref(null)
 const editDiscussionForm: Ref<{ title: string; comment: string }> = ref({
@@ -153,6 +158,9 @@ const createDiscussion = () => {
   const externalUrl = getNotificationExternalUrl()
   const payload: DiscussionForm = {
     ...discussionForm.value,
+    ...(discussionOrganization.value
+      ? { organization: discussionOrganization.value }
+      : {}),
     ...(externalUrl
       ? { extras: { notification: { external_url: externalUrl } } }
       : {})
@@ -161,6 +169,7 @@ const createDiscussion = () => {
     if (d !== undefined) {
       discussionForm.value.title = ''
       discussionForm.value.comment = ''
+      discussionOrganization.value = null
       showDiscussionForm.value = false
       currentPage.value = 1
     }
@@ -171,11 +180,15 @@ const createPost = (discussionId: DiscussionId, close = false) => {
   discussionStore
     .createPost(props.subject.id, discussionId, {
       ...postForm.value,
+      ...(postOrganization.value
+        ? { organization: postOrganization.value }
+        : {}),
       close
     })
     .then((d) => {
       if (d !== undefined) {
         postForm.value.comment = ''
+        postOrganization.value = null
         postFormId.value = null
       }
     })
@@ -325,6 +338,10 @@ defineExpose({ navigateToDiscussion })
 
   <div v-if="showDiscussionForm" class="fr-mb-4w">
     <form @submit.stop.prevent="createDiscussion()">
+      <DiscussionIdentitySelect
+        id="new-discussion"
+        v-model="discussionOrganization"
+      />
       <div class="fr-input-group">
         <label class="fr-label" for="discussion-title">
           Titre (obligatoire)</label
@@ -353,7 +370,12 @@ defineExpose({ navigateToDiscussion })
         <button
           type="button"
           class="fr-btn fr-btn--sm fr-btn--tertiary fr-mr-1w"
-          @click.stop.prevent="showDiscussionForm = false"
+          @click.stop.prevent="
+            () => {
+              showDiscussionForm = false
+              discussionOrganization = null
+            }
+          "
         >
           Annuler
         </button>
@@ -604,6 +626,10 @@ defineExpose({ navigateToDiscussion })
           class="fr-mt-3w"
           @submit.stop.prevent="createPost(discussion.id)"
         >
+          <DiscussionIdentitySelect
+            :id="`reply-${discussion.id}`"
+            v-model="postOrganization"
+          />
           <div class="fr-input-group">
             <label class="fr-label" for="input-discussion-comment">
               Commentaire (obligatoire)
@@ -620,7 +646,12 @@ defineExpose({ navigateToDiscussion })
             <button
               type="button"
               class="fr-btn fr-btn--sm fr-btn--tertiary fr-mr-1w"
-              @click.stop.prevent="postFormId = null"
+              @click.stop.prevent="
+                () => {
+                  postFormId = null
+                  postOrganization = null
+                }
+              "
             >
               Annuler
             </button>
@@ -645,6 +676,7 @@ defineExpose({ navigateToDiscussion })
             @click.stop.prevent="
               () => {
                 postForm.comment = ''
+                postOrganization = null
                 postFormId = discussion.id
                 editDiscussionId = null
                 editPostInfo = null
