@@ -45,6 +45,7 @@ interface Comment extends UpstreamComment {
 
 interface PostForm {
   comment: string
+  close?: boolean
 }
 
 interface Subject {

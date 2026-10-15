@@ -58,7 +58,8 @@ export default class DiscussionsAPI extends DatagouvfrAPI {
       url,
       method: 'post',
       data: postForm,
-      authenticated: true
+      authenticated: true,
+      toasted: true
     })
   }
 

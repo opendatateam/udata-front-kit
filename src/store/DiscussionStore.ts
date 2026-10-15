@@ -42,6 +42,13 @@ export const useDiscussionStore = defineStore('discussion', {
       const discussion: Discussion | undefined =
         await discussionsAPI.createPost(discussionId, postForm)
       if (discussion === undefined) return
+      if (
+        postForm.close &&
+        discussion.closed &&
+        this.closedCount[subjectId] !== undefined
+      ) {
+        this.closedCount[subjectId] += 1
+      }
       this.replaceDiscussion(subjectId, discussion)
       return discussion
     },

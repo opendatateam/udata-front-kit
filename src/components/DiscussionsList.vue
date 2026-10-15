@@ -167,9 +167,12 @@ const createDiscussion = () => {
   })
 }
 
-const createPost = (discussionId: DiscussionId) => {
+const createPost = (discussionId: DiscussionId, close = false) => {
   discussionStore
-    .createPost(props.subject.id, discussionId, postForm.value)
+    .createPost(props.subject.id, discussionId, {
+      ...postForm.value,
+      close
+    })
     .then((d) => {
       if (d !== undefined) {
         postForm.value.comment = ''
@@ -349,7 +352,7 @@ defineExpose({ navigateToDiscussion })
       <div class="align-right">
         <button
           type="button"
-          class="fr-btn fr-btn--sm fr-btn--secondary fr-mr-1w"
+          class="fr-btn fr-btn--sm fr-btn--tertiary fr-mr-1w"
           @click.stop.prevent="showDiscussionForm = false"
         >
           Annuler
@@ -485,7 +488,7 @@ defineExpose({ navigateToDiscussion })
           <div class="align-right">
             <button
               type="button"
-              class="fr-btn fr-btn--sm fr-btn--secondary fr-mr-1w"
+              class="fr-btn fr-btn--sm fr-btn--tertiary fr-mr-1w"
               @click.stop.prevent="cancelEditDiscussion()"
             >
               Annuler
@@ -564,7 +567,7 @@ defineExpose({ navigateToDiscussion })
                 <div class="align-right">
                   <button
                     type="button"
-                    class="fr-btn fr-btn--sm fr-btn--secondary fr-mr-1w"
+                    class="fr-btn fr-btn--sm fr-btn--tertiary fr-mr-1w"
                     @click.stop.prevent="cancelEditPost()"
                   >
                     Annuler
@@ -616,10 +619,18 @@ defineExpose({ navigateToDiscussion })
           <div class="align-right">
             <button
               type="button"
-              class="fr-btn fr-btn--sm fr-btn--secondary fr-mr-1w"
+              class="fr-btn fr-btn--sm fr-btn--tertiary fr-mr-1w"
               @click.stop.prevent="postFormId = null"
             >
               Annuler
+            </button>
+            <button
+              v-if="discussion.permissions.close"
+              type="button"
+              class="fr-btn fr-btn--sm fr-btn--secondary fr-icon-lock-line fr-btn--icon-left fr-mr-1w"
+              @click.stop.prevent="createPost(discussion.id, true)"
+            >
+              Répondre et clôturer
             </button>
             <button type="submit" class="fr-btn fr-btn--sm">Répondre</button>
           </div>
@@ -690,6 +701,11 @@ defineExpose({ navigateToDiscussion })
 .discussion-footer {
   display: flex;
   justify-content: flex-end;
+}
+
+/* An icon-left button sits on a different text baseline than a plain one, misaligning the row. */
+.align-right .fr-btn {
+  vertical-align: middle;
 }
 .start-discussion {
   flex: 1 1 auto;
