@@ -1,13 +1,13 @@
+import type { Feature, MultiPolygon, Polygon } from 'geojson'
+
 import config from '@/config'
 
-export type MapGeometry = { type: string; coordinates: unknown }
+export type MapGeometry = Polygon | MultiPolygon
 
-export type MapFeature = {
-  type: 'Feature'
-  id?: string
-  properties: Record<string, string | number | null>
-  geometry: MapGeometry
-}
+export type MapFeature = Feature<
+  MapGeometry,
+  Record<string, string | number | null>
+>
 
 type LngLatBounds = [[number, number], [number, number]]
 

@@ -15,7 +15,7 @@ const props = withDefaults(
     labels: string[]
     series: ChartSeries[]
     yTitle: string
-    ariaLabel: string
+    accessibleLabel: string
     height?: number
     stacked?: boolean
     valueFormat?: 'integer' | 'month'
@@ -167,7 +167,7 @@ onUnmounted(() => chart?.destroy())
 
 <template>
   <div class="chart-box" :style="{ height: `${height}px` }">
-    <canvas ref="canvas" role="img" :aria-label="ariaLabel" />
+    <canvas ref="canvas" role="img" :aria-label="accessibleLabel" />
   </div>
 </template>
 

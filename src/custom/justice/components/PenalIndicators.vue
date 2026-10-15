@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { DatasetV2 } from '@datagouv/components-next'
+import type { DatasetV2WithFullObject } from '@datagouv/components-next'
 import { onMounted, ref } from 'vue'
 
 import JusticeSection from '@/custom/justice/components/JusticeSection.vue'
@@ -41,7 +41,7 @@ type Indicator = {
 
 const loading = ref(true)
 const error = ref(false)
-const dataset = ref<DatasetV2 | null>(null)
+const dataset = ref<DatasetV2WithFullObject | null>(null)
 const indicators = ref<Indicator[]>([])
 const victimesSlices = ref<PieSlice[]>([])
 const jugeesSlices = ref<PieSlice[]>([])
@@ -185,7 +185,7 @@ onMounted(async () => {
           <PieChart
             :slices="victimesSlices"
             :height="420"
-            aria-label="Répartition des victimes selon la nature de l’affaire, hors total"
+            accessible-label="Répartition des victimes selon la nature de l’affaire, hors total"
           />
         </VizCard>
       </div>
@@ -198,7 +198,7 @@ onMounted(async () => {
           <PieChart
             :slices="jugeesSlices"
             :height="420"
-            aria-label="Répartition des victimes des affaires jugées selon la nature de l’affaire, hors total"
+            accessible-label="Répartition des victimes des affaires jugées selon la nature de l’affaire, hors total"
           />
         </VizCard>
       </div>

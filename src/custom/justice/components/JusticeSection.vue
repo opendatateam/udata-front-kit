@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { DatasetV2 } from '@datagouv/components-next'
+import type { DatasetV2WithFullObject } from '@datagouv/components-next'
 import { toRef } from 'vue'
 
 import { provideJusticeDataset } from '@/custom/justice/utils/dataset'
@@ -14,7 +14,7 @@ const props = withDefaults(
     error?: boolean
     loadingLabel?: string
     errorLabel?: string
-    dataset?: DatasetV2 | null
+    dataset?: DatasetV2WithFullObject | null
   }>(),
   {
     loading: false,

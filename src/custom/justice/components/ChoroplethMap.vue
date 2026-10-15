@@ -1,5 +1,9 @@
 <script lang="ts" setup>
-import { type GeoJSONSource, type MapGeoJSONFeature } from 'maplibre-gl'
+import {
+  type DataDrivenPropertyValueSpecification,
+  type GeoJSONSource,
+  type MapGeoJSONFeature
+} from 'maplibre-gl'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
 import { BLUE, integerFormat } from '@/custom/justice/utils/chartTheme'
@@ -17,7 +21,7 @@ const NO_DATA = '#E5E5E5'
 const props = defineProps<{
   features: MapFeature[]
   metrics: { id: string; label: string }[]
-  ariaLabel: string
+  accessibleLabel: string
 }>()
 
 const container = ref<HTMLDivElement | null>(null)
@@ -44,11 +48,7 @@ const legend = computed(() => {
 
 function largestPartCenter(geometry: MapGeometry): [number, number] | null {
   const polygons: unknown[] =
-    geometry.type === 'Polygon'
-      ? [geometry.coordinates]
-      : geometry.type === 'MultiPolygon'
-        ? (geometry.coordinates as unknown[])
-        : []
+    geometry.type === 'Polygon' ? [geometry.coordinates] : geometry.coordinates
   let best: [number, number] | null = null
   let bestArea = -1
   for (const polygon of polygons) {
@@ -87,7 +87,7 @@ function largestPartCenter(geometry: MapGeometry): [number, number] | null {
   return best
 }
 
-function fillColor() {
+function fillColor(): DataDrivenPropertyValueSpecification<string> {
   const scale = legend.value
   if (!scale) return NO_DATA
   return [
@@ -103,7 +103,7 @@ function fillColor() {
       scale.max,
       BLUE
     ]
-  ] as const
+  ] as DataDrivenPropertyValueSpecification<string>
 }
 
 function clearHover() {
@@ -323,6 +323,6 @@ watch(
     ref="container"
     class="justice-map"
     role="application"
-    :aria-label="ariaLabel"
+    :aria-label="accessibleLabel"
   />
 </template>

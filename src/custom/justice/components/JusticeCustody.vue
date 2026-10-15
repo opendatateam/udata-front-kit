@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { DatasetV2 } from '@datagouv/components-next'
+import type { DatasetV2WithFullObject } from '@datagouv/components-next'
 import { computed, onMounted, ref } from 'vue'
 
 import ChoroplethMap from '@/custom/justice/components/ChoroplethMap.vue'
@@ -39,7 +39,7 @@ const METRICS = [
 
 const series = ref<TabularRow[]>([])
 const territories = ref<MapFeature[]>([])
-const dataset = ref<DatasetV2 | null>(null)
+const dataset = ref<DatasetV2WithFullObject | null>(null)
 const error = ref(false)
 const loading = ref(true)
 
@@ -138,7 +138,7 @@ onMounted(async () => {
         stack-total
         :x-every="5"
         y-title="Nombre de personnes"
-        aria-label="Histogramme empilé, année par année, des personnes écrouées et des personnes suivies en milieu ouvert"
+        accessible-label="Histogramme empilé, année par année, des personnes écrouées et des personnes suivies en milieu ouvert"
         :height="420"
       />
     </VizCard>
@@ -151,7 +151,7 @@ onMounted(async () => {
       <ChoroplethMap
         :features="territories"
         :metrics="METRICS"
-        aria-label="Carte des directions interrégionales des services pénitentiaires"
+        accessible-label="Carte des directions interrégionales des services pénitentiaires"
       />
     </VizCard>
   </JusticeSection>
