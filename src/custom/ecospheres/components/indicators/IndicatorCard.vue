@@ -10,7 +10,7 @@ import IndicatorTags from './IndicatorTags.vue'
 const props = withDefaults(
   defineProps<{
     dataset: Indicator
-    // declared to avoid attribute fallthrough, the slug-based url below is used instead
+    // passed by UnifiedSearchView but unused, `url` links by slug instead; declared to avoid attribute fallthrough
     datasetUrl?: RouteLocationRaw
     organizationUrl?: RouteLocationRaw | null
     showDescription?: boolean
