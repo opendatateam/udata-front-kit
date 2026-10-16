@@ -1,7 +1,8 @@
 import { useSpatialStore } from '@/store/SpatialStore'
 import { usePageConf } from '@/utils/config'
+import { useTagsByRef } from '@/utils/tags'
 import type { DatasetV2 } from '@datagouv/components-next'
-import type { ComputedRef } from 'vue'
+import { toValue, type ComputedRef, type MaybeRefOrGetter } from 'vue'
 import type {
   Indicator,
   IndicatorExtrasCalcul,
@@ -11,6 +12,21 @@ import type {
 const pageConf = usePageConf('indicators')
 
 export const UNFILLED_LABEL = 'Non renseigné'
+
+const EXCLUDE_TAGS = ['usage', 'maille']
+
+/**
+ * Displayable tags of an indicator (secteur, levier...)
+ */
+export const useIndicatorTags = (
+  indicator: MaybeRefOrGetter<Indicator | undefined>
+) =>
+  useTagsByRef(
+    'indicators',
+    computed(() => toValue(indicator)),
+    undefined,
+    EXCLUDE_TAGS
+  )
 
 export const useIndicatorExtras = (indicator: Ref<Indicator | undefined>) => {
   const unite: Ref<string | undefined> = ref()

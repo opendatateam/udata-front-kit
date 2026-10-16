@@ -1,38 +1,49 @@
 <script setup lang="ts">
-import { stripFromMarkdown } from '@/utils'
+import { RiBarChart2Line } from '@remixicon/vue'
+import type { RouteLocationRaw } from 'vue-router'
+
+import ObjectCardLayout from '@/components/ObjectCardLayout.vue'
 import type { Indicator } from '../../model/indicator'
+import { useIndicatorTags } from '../../utils/indicator'
 import IndicatorTags from './IndicatorTags.vue'
 
-defineProps({
-  dataset: {
-    type: Object as PropType<Indicator>,
-    required: true
+const props = withDefaults(
+  defineProps<{
+    dataset: Indicator
+    // passed by UnifiedSearchView but unused, `url` links by slug instead; declared to avoid attribute fallthrough
+    datasetUrl?: RouteLocationRaw
+    organizationUrl?: RouteLocationRaw | null
+    showDescription?: boolean
+  }>(),
+  {
+    datasetUrl: undefined,
+    organizationUrl: undefined,
+    showDescription: true
   }
-})
+)
+
+const tags = useIndicatorTags(() => props.dataset)
+
+const url = computed(() => ({
+  name: 'indicators_detail',
+  params: { item_id: props.dataset.slug }
+}))
 </script>
 
 <template>
-  <div class="fr-card fr-enlarge-link">
-    <div class="fr-card__body">
-      <div class="fr-card__content">
-        <IndicatorTags :indicator="dataset" />
-        <h3 class="fr-card__title fr-mb-1w">
-          <RouterLink
-            :to="{
-              name: 'indicators_detail',
-              params: { item_id: dataset.slug }
-            }"
-            >{{ dataset.title }}</RouterLink
-          >
-        </h3>
-        <p class="fr-card__desc">
-          <text-clamp
-            :auto-resize="true"
-            :text="stripFromMarkdown(dataset.description)"
-            :max-lines="3"
-          />
-        </p>
-      </div>
-    </div>
-  </div>
+  <ObjectCardLayout
+    :url="url"
+    :title="dataset.title"
+    :icon="RiBarChart2Line"
+    :organization="dataset.organization"
+    :owner="dataset.owner"
+    :organization-url="organizationUrl"
+    :last-update="dataset.last_update"
+    :description="dataset.description"
+    :show-description="showDescription"
+  >
+    <template v-if="tags.length > 0" #footer>
+      <IndicatorTags :tags="tags" />
+    </template>
+  </ObjectCardLayout>
 </template>

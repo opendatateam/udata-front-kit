@@ -264,7 +264,7 @@ onMounted(() => {
               class="fr-col-12 fr-col-lg-6"
             >
               <CardComponent
-                :show-description="false"
+                :show-description-short="false"
                 :dataset="dataset"
                 :dataset-url="getDatasetPage(dataset.id)"
                 :organization-url="null"
