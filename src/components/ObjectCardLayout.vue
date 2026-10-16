@@ -14,20 +14,31 @@ import { RiSubtractLine } from '@remixicon/vue'
 import type { Component } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 
-const props = defineProps<{
-  url: RouteLocationRaw
-  title: string
-  icon?: Component
-  organization?: OrganizationReference | null
-  owner?: UserReference | null
-  organizationUrl?: RouteLocationRaw | null
-  lastUpdate: string
-  description?: string | null
-}>()
+const props = withDefaults(
+  defineProps<{
+    url: RouteLocationRaw
+    title: string
+    icon?: Component
+    organization?: OrganizationReference | null
+    owner?: UserReference | null
+    organizationUrl?: RouteLocationRaw | null
+    lastUpdate: string
+    description?: string | null
+    showDescription?: boolean
+  }>(),
+  {
+    icon: undefined,
+    organization: undefined,
+    owner: undefined,
+    organizationUrl: undefined,
+    description: undefined,
+    showDescription: true
+  }
+)
 
 // visual truncation is handled by line-clamp, the cap only limits DOM size
 const shortDescription = computed(() =>
-  removeMarkdownSync(props.description ?? '')
+  removeMarkdownSync((props.showDescription && props.description) || '')
     .trim()
     .slice(0, 500)
 )

@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import SearchComponent from '@/components/SearchComponent.vue'
 import type { DatasetV2 } from '@datagouv/components-next'
-import { toast } from '@datagouv/components-next'
+import { DataserviceCard, toast } from '@datagouv/components-next'
+import { RiBookShelfLine, RiTerminalLine } from '@remixicon/vue'
 import { capitalize, computed, nextTick, ref, type Ref } from 'vue'
 
 import { useAnimationConstants } from '@/utils/constants'
@@ -16,6 +17,7 @@ import type { ResolvedFactor } from '@/model/topic'
 import { useTopicElementStore } from '@/store/TopicElementStore'
 import { isAvailable } from '@/utils/topic'
 
+import CardTypeBadge from '@/components/CardTypeBadge.vue'
 import { useCurrentPageConf } from '@/router/utils'
 import { useResourceStore } from '@/store/ResourceStore'
 import { basicSlugify, fromMarkdown } from '@/utils'
@@ -25,10 +27,9 @@ import { fetchAllOgcResources } from '@/utils/ogcServices'
 import { openTopicInQgis } from '@/utils/qgis'
 import { isOnlyNoGroup, useFactorsFilter, useGroups } from '@/utils/topicGroups'
 import { useTopicReferencedContent } from '@/utils/topicReferencedContent'
-import DataserviceInTopicCard from './DataserviceInTopicCard.vue'
 import DatasetInTopicCard from './DatasetInTopicCard.vue'
+import TopicCard from './TopicCard.vue'
 import TopicGroup from './TopicGroup.vue'
-import TopicInTopicCard from './TopicInTopicCard.vue'
 
 const factors = defineModel({
   type: Array<ResolvedFactor>,
@@ -370,17 +371,35 @@ defineExpose({
                   :factor="factor"
                   :dataset-content="getDatasetForFactor(factor)!"
                 />
-                <TopicInTopicCard
+                <CardTypeBadge
                   v-else-if="getTopicForFactor(factor)"
-                  :page-key="pageKey"
-                  :topic="getTopicForFactor(factor)!"
+                  :label="labels.singular"
+                  :icon="RiBookShelfLine"
                   class="fr-my-2w"
-                />
-                <DataserviceInTopicCard
+                >
+                  <TopicCard
+                    :page-key="pageKey"
+                    :topic="getTopicForFactor(factor)!"
+                    :show-description="false"
+                    :show-tags="false"
+                  />
+                </CardTypeBadge>
+                <CardTypeBadge
                   v-else-if="getDataserviceForFactor(factor)"
-                  :dataservice="getDataserviceForFactor(factor)!"
+                  label="API"
+                  :icon="RiTerminalLine"
                   class="fr-my-2w"
-                />
+                >
+                  <DataserviceCard
+                    :dataservice="getDataserviceForFactor(factor)!"
+                    :dataservice-url="{
+                      name: 'dataservices_detail',
+                      params: { item_id: getDataserviceForFactor(factor)!.id }
+                    }"
+                    :organization-url="null"
+                    :show-description="false"
+                  />
+                </CardTypeBadge>
                 <div
                   v-if="
                     !getTopicForFactor(factor) &&

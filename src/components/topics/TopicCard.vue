@@ -28,6 +28,15 @@ const props = defineProps({
   topicUrl: {
     type: Object as () => RouteLocationRaw,
     default: null
+  },
+  showDescription: {
+    type: Boolean,
+    default: true
+  },
+  // theme tags and data/coverage pills
+  showTags: {
+    type: Boolean,
+    default: true
   }
 })
 
@@ -56,6 +65,7 @@ const tags = useTags(props.pageKey, props.topic)
     :organization-url="null"
     :last-update="topic.last_modified"
     :description="topic.description"
+    :show-description="showDescription"
   >
     <template #media>
       <OrganizationLogo
@@ -66,7 +76,7 @@ const tags = useTags(props.pageKey, props.topic)
       <Avatar v-else-if="topic.owner" :user="topic.owner" :size="48" />
       <Placeholder v-else type="Topic" class="size-12" />
     </template>
-    <template #footer>
+    <template v-if="showTags" #footer>
       <ul class="fr-badges-group">
         <li v-for="t in tags" :key="`${t.type}-${t.id}`">
           <TagComponent :tag="t" />

@@ -11,6 +11,7 @@ const props = defineProps<{
   // declared to avoid attribute fallthrough, the slug-based url below is used instead
   datasetUrl?: RouteLocationRaw
   organizationUrl?: RouteLocationRaw | null
+  showDescription?: boolean
 }>()
 
 const url = computed(() => ({
@@ -29,6 +30,7 @@ const url = computed(() => ({
     :organization-url="organizationUrl"
     :last-update="dataset.last_update"
     :description="dataset.description"
+    :show-description="showDescription ?? true"
   >
     <template #footer>
       <IndicatorTags :indicator="dataset" />
