@@ -15,7 +15,7 @@ defineProps<{
   <div class="card-type-badge-wrapper">
     <p
       v-if="label"
-      class="fr-badge fr-badge--sm fr-badge--mention-grey text-grey-425 card-type-badge"
+      class="fr-badge fr-badge--sm fr-badge--mention-grey card-type-badge"
     >
       <VIconRi v-if="icon" :icon="icon" small class="fr-mr-1v" />
       {{ label }}
@@ -35,5 +35,8 @@ defineProps<{
   left: 0.5rem;
   transform: translateY(-50%);
   z-index: 1;
+  /* stronger contrast than DSFR's default mention-grey */
+  background-color: #cecece;
+  color: var(--text-default-grey) !important;
 }
 </style>

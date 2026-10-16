@@ -480,10 +480,4 @@ details[open] summary::marker {
 :deep(search) {
   margin-inline-start: auto;
 }
-
-/* Intensify contrast for topic and dataset cards badges */
-:deep(.fr-badge--mention-grey) {
-  background-color: #cecece;
-  color: var(--text-default-grey) !important;
-}
 </style>
