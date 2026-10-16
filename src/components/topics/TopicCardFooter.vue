@@ -8,7 +8,6 @@ import { useSpatialCoverage } from '@/utils/spatial'
 import { useTags } from '@/utils/tags'
 import { useTopicFactors } from '@/utils/topic'
 
-// separate component so factors and spatial coverage are only fetched when displayed
 const props = defineProps<{
   pageKey: string
   topic: Topic
