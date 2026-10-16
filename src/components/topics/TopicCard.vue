@@ -11,6 +11,7 @@ import { type RouteLocationRaw } from 'vue-router'
 import ObjectCardLayout from '@/components/ObjectCardLayout.vue'
 import TagComponent from '@/components/TagComponent.vue'
 import VIconDsfr from '@/components/VIconDsfr.vue'
+import type { TitleTag } from '@/model'
 import type { Topic } from '@/model/topic'
 import { useSpatialCoverage } from '@/utils/spatial'
 import { useTags } from '@/utils/tags'
@@ -37,6 +38,10 @@ const props = defineProps({
   showTags: {
     type: Boolean,
     default: true
+  },
+  titleTag: {
+    type: String as () => TitleTag,
+    default: 'h3'
   }
 })
 
@@ -66,6 +71,7 @@ const tags = useTags(props.pageKey, props.topic)
     :last-update="topic.last_modified"
     :description="topic.description"
     :show-description="showDescription"
+    :title-tag="titleTag"
   >
     <template #media>
       <OrganizationLogo

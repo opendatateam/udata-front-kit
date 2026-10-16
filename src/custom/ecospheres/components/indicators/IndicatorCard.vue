@@ -6,13 +6,20 @@ import ObjectCardLayout from '@/components/ObjectCardLayout.vue'
 import type { Indicator } from '../../model/indicator'
 import IndicatorTags from './IndicatorTags.vue'
 
-const props = defineProps<{
-  dataset: Indicator
-  // declared to avoid attribute fallthrough, the slug-based url below is used instead
-  datasetUrl?: RouteLocationRaw
-  organizationUrl?: RouteLocationRaw | null
-  showDescription?: boolean
-}>()
+const props = withDefaults(
+  defineProps<{
+    dataset: Indicator
+    // declared to avoid attribute fallthrough, the slug-based url below is used instead
+    datasetUrl?: RouteLocationRaw
+    organizationUrl?: RouteLocationRaw | null
+    showDescription?: boolean
+  }>(),
+  {
+    datasetUrl: undefined,
+    organizationUrl: undefined,
+    showDescription: true
+  }
+)
 
 const url = computed(() => ({
   name: 'indicators_detail',
@@ -30,7 +37,7 @@ const url = computed(() => ({
     :organization-url="organizationUrl"
     :last-update="dataset.last_update"
     :description="dataset.description"
-    :show-description="showDescription ?? true"
+    :show-description="showDescription"
   >
     <template #footer>
       <IndicatorTags :indicator="dataset" />

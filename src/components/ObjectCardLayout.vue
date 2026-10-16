@@ -14,6 +14,8 @@ import { RiSubtractLine } from '@remixicon/vue'
 import type { Component } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 
+import type { TitleTag } from '@/model'
+
 const props = withDefaults(
   defineProps<{
     url: RouteLocationRaw
@@ -25,6 +27,7 @@ const props = withDefaults(
     lastUpdate: string
     description?: string | null
     showDescription?: boolean
+    titleTag?: TitleTag
   }>(),
   {
     icon: undefined,
@@ -32,7 +35,8 @@ const props = withDefaults(
     owner: undefined,
     organizationUrl: undefined,
     description: undefined,
-    showDescription: true
+    showDescription: true,
+    titleTag: 'h3'
   }
 )
 
@@ -58,7 +62,7 @@ const shortDescription = computed(() =>
         </div>
       </div>
       <div class="flex-1 overflow-hidden space-y-1">
-        <h3 class="w-full text-base font-bold flex">
+        <component :is="titleTag" class="w-full text-base font-bold flex">
           <AppLink
             :to="url"
             class="text-gray-title text-base bg-none flex items-center w-full truncate gap-1"
@@ -72,7 +76,7 @@ const shortDescription = computed(() =>
             <span class="block truncate flex-1">{{ title }}</span>
             <span class="absolute inset-0" />
           </AppLink>
-        </h3>
+        </component>
         <div
           v-if="organization || owner"
           class="text-sm flex flex-wrap md:flex-nowrap gap-y-1 items-center truncate"

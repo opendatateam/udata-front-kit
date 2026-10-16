@@ -41,6 +41,7 @@ const factorRef = toRef(props, 'factor')
     }"
     :show-description-short="false"
     :organization-url="null"
+    title-tag="p"
     class="dataset-card fr-my-2w fr-mx-0"
   />
   <DsfrAlert

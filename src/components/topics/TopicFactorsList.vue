@@ -382,6 +382,7 @@ defineExpose({
                     :topic="getTopicForFactor(factor)!"
                     :show-description="false"
                     :show-tags="false"
+                    title-tag="p"
                   />
                 </CardTypeBadge>
                 <CardTypeBadge
@@ -398,6 +399,7 @@ defineExpose({
                     }"
                     :organization-url="null"
                     :show-description="false"
+                    title-tag="p"
                   />
                 </CardTypeBadge>
                 <div
