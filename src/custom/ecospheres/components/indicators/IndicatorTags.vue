@@ -1,20 +1,10 @@
 <script setup lang="ts">
 import TagComponent from '@/components/TagComponent.vue'
-import type { Indicator } from '../../model/indicator'
-import { useIndicatorTags } from '../../utils/indicator'
+import type { ResolvedTag } from '@/model/tag'
 
-const props = defineProps({
-  indicator: {
-    type: Object as () => Indicator | undefined,
-    required: true
-  },
-  type: {
-    type: String,
-    default: undefined
-  }
-})
-
-const tags = useIndicatorTags(props.indicator, props.type)
+defineProps<{
+  tags: ResolvedTag[]
+}>()
 </script>
 
 <template>

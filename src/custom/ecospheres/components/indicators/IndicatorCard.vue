@@ -22,7 +22,7 @@ const props = withDefaults(
   }
 )
 
-const tags = useIndicatorTags(props.dataset)
+const tags = useIndicatorTags(() => props.dataset)
 
 const url = computed(() => ({
   name: 'indicators_detail',
@@ -43,7 +43,7 @@ const url = computed(() => ({
     :show-description="showDescription"
   >
     <template v-if="tags.length > 0" #footer>
-      <IndicatorTags :indicator="dataset" />
+      <IndicatorTags :tags="tags" />
     </template>
   </ObjectCardLayout>
 </template>
