@@ -42,7 +42,7 @@ const factorRef = toRef(props, 'factor')
     :show-description-short="false"
     :organization-url="null"
     title-tag="p"
-    class="dataset-card fr-my-2w fr-mx-0"
+    class="fr-my-2w fr-mx-0"
   />
   <DsfrAlert
     v-if="factor.remoteDeleted"
@@ -57,9 +57,3 @@ const factorRef = toRef(props, 'factor')
     </div>
   </DsfrAlert>
 </template>
-
-<style scoped>
-.dataset-card {
-  background-color: var(--background-default-grey, #fff);
-}
-</style>

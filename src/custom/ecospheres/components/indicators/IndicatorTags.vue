@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import TagComponent from '@/components/TagComponent.vue'
-import { useTags } from '@/utils/tags'
 import type { Indicator } from '../../model/indicator'
-
-const EXCLUDE_TAGS = ['usage', 'maille']
+import { useIndicatorTags } from '../../utils/indicator'
 
 const props = defineProps({
   indicator: {
@@ -16,7 +14,7 @@ const props = defineProps({
   }
 })
 
-const tags = useTags('indicators', props.indicator, props.type, EXCLUDE_TAGS)
+const tags = useIndicatorTags(props.indicator, props.type)
 </script>
 
 <template>

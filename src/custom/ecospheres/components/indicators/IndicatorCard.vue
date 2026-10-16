@@ -4,6 +4,7 @@ import type { RouteLocationRaw } from 'vue-router'
 
 import ObjectCardLayout from '@/components/ObjectCardLayout.vue'
 import type { Indicator } from '../../model/indicator'
+import { useIndicatorTags } from '../../utils/indicator'
 import IndicatorTags from './IndicatorTags.vue'
 
 const props = withDefaults(
@@ -20,6 +21,8 @@ const props = withDefaults(
     showDescription: true
   }
 )
+
+const tags = useIndicatorTags(props.dataset)
 
 const url = computed(() => ({
   name: 'indicators_detail',
@@ -39,7 +42,7 @@ const url = computed(() => ({
     :description="dataset.description"
     :show-description="showDescription"
   >
-    <template #footer>
+    <template v-if="tags.length > 0" #footer>
       <IndicatorTags :indicator="dataset" />
     </template>
   </ObjectCardLayout>

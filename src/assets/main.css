@@ -161,12 +161,6 @@ body {
   color: var(--grey-50-1000);
 }
 
-/* ===== Links ===== */
-
-.dataset-card :where(.fr-link, a:not(.fr-btn)) {
-  color: var(--text-active-blue-france) !important;
-}
-
 /* ===== Borders ===== */
 
 .border-top {
