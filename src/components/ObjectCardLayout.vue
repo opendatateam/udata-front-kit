@@ -3,18 +3,13 @@ import type {
   OrganizationReference,
   UserReference
 } from '@datagouv/components-next'
-import {
-  AppLink,
-  FormattedDate,
-  ObjectCardOwner,
-  removeMarkdownSync,
-  TranslationT
-} from '@datagouv/components-next'
+import { ObjectCardOwner, useFormatDate } from '@datagouv/components-next'
 import { RiSubtractLine } from '@remixicon/vue'
 import type { Component } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 
 import type { TitleTag } from '@/model'
+import { stripFromMarkdown } from '@/utils'
 
 const props = withDefaults(
   defineProps<{
@@ -40,11 +35,13 @@ const props = withDefaults(
   }
 )
 
+const { formatRelativeIfRecentDate } = useFormatDate()
+
 // visual truncation is handled by line-clamp, the cap only limits DOM size
 const shortDescription = computed(() =>
-  removeMarkdownSync((props.showDescription && props.description) || '')
-    .trim()
-    .slice(0, 500)
+  props.showDescription && props.description
+    ? stripFromMarkdown(props.description, 500).trim()
+    : ''
 )
 </script>
 
@@ -63,7 +60,7 @@ const shortDescription = computed(() =>
       </div>
       <div class="flex-1 overflow-hidden space-y-1">
         <component :is="titleTag" class="w-full text-base font-bold flex">
-          <AppLink
+          <RouterLink
             :to="url"
             class="text-gray-title text-base bg-none flex items-center w-full truncate gap-1"
           >
@@ -75,7 +72,7 @@ const shortDescription = computed(() =>
             />
             <span class="block truncate flex-1">{{ title }}</span>
             <span class="absolute inset-0" />
-          </AppLink>
+          </RouterLink>
         </component>
         <div
           v-if="organization || owner"
@@ -89,19 +86,12 @@ const shortDescription = computed(() =>
           <RiSubtractLine
             class="hidden md:block size-4 flex-none fill-gray-medium"
           />
-          <TranslationT
-            tag="div"
-            class="w-full md:w-auto text-gray-medium whitespace-nowrap"
-            keypath="Mis à jour {date}"
-          >
-            <template #date>
-              <FormattedDate
-                :date="lastUpdate"
-                format="relative"
-                :options="{ dateStyle: 'medium' }"
-              />
-            </template>
-          </TranslationT>
+          <div class="w-full md:w-auto text-gray-medium whitespace-nowrap">
+            Mis à jour
+            {{
+              formatRelativeIfRecentDate(lastUpdate, { dateStyle: 'medium' })
+            }}
+          </div>
         </div>
         <p
           v-if="shortDescription"
