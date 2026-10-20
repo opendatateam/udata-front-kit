@@ -5,7 +5,6 @@ export type TabWithCount = {
   slug: string
   title: string
   count?: number
-  icon?: string
 }
 
 defineProps<{
@@ -23,7 +22,6 @@ const activeTab = defineModel<number>({ required: true })
         v-for="(tab, index) in tabs"
         :key="tab.slug"
         v-bind="tabIds(tab.slug)"
-        :icon="tab.icon"
         @click="activeTab = index"
         @next="activeTab = index === tabs.length - 1 ? 0 : index + 1"
         @previous="activeTab = index === 0 ? tabs.length - 1 : index - 1"

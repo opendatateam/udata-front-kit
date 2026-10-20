@@ -1,3 +1,4 @@
+import type { DsfrTabItemProps } from '@gouvminint/vue-dsfr'
 import type { MaybeRefOrGetter } from 'vue'
 import { computed, toValue } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -12,7 +13,10 @@ export const FILES_TAB = 'files'
 // Slug of the discussions tab, stored by udata in notification links: do not rename
 export const DISCUSSIONS_TAB = 'discussions'
 
-export const tabIds = (slug: string) => ({
+// typed against DSFR so its required tab/panel ids stay covered
+export const tabIds = (
+  slug: string
+): Pick<DsfrTabItemProps, 'tabId' | 'panelId'> => ({
   tabId: `tab-${slug}`,
   panelId: `tab-content-${slug}`
 })
