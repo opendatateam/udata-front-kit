@@ -97,7 +97,7 @@ describe('Topic Discussions', () => {
     }).as('reply')
 
     cy.contains('button', 'Répondre').click()
-    cy.get('#input-discussion-comment').type('A reply from e2e')
+    cy.get('textarea[name="message"]').type('A reply from e2e')
     cy.contains('button', 'Répondre').click()
 
     cy.wait('@reply')
@@ -182,11 +182,11 @@ describe('Topic Discussions', () => {
     }).as('replyAsOrg')
 
     cy.contains('button', 'Répondre').click()
-    cy.get('#input-discussion-comment')
+    cy.get('textarea[name="message"]')
       .closest('form')
       .find('select')
       .select(organization.name)
-    cy.get('#input-discussion-comment').type('A reply as an organization')
+    cy.get('textarea[name="message"]').type('A reply as an organization')
     cy.contains('button', 'Répondre').click()
 
     cy.wait('@replyAsOrg').then((interception) => {
