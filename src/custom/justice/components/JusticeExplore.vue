@@ -83,8 +83,8 @@ onMounted(async () => {
 
 <template>
   <JusticeSection
-    title="Activité civile des tribunaux judiciaires"
-    description="Les affaires civiles nouvelles enregistrées par les tribunaux judiciaires, et le temps moyen nécessaire pour les juger."
+    title="Combien d’affaires civiles arrivent devant les tribunaux ?"
+    description="Loyers impayés, séparations, tutelles, conflits de voisinage… Chaque année, des milliers de litiges du quotidien sont portés devant les tribunaux judiciaires. Découvrez leur nombre et le temps qu’il faut, en moyenne, pour les juger."
     :loading="loading"
     :error="error"
     :dataset="dataset"
@@ -122,6 +122,14 @@ onMounted(async () => {
           />
         </VizCard>
       </div>
+    </div>
+    <div class="fr-mt-4w">
+      <p>
+        <em
+          >Le nombre d’affaires a augmenté d’environ 20% depuis 2020, avec une
+          baisse du temps de traitement de 1 à 2 mois.</em
+        >
+      </p>
     </div>
   </JusticeSection>
 </template>
