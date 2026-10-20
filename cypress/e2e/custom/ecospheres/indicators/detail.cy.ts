@@ -57,7 +57,7 @@ describe('Indicator Detail View', () => {
     })
 
     it('should display all metadata', () => {
-      cy.get('#tab-content-infos').within(() => {
+      cy.get('#tab-content-informations').within(() => {
         // Couverture géographique
         cy.contains('Couverture géographique').should('be.visible')
         cy.contains('Île-de-France').should('be.visible')

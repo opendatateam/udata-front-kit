@@ -47,6 +47,20 @@ describe('Topic Elements - Deep Linking', () => {
       cy.url().should('not.include', `#factor-${factorId}`)
     })
 
+    it('should switch to the Données tab when the hash is set on another tab', () => {
+      const factorId = testFactors[0].id
+
+      cy.visit(`/bouquets/${testTopic.slug}/discussions#factor-${factorId}`)
+
+      cy.wait('@getElementsDataset')
+
+      cy.get(`#factor-${factorId}`).isInViewport({ wait: VIEWPORT_WAIT })
+      cy.get('[role="tablist"]')
+        .find('[role="tab"][aria-selected="true"]')
+        .should('contain', 'Données')
+      cy.location('pathname').should('eq', `/bouquets/${testTopic.slug}`)
+    })
+
     it('should highlight the target factor temporarily', () => {
       const targetFactor = testFactors[0]
       const factorId = targetFactor.id

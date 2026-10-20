@@ -121,4 +121,28 @@ describe('Indicator Viz', () => {
       cy.get('#viz-mesh-select').should('exist')
     })
   })
+
+  describe('Resource link', () => {
+    it('should open the Fichiers tab instead of the default Prévisualisation tab', () => {
+      const indicatorWithViz = createIndicator(
+        {},
+        { enable_visualization: true }
+      )
+      const resource = createIndicatorResource()
+      cy.mockDatasetAndRelatedObjects(indicatorWithViz, [resource])
+
+      cy.visit(
+        `/indicators/${indicatorWithViz.id}/files?resource_id=${resource.id}`
+      )
+
+      cy.get('[role="tab"][aria-selected="true"]').should('contain', 'Fichiers')
+      cy.location('pathname').should('match', /\/files$/)
+      cy.location('search').should('include', `resource_id=${resource.id}`)
+
+      // query belongs to the tab being left
+      cy.contains('[role="tab"]', 'Sources').click()
+      cy.location('pathname').should('match', /\/sources$/)
+      cy.location('search').should('eq', '')
+    })
+  })
 })

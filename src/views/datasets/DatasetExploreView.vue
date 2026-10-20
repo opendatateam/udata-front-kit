@@ -7,6 +7,7 @@ import ResourceExplorer from '@/components/datasets/ResourceExplorer.vue'
 import SkipLinks from '@/components/SkipLinks.vue'
 import { useDatasetStore } from '@/store/DatasetStore'
 import { useCanonicalUrl, useMeta } from '@/utils/seo'
+import { FILES_TAB } from '@/utils/tabs'
 
 const route = useRoute()
 const router = useRouter()
@@ -27,7 +28,7 @@ const exitTo = computed<RouteLocationRaw>(() => {
   const resourceId = route.query.resource_id
   return {
     name: fromRouteName.value,
-    params: { item_id: dataset.value?.slug ?? itemId },
+    params: { item_id: dataset.value?.slug ?? itemId, tab: FILES_TAB },
     query: typeof resourceId === 'string' ? { resource_id: resourceId } : {}
   }
 })

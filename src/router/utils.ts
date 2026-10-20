@@ -359,7 +359,7 @@ export const useGlobalSearchPageRoutes = ({
   }
 
   const childrenPages = {
-    path: renderRootPage ? ':item_id' : `${root}/:item_id`,
+    path: renderRootPage ? ':item_id/:tab?' : `${root}/:item_id/:tab?`,
     name: `${pageKey}_detail`,
     component: detailsViewComponent ?? defaultDetailsViews[objectType],
     meta: {

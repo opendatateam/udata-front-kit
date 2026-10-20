@@ -9,6 +9,7 @@ import { computed } from 'vue'
 import type { Router } from 'vue-router'
 
 import { useDatasetsConf } from '@/utils/config'
+import { FILES_TAB } from '@/utils/tabs'
 
 // Lazy: this module loads on every page (router/index.ts imports it for the /explore guard), so a module-scope useStorage() would read localStorage eagerly everywhere.
 let stored: ReturnType<typeof useStorage<boolean>>
@@ -41,7 +42,7 @@ export function buildResourceExternalUrl(
     `${window.location.origin}${
       router.resolve({
         name: fromRouteName,
-        params: { item_id: dataset.slug },
+        params: { item_id: dataset.slug, tab: FILES_TAB },
         query: { resource_id: resource.id }
       }).href
     }`

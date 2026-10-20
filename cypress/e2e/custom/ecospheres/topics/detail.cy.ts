@@ -19,3 +19,24 @@ describe('Topic Detail View - Tab counts', () => {
     cy.contains('button', 'Discussions (5)').should('be.visible')
   })
 })
+
+describe('Topic Detail View - Discussion deep link', () => {
+  it('should open the Discussions tab from a #discussion- hash', () => {
+    const discussions = discussionFactory.many(2)
+    const target = discussions[1]
+    const { testTopic } = setupTopicWithExistingFactors({ discussions })
+
+    cy.visit(`/bouquets/${testTopic.slug}#discussion-${target.id}`)
+
+    cy.location('pathname').should(
+      'eq',
+      `/bouquets/${testTopic.slug}/discussions`
+    )
+    cy.url().should('not.include', '#discussion-')
+    cy.get('[role="tab"][aria-selected="true"]').should(
+      'contain',
+      'Discussions'
+    )
+    cy.get(`#discussion-${target.id}`).should('be.visible')
+  })
+})
