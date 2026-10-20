@@ -130,6 +130,12 @@ describe('Indicator Viz', () => {
       )
       const resource = createIndicatorResource()
       cy.mockDatasetAndRelatedObjects(indicatorWithViz, [resource])
+      // the preview panel is mounted even when hidden, so its chart still fetches
+      cy.intercept(
+        'GET',
+        `https://tabular-api*.data.gouv.fr/api/resources/${resource.id}/data/**`,
+        { statusCode: 200, body: { data: [] } }
+      )
 
       cy.visit(
         `/indicators/${indicatorWithViz.id}/files?resource_id=${resource.id}`
