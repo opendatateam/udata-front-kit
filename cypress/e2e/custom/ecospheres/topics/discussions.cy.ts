@@ -8,9 +8,23 @@ const testUser = UserReferenceFactory.one({
   overrides: { id: 'test-user-id', first_name: 'Test', last_name: 'User' }
 })
 
+const testOrganization = OrganizationReferenceFactory.one({
+  overrides: { id: 'test-org-id', name: 'Test Org' }
+})
+
 function openDiscussionsTab() {
   cy.wait('@get_discussions_list')
   cy.get('[role="tab"]').contains('Discussions').click()
+}
+
+// Override the connected user to also belong to an organization
+function connectAsOrganizationMember() {
+  cy.simulateConnectedUser({
+    id: testUser.id,
+    first_name: testUser.first_name,
+    last_name: testUser.last_name,
+    organizations: [testOrganization]
+  })
 }
 
 describe('Topic Discussions', () => {
@@ -142,21 +156,11 @@ describe('Topic Discussions', () => {
   })
 
   it('should post a reply as an organization when one is selected', () => {
-    const organization = OrganizationReferenceFactory.one({
-      overrides: { id: 'test-org-id', name: 'Test Org' }
-    })
     const discussion = discussionFactory.one()
     const { testTopic } = setupTopicWithExistingFactors({
       discussions: [discussion]
     })
-
-    // Override the connected user to also belong to an organization
-    cy.simulateConnectedUser({
-      id: testUser.id,
-      first_name: testUser.first_name,
-      last_name: testUser.last_name,
-      organizations: [organization]
-    })
+    connectAsOrganizationMember()
 
     visitTopic(testTopic.slug)
     openDiscussionsTab()
@@ -169,7 +173,7 @@ describe('Topic Discussions', () => {
           id: 'org-reply-comment-id',
           content: 'A reply as an organization',
           posted_by: testUser,
-          posted_by_organization: organization,
+          posted_by_organization: testOrganization,
           posted_on: new Date().toISOString(),
           permissions: { delete: true, edit: true }
         }
@@ -185,13 +189,78 @@ describe('Topic Discussions', () => {
     cy.get('textarea[name="message"]')
       .closest('form')
       .find('select')
-      .select(organization.name)
+      .select(testOrganization.name)
     cy.get('textarea[name="message"]').type('A reply as an organization')
     cy.contains('button', 'Répondre').click()
 
     cy.wait('@replyAsOrg').then((interception) => {
-      expect(interception.request.body.organization).to.equal(organization.id)
+      expect(interception.request.body.organization).to.equal(
+        testOrganization.id
+      )
     })
     cy.contains('Test Org').should('be.visible')
+  })
+
+  it('should post a reply as yourself when member of an organization', () => {
+    const discussion = discussionFactory.one()
+    const { testTopic } = setupTopicWithExistingFactors({
+      discussions: [discussion]
+    })
+    connectAsOrganizationMember()
+
+    visitTopic(testTopic.slug)
+    openDiscussionsTab()
+
+    cy.intercept('POST', `**/api/*/discussions/${discussion.id}/`, {
+      statusCode: 200,
+      body: discussion
+    }).as('replyAsSelf')
+
+    cy.contains('button', 'Répondre').click()
+    cy.get('textarea[name="message"]')
+      .closest('form')
+      .find('select')
+      .select(`${testUser.first_name} ${testUser.last_name}`)
+    cy.get('textarea[name="message"]').type('A reply as myself')
+    cy.contains('button', 'Répondre').click()
+
+    cy.wait('@replyAsSelf').then((interception) => {
+      expect(interception.request.body).not.to.have.property('organization')
+    })
+  })
+
+  it('should create a discussion as an organization when one is selected', () => {
+    const { testTopic } = setupTopicWithExistingFactors()
+    connectAsOrganizationMember()
+
+    visitTopic(testTopic.slug)
+    openDiscussionsTab()
+
+    const newDiscussion = discussionFactory.one({
+      overrides: {
+        title: 'New discussion as an organization',
+        subject: { class: 'Topic', id: testTopic.id }
+      }
+    })
+    cy.intercept('POST', '**/api/*/discussions/', {
+      statusCode: 201,
+      body: newDiscussion
+    }).as('createDiscussionAsOrg')
+    cy.mockDatagouvObjectList('discussions', [newDiscussion])
+
+    cy.contains('button', 'Démarrer une nouvelle discussion').click()
+    cy.get('#discussion-title')
+      .closest('form')
+      .find('select')
+      .select(testOrganization.name)
+    cy.get('#discussion-title').type(newDiscussion.title)
+    cy.get('#discussion-message').type('Hello as an organization')
+    cy.contains('button', 'Envoyer').click()
+
+    cy.wait('@createDiscussionAsOrg').then((interception) => {
+      expect(interception.request.body.organization).to.equal(
+        testOrganization.id
+      )
+    })
   })
 })
