@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Owned } from '@datagouv/components-next'
 import { storeToRefs } from 'pinia'
 import type { PropType, Ref } from 'vue'
 import { computed, nextTick, ref, toRef } from 'vue'
@@ -32,12 +33,8 @@ const { pageKey, pageConf } = useCurrentPageConf()
 
 const { loggedIn } = storeToRefs(userStore)
 
-interface DiscussionSubject {
-  id: string
-  slug?: string
-  owner?: { id: string } | null
-  organization?: { id: string } | null
-}
+// Object the discussions are attached to (dataset, topic…); owner/organization identify its producer
+type DiscussionSubject = Owned & { id: string; slug?: string }
 
 const props = defineProps({
   subject: {
