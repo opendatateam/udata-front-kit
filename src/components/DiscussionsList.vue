@@ -122,11 +122,14 @@ const toggleDiscussionExpansion = (discussionId: DiscussionId) => {
 }
 
 const discussionsCountLabel = computed(() => {
-  const label =
+  const totalLabel =
     total.value > 1 ? `${total.value} discussions` : `${total.value} discussion`
-  if (!closedCount.value) return label
-  const closedLabel = closedCount.value > 1 ? 'clôturées' : 'clôturée'
-  return `${label} dont ${closedCount.value} ${closedLabel}`
+  if (!closedCount.value) return totalLabel
+  const closedLabel =
+    closedCount.value > 1
+      ? `${closedCount.value} clôturées`
+      : `${closedCount.value} clôturée`
+  return `${totalLabel} dont ${closedLabel}`
 })
 
 const allowDiscussionCreation = pageConf.resources_tabs.discussions.create
