@@ -120,8 +120,8 @@ onMounted(async () => {
 
 <template>
   <JusticeSection
-    title="Personnes placées sous la main de la justice"
-    description="Personnes prises en charge par l’administration pénitentiaire : les personnes écrouées, dont une partie est détenue, et les personnes suivies en milieu ouvert."
+    title="Combien de personnes sont suivies par l’administration pénitentiaire ?"
+    description="Une personne sous écrou ou poursuivie n'est pas nécessairement incarcérée. Selon sa situation, elle peut être détenue en établissement pénitentiaire, placée sous surveillance électronique à domicile, ou exécuter sa peine/mesure en milieu ouvert sous le suivi du SPIP."
     :loading="loading"
     :error="error"
     :dataset="dataset"
@@ -142,6 +142,14 @@ onMounted(async () => {
         :height="420"
       />
     </VizCard>
+    <div class="fr-mt-4w">
+      <p>
+        <em
+          >Environ deux personnes sur trois sont suivies en milieu ouvert, hors
+          détention.</em
+        >
+      </p>
+    </div>
     <VizCard
       class="fr-mt-4w"
       title="Répartition de la population pénitentiaire"
