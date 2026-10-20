@@ -14,19 +14,6 @@ useMeta({
 </script>
 
 <template>
-  <section class="hero fr-py-8w">
-    <div class="fr-container">
-      <div class="intro">
-        <h1>Explorer les données de la justice</h1>
-        <p class="fr-text--lead fr-mb-0">
-          justice.data.gouv.fr vise à diffuser et valoriser les données
-          publiques de la justice, pour les rendre compréhensibles par le grand
-          public. Vous y trouverez des visualisations commentées, ainsi que les
-          données sources, téléchargeables et utilisables librement.
-        </p>
-      </div>
-    </div>
-  </section>
   <div class="bands">
     <div class="band fr-py-6w">
       <div class="fr-container">
