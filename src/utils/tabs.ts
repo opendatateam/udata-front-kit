@@ -4,10 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 
 import type { TabWithCount } from '@/components/TabsWithCounts.vue'
 
-export type RoutedTab = Omit<TabWithCount, 'tabId' | 'panelId'> & {
-  slug: string
-  visible?: boolean
-}
+export type RoutedTab = TabWithCount & { visible?: boolean }
 
 // Slug of the tab that renders resources, targeted by `?resource_id` links
 export const FILES_TAB = 'files'
@@ -31,10 +28,6 @@ export const useRoutedTabs = (routedTabs: MaybeRefOrGetter<RoutedTab[]>) => {
 
   const list = computed(() =>
     toValue(routedTabs).filter((t) => t.visible !== false)
-  )
-
-  const tabs = computed<TabWithCount[]>(() =>
-    list.value.map(({ visible, ...tab }) => ({ ...tab, ...tabIds(tab.slug) }))
   )
 
   const currentSlug = computed(() => route.params.tab as string | undefined)
@@ -66,5 +59,5 @@ export const useRoutedTabs = (routedTabs: MaybeRefOrGetter<RoutedTab[]>) => {
     })
   }
 
-  return { tabs, activeIndex, selectTab }
+  return { tabs: list, activeIndex, selectTab }
 }
