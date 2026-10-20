@@ -43,15 +43,15 @@ export const useRoutedTabs = (routedTabs: MaybeRefOrGetter<RoutedTab[]>) => {
       ),
     set: (index: number) => {
       const tab = list.value[index]
-      if (tab) void selectTab(tab.slug)
+      if (tab) selectTab(tab.slug)
     }
   })
 
   const selectTab = async (slug: string) => {
     const index = list.value.findIndex((t) => t.slug === slug)
     if (index === -1) return
-    // compare with the URL, not the displayed tab, which falls back to the default
     const target = index === 0 ? undefined : slug
+    // skip only if the URL already points there: the displayed tab can differ (unknown or hidden slug)
     if ((currentSlug.value || undefined) === target) return
     const { tab, ...params } = route.params
     // replace, not push: arrow-key navigation would otherwise flood the history

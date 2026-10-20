@@ -236,7 +236,7 @@ watch(
   () => router.currentRoute.value.hash,
   (hash) => {
     if (hash.startsWith('#factor-')) {
-      void selectTab('factors')
+      selectTab('factors')
       const elementId = hash.replace('#factor-', '')
       runWhenReady(
         () => !!topicFactorsListRef.value && factors.value.length > 0,
@@ -247,7 +247,7 @@ watch(
       )
       clearHash()
     } else if (hash.startsWith('#discussion-')) {
-      void selectTab(DISCUSSIONS_TAB)
+      selectTab(DISCUSSIONS_TAB)
       const discussionId = hash.replace('#discussion-', '')
       runWhenReady(
         () => !!discussionsListRef.value,
