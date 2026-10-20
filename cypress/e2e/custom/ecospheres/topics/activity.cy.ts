@@ -114,6 +114,13 @@ describe('Topic Activity List', () => {
       cy.contains("a modifié l'élément")
         .should('have.prop', 'tagName', 'A')
         .and('have.class', 'activity-link')
+
+      // links point to the topic page, not to the current /activity URL
+      cy.contains("a ajouté l'élément").should(
+        'have.attr',
+        'href',
+        `/bouquets/${testTopic.slug}#factor-${testFactors[0].id}`
+      )
     })
 
     it('should make non-element activities non-clickable', () => {
