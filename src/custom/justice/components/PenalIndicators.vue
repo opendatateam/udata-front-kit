@@ -138,8 +138,8 @@ onMounted(async () => {
 
 <template>
   <JusticeSection
-    title="L’activité pénale"
-    description="Les trois étapes clés du travail du parquet le long de la chaîne pénale : les affaires traitées en entrée, les classements sans suite et la décision de poursuivre devant un juge"
+    title="Que devient une plainte pénale ?"
+    description="La plupart des affaires pénales sont d’abord examinées par le parquet. Combien aboutissent à des poursuites, combien reçoivent une autre réponse, et pourquoi certaines sont-elles classées sans suite ? Plus des deux tiers des classements sans suite concernent des affaires dont l’auteur n’a pas été identifié. Quand une réponse est possible, elle est apportée dans 83 % des cas."
     loading-label="Préparation des indicateurs…"
     error-label="Les indicateurs n’ont pas pu être chargés."
     :loading="loading"
@@ -202,6 +202,14 @@ onMounted(async () => {
           />
         </VizCard>
       </div>
+    </div>
+    <div class="fr-mt-4w">
+      <p>
+        <em
+          >Le nombre d’affaires a augmenté d’environ 20% depuis 2020, avec une
+          baisse du temps de traitement de 1 à 2 mois.</em
+        >
+      </p>
     </div>
   </JusticeSection>
 </template>
