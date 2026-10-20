@@ -13,7 +13,6 @@ export const FILES_TAB = 'files'
 // Slug of the discussions tab, stored by udata in notification links: do not rename
 export const DISCUSSIONS_TAB = 'discussions'
 
-// typed against DSFR so its required tab/panel ids stay covered
 export const tabIds = (
   slug: string
 ): Pick<DsfrTabItemProps, 'tabId' | 'panelId'> => ({
