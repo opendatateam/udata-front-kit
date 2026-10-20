@@ -174,8 +174,8 @@ onMounted(async () => {
 
 <template>
   <JusticeSection
-    title="Saisine du juge des enfants en assistance éducative"
-    description="Les saisines du juge des enfants en assistance éducative selon leur origine, et les effectifs de garçons et de filles par classe d’âge."
+    title="Quand un enfant est en danger, qui alerte le juge ?"
+    description="Le juge des enfants peut ordonner des mesures pour protéger un mineur en danger. Combien d’enfants sont concernés chaque année, qui signale leur situation, et quel âge ont-ils ?"
     error-label="Les graphiques n’ont pas pu être chargés."
     :loading="loading"
     :error="error"
@@ -247,6 +247,15 @@ onMounted(async () => {
           />
         </VizCard>
       </div>
+    </div>
+    <div class="fr-mt-4w">
+      <p>
+        <em
+          >Plus de huit fois sur dix, la saisine du juge des enfants vient du
+          parquet, le plus souvent après un signalement de l’aide sociale à
+          l’enfance.</em
+        >
+      </p>
     </div>
   </JusticeSection>
 </template>
