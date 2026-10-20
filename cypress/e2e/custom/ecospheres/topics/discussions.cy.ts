@@ -132,9 +132,12 @@ describe('Topic Discussions', () => {
     cy.intercept('DELETE', `**/api/*/discussions/${discussion.id}/`, {
       statusCode: 204
     }).as('deleteDiscussion')
+    // The component reloads the list after deleting
+    cy.mockDatagouvObjectList('discussions', [])
 
     cy.get('[title="Supprimer la discussion"]').click()
     cy.wait('@deleteDiscussion')
+    cy.wait('@get_discussions_list')
     cy.contains('An edited title').should('not.exist')
   })
 

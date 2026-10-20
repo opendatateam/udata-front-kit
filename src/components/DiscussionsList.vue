@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import type { ComputedRef, PropType, Ref } from 'vue'
-import { computed, nextTick, ref, watch } from 'vue'
+import type { PropType, Ref } from 'vue'
+import { computed, nextTick, ref, toRef, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import BlankState from '@/components/BlankState.vue'
@@ -15,25 +15,22 @@ import type {
   Discussion,
   DiscussionForm,
   DiscussionId,
-  DiscussionResponse,
   SubjectClass
 } from '@/model/discussion'
 import { useCurrentPageConf } from '@/router/utils'
 import LocalStorageService from '@/services/LocalStorageService'
-import { useDiscussionStore } from '@/store/DiscussionStore'
 import { useUserStore } from '@/store/UserStore'
 import { formatDate } from '@/utils'
+import { useDiscussions } from '@/utils/discussion'
 
 const route = useRoute()
 const router = useRouter()
 
-const discussionStore = useDiscussionStore()
 const userStore = useUserStore()
 
 const { pageKey, pageConf } = useCurrentPageConf()
 
 const { loggedIn } = storeToRefs(userStore)
-const currentPage: Ref<number> = ref(1)
 const showDiscussionForm: Ref<boolean> = ref(false)
 const commentFormId: Ref<DiscussionId | null> = ref(null)
 
@@ -58,6 +55,22 @@ const props = defineProps({
     default: "Il n'y a pas encore de discussion pour ce jeu de données."
   }
 })
+
+const {
+  currentPage,
+  discussions,
+  closedCount,
+  pages,
+  loaded,
+  createDiscussion,
+  createComment,
+  updateDiscussionTitle,
+  updateComment,
+  deleteDiscussion,
+  deleteComment
+} = useDiscussions(toRef(() => props.subject.id))
+
+const total = computed(() => discussions.value?.total ?? 0)
 
 const discussionForm: Ref<DiscussionForm> = ref({
   title: '',
@@ -97,25 +110,9 @@ const toggleDiscussionExpansion = (discussionId: DiscussionId) => {
   }
 }
 
-const discussions: ComputedRef<DiscussionResponse | undefined> = computed(
-  () => {
-    return discussionStore.getDiscussionsForSubject(
-      props.subject.id,
-      currentPage.value
-    )
-  }
-)
-const pages = computed(() => {
-  return discussionStore.getDiscussionsPaginationForSubject(props.subject.id)
-})
-
-const closedCount = computed(() =>
-  discussionStore.getClosedCountForSubject(props.subject.id)
-)
-
 const discussionsCountLabel = computed(() => {
-  const total = discussions.value?.total ?? 0
-  const label = total > 1 ? `${total} discussions` : `${total} discussion`
+  const label =
+    total.value > 1 ? `${total.value} discussions` : `${total.value} discussion`
   if (!closedCount.value) return label
   const closedLabel = closedCount.value > 1 ? 'clôturées' : 'clôturée'
   return `${label} dont ${closedCount.value} ${closedLabel}`
@@ -152,7 +149,7 @@ const triggerLogin = () => {
   router.push({ name: 'login' })
 }
 
-const createDiscussion = () => {
+const submitDiscussion = () => {
   const externalUrl = getNotificationExternalUrl()
   const payload: DiscussionForm = {
     ...discussionForm.value,
@@ -163,14 +160,11 @@ const createDiscussion = () => {
       ? { extras: { notification: { external_url: externalUrl } } }
       : {})
   }
-  discussionStore.createDiscussion(payload).then((d) => {
-    if (d !== undefined) {
-      discussionForm.value.title = ''
-      discussionForm.value.comment = ''
-      discussionOrganization.value = null
-      showDiscussionForm.value = false
-      currentPage.value = 1
-    }
+  createDiscussion(payload).then(() => {
+    discussionForm.value.title = ''
+    discussionForm.value.comment = ''
+    discussionOrganization.value = null
+    showDiscussionForm.value = false
   })
 }
 
@@ -179,22 +173,18 @@ const cancelCreateDiscussion = () => {
   discussionOrganization.value = null
 }
 
-const createComment = (discussionId: DiscussionId, close = false) => {
-  discussionStore
-    .createComment(props.subject.id, discussionId, {
-      ...commentForm.value,
-      ...(commentOrganization.value
-        ? { organization: commentOrganization.value }
-        : {}),
-      close
-    })
-    .then((d) => {
-      if (d !== undefined) {
-        commentForm.value.comment = ''
-        commentOrganization.value = null
-        commentFormId.value = null
-      }
-    })
+const submitComment = (discussionId: DiscussionId, close = false) => {
+  createComment(discussionId, {
+    ...commentForm.value,
+    ...(commentOrganization.value
+      ? { organization: commentOrganization.value }
+      : {}),
+    close
+  }).then(() => {
+    commentForm.value.comment = ''
+    commentOrganization.value = null
+    commentFormId.value = null
+  })
 }
 
 const cancelComment = () => {
@@ -228,17 +218,12 @@ const submitEditDiscussion = async (discussion: Discussion) => {
   const firstComment = discussion.discussion[0]
   try {
     if (editDiscussionForm.value.title !== discussion.title) {
-      await discussionStore.updateDiscussionTitle(
-        props.subject.id,
-        discussion.id,
-        editDiscussionForm.value.title
-      )
+      await updateDiscussionTitle(discussion.id, editDiscussionForm.value.title)
     }
     // Title and first-comment content live on two separate udata endpoints,
     // so changing both takes two requests.
     if (editDiscussionForm.value.comment !== firstComment.content) {
-      await discussionStore.updateComment(
-        props.subject.id,
+      await updateComment(
         discussion.id,
         firstComment.id,
         editDiscussionForm.value.comment
@@ -251,14 +236,14 @@ const submitEditDiscussion = async (discussion: Discussion) => {
   editDiscussionId.value = null
 }
 
-const deleteDiscussion = (discussion: Discussion) => {
+const confirmDeleteDiscussion = (discussion: Discussion) => {
   if (
     !window.confirm(
       'Êtes-vous sûr de vouloir supprimer cette discussion et tous ses commentaires ?'
     )
   )
     return
-  discussionStore.deleteDiscussion(props.subject.id, discussion.id)
+  deleteDiscussion(discussion.id)
 }
 
 const startEditComment = (discussionId: DiscussionId, comment: Comment) => {
@@ -274,8 +259,7 @@ const cancelEditComment = () => {
 
 const submitEditComment = async () => {
   if (editCommentInfo.value === null) return
-  await discussionStore.updateComment(
-    props.subject.id,
+  await updateComment(
     editCommentInfo.value.discussionId,
     editCommentInfo.value.commentId,
     editCommentForm.value.comment
@@ -283,36 +267,29 @@ const submitEditComment = async () => {
   editCommentInfo.value = null
 }
 
-const deleteComment = (discussionId: DiscussionId, commentId: string) => {
+const confirmDeleteComment = (
+  discussionId: DiscussionId,
+  commentId: string
+) => {
   if (!window.confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?'))
     return
   if (editCommentInfo.value?.commentId === commentId) {
     editCommentInfo.value = null
   }
-  discussionStore.deleteComment(props.subject.id, discussionId, commentId)
+  deleteComment(discussionId, commentId)
 }
 
 watch(
-  [() => props.subject.id, () => currentPage.value, () => props.subjectClass],
-  ([subjectId, page, subjectClass]) => {
-    if (!subjectId) return
-    discussionStore.loadDiscussionsForSubject(subjectId, page)
-    discussionStore.loadClosedCountForSubject(subjectId)
-    discussionForm.value.subject = {
-      id: subjectId,
-      class: subjectClass
-    }
-  },
-  { immediate: true }
+  [() => props.subject.id, () => props.subjectClass],
+  ([id, subjectClass]) => {
+    discussionForm.value.subject = { id, class: subjectClass }
+  }
 )
 
 // Used by parent views to deep-link to a discussion
 // Only looks at the currently loaded page: discussions on further pages are a known limitation.
 const navigateToDiscussion = async (discussionId: DiscussionId) => {
-  await discussionStore.loadDiscussionsForSubject(
-    props.subject.id,
-    currentPage.value
-  )
+  await loaded()
   nextTick(() => {
     const el = document.getElementById(`discussion-${discussionId}`)
     if (!el) {
@@ -323,7 +300,7 @@ const navigateToDiscussion = async (discussionId: DiscussionId) => {
   })
 }
 
-defineExpose({ navigateToDiscussion })
+defineExpose({ navigateToDiscussion, total })
 </script>
 
 <template>
@@ -357,7 +334,7 @@ defineExpose({ navigateToDiscussion })
   </div>
 
   <div v-if="showDiscussionForm" class="fr-mb-4w">
-    <form @submit.prevent="createDiscussion()">
+    <form @submit.prevent="submitDiscussion()">
       <DiscussionIdentitySelect v-model="discussionOrganization" />
       <div class="fr-input-group">
         <label class="fr-label" for="discussion-title">
@@ -444,7 +421,7 @@ defineExpose({ navigateToDiscussion })
             type="button"
             icon="fr-icon-delete-line"
             label="Supprimer la discussion"
-            @click="deleteDiscussion(discussion)"
+            @click="confirmDeleteDiscussion(discussion)"
           />
         </div>
       </div>
@@ -562,7 +539,7 @@ defineExpose({ navigateToDiscussion })
                     type="button"
                     icon="fr-icon-delete-line"
                     label="Supprimer le commentaire"
-                    @click="deleteComment(discussion.id, comment.id)"
+                    @click="confirmDeleteComment(discussion.id, comment.id)"
                   />
                 </div>
               </div>
@@ -619,7 +596,7 @@ defineExpose({ navigateToDiscussion })
         <form
           v-if="commentFormId === discussion.id"
           class="fr-mt-3w"
-          @submit.prevent="createComment(discussion.id)"
+          @submit.prevent="submitComment(discussion.id)"
         >
           <DiscussionIdentitySelect v-model="commentOrganization" />
           <div class="fr-input-group">
@@ -651,7 +628,7 @@ defineExpose({ navigateToDiscussion })
               icon="fr-icon-lock-line"
               label="Répondre et clôturer"
               class="fr-mr-1w"
-              @click="createComment(discussion.id, true)"
+              @click="submitComment(discussion.id, true)"
             />
             <DsfrButton size="sm" type="submit" label="Répondre" />
           </div>
