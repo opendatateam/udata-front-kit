@@ -19,7 +19,7 @@ import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
 import { usePageConf } from '@/utils/config'
 import { useLabels } from '@/utils/labels'
-import { FILES_TAB, tabIds, useRoutedTabs } from '@/utils/tabs'
+import { DISCUSSIONS_TAB, FILES_TAB, tabIds, useRoutedTabs } from '@/utils/tabs'
 import IndicatorInformationPanel from '../../components/indicators/IndicatorInformationPanel.vue'
 import IndicatorSourcesList from '../../components/indicators/IndicatorSourcesList.vue'
 import IndicatorTags from '../../components/indicators/IndicatorTags.vue'
@@ -76,7 +76,7 @@ const { tabs, activeIndex } = useRoutedTabs(() => [
       (indicator.value?.metrics.dataservices ?? 0)
   },
   {
-    slug: 'discussions',
+    slug: DISCUSSIONS_TAB,
     title: 'Discussions',
     count:
       discussionsList.value?.total ?? indicator.value?.metrics.discussions ?? 0
@@ -190,7 +190,7 @@ onMounted(() => {
       </DsfrTabContent>
 
       <!-- Discussions -->
-      <DsfrTabContent v-bind="tabIds('discussions')">
+      <DsfrTabContent v-bind="tabIds(DISCUSSIONS_TAB)">
         <DiscussionsList
           ref="discussionsList"
           :subject="indicator"

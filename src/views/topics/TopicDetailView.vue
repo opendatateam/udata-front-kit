@@ -34,7 +34,7 @@ import { useAsyncComponent } from '@/utils/component'
 import { useLabels } from '@/utils/labels'
 import { useCanonicalUrl, useMeta } from '@/utils/seo'
 import { useSpatialCoverage } from '@/utils/spatial'
-import { tabIds, useRoutedTabs } from '@/utils/tabs'
+import { DISCUSSIONS_TAB, tabIds, useRoutedTabs } from '@/utils/tabs'
 import { useTagsByRef } from '@/utils/tags'
 import { useExtras, useTopicFactors } from '@/utils/topic'
 
@@ -114,7 +114,7 @@ const { tabs, activeIndex, selectTab } = useRoutedTabs(() => [
     visible: showDatasets
   },
   {
-    slug: 'discussions',
+    slug: DISCUSSIONS_TAB,
     title: 'Discussions',
     count: discussionsListRef.value?.total ?? 0,
     visible: showDiscussions
@@ -247,7 +247,7 @@ watch(
       )
       clearHash()
     } else if (hash.startsWith('#discussion-')) {
-      void selectTab('discussions')
+      void selectTab(DISCUSSIONS_TAB)
       const discussionId = hash.replace('#discussion-', '')
       runWhenReady(
         () => !!discussionsListRef.value,
@@ -460,7 +460,7 @@ watch(
       <!-- Discussions -->
       <DsfrTabContent
         v-if="showDiscussions && topic"
-        v-bind="tabIds('discussions')"
+        v-bind="tabIds(DISCUSSIONS_TAB)"
       >
         <DiscussionsList
           ref="discussionsListRef"

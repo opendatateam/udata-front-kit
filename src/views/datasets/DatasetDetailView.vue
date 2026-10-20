@@ -26,7 +26,7 @@ import type { OgcLayerInfo } from '@/utils/ogcServices'
 import { fetchAllOgcResources } from '@/utils/ogcServices'
 import { openInQgis } from '@/utils/qgis'
 import { useMeta } from '@/utils/seo'
-import { FILES_TAB, tabIds, useRoutedTabs } from '@/utils/tabs'
+import { DISCUSSIONS_TAB, FILES_TAB, tabIds, useRoutedTabs } from '@/utils/tabs'
 
 const route = useRouteParamsAsString()
 const datasetIdOrSlug = route.params.item_id
@@ -110,7 +110,7 @@ const { tabs, activeIndex } = useRoutedTabs(() => [
       (dataset.value?.metrics.dataservices ?? 0)
   },
   {
-    slug: 'discussions',
+    slug: DISCUSSIONS_TAB,
     title: 'Discussions',
     count:
       discussionsList.value?.total ?? dataset.value?.metrics.discussions ?? 0
@@ -257,7 +257,7 @@ onMounted(() => {
       </DsfrTabContent>
 
       <!-- Discussions -->
-      <DsfrTabContent v-bind="tabIds('discussions')">
+      <DsfrTabContent v-bind="tabIds(DISCUSSIONS_TAB)">
         <SimpleBanner
           v-if="!pageConf.resources_tabs.discussions.create"
           type="primary"

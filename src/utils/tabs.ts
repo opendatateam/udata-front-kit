@@ -12,6 +12,9 @@ export type RoutedTab = Omit<TabWithCount, 'tabId' | 'panelId'> & {
 // Slug of the tab that renders resources, targeted by `?resource_id` links
 export const FILES_TAB = 'files'
 
+// Slug of the discussions tab, stored by udata in notification links: do not rename
+export const DISCUSSIONS_TAB = 'discussions'
+
 export const tabIds = (slug: string) => ({
   tabId: `tab-${slug}`,
   panelId: `tab-content-${slug}`

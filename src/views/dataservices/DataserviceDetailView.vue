@@ -19,7 +19,7 @@ import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { useAsyncComponent } from '@/utils/component'
 import { useLabels } from '@/utils/labels'
 import { useMeta } from '@/utils/seo'
-import { tabIds, useRoutedTabs } from '@/utils/tabs'
+import { DISCUSSIONS_TAB, tabIds, useRoutedTabs } from '@/utils/tabs'
 import { OpenApiViewer } from '@datagouv/components-next'
 
 const route = useRouteParamsAsString()
@@ -78,7 +78,7 @@ const discussionsList =
 const { tabs, activeIndex } = useRoutedTabs(() => [
   { slug: 'datasets', title: 'Données', count: total.value },
   {
-    slug: 'discussions',
+    slug: DISCUSSIONS_TAB,
     title: 'Discussions',
     count:
       discussionsList.value?.total ??
@@ -283,7 +283,7 @@ onMounted(() => {
       </DsfrTabContent>
 
       <!-- Discussions -->
-      <DsfrTabContent v-bind="tabIds('discussions')">
+      <DsfrTabContent v-bind="tabIds(DISCUSSIONS_TAB)">
         <SimpleBanner
           v-if="!pageConf.resources_tabs.discussions.create"
           type="primary"
