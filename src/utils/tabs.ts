@@ -54,7 +54,6 @@ export const useRoutedTabs = (routedTabs: MaybeRefOrGetter<RoutedTab[]>) => {
     // skip only if the URL already points there: the displayed tab can differ (unknown or hidden slug)
     if ((currentSlug.value || undefined) === target) return
     const { tab, ...params } = route.params
-    // replace, not push: arrow-key navigation would otherwise flood the history
     // query is dropped: it belongs to the tab being left (e.g. ?resource_id)
     await router.replace({
       name: route.name,
