@@ -3,6 +3,7 @@ import type {
   DatasetV2,
   DatasetV2WithFullObject
 } from '@datagouv/components-next'
+import { discussionFactory } from 'cypress/support/factories/discussions_factory'
 import { dataserviceFactory } from '../../../../support/factories/dataservices_factory'
 import { datasetFactory } from '../../../../support/factories/datasets_factory'
 import { createIndicator } from '../indicators/support'
@@ -251,12 +252,15 @@ describe('Dataservices (API) - Detail Page', () => {
         datasetFactory.many(3)
       )
 
+      // Differs from metrics.discussions: the tab shows the loaded list's total
+      cy.mockDatagouvObjectList('discussions', discussionFactory.many(2))
+
       cy.visit(`/dataservices/${countsDataservice.id}`)
       cy.wait(`@get_dataservices_${countsDataservice.id}`)
       cy.wait('@getDataserviceDatasets')
 
       cy.contains('button', 'Données (3)').should('be.visible')
-      cy.contains('button', 'Discussions (6)').should('be.visible')
+      cy.contains('button', 'Discussions (2)').should('be.visible')
       cy.contains('button', 'Informations')
         .find('sup.tab-count')
         .should('not.exist')
