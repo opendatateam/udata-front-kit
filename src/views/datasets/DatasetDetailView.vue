@@ -26,7 +26,7 @@ import type { OgcLayerInfo } from '@/utils/ogcServices'
 import { fetchAllOgcResources } from '@/utils/ogcServices'
 import { openInQgis } from '@/utils/qgis'
 import { useMeta } from '@/utils/seo'
-import { DISCUSSIONS_TAB, FILES_TAB, tabIds, useRoutedTabs } from '@/utils/tabs'
+import { Tab, tabIds, useRoutedTabs } from '@/utils/tabs'
 
 const route = useRouteParamsAsString()
 const datasetIdOrSlug = route.params.item_id
@@ -98,24 +98,24 @@ const discussionsList =
 
 const { tabs, activeIndex } = useRoutedTabs(() => [
   {
-    slug: FILES_TAB,
+    slug: Tab.FILES,
     title: 'Fichiers',
     count: dataset.value?.resources.total ?? 0
   },
   {
-    slug: 'reuses_and_dataservices',
+    slug: Tab.REUSES_AND_DATASERVICES,
     title: 'Réutilisations et API',
     count:
       (dataset.value?.metrics.reuses ?? 0) +
       (dataset.value?.metrics.dataservices ?? 0)
   },
   {
-    slug: DISCUSSIONS_TAB,
+    slug: Tab.DISCUSSIONS,
     title: 'Discussions',
     count:
       discussionsList.value?.total ?? dataset.value?.metrics.discussions ?? 0
   },
-  { slug: 'informations', title: 'Informations' }
+  { slug: Tab.INFORMATIONS, title: 'Informations' }
 ])
 
 const description = computed(() => descriptionFromMarkdown(dataset))
@@ -235,7 +235,7 @@ onMounted(() => {
       :tabs="tabs"
     >
       <!-- Fichiers -->
-      <DsfrTabContent v-bind="tabIds(FILES_TAB)">
+      <DsfrTabContent v-bind="tabIds(Tab.FILES)">
         <ResourcesTabContent :dataset="dataset" />
         <div v-if="ogcLayerInfo.has(dataset.id)" class="fr-mt-2w">
           <DsfrButton
@@ -251,13 +251,13 @@ onMounted(() => {
       </DsfrTabContent>
 
       <!-- Réutilisations et API -->
-      <DsfrTabContent v-bind="tabIds('reuses_and_dataservices')">
+      <DsfrTabContent v-bind="tabIds(Tab.REUSES_AND_DATASERVICES)">
         <DatasetDataservicesList :dataset-id="dataset.id" />
         <DatasetReusesList :dataset-id="dataset.id" />
       </DsfrTabContent>
 
       <!-- Discussions -->
-      <DsfrTabContent v-bind="tabIds(DISCUSSIONS_TAB)">
+      <DsfrTabContent v-bind="tabIds(Tab.DISCUSSIONS)">
         <SimpleBanner
           v-if="!pageConf.resources_tabs.discussions.create"
           type="primary"
@@ -288,7 +288,7 @@ onMounted(() => {
       </DsfrTabContent>
 
       <!-- Informations -->
-      <DsfrTabContent v-bind="tabIds('informations')">
+      <DsfrTabContent v-bind="tabIds(Tab.INFORMATIONS)">
         <div class="divide-y">
           <ExtendedInformationPanel
             v-if="

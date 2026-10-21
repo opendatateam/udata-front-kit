@@ -7,11 +7,21 @@ import type { TabWithCount } from '@/components/TabsWithCounts.vue'
 
 export type RoutedTab = TabWithCount & { visible?: boolean }
 
-// Slug of the tab that renders resources, targeted by `?resource_id` links
-export const FILES_TAB = 'files'
-
-// Slug of the discussions tab, stored by udata in notification links: do not rename
-export const DISCUSSIONS_TAB = 'discussions'
+// Tab slugs, matching data.gouv.fr where an equivalent exists
+export enum Tab {
+  ACTIVITY = 'activity',
+  DATASETS = 'datasets',
+  // stored by udata in notification links: do not rename
+  DISCUSSIONS = 'discussions',
+  FACTORS = 'factors',
+  // renders resources, targeted by `?resource_id` links
+  FILES = 'files',
+  INFORMATIONS = 'informations',
+  PREVIEW = 'preview',
+  REUSES = 'reuses',
+  REUSES_AND_DATASERVICES = 'reuses_and_dataservices',
+  SOURCES = 'sources'
+}
 
 export const tabIds = (
   slug: string

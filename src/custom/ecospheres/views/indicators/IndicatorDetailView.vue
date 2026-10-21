@@ -19,7 +19,7 @@ import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
 import { usePageConf } from '@/utils/config'
 import { useLabels } from '@/utils/labels'
-import { DISCUSSIONS_TAB, FILES_TAB, tabIds, useRoutedTabs } from '@/utils/tabs'
+import { Tab, tabIds, useRoutedTabs } from '@/utils/tabs'
 import IndicatorInformationPanel from '../../components/indicators/IndicatorInformationPanel.vue'
 import IndicatorSourcesList from '../../components/indicators/IndicatorSourcesList.vue'
 import IndicatorTags from '../../components/indicators/IndicatorTags.vue'
@@ -53,35 +53,35 @@ const discussionsList =
 
 const { tabs, activeIndex } = useRoutedTabs(() => [
   {
-    slug: 'preview',
+    slug: Tab.PREVIEW,
     title: 'Prévisualisation',
     visible:
       !!indicator.value?.extras['ecospheres-indicateurs'].enable_visualization
   },
   {
-    slug: FILES_TAB,
+    slug: Tab.FILES,
     title: 'Fichiers',
     count: indicator.value?.resources.total ?? 0
   },
   {
-    slug: 'sources',
+    slug: Tab.SOURCES,
     title: 'Sources',
     count: indicator.value?.extras['ecospheres-indicateurs'].sources.length ?? 0
   },
   {
-    slug: 'reuses_and_dataservices',
+    slug: Tab.REUSES_AND_DATASERVICES,
     title: 'Réutilisations et API',
     count:
       (indicator.value?.metrics.reuses ?? 0) +
       (indicator.value?.metrics.dataservices ?? 0)
   },
   {
-    slug: DISCUSSIONS_TAB,
+    slug: Tab.DISCUSSIONS,
     title: 'Discussions',
     count:
       discussionsList.value?.total ?? indicator.value?.metrics.discussions ?? 0
   },
-  { slug: 'informations', title: 'Informations' }
+  { slug: Tab.INFORMATIONS, title: 'Informations' }
 ])
 
 const description = computed(() => descriptionFromMarkdown(indicator))
@@ -160,7 +160,7 @@ onMounted(() => {
       :tabs="tabs"
     >
       <!-- Fichiers -->
-      <DsfrTabContent v-bind="tabIds(FILES_TAB)">
+      <DsfrTabContent v-bind="tabIds(Tab.FILES)">
         <ResourcesTabContent
           :dataset="indicator"
           no-file-message="Il n'y a pas encore de fichier pour cet indicateur."
@@ -169,7 +169,7 @@ onMounted(() => {
       </DsfrTabContent>
 
       <!-- Prévisualisation -->
-      <DsfrTabContent v-bind="tabIds('preview')">
+      <DsfrTabContent v-bind="tabIds(Tab.PREVIEW)">
         <IndicatorVizChart
           v-if="tabularApiUrl"
           :indicator="indicator"
@@ -178,7 +178,7 @@ onMounted(() => {
       </DsfrTabContent>
 
       <!-- Réutilisations et API -->
-      <DsfrTabContent v-bind="tabIds('reuses_and_dataservices')">
+      <DsfrTabContent v-bind="tabIds(Tab.REUSES_AND_DATASERVICES)">
         <DatasetDataservicesList
           :dataset-id="indicator.id"
           empty-message="Il n'y a pas encore d'API pour cet indicateur."
@@ -190,7 +190,7 @@ onMounted(() => {
       </DsfrTabContent>
 
       <!-- Discussions -->
-      <DsfrTabContent v-bind="tabIds(DISCUSSIONS_TAB)">
+      <DsfrTabContent v-bind="tabIds(Tab.DISCUSSIONS)">
         <DiscussionsList
           ref="discussionsList"
           :subject="indicator"
@@ -200,12 +200,12 @@ onMounted(() => {
       </DsfrTabContent>
 
       <!-- Sources -->
-      <DsfrTabContent v-bind="tabIds('sources')">
+      <DsfrTabContent v-bind="tabIds(Tab.SOURCES)">
         <IndicatorSourcesList :indicator="indicator" />
       </DsfrTabContent>
 
       <!-- Informations -->
-      <DsfrTabContent v-bind="tabIds('informations')">
+      <DsfrTabContent v-bind="tabIds(Tab.INFORMATIONS)">
         <IndicatorInformationPanel :indicator="indicator" />
       </DsfrTabContent>
     </TabsWithCounts>

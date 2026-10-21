@@ -34,7 +34,7 @@ import { useAsyncComponent } from '@/utils/component'
 import { useLabels } from '@/utils/labels'
 import { useCanonicalUrl, useMeta } from '@/utils/seo'
 import { useSpatialCoverage } from '@/utils/spatial'
-import { DISCUSSIONS_TAB, tabIds, useRoutedTabs } from '@/utils/tabs'
+import { Tab, tabIds, useRoutedTabs } from '@/utils/tabs'
 import { useTagsByRef } from '@/utils/tags'
 import { useExtras, useTopicFactors } from '@/utils/topic'
 
@@ -108,24 +108,24 @@ const showActivity = computed(() => canEdit.value)
 
 const { tabs, activeIndex, selectTab } = useRoutedTabs(() => [
   {
-    slug: 'factors',
+    slug: Tab.FACTORS,
     title: 'Données',
     count: nbFactors.value,
     visible: showDatasets
   },
   {
-    slug: DISCUSSIONS_TAB,
+    slug: Tab.DISCUSSIONS,
     title: 'Discussions',
     count: discussionsListRef.value?.total ?? 0,
     visible: showDiscussions
   },
   {
-    slug: 'reuses',
+    slug: Tab.REUSES,
     title: 'Réutilisations',
     count: topicReusesListRef.value?.reuses.length ?? 0,
     visible: showReuses
   },
-  { slug: 'activity', title: 'Activité', visible: showActivity.value }
+  { slug: Tab.ACTIVITY, title: 'Activité', visible: showActivity.value }
 ])
 
 const cloneModalActions = [
@@ -247,7 +247,7 @@ watch(
       )
       clearHash()
     } else if (hash.startsWith('#discussion-')) {
-      selectTab(DISCUSSIONS_TAB)
+      selectTab(Tab.DISCUSSIONS)
       const discussionId = hash.replace('#discussion-', '')
       runWhenReady(
         () => !!discussionsListRef.value,
@@ -436,7 +436,7 @@ watch(
       <!-- Jeux de données -->
       <DsfrTabContent
         v-if="showDatasets"
-        v-bind="tabIds('factors')"
+        v-bind="tabIds(Tab.FACTORS)"
         class="fr-px-2w"
       >
         <TopicFactorsList
@@ -460,7 +460,7 @@ watch(
       <!-- Discussions -->
       <DsfrTabContent
         v-if="showDiscussions && topic"
-        v-bind="tabIds(DISCUSSIONS_TAB)"
+        v-bind="tabIds(Tab.DISCUSSIONS)"
       >
         <DiscussionsList
           ref="discussionsListRef"
@@ -470,11 +470,11 @@ watch(
         />
       </DsfrTabContent>
       <!-- Réutilisations -->
-      <DsfrTabContent v-if="showReuses" v-bind="tabIds('reuses')">
+      <DsfrTabContent v-if="showReuses" v-bind="tabIds(Tab.REUSES)">
         <TopicReusesList ref="topicReusesListRef" :topic="topic" />
       </DsfrTabContent>
       <!-- Activité -->
-      <DsfrTabContent v-if="showActivity" v-bind="tabIds('activity')">
+      <DsfrTabContent v-if="showActivity" v-bind="tabIds(Tab.ACTIVITY)">
         <TopicActivityList
           ref="topicActivityListRef"
           :topic

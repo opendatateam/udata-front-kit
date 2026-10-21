@@ -19,7 +19,7 @@ import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { useAsyncComponent } from '@/utils/component'
 import { useLabels } from '@/utils/labels'
 import { useMeta } from '@/utils/seo'
-import { DISCUSSIONS_TAB, tabIds, useRoutedTabs } from '@/utils/tabs'
+import { Tab, tabIds, useRoutedTabs } from '@/utils/tabs'
 import { OpenApiViewer } from '@datagouv/components-next'
 
 const route = useRouteParamsAsString()
@@ -76,16 +76,16 @@ const discussionsList =
   useTemplateRef<InstanceType<typeof DiscussionsList>>('discussionsList')
 
 const { tabs, activeIndex } = useRoutedTabs(() => [
-  { slug: 'datasets', title: 'Données', count: total.value },
+  { slug: Tab.DATASETS, title: 'Données', count: total.value },
   {
-    slug: DISCUSSIONS_TAB,
+    slug: Tab.DISCUSSIONS,
     title: 'Discussions',
     count:
       discussionsList.value?.total ??
       dataservice.value?.metrics.discussions ??
       0
   },
-  { slug: 'informations', title: 'Informations' }
+  { slug: Tab.INFORMATIONS, title: 'Informations' }
 ])
 
 const description = computed(() => descriptionFromMarkdown(dataservice))
@@ -249,7 +249,7 @@ onMounted(() => {
       :tabs="tabs"
     >
       <!-- Données -->
-      <DsfrTabContent v-bind="tabIds('datasets')">
+      <DsfrTabContent v-bind="tabIds(Tab.DATASETS)">
         <div id="datasets" class="fr-pb-2w">
           <h2 class="fr-mb-1v subtitle subtitle--uppercase">
             {{ `${total} jeu${total > 1 ? 'x' : ''} de données` }}
@@ -283,7 +283,7 @@ onMounted(() => {
       </DsfrTabContent>
 
       <!-- Discussions -->
-      <DsfrTabContent v-bind="tabIds(DISCUSSIONS_TAB)">
+      <DsfrTabContent v-bind="tabIds(Tab.DISCUSSIONS)">
         <SimpleBanner
           v-if="!pageConf.resources_tabs.discussions.create"
           type="primary"
@@ -315,7 +315,7 @@ onMounted(() => {
       </DsfrTabContent>
 
       <!-- Informations -->
-      <DsfrTabContent v-bind="tabIds('informations')">
+      <DsfrTabContent v-bind="tabIds(Tab.INFORMATIONS)">
         <div class="fr-pb-3w">
           <h2 class="fr-mb-3w subtitle subtitle--uppercase">
             Informations techniques
