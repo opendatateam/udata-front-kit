@@ -393,23 +393,21 @@ defineExpose({ total })
       <div
         class="fr-grid-row fr-grid-row--middle discussion-title-row fr-mb-1v"
       >
-        <div
-          :id="`discussion-${discussion.id}`"
-          class="discussion-title fr-col"
-        >
-          <span
-            v-if="discussion.closed"
-            class="fr-icon-lock-line fr-icon--sm"
-            aria-hidden="true"
-          ></span>
-          {{ discussion.title }}
+        <div class="discussion-title-group fr-col">
+          <div :id="`discussion-${discussion.id}`" class="discussion-title">
+            <span
+              v-if="discussion.closed"
+              class="fr-icon-lock-line fr-icon--sm"
+              aria-hidden="true"
+            ></span>
+            {{ discussion.title }}
+          </div>
+          <CopyButton
+            label="Copier le lien vers cette discussion"
+            copied-label="Lien copié"
+            :text="discussionPermalink(discussion.id)"
+          />
         </div>
-        <CopyButton
-          label="Copier le lien vers cette discussion"
-          copied-label="Lien copié"
-          :text="discussionPermalink(discussion.id)"
-          icon-only
-        />
         <DiscussionItemActions
           :permissions="discussion.permissions"
           item-label="la discussion"
@@ -584,6 +582,11 @@ defineExpose({ total })
 }
 .discussion-title-row {
   justify-content: space-between;
+}
+.discussion-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 .discussion-footer {
   display: flex;
