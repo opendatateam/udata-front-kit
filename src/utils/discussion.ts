@@ -19,7 +19,7 @@ export const useDiscussions = (subjectId: Ref<SubjectId>) => {
   const discussions: Ref<DiscussionResponse | undefined> = ref()
   const closedCount: Ref<number | undefined> = ref()
 
-  let loading: Promise<void> = Promise.resolve()
+  let loading: Promise<void> | undefined
   let lastRequest = 0
 
   const fetchPage = async () => {
@@ -30,6 +30,7 @@ export const useDiscussions = (subjectId: Ref<SubjectId>) => {
     )
     // Drop responses superseded by a later request (e.g. fast page changes)
     if (request !== lastRequest) return
+    // Page emptied (e.g. last item deleted): step back, the watcher fetches it
     if (!res.data.length && currentPage.value > 1) {
       currentPage.value -= 1
       return
@@ -37,10 +38,14 @@ export const useDiscussions = (subjectId: Ref<SubjectId>) => {
     discussions.value = res
   }
 
+  let lastCountRequest = 0
+
   const refreshClosedCount = async () => {
-    const id = subjectId.value
-    const count = await discussionsAPI.getClosedCount(id)
-    if (id === subjectId.value) closedCount.value = count
+    const request = ++lastCountRequest
+    const count = await discussionsAPI.getClosedCount(subjectId.value)
+    // Drop responses superseded by a later request
+    if (request !== lastCountRequest) return
+    closedCount.value = count
   }
 
   const reload = (): Promise<void> => {
@@ -48,18 +53,12 @@ export const useDiscussions = (subjectId: Ref<SubjectId>) => {
     return loading
   }
 
-  watch(currentPage, () => {
-    loading = fetchPage()
-  })
-
   const reloadFirstPage = async () => {
     if (currentPage.value === 1) return await reload()
     // Changing page triggers the page fetch through the watcher
     currentPage.value = 1
     await refreshClosedCount()
   }
-
-  watch(subjectId, (id) => id && reloadFirstPage(), { immediate: true })
 
   const pages = computed(() => {
     if (!discussions.value) return []
@@ -132,6 +131,22 @@ export const useDiscussions = (subjectId: Ref<SubjectId>) => {
       discussion: discussion.discussion.filter((c) => c.id !== commentId)
     })
   }
+
+  watch(currentPage, () => {
+    loading = fetchPage()
+  })
+  // Subject can change with the same composable used (e.g. TopicDetail swaps the Topic)
+  watch(
+    subjectId,
+    (id) => {
+      if (!id) return
+      // Clear the previous subject's data while the new one loads
+      discussions.value = undefined
+      closedCount.value = undefined
+      reloadFirstPage()
+    },
+    { immediate: true }
+  )
 
   return {
     currentPage,
