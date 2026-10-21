@@ -19,7 +19,7 @@ const EXCLUDE_TAGS = ['usage', 'maille']
  * Displayable tags of an indicator (secteur, levier...)
  */
 export const useIndicatorTags = (
-  indicator: MaybeRefOrGetter<Indicator | undefined>
+  indicator: MaybeRefOrGetter<Indicator | DatasetV2 | undefined>
 ) =>
   useTagsByRef(
     'indicators',
