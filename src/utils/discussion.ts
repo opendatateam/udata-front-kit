@@ -18,8 +18,6 @@ export const useDiscussions = (subjectId: Ref<SubjectId>) => {
   const currentPage = ref(1)
   const discussions: Ref<DiscussionResponse | undefined> = ref()
   const closedCount: Ref<number | undefined> = ref()
-
-  let loading: Promise<void> | undefined
   let lastRequest = 0
 
   const fetchPage = async () => {
@@ -49,8 +47,7 @@ export const useDiscussions = (subjectId: Ref<SubjectId>) => {
   }
 
   const reload = (): Promise<void> => {
-    loading = Promise.all([fetchPage(), refreshClosedCount()]).then(() => {})
-    return loading
+    return Promise.all([fetchPage(), refreshClosedCount()]).then(() => {})
   }
 
   const reloadFirstPage = async () => {
@@ -70,7 +67,34 @@ export const useDiscussions = (subjectId: Ref<SubjectId>) => {
     }))
   })
 
+  // Discussion fetched on its own (deep link), independently of pagination
+  const selected: Ref<Discussion | null> = ref(null)
+  let lastSelectRequest = 0
+
+  // Resolves to false if the discussion doesn't exist or belongs to another subject
+  const selectDiscussion = async (
+    discussionId: DiscussionId | undefined
+  ): Promise<boolean> => {
+    const request = ++lastSelectRequest
+    selected.value = null
+    if (!discussionId) return true
+    const discussion = await discussionsAPI
+      .getDiscussion(discussionId)
+      .catch(() => undefined)
+    // A later selection takes over
+    if (request !== lastSelectRequest) return true
+    if (!discussion || discussion.subject.id !== subjectId.value) return false
+    selected.value = discussion
+    return true
+  }
+
+  const findDiscussion = (discussionId: DiscussionId) =>
+    selected.value?.id === discussionId
+      ? selected.value
+      : discussions.value?.data.find((d) => d.id === discussionId)
+
   const replaceDiscussion = (discussion: Discussion) => {
+    if (selected.value?.id === discussion.id) selected.value = discussion
     if (!discussions.value) return
     discussions.value.data = discussions.value.data.map((d) =>
       d.id === discussion.id ? discussion : d
@@ -114,6 +138,7 @@ export const useDiscussions = (subjectId: Ref<SubjectId>) => {
 
   const deleteDiscussion = async (discussionId: DiscussionId) => {
     await discussionsAPI.deleteDiscussion(discussionId)
+    if (selected.value?.id === discussionId) selected.value = null
     await reload()
   }
 
@@ -122,9 +147,7 @@ export const useDiscussions = (subjectId: Ref<SubjectId>) => {
     commentId: string
   ) => {
     await discussionsAPI.deleteComment(discussionId, commentId)
-    const discussion = discussions.value?.data.find(
-      (d) => d.id === discussionId
-    )
+    const discussion = findDiscussion(discussionId)
     if (!discussion) return
     replaceDiscussion({
       ...discussion,
@@ -133,7 +156,7 @@ export const useDiscussions = (subjectId: Ref<SubjectId>) => {
   }
 
   watch(currentPage, () => {
-    loading = fetchPage()
+    fetchPage()
   })
   // Subject can change with the same composable used (e.g. TopicDetail swaps the Topic)
   watch(
@@ -143,6 +166,8 @@ export const useDiscussions = (subjectId: Ref<SubjectId>) => {
       // Clear the previous subject's data while the new one loads
       discussions.value = undefined
       closedCount.value = undefined
+      selected.value = null
+      lastSelectRequest++
       reloadFirstPage()
     },
     { immediate: true }
@@ -153,8 +178,8 @@ export const useDiscussions = (subjectId: Ref<SubjectId>) => {
     discussions,
     closedCount,
     pages,
-    // Resolves once the in-flight load is done
-    loaded: () => loading,
+    selected,
+    selectDiscussion,
     createDiscussion,
     createComment,
     updateDiscussionTitle,

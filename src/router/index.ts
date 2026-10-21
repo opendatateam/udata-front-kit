@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
 import config from '@/config'
 import type { StaticPageConfig } from '@/model/config'
+import { rewriteDiscussionHash } from '@/router/deeplinks'
 import LocalStorageService from '@/services/LocalStorageService'
 import { useResourceExplorer } from '@/utils/explorer'
 import NotFoundView from '@/views/NotFoundView.vue'
@@ -132,7 +133,7 @@ const routerPromise = siteRoutesPromise.then((siteRoutes) => {
     path: '/:pathMatch(.*)',
     component: NotFoundView
   })
-  return createRouter({
+  const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes,
     scrollBehavior(to, from, savedPosition) {
@@ -148,13 +149,13 @@ const routerPromise = siteRoutesPromise.then((siteRoutes) => {
         }
         return false
       }
-      // Preserve scroll when switching tabs on a detail page
+      // Preserve scroll when switching tabs or query on a detail page, unless back/forward
       if (
+        to.meta.objectType &&
         to.name === from.name &&
-        to.params.item_id === from.params.item_id &&
-        to.params.tab !== from.params.tab
+        to.params.item_id === from.params.item_id
       ) {
-        return false
+        return savedPosition ?? false
       }
       // Preserve scroll when switching between search list pages (e.g. datasets ↔ indicators)
       if (to.meta.searchConfig && from.meta.searchConfig) {
@@ -171,6 +172,8 @@ const routerPromise = siteRoutesPromise.then((siteRoutes) => {
       }
     }
   })
+  router.beforeEach(rewriteDiscussionHash)
+  return router
 })
 
 export default routerPromise

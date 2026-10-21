@@ -32,6 +32,18 @@ export default class DiscussionsAPI extends DatagouvfrAPI {
   }
 
   /**
+   * Get a single discussion, without error toast
+   */
+  async getDiscussion(discussionId: DiscussionId): Promise<Discussion> {
+    return await this.get({
+      entityId: discussionId,
+      toasted: false,
+      // Needed so the API resolves `permissions` against the current user
+      authenticated: true
+    })
+  }
+
+  /**
    * Get the number of closed discussions for an object
    */
   async getClosedCount(subjectId: SubjectId): Promise<number> {

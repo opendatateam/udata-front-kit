@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import type { Owned } from '@datagouv/components-next'
+import { CopyButton } from '@datagouv/components-next'
 import { storeToRefs } from 'pinia'
 import type { PropType, Ref } from 'vue'
-import { computed, nextTick, ref, toRef, useTemplateRef } from 'vue'
+import { computed, nextTick, ref, toRef, useTemplateRef, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import BlankState from '@/components/BlankState.vue'
@@ -57,7 +58,8 @@ const {
   discussions,
   closedCount,
   pages,
-  loaded,
+  selected: selectedDiscussion,
+  selectDiscussion,
   createDiscussion,
   createComment,
   updateDiscussionTitle,
@@ -68,6 +70,22 @@ const {
 
 // Undefined until loaded, so parents can fall back to their own count
 const total = computed(() => discussions.value?.total)
+
+const selectedDiscussionId = computed(() => {
+  const id = route.query.discussion_id
+  return typeof id === 'string' ? id : undefined
+})
+const selectedDiscussionBackLink = useTemplateRef<HTMLElement>(
+  'selectedDiscussionBackLink'
+)
+
+// only the selected discussion while one is deeplinked (empty until loaded)
+const shownDiscussions = computed(() => {
+  if (selectedDiscussionId.value) {
+    return selectedDiscussion.value ? [selectedDiscussion.value] : []
+  }
+  return discussions.value?.data ?? []
+})
 
 // Only one form can be open at a time, so they all share the same data
 interface FormData {
@@ -227,7 +245,11 @@ const confirmDeleteDiscussion = (discussion: Discussion) => {
     )
   )
     return
-  deleteDiscussion(discussion.id)
+  deleteDiscussion(discussion.id).then(() => {
+    if (selectedDiscussionId.value === discussion.id) {
+      router.replace(allDiscussionsRoute.value)
+    }
+  })
 }
 
 const openEditCommentForm = (discussionId: DiscussionId, comment: Comment) =>
@@ -253,19 +275,42 @@ const confirmDeleteComment = (
   deleteComment(discussionId, commentId)
 }
 
-// Used by parent views to deep-link to a discussion
-// Only looks at the currently loaded page: discussions on further pages are a known limitation.
-const navigateToDiscussion = async (discussionId: DiscussionId) => {
-  await loaded()
-  nextTick(() => {
-    const el = document.getElementById(`discussion-${discussionId}`)
-    if (!el) {
-      console.warn(`Trying to scroll to discussion ${discussionId}, not found.`)
+const discussionPermalink = (discussionId: DiscussionId) => {
+  const { href } = router.resolve({
+    name: route.name ?? undefined,
+    params: { ...route.params, tab: Tab.DISCUSSIONS },
+    query: { discussion_id: discussionId }
+  })
+  return new URL(href, window.location.origin).href
+}
+
+const allDiscussionsRoute = computed(() => {
+  const { discussion_id: _, ...query } = route.query
+  return { name: route.name ?? undefined, params: route.params, query }
+})
+
+// Deeplinked discussion, fetched on its own so it doesn't depend on pagination
+watch(
+  [selectedDiscussionId, () => props.subject.id],
+  async ([discussionId]) => {
+    // subject is stale while the parent view loads another item: wait for it
+    const itemId = route.params.item_id
+    if (itemId !== props.subject.id && itemId !== props.subject.slug) return
+    const found = await selectDiscussion(discussionId)
+    if (discussionId !== selectedDiscussionId.value) return
+    if (!found) {
+      console.warn(`Discussion ${discussionId} not found for this subject.`)
+      router.replace(allDiscussionsRoute.value)
       return
     }
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  })
-}
+    if (selectedDiscussion.value) {
+      nextTick(() =>
+        selectedDiscussionBackLink.value?.scrollIntoView({ behavior: 'smooth' })
+      )
+    }
+  },
+  { immediate: true }
+)
 
 const header = useTemplateRef('header')
 
@@ -274,7 +319,7 @@ const changePage = (page: number) => {
   header.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
-defineExpose({ navigateToDiscussion, total })
+defineExpose({ total })
 </script>
 
 <template>
@@ -285,7 +330,7 @@ defineExpose({ navigateToDiscussion, total })
       </h2>
       <h2 v-else class="discussions-count-title fr-mt-4w">Discussions</h2>
     </div>
-    <template v-if="allowDiscussionCreation">
+    <template v-if="allowDiscussionCreation && !selectedDiscussionId">
       <DsfrButton
         v-if="loggedIn"
         size="sm"
@@ -321,14 +366,27 @@ defineExpose({ navigateToDiscussion, total })
     @cancel="closeForm()"
   />
 
+  <div
+    v-if="selectedDiscussion"
+    ref="selectedDiscussionBackLink"
+    class="fr-mb-2w"
+  >
+    <RouterLink
+      :to="allDiscussionsRoute"
+      class="fr-link fr-icon-arrow-left-line fr-link--icon-left"
+    >
+      Voir toutes les discussions
+    </RouterLink>
+  </div>
+
   <BlankState
-    v-if="!discussions?.data?.length"
+    v-if="!selectedDiscussionId && !shownDiscussions.length"
     image="/static/blank_state/discussion.svg"
     :message="emptyMessage"
   />
   <div v-else>
     <div
-      v-for="discussion in discussions?.data"
+      v-for="discussion in shownDiscussions"
       :key="discussion.id"
       class="discussion-item fr-mb-3w"
     >
@@ -346,6 +404,12 @@ defineExpose({ navigateToDiscussion, total })
           ></span>
           {{ discussion.title }}
         </div>
+        <CopyButton
+          label="Copier le lien vers cette discussion"
+          copied-label="Lien copié"
+          :text="discussionPermalink(discussion.id)"
+          icon-only
+        />
         <DiscussionItemActions
           :permissions="discussion.permissions"
           item-label="la discussion"
@@ -492,7 +556,7 @@ defineExpose({ navigateToDiscussion, total })
         </div>
       </template>
     </div>
-    <div v-if="pages?.length > 1" class="fr-container">
+    <div v-if="!selectedDiscussionId && pages?.length > 1" class="fr-container">
       <DsfrPagination
         :trunc-limit="3"
         :current-page="currentPage - 1"
