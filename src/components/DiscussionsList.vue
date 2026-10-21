@@ -2,7 +2,7 @@
 import type { Owned } from '@datagouv/components-next'
 import { storeToRefs } from 'pinia'
 import type { PropType, Ref } from 'vue'
-import { computed, nextTick, ref, toRef } from 'vue'
+import { computed, nextTick, ref, toRef, useTemplateRef } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import BlankState from '@/components/BlankState.vue'
@@ -265,11 +265,18 @@ const navigateToDiscussion = async (discussionId: DiscussionId) => {
   })
 }
 
+const header = useTemplateRef('header')
+
+const changePage = (page: number) => {
+  currentPage.value = page
+  header.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
 defineExpose({ navigateToDiscussion, total })
 </script>
 
 <template>
-  <div class="fr-grid-row fr-grid-row--middle discussion-header">
+  <div ref="header" class="fr-grid-row fr-grid-row--middle discussion-header">
     <div class="fr-col">
       <h2 v-if="discussions" class="discussions-count-title fr-mt-4w">
         {{ discussionsCountLabel }}
@@ -488,7 +495,7 @@ defineExpose({ navigateToDiscussion, total })
         :trunc-limit="3"
         :current-page="currentPage - 1"
         :pages="pages"
-        @update:current-page="(p: number) => (currentPage = p + 1)"
+        @update:current-page="(p: number) => changePage(p + 1)"
       />
     </div>
   </div>
