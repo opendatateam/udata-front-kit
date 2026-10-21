@@ -32,7 +32,7 @@ describe('Topic Detail View - Discussion notification links', () => {
     cy.contains('button', 'Démarrer une nouvelle discussion').click()
     cy.get('#discussion-title').type('Titre')
     cy.get('#discussion-message').type('Message')
-    cy.contains('button', 'Soumettre').click()
+    cy.contains('button', 'Envoyer').click()
 
     cy.wait('@createDiscussion')
       .its('request.body.extras.notification.external_url')
