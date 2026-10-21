@@ -23,6 +23,7 @@ import LocalStorageService from '@/services/LocalStorageService'
 import { useUserStore } from '@/store/UserStore'
 import { formatDate } from '@/utils'
 import { useDiscussions } from '@/utils/discussion'
+import { Tab } from '@/utils/tabs'
 
 const route = useRoute()
 const router = useRouter()
@@ -144,7 +145,7 @@ const getNotificationExternalUrl = (): string | null => {
   if (!slug) return null
   const path = router.resolve({
     name: `${pageKey}_detail`,
-    params: { item_id: slug }
+    params: { item_id: slug, tab: Tab.DISCUSSIONS }
   }).href
   return `${canonicalUrl}${path}`
 }

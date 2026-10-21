@@ -12,9 +12,7 @@ import GenericContainer from '@/components/GenericContainer.vue'
 import SidebarItem from '@/components/SidebarItem.vue'
 import SidebarList from '@/components/SidebarList.vue'
 import SidebarOwner from '@/components/SidebarOwner.vue'
-import TabsWithCounts, {
-  type TabWithCount
-} from '@/components/TabsWithCounts.vue'
+import TabsWithCounts from '@/components/TabsWithCounts.vue'
 import TagComponent from '@/components/TagComponent.vue'
 import TopicActivityList from '@/components/topics/TopicActivityList.vue'
 import TopicFactorsList from '@/components/topics/TopicFactorsList.vue'
@@ -36,6 +34,7 @@ import { useAsyncComponent } from '@/utils/component'
 import { useLabels } from '@/utils/labels'
 import { useCanonicalUrl, useMeta } from '@/utils/seo'
 import { useSpatialCoverage } from '@/utils/spatial'
+import { Tab, tabIds, useRoutedTabs } from '@/utils/tabs'
 import { useTagsByRef } from '@/utils/tags'
 import { useExtras, useTopicFactors } from '@/utils/topic'
 
@@ -107,45 +106,27 @@ const breadcrumbLinks = computed(() => {
 
 const showActivity = computed(() => canEdit.value)
 
-const tabs = computed(() => {
-  const result: TabWithCount[] = []
-
-  if (showDatasets) {
-    result.push({
-      title: 'Données',
-      count: nbFactors.value,
-      tabId: 'tab-datasets',
-      panelId: 'tab-content-datasets'
-    })
-  }
-  if (showDiscussions) {
-    result.push({
-      title: 'Discussions',
-      count: discussionsListRef.value?.total ?? 0,
-      tabId: 'tab-discussions',
-      panelId: 'tab-content-discussions'
-    })
-  }
-  if (showReuses) {
-    result.push({
-      title: 'Réutilisations',
-      count: topicReusesListRef.value?.reuses.length ?? 0,
-      tabId: 'tab-reuses',
-      panelId: 'tab-content-reuses'
-    })
-  }
-  if (showActivity.value) {
-    result.push({
-      title: 'Activité',
-      tabId: 'tab-activity',
-      panelId: 'tab-content-activity'
-    })
-  }
-
-  return result
-})
-
-const activeTab = ref(0)
+const { tabs, activeIndex, selectTab } = useRoutedTabs(() => [
+  {
+    slug: Tab.FACTORS,
+    title: 'Données',
+    count: nbFactors.value,
+    visible: showDatasets
+  },
+  {
+    slug: Tab.DISCUSSIONS,
+    title: 'Discussions',
+    count: discussionsListRef.value?.total ?? 0,
+    visible: showDiscussions
+  },
+  {
+    slug: Tab.REUSES,
+    title: 'Réutilisations',
+    count: topicReusesListRef.value?.reuses.length ?? 0,
+    visible: showReuses
+  },
+  { slug: Tab.ACTIVITY, title: 'Activité', visible: showActivity.value }
+])
 
 const cloneModalActions = [
   {
@@ -200,8 +181,8 @@ const metaTitle = computed(() => {
   return topic.value?.name
 })
 
-const handleNavigateToFactor = (elementId: string) => {
-  activeTab.value = 0
+const handleNavigateToFactor = async (elementId: string) => {
+  await selectTab('factors')
   nextTick(() => {
     topicFactorsListRef.value?.navigateToElement(elementId)
   })
@@ -255,7 +236,7 @@ watch(
   () => router.currentRoute.value.hash,
   (hash) => {
     if (hash.startsWith('#factor-')) {
-      activeTab.value = 0
+      selectTab('factors')
       const elementId = hash.replace('#factor-', '')
       runWhenReady(
         () => !!topicFactorsListRef.value && factors.value.length > 0,
@@ -266,10 +247,7 @@ watch(
       )
       clearHash()
     } else if (hash.startsWith('#discussion-')) {
-      const tabIndex = tabs.value.findIndex(
-        (t) => t.tabId === 'tab-discussions'
-      )
-      if (tabIndex !== -1) activeTab.value = tabIndex
+      selectTab(Tab.DISCUSSIONS)
       const discussionId = hash.replace('#discussion-', '')
       runWhenReady(
         () => !!discussionsListRef.value,
@@ -295,9 +273,10 @@ watch(
       .then((res) => {
         topic.value = res
         if (topic.value.slug !== itemId) {
-          router.push({
+          router.replace({
             name: `${pageKey}_detail`,
-            params: { item_id: topic.value.slug }
+            params: { ...route.value.params, item_id: topic.value.slug },
+            query: route.value.query
           })
         }
       })
@@ -449,7 +428,7 @@ watch(
 
     <TabsWithCounts
       v-if="tabs.length > 0"
-      v-model="activeTab"
+      v-model="activeIndex"
       class="fr-mt-2w"
       :tabs="tabs"
       :tab-list-name="`Groupes d'attributs ${labels.articles.du} ${labels.singular}`"
@@ -457,8 +436,7 @@ watch(
       <!-- Jeux de données -->
       <DsfrTabContent
         v-if="showDatasets"
-        panel-id="tab-content-datasets"
-        tab-id="tab-datasets"
+        v-bind="tabIds(Tab.FACTORS)"
         class="fr-px-2w"
       >
         <TopicFactorsList
@@ -482,8 +460,7 @@ watch(
       <!-- Discussions -->
       <DsfrTabContent
         v-if="showDiscussions && topic"
-        panel-id="tab-content-discussions"
-        tab-id="tab-discussions"
+        v-bind="tabIds(Tab.DISCUSSIONS)"
       >
         <DiscussionsList
           ref="discussionsListRef"
@@ -493,19 +470,11 @@ watch(
         />
       </DsfrTabContent>
       <!-- Réutilisations -->
-      <DsfrTabContent
-        v-if="showReuses"
-        panel-id="tab-content-reuses"
-        tab-id="tab-reuses"
-      >
+      <DsfrTabContent v-if="showReuses" v-bind="tabIds(Tab.REUSES)">
         <TopicReusesList ref="topicReusesListRef" :topic="topic" />
       </DsfrTabContent>
       <!-- Activité -->
-      <DsfrTabContent
-        v-if="showActivity"
-        panel-id="tab-content-activity"
-        tab-id="tab-activity"
-      >
+      <DsfrTabContent v-if="showActivity" v-bind="tabIds(Tab.ACTIVITY)">
         <TopicActivityList
           ref="topicActivityListRef"
           :topic

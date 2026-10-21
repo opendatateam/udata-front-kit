@@ -148,6 +148,14 @@ const routerPromise = siteRoutesPromise.then((siteRoutes) => {
         }
         return false
       }
+      // Preserve scroll when switching tabs on a detail page
+      if (
+        to.name === from.name &&
+        to.params.item_id === from.params.item_id &&
+        to.params.tab !== from.params.tab
+      ) {
+        return false
+      }
       // Preserve scroll when switching between search list pages (e.g. datasets ↔ indicators)
       if (to.meta.searchConfig && from.meta.searchConfig) {
         return false
