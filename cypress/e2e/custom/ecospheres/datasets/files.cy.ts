@@ -55,7 +55,7 @@ describe('Dataset Page - Fichiers Tab', () => {
 
     cy.get('@writeText').should(
       'have.been.calledWith',
-      `${Cypress.config('baseUrl')}/datasets/${dataset.slug}?resource_id=${resource.id}`
+      `${Cypress.config('baseUrl')}/datasets/${dataset.slug}/files?resource_id=${resource.id}`
     )
   })
 })

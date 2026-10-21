@@ -1,5 +1,6 @@
 import type { DatasetV2 } from '@datagouv/components-next'
 import { datasetFactory } from 'cypress/support/factories/datasets_factory'
+import { discussionFactory } from 'cypress/support/factories/discussions_factory'
 import { resourceFactory } from 'cypress/support/factories/resources_factory'
 
 const SIMM_TOPIC_ID: string =
@@ -67,13 +68,15 @@ describe('Dataset Page - Tab counts', () => {
     })
 
     cy.mockDatasetAndRelatedObjects(testDataset, resourceFactory.many(4))
+    // Differs from metrics.discussions: the tab shows the loaded list's total
+    cy.mockDatagouvObjectList('discussions', discussionFactory.many(2))
 
     cy.visit(`/datasets/${testDataset.id}`)
     cy.wait(`@get_datasets_${testDataset.id}`)
 
     cy.contains('button', 'Fichiers (4)').should('be.visible')
     cy.contains('button', 'Réutilisations et API (5)').should('be.visible')
-    cy.contains('button', 'Discussions (7)').should('be.visible')
+    cy.contains('button', 'Discussions (2)').should('be.visible')
     cy.contains('button', 'Informations')
       .find('sup.tab-count')
       .should('not.exist')

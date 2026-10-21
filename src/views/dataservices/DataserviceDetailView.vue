@@ -19,6 +19,7 @@ import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { useAsyncComponent } from '@/utils/component'
 import { useLabels } from '@/utils/labels'
 import { useMeta } from '@/utils/seo'
+import { Tab, tabIds, useRoutedTabs } from '@/utils/tabs'
 import { OpenApiViewer } from '@datagouv/components-next'
 
 const route = useRouteParamsAsString()
@@ -71,23 +72,21 @@ const links = computed(() => {
   return breadcrumbs
 })
 
-const tabs = computed(() => [
-  {
-    title: 'Données',
-    count: total.value,
-    tabId: 'tab-0',
-    panelId: 'tab-content-0'
-  },
-  {
-    title: 'Discussions',
-    count: dataservice.value?.metrics.discussions ?? 0,
-    tabId: 'tab-1',
-    panelId: 'tab-content-1'
-  },
-  { title: 'Informations', tabId: 'tab-2', panelId: 'tab-content-2' }
-])
+const discussionsList =
+  useTemplateRef<InstanceType<typeof DiscussionsList>>('discussionsList')
 
-const activeTab = ref(0)
+const { tabs, activeIndex } = useRoutedTabs(() => [
+  { slug: Tab.DATASETS, title: 'Données', count: total.value },
+  {
+    slug: Tab.DISCUSSIONS,
+    title: 'Discussions',
+    count:
+      discussionsList.value?.total ??
+      dataservice.value?.metrics.discussions ??
+      0
+  },
+  { slug: Tab.INFORMATIONS, title: 'Informations' }
+])
 
 const description = computed(() => descriptionFromMarkdown(dataservice))
 
@@ -156,7 +155,7 @@ onMounted(() => {
           </SidebarItem>
           <!-- last update -->
           <SidebarItem term="Dernière mise à jour">
-            {{ formatDate(dataservice.metadata_modified_at, true) }}
+            {{ formatDate(dataservice.metadata_modified_at, 'short') }}
           </SidebarItem>
           <!-- rate limiting -->
           <SidebarItem v-if="dataservice.rate_limiting" term="Limite d'appels">
@@ -244,13 +243,13 @@ onMounted(() => {
     </div>
 
     <TabsWithCounts
-      v-model="activeTab"
+      v-model="activeIndex"
       class="fr-mt-4w"
       tab-list-name="Groupes d'attributs de l'API"
       :tabs="tabs"
     >
       <!-- Données -->
-      <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0">
+      <DsfrTabContent v-bind="tabIds(Tab.DATASETS)">
         <div id="datasets" class="fr-pb-2w">
           <h2 class="fr-mb-1v subtitle subtitle--uppercase">
             {{ `${total} jeu${total > 1 ? 'x' : ''} de données` }}
@@ -284,7 +283,7 @@ onMounted(() => {
       </DsfrTabContent>
 
       <!-- Discussions -->
-      <DsfrTabContent panel-id="tab-content-1" tab-id="tab-1">
+      <DsfrTabContent v-bind="tabIds(Tab.DISCUSSIONS)">
         <SimpleBanner
           v-if="!pageConf.resources_tabs.discussions.create"
           type="primary"
@@ -309,13 +308,14 @@ onMounted(() => {
         </SimpleBanner>
         <DiscussionsList
           v-if="showDiscussions"
+          ref="discussionsList"
           :subject="dataservice"
           empty-message="Il n'y a pas encore de discussion pour cette API."
         />
       </DsfrTabContent>
 
       <!-- Informations -->
-      <DsfrTabContent panel-id="tab-content-2" tab-id="tab-2">
+      <DsfrTabContent v-bind="tabIds(Tab.INFORMATIONS)">
         <div class="fr-pb-3w">
           <h2 class="fr-mb-3w subtitle subtitle--uppercase">
             Informations techniques
