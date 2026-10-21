@@ -65,7 +65,8 @@ const {
   deleteComment
 } = useDiscussions(toRef(() => props.subject.id))
 
-const total = computed(() => discussions.value?.total ?? 0)
+// Undefined until loaded, so parents can fall back to their own count
+const total = computed(() => discussions.value?.total)
 
 // Only one form can be open at a time, so they all share the same data
 interface FormData {
@@ -122,8 +123,8 @@ const toggleDiscussionExpansion = (discussionId: DiscussionId) => {
 }
 
 const discussionsCountLabel = computed(() => {
-  const totalLabel =
-    total.value > 1 ? `${total.value} discussions` : `${total.value} discussion`
+  const count = total.value ?? 0
+  const totalLabel = count > 1 ? `${count} discussions` : `${count} discussion`
   if (!closedCount.value) return totalLabel
   const closedLabel =
     closedCount.value > 1

@@ -46,6 +46,7 @@ describe('Topic Discussions', () => {
     const { testTopic } = setupTopicWithExistingFactors()
     visitTopic(testTopic.slug)
     openDiscussionsTab()
+    cy.contains('[role="tab"]', 'Discussions').should('contain.text', '(0)')
 
     const newDiscussion = discussionFactory.one({
       overrides: {
@@ -80,6 +81,7 @@ describe('Topic Discussions', () => {
     cy.wait('@createDiscussion')
     cy.wait('@get_discussions_list')
     cy.contains(newDiscussion.title).should('be.visible')
+    cy.contains('[role="tab"]', 'Discussions').should('contain.text', '(1)')
   })
 
   it('should reply to a discussion', () => {

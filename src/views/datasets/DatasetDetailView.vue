@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ReadMore, SimpleBanner } from '@datagouv/components-next'
-import { capitalize, computed, onMounted, ref } from 'vue'
+import { capitalize, computed, onMounted, ref, useTemplateRef } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
@@ -92,6 +92,9 @@ const links = computed(() => {
   return breadcrumbs
 })
 
+const discussionsList =
+  useTemplateRef<InstanceType<typeof DiscussionsList>>('discussionsList')
+
 const tabs = computed(() => [
   {
     title: 'Fichiers',
@@ -109,7 +112,8 @@ const tabs = computed(() => [
   },
   {
     title: 'Discussions',
-    count: dataset.value?.metrics.discussions ?? 0,
+    count:
+      discussionsList.value?.total ?? dataset.value?.metrics.discussions ?? 0,
     tabId: 'tab-2',
     panelId: 'tab-content-2'
   },
@@ -280,7 +284,11 @@ onMounted(() => {
             </div>
           </div>
         </SimpleBanner>
-        <DiscussionsList v-if="showDiscussions" :subject="dataset" />
+        <DiscussionsList
+          v-if="showDiscussions"
+          ref="discussionsList"
+          :subject="dataset"
+        />
       </DsfrTabContent>
 
       <!-- Informations -->
