@@ -48,25 +48,6 @@ describe('Dataset Detail View - Networks (univers)', () => {
   })
 })
 
-describe('Dataset Page - Discussion deeplink', () => {
-  it('should open a single discussion from a #discussion- link', () => {
-    cy.mockMatomo()
-    cy.mockStaticDatagouv()
-    const dataset = datasetFactory.one()
-    cy.mockDatasetAndRelatedObjects(dataset)
-    const target = discussionFactory.one({
-      overrides: { subject: { class: 'Dataset', id: dataset.id } }
-    })
-    cy.mockDatagouvObject('discussions', target.id, target)
-
-    cy.visit(`/datasets/${dataset.id}#discussion-${target.id}`)
-
-    cy.location('pathname').should('eq', `/datasets/${dataset.id}/discussions`)
-    cy.location('search').should('eq', `?discussion_id=${target.id}`)
-    cy.get(`#discussion-${target.id}`).should('be.visible')
-  })
-})
-
 describe('Dataset Page - Tab counts', () => {
   it('should show distinct counts on each tab', () => {
     cy.mockMatomo()

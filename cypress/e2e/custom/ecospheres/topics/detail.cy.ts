@@ -101,7 +101,7 @@ describe('Topic Detail View - Discussion notification links', () => {
     cy.get(`#discussion-${target.id}`).should('not.exist')
   })
 
-  it('should fall back to all discussions for a discussion of another subject', () => {
+  it('should fall back to all discussions for an invalid discussion', () => {
     const { testTopic, firstPage } = setupDeeplinkedDiscussion()
     const foreign = discussionFactory.one()
     cy.mockDatagouvObject('discussions', foreign.id, foreign)
