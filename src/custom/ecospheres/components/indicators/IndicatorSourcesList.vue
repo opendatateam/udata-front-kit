@@ -31,8 +31,8 @@ const { sources, calcul } = useIndicatorExtras(indicator)
         v-if="source.plage_temporelle"
         title="Plage temporelle"
       >
-        {{ formatDate(source.plage_temporelle.start, true) }} -
-        {{ formatDate(source.plage_temporelle.end, true) }}
+        {{ formatDate(source.plage_temporelle.start, 'short') }} -
+        {{ formatDate(source.plage_temporelle.end, 'short') }}
       </InformationPanelItem>
       <InformationPanelItem title="URL source">
         <a :href="source.url" target="_blank">{{ source.url }}</a>

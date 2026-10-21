@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useCanonicalUrl, useMeta } from '@/utils/seo'
 import { ReadMore } from '@datagouv/components-next'
-import { capitalize, computed, onMounted, ref } from 'vue'
+import { capitalize, computed, onMounted, ref, useTemplateRef } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
@@ -47,6 +47,9 @@ const links = computed(() => [
   { text: indicator.value?.title || '' }
 ])
 
+const discussionsList =
+  useTemplateRef<InstanceType<typeof DiscussionsList>>('discussionsList')
+
 const tabs = computed(() => [
   // only display the visualization tab if the indicator has visualization enabled
   ...(indicator.value?.extras['ecospheres-indicateurs'].enable_visualization
@@ -81,7 +84,8 @@ const tabs = computed(() => [
   },
   {
     title: 'Discussions',
-    count: indicator.value?.metrics.discussions ?? 0,
+    count:
+      discussionsList.value?.total ?? indicator.value?.metrics.discussions ?? 0,
     tabId: 'tab-discussions',
     panelId: 'tab-content-discussions'
   },
@@ -203,6 +207,7 @@ onMounted(() => {
         tab-id="tab-discussions"
       >
         <DiscussionsList
+          ref="discussionsList"
           :subject="indicator"
           subject-class="Dataset"
           empty-message="Il n'y a pas encore de discussion pour cet indicateur."

@@ -71,6 +71,9 @@ const links = computed(() => {
   return breadcrumbs
 })
 
+const discussionsList =
+  useTemplateRef<InstanceType<typeof DiscussionsList>>('discussionsList')
+
 const tabs = computed(() => [
   {
     title: 'Données',
@@ -80,7 +83,10 @@ const tabs = computed(() => [
   },
   {
     title: 'Discussions',
-    count: dataservice.value?.metrics.discussions ?? 0,
+    count:
+      discussionsList.value?.total ??
+      dataservice.value?.metrics.discussions ??
+      0,
     tabId: 'tab-1',
     panelId: 'tab-content-1'
   },
@@ -156,7 +162,7 @@ onMounted(() => {
           </SidebarItem>
           <!-- last update -->
           <SidebarItem term="Dernière mise à jour">
-            {{ formatDate(dataservice.metadata_modified_at, true) }}
+            {{ formatDate(dataservice.metadata_modified_at, 'short') }}
           </SidebarItem>
           <!-- rate limiting -->
           <SidebarItem v-if="dataservice.rate_limiting" term="Limite d'appels">
@@ -309,6 +315,7 @@ onMounted(() => {
         </SimpleBanner>
         <DiscussionsList
           v-if="showDiscussions"
+          ref="discussionsList"
           :subject="dataservice"
           empty-message="Il n'y a pas encore de discussion pour cette API."
         />

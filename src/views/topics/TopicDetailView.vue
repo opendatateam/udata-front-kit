@@ -29,7 +29,6 @@ import {
   useRouteMeta,
   useRouteParamsAsStringReactive
 } from '@/router/utils'
-import { useDiscussionStore } from '@/store/DiscussionStore'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
@@ -62,7 +61,6 @@ const customDescriptionComponent = useAsyncComponent(
 )
 
 const userStore = useUserStore()
-const discussionStore = useDiscussionStore()
 const canEdit = computed(() => {
   return userStore.hasEditPermissions(topic.value) && pageConf.editable
 })
@@ -123,9 +121,7 @@ const tabs = computed(() => {
   if (showDiscussions) {
     result.push({
       title: 'Discussions',
-      count: topic.value
-        ? (discussionStore.getDiscussionsForSubject(topic.value.id)?.total ?? 0)
-        : 0,
+      count: discussionsListRef.value?.total ?? 0,
       tabId: 'tab-discussions',
       panelId: 'tab-content-discussions'
     })
