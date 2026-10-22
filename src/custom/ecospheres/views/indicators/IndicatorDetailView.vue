@@ -24,6 +24,7 @@ import IndicatorInformationPanel from '../../components/indicators/IndicatorInfo
 import IndicatorSourcesList from '../../components/indicators/IndicatorSourcesList.vue'
 import IndicatorTags from '../../components/indicators/IndicatorTags.vue'
 import type { Indicator } from '../../model/indicator'
+import { useIndicatorTags } from '../../utils/indicator'
 
 const route = useRouteParamsAsString()
 const indicatorId = route.params.item_id
@@ -33,6 +34,7 @@ const datasetStore = useDatasetStore()
 const userStore = useUserStore()
 
 const indicator = computed(() => datasetStore.get(indicatorId) as Indicator)
+const tags = useIndicatorTags(indicator)
 
 const tabularApiUrl = config.datagouvfr?.tabular_api_url
 
@@ -143,7 +145,7 @@ onMounted(() => {
       <div class="fr-col-12 fr-col-md-8">
         <div class="fr-mb-4v">
           <h1 class="fr-mb-1v fr-mr-2v">{{ indicator.title }}</h1>
-          <IndicatorTags :indicator="indicator" />
+          <IndicatorTags :tags="tags" class="fr-mb-1w" />
         </div>
         <ReadMore max-height="600">
           <!-- eslint-disable-next-line vue/no-v-html -->

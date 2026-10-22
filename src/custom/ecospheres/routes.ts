@@ -49,7 +49,7 @@ export const routes: RouteRecordRaw[] = [
     topicConf,
     datasetCardComponent: async () =>
       await import(
-        '@/custom/ecospheres/components/datasets/DatasetOrIndicatorCard.vue'
+        '@/custom/ecospheres/components/datasets/DatasetOrIndicatorInTopicCard.vue'
       )
   }),
   ...useTopicAdminPagesRoutes({

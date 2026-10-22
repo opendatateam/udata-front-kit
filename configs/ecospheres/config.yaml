@@ -362,7 +362,7 @@ definitions: &definitions
 #         name: {string}              # name of the filter ⚠️ only used in templates by custom filters
 #         type: {string}              # type of the filter (CustomFilterType or any BuiltInFilterKey from data.gouv.fr GlobalSearch)
 #         child: {string?}            # id of the child filter (optional)
-#         color: {string}             # color of the filter's tag
+#         color: {string}             # DSFR color of the filter's tag, append ::outlined for an outlined tag (e.g. purple-glycine::outlined)
 #         use_filter_prefix: {bool}   # whether to use {filter_prefix}-{filter.id}-{value} when building filter value
 #         api_param: {string?}        # API query parameter name to use (optional, defaults to "tag")
 #         default_option: {string?}   # default option for the filter (optional)
@@ -415,7 +415,7 @@ pages:
   indicators:
     object_type: datasets # indicators are datasets filtered by universe_query
     list_all: true
-    icon: fr-icon-lightbulb-line
+    icon: fr-icon-bar-chart-2-line
     universe_query:
       tag: ecospheres-indicateurs
     filter_prefix: ecospheres-indicateurs
@@ -480,7 +480,7 @@ pages:
         name: Levier
         default_option: Tous les leviers
         type: select
-        color: green-archipel
+        color: purple-glycine::outlined
         use_filter_prefix: true
         values:
           - id: 2-roues-elec-efficacite
