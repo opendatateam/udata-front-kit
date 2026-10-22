@@ -19,13 +19,17 @@ ARG VITE_SITE_ID
 # only set the environment variable if the build arg was provided
 ENV VITE_SITE_ID=${VITE_SITE_ID:-}
 
-RUN echo "$(date)" && \
+# node:22 and pnpm@latest-11 are floating tags: log what they resolved to
+RUN echo "$(date) - node $(node --version), pnpm $(pnpm --version)" && \
     export $(cat /app/*.env | xargs) && \
     pnpm run build
 
 FROM nginx:alpine-slim
 
 COPY --from=builder /app/dist /usr/share/nginx/html
+
+# alpine-slim is a floating tag: log what it resolved to
+RUN nginx -v && cat /etc/alpine-release
 
 RUN echo 'server { \
     listen 80; \
