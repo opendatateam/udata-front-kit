@@ -151,12 +151,6 @@ const discussionsCountLabel = computed(() => {
   return `${totalLabel} dont ${closedLabel}`
 })
 
-const backLinkLabel = computed(() =>
-  total.value && total.value > 1
-    ? `Voir les ${total.value} discussions`
-    : 'Voir toutes les discussions'
-)
-
 const allowDiscussionCreation = pageConf.resources_tabs.discussions.create
 
 // If configured, construct an external notification url from canonical_url for udata to use
@@ -333,7 +327,7 @@ defineExpose({ total })
           :to="allDiscussionsRoute"
           class="fr-link fr-icon-arrow-left-line fr-link--icon-left"
         >
-          {{ backLinkLabel }}
+          Voir toutes les discussions
         </RouterLink>
       </div>
       <h2 v-else-if="discussions" class="discussions-count-title fr-mt-4w">

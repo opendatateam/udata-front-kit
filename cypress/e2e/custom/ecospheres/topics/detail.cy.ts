@@ -60,7 +60,7 @@ describe('Topic Detail View - Discussion notification links', () => {
       'contain',
       'Discussions'
     )
-    cy.contains('a', 'Voir les 2 discussions').should('be.visible')
+    cy.contains('a', 'Voir toutes les discussions').should('be.visible')
     cy.get(`#discussion-${targetId}`).should('be.visible')
   }
 
@@ -90,7 +90,7 @@ describe('Topic Detail View - Discussion notification links', () => {
       `/bouquets/${testTopic.slug}/discussions?discussion_id=${target.id}`
     )
     cy.get(`#discussion-${target.id}`).should('be.visible')
-    cy.contains('a', 'Voir les 2 discussions').click()
+    cy.contains('a', 'Voir toutes les discussions').click()
 
     cy.location('pathname').should(
       'eq',
