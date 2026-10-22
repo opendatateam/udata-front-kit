@@ -75,9 +75,8 @@ const selectedDiscussionId = computed(() => {
   const id = route.query.discussion_id
   return typeof id === 'string' ? id : undefined
 })
-const selectedDiscussionBackLink = useTemplateRef<HTMLElement>(
-  'selectedDiscussionBackLink'
-)
+
+const header = useTemplateRef('header')
 
 // only the selected discussion while one is deeplinked (empty until loaded)
 const shownDiscussions = computed(() => {
@@ -151,6 +150,12 @@ const discussionsCountLabel = computed(() => {
       : `${closedCount.value} clôturée`
   return `${totalLabel} dont ${closedLabel}`
 })
+
+const backLinkLabel = computed(() =>
+  total.value && total.value > 1
+    ? `Voir les ${total.value} discussions`
+    : 'Voir toutes les discussions'
+)
 
 const allowDiscussionCreation = pageConf.resources_tabs.discussions.create
 
@@ -305,14 +310,12 @@ watch(
     }
     if (selectedDiscussion.value) {
       nextTick(() =>
-        selectedDiscussionBackLink.value?.scrollIntoView({ behavior: 'smooth' })
+        header.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
       )
     }
   },
   { immediate: true }
 )
-
-const header = useTemplateRef('header')
 
 const changePage = (page: number) => {
   currentPage.value = page
@@ -325,7 +328,15 @@ defineExpose({ total })
 <template>
   <div ref="header" class="fr-grid-row fr-grid-row--middle discussion-header">
     <div class="fr-col">
-      <h2 v-if="discussions" class="discussions-count-title fr-mt-4w">
+      <div v-if="selectedDiscussionId" class="fr-mt-4w fr-mb-2w">
+        <RouterLink
+          :to="allDiscussionsRoute"
+          class="fr-link fr-icon-arrow-left-line fr-link--icon-left"
+        >
+          {{ backLinkLabel }}
+        </RouterLink>
+      </div>
+      <h2 v-else-if="discussions" class="discussions-count-title fr-mt-4w">
         {{ discussionsCountLabel }}
       </h2>
       <h2 v-else class="discussions-count-title fr-mt-4w">Discussions</h2>
@@ -365,19 +376,6 @@ defineExpose({ total })
     @submit="submitDiscussion()"
     @cancel="closeForm()"
   />
-
-  <div
-    v-if="selectedDiscussion"
-    ref="selectedDiscussionBackLink"
-    class="fr-mb-2w"
-  >
-    <RouterLink
-      :to="allDiscussionsRoute"
-      class="fr-link fr-icon-arrow-left-line fr-link--icon-left"
-    >
-      Voir toutes les discussions
-    </RouterLink>
-  </div>
 
   <BlankState
     v-if="!selectedDiscussionId && !shownDiscussions.length"
