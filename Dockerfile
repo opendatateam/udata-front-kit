@@ -14,8 +14,7 @@ RUN pnpm install
 COPY ./ /app
 
 ARG VITE_SITE_ID
-# always set, so a missing build arg fails the build instead of falling back to .env
-ENV VITE_SITE_ID=${VITE_SITE_ID:-}
+RUN test -n "$VITE_SITE_ID" || { echo "VITE_SITE_ID build arg is required" >&2; exit 1; }
 
 # node:22 and pnpm@latest-11 are floating tags: log what they resolved to
 RUN echo "$(date) - node $(node --version), pnpm $(pnpm --version)" && \
