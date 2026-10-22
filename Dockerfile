@@ -19,7 +19,6 @@ ENV VITE_SITE_ID=${VITE_SITE_ID:-}
 
 # node:22 and pnpm@latest-11 are floating tags: log what they resolved to
 RUN echo "$(date) - node $(node --version), pnpm $(pnpm --version)" && \
-    export $(cat /app/*.env | xargs) && \
     pnpm run build
 
 FROM nginx:alpine-slim
