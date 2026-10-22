@@ -3,7 +3,7 @@ import type { Owned } from '@datagouv/components-next'
 import { CopyButton } from '@datagouv/components-next'
 import { storeToRefs } from 'pinia'
 import type { PropType, Ref } from 'vue'
-import { computed, nextTick, ref, toRef, useTemplateRef, watch } from 'vue'
+import { computed, nextTick, ref, toRef, useTemplateRef } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import BlankState from '@/components/BlankState.vue'
@@ -58,12 +58,18 @@ const selectedDiscussionId = computed(() => {
   return typeof id === 'string' ? id : undefined
 })
 
-// subject is stale while the parent view loads another item: wait for it
-const subjectDiscussionId = computed(() => {
+// subject lags behind the route while the parent view loads another item
+const isSubjectCurrent = computed(() => {
   const itemId = route.params.item_id
-  const isCurrent = itemId === props.subject.id || itemId === props.subject.slug
-  return isCurrent ? selectedDiscussionId.value : undefined
+  return itemId === props.subject.id || itemId === props.subject.slug
 })
+
+// deeplinked discussion to load, held back until subject matches the route
+const discussionIdToLoad = computed(() =>
+  isSubjectCurrent.value ? selectedDiscussionId.value : undefined
+)
+
+const header = useTemplateRef('header')
 
 const allDiscussionsRoute = computed(() => ({
   query: { ...route.query, discussion_id: undefined }
@@ -83,28 +89,21 @@ const {
   deleteComment
 } = useDiscussions(
   toRef(() => props.subject.id),
-  subjectDiscussionId,
-  (discussionId) => {
-    console.warn(`Discussion ${discussionId} not found for this subject.`)
-    router.replace(allDiscussionsRoute.value)
+  {
+    selectedDiscussionId: discussionIdToLoad,
+    onSelectedLoaded: () =>
+      nextTick(() =>
+        header.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      ),
+    onSelectedNotFound: (discussionId) => {
+      console.warn(`Discussion ${discussionId} not found for this subject.`)
+      router.replace(allDiscussionsRoute.value)
+    }
   }
 )
 
 // Undefined until loaded, so parents can fall back to their own count
 const total = computed(() => discussions.value?.total)
-
-const header = useTemplateRef('header')
-
-// id rather than object, so replies and edits don't scroll
-watch(
-  () => selectedDiscussion.value?.id,
-  (id) => {
-    if (!id) return
-    nextTick(() =>
-      header.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    )
-  }
-)
 
 // only the selected discussion while one is deeplinked (empty until loaded)
 const shownDiscussions = computed(() => {

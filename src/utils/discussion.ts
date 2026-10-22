@@ -13,11 +13,20 @@ import DiscussionsAPI from '@/services/api/resources/DiscussionsAPI'
 
 const discussionsAPI = new DiscussionsAPI()
 
+interface SelectedDiscussionOptions {
+  selectedDiscussionId: Ref<DiscussionId | undefined>
+  onSelectedLoaded: (discussion: Discussion) => void
+  onSelectedNotFound: (discussionId: DiscussionId) => void
+}
+
 /** Current page of discussions for a subject, plus an optionally selected one, with their mutations */
 export const useDiscussions = (
   subjectId: Ref<SubjectId>,
-  selectedDiscussionId: Ref<DiscussionId | undefined>,
-  onDiscussionNotFound: (discussionId: DiscussionId) => void
+  {
+    selectedDiscussionId,
+    onSelectedLoaded,
+    onSelectedNotFound
+  }: SelectedDiscussionOptions
 ) => {
   const currentPage = ref(1)
   const discussions: Ref<DiscussionResponse | undefined> = ref()
@@ -85,10 +94,11 @@ export const useDiscussions = (
         .catch(() => undefined)
       if (cancelled) return
       if (discussion?.subject.id !== subjectId.value) {
-        onDiscussionNotFound(id)
+        onSelectedNotFound(id)
         return
       }
       selectedDiscussion.value = discussion
+      onSelectedLoaded(discussion)
     },
     { immediate: true }
   )
