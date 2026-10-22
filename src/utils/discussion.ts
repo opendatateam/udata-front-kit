@@ -82,17 +82,18 @@ export const useDiscussions = (
 
   // Discussion fetched on its own (deep link), independently of pagination
   const selectedDiscussion: Ref<Discussion | null> = ref(null)
+  let lastSelectedRequest = 0
   watch(
     [selectedDiscussionId, subjectId],
-    async ([id], _, onCleanup) => {
+    async ([id]) => {
+      const request = ++lastSelectedRequest
       selectedDiscussion.value = null
       if (!id) return
-      let cancelled = false
-      onCleanup(() => (cancelled = true))
       const discussion = await discussionsAPI
         .getDiscussion(id)
         .catch(() => undefined)
-      if (cancelled) return
+      // Drop responses superseded by a later request
+      if (request !== lastSelectedRequest) return
       if (discussion?.subject.id !== subjectId.value) {
         onSelectedNotFound(id)
         return
