@@ -68,7 +68,7 @@ export const useDiscussions = (subjectId: Ref<SubjectId>) => {
   })
 
   // Discussion fetched on its own (deep link), independently of pagination
-  const selected: Ref<Discussion | null> = ref(null)
+  const selectedDiscussion: Ref<Discussion | null> = ref(null)
   let lastSelectRequest = 0
 
   // Resolves to false if the discussion doesn't exist or belongs to another subject
@@ -76,7 +76,7 @@ export const useDiscussions = (subjectId: Ref<SubjectId>) => {
     discussionId: DiscussionId | undefined
   ): Promise<boolean> => {
     const request = ++lastSelectRequest
-    selected.value = null
+    selectedDiscussion.value = null
     if (!discussionId) return true
     const discussion = await discussionsAPI
       .getDiscussion(discussionId)
@@ -84,17 +84,18 @@ export const useDiscussions = (subjectId: Ref<SubjectId>) => {
     // A later selection takes over
     if (request !== lastSelectRequest) return true
     if (!discussion || discussion.subject.id !== subjectId.value) return false
-    selected.value = discussion
+    selectedDiscussion.value = discussion
     return true
   }
 
   const findDiscussion = (discussionId: DiscussionId) =>
-    selected.value?.id === discussionId
-      ? selected.value
+    selectedDiscussion.value?.id === discussionId
+      ? selectedDiscussion.value
       : discussions.value?.data.find((d) => d.id === discussionId)
 
   const replaceDiscussion = (discussion: Discussion) => {
-    if (selected.value?.id === discussion.id) selected.value = discussion
+    if (selectedDiscussion.value?.id === discussion.id)
+      selectedDiscussion.value = discussion
     if (!discussions.value) return
     discussions.value.data = discussions.value.data.map((d) =>
       d.id === discussion.id ? discussion : d
@@ -138,7 +139,8 @@ export const useDiscussions = (subjectId: Ref<SubjectId>) => {
 
   const deleteDiscussion = async (discussionId: DiscussionId) => {
     await discussionsAPI.deleteDiscussion(discussionId)
-    if (selected.value?.id === discussionId) selected.value = null
+    if (selectedDiscussion.value?.id === discussionId)
+      selectedDiscussion.value = null
     await reload()
   }
 
@@ -166,7 +168,7 @@ export const useDiscussions = (subjectId: Ref<SubjectId>) => {
       // Clear the previous subject's data while the new one loads
       discussions.value = undefined
       closedCount.value = undefined
-      selected.value = null
+      selectedDiscussion.value = null
       lastSelectRequest++
       reloadFirstPage()
     },
@@ -178,7 +180,7 @@ export const useDiscussions = (subjectId: Ref<SubjectId>) => {
     discussions,
     closedCount,
     pages,
-    selected,
+    selectedDiscussion,
     selectDiscussion,
     createDiscussion,
     createComment,

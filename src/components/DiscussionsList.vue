@@ -58,7 +58,7 @@ const {
   discussions,
   closedCount,
   pages,
-  selected: selectedDiscussion,
+  selectedDiscussion,
   selectDiscussion,
   createDiscussion,
   createComment,
