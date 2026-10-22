@@ -29,7 +29,7 @@ FROM nginx:alpine-slim
 COPY --from=builder /app/dist /usr/share/nginx/html
 
 # alpine-slim is a floating tag: log what it resolved to
-RUN nginx -v && cat /etc/alpine-release
+RUN nginx -v && echo "alpine $(cat /etc/alpine-release)"
 
 RUN echo 'server { \
     listen 80; \
