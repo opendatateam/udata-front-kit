@@ -13,8 +13,6 @@ RUN pnpm install
 # Copy source files
 COPY ./ /app
 
-ENV NODE_OPTIONS=--openssl-legacy-provider
-
 ARG VITE_SITE_ID
 # only set the environment variable if the build arg was provided
 ENV VITE_SITE_ID=${VITE_SITE_ID:-}
