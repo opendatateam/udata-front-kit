@@ -32,12 +32,11 @@ export default class DiscussionsAPI extends DatagouvfrAPI {
   }
 
   /**
-   * Get a single discussion, without error toast
+   * Get a single discussion
    */
   async getDiscussion(discussionId: DiscussionId): Promise<Discussion> {
     return await this.get({
       entityId: discussionId,
-      toasted: false,
       // Needed so the API resolves `permissions` against the current user
       authenticated: true
     })
