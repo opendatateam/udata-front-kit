@@ -321,7 +321,7 @@ defineExpose({ total })
 <template>
   <div ref="header" class="fr-grid-row fr-grid-row--middle discussion-header">
     <div class="fr-col">
-      <div v-if="selectedDiscussionId" class="fr-mt-4w fr-mb-2w">
+      <div v-if="selectedDiscussionId" class="fr-mt-4w fr-mb-3w">
         <RouterLink
           :to="allDiscussionsRoute"
           class="fr-link fr-icon-arrow-left-line fr-link--icon-left"
