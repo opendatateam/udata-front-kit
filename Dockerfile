@@ -14,7 +14,7 @@ RUN pnpm install
 COPY ./ /app
 
 ARG VITE_SITE_ID
-# only set the environment variable if the build arg was provided
+# always set, so a missing build arg fails the build instead of falling back to .env
 ENV VITE_SITE_ID=${VITE_SITE_ID:-}
 
 # node:22 and pnpm@latest-11 are floating tags: log what they resolved to
