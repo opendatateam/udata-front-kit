@@ -20,7 +20,7 @@ describe('Topic Detail View - Tab counts', () => {
   })
 })
 
-describe('Topic Detail View - Discussion notification links', () => {
+describe('Topic Detail View - Discussion deeplinks', () => {
   it('should send a notification URL pointing to the Discussions tab', () => {
     const { testTopic } = setupTopicWithExistingFactors()
     cy.intercept('POST', /data\.gouv\.fr\/api\/1\/discussions\/?$/, {
@@ -64,23 +64,15 @@ describe('Topic Detail View - Discussion notification links', () => {
     cy.get(`#discussion-${targetId}`).should('be.visible')
   }
 
-  // udata appends #discussion-{id} to the notification external_url
-  it('should open a single discussion from a /discussions#discussion- link', () => {
+  it('should open a single discussion from a ?discussion_id= link', () => {
     const { testTopic, firstPage, target } = setupDeeplinkedDiscussion()
 
-    cy.visit(`/bouquets/${testTopic.slug}/discussions#discussion-${target.id}`)
+    cy.visit(
+      `/bouquets/${testTopic.slug}/discussions?discussion_id=${target.id}`
+    )
 
     assertSingleDiscussion(testTopic.slug, target.id)
     cy.get(`#discussion-${firstPage[0].id}`).should('not.exist')
-  })
-
-  // bare URL + hash: format stored on discussions created before the tab was in the path
-  it('should open a single discussion from a bare #discussion- link', () => {
-    const { testTopic, target } = setupDeeplinkedDiscussion()
-
-    cy.visit(`/bouquets/${testTopic.slug}#discussion-${target.id}`)
-
-    assertSingleDiscussion(testTopic.slug, target.id)
   })
 
   it('should go back to all discussions from a single discussion', () => {
@@ -106,7 +98,9 @@ describe('Topic Detail View - Discussion notification links', () => {
     const foreign = discussionFactory.one()
     cy.mockDatagouvObject('discussions', foreign.id, foreign)
 
-    cy.visit(`/bouquets/${testTopic.slug}#discussion-${foreign.id}`)
+    cy.visit(
+      `/bouquets/${testTopic.slug}/discussions?discussion_id=${foreign.id}`
+    )
 
     cy.location('pathname').should(
       'eq',
@@ -133,5 +127,28 @@ describe('Topic Detail View - Discussion notification links', () => {
       'have.been.calledWith',
       `${Cypress.config('baseUrl')}/bouquets/${testTopic.slug}/discussions?discussion_id=${firstPage[0].id}`
     )
+  })
+
+  // TODO: drop along with rewriteDiscussionHash
+  describe('legacy #discussion- links', () => {
+    // udata appends #discussion-{id} to the notification external_url
+    it('should rewrite a /discussions#discussion- link', () => {
+      const { testTopic, target } = setupDeeplinkedDiscussion()
+
+      cy.visit(
+        `/bouquets/${testTopic.slug}/discussions#discussion-${target.id}`
+      )
+
+      assertSingleDiscussion(testTopic.slug, target.id)
+    })
+
+    // format stored on discussions created before the tab was in the path
+    it('should rewrite a bare #discussion- link', () => {
+      const { testTopic, target } = setupDeeplinkedDiscussion()
+
+      cy.visit(`/bouquets/${testTopic.slug}#discussion-${target.id}`)
+
+      assertSingleDiscussion(testTopic.slug, target.id)
+    })
   })
 })
