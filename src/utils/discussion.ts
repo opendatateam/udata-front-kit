@@ -69,23 +69,15 @@ export const useDiscussions = (subjectId: Ref<SubjectId>) => {
 
   // Discussion fetched on its own (deep link), independently of pagination
   const selectedDiscussion: Ref<Discussion | null> = ref(null)
-  let lastSelectRequest = 0
 
-  // Resolves to false if the discussion doesn't exist or belongs to another subject
-  const selectDiscussion = async (
-    discussionId: DiscussionId | undefined
-  ): Promise<boolean> => {
-    const request = ++lastSelectRequest
-    selectedDiscussion.value = null
-    if (!discussionId) return true
+  // Undefined if the discussion doesn't exist or belongs to another subject
+  const fetchDiscussion = async (
+    discussionId: DiscussionId
+  ): Promise<Discussion | undefined> => {
     const discussion = await discussionsAPI
       .getDiscussion(discussionId)
       .catch(() => undefined)
-    // A later selection takes over
-    if (request !== lastSelectRequest) return true
-    if (!discussion || discussion.subject.id !== subjectId.value) return false
-    selectedDiscussion.value = discussion
-    return true
+    return discussion?.subject.id === subjectId.value ? discussion : undefined
   }
 
   const findDiscussion = (discussionId: DiscussionId) =>
@@ -139,8 +131,6 @@ export const useDiscussions = (subjectId: Ref<SubjectId>) => {
 
   const deleteDiscussion = async (discussionId: DiscussionId) => {
     await discussionsAPI.deleteDiscussion(discussionId)
-    if (selectedDiscussion.value?.id === discussionId)
-      selectedDiscussion.value = null
     await reload()
   }
 
@@ -168,8 +158,6 @@ export const useDiscussions = (subjectId: Ref<SubjectId>) => {
       // Clear the previous subject's data while the new one loads
       discussions.value = undefined
       closedCount.value = undefined
-      selectedDiscussion.value = null
-      lastSelectRequest++
       reloadFirstPage()
     },
     { immediate: true }
@@ -181,7 +169,7 @@ export const useDiscussions = (subjectId: Ref<SubjectId>) => {
     closedCount,
     pages,
     selectedDiscussion,
-    selectDiscussion,
+    fetchDiscussion,
     createDiscussion,
     createComment,
     updateDiscussionTitle,

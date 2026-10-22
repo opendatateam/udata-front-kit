@@ -59,7 +59,7 @@ const {
   closedCount,
   pages,
   selectedDiscussion,
-  selectDiscussion,
+  fetchDiscussion,
   createDiscussion,
   createComment,
   updateDiscussionTitle,
@@ -276,37 +276,39 @@ const confirmDeleteComment = (
 
 const discussionPermalink = (discussionId: DiscussionId) => {
   const { href } = router.resolve({
-    name: route.name ?? undefined,
+    name: route.name,
     params: { ...route.params, tab: Tab.DISCUSSIONS },
     query: { discussion_id: discussionId }
   })
   return new URL(href, window.location.origin).href
 }
 
-const allDiscussionsRoute = computed(() => {
-  const { discussion_id: _, ...query } = route.query
-  return { name: route.name ?? undefined, params: route.params, query }
-})
+const allDiscussionsRoute = computed(() => ({
+  query: { ...route.query, discussion_id: undefined }
+}))
 
 // Deeplinked discussion, fetched on its own so it doesn't depend on pagination
 watch(
   [selectedDiscussionId, () => props.subject.id],
-  async ([discussionId]) => {
+  async ([discussionId], _, onCleanup) => {
+    selectedDiscussion.value = null
+    if (!discussionId) return
     // subject is stale while the parent view loads another item: wait for it
     const itemId = route.params.item_id
     if (itemId !== props.subject.id && itemId !== props.subject.slug) return
-    const found = await selectDiscussion(discussionId)
-    if (discussionId !== selectedDiscussionId.value) return
-    if (!found) {
+    let cancelled = false
+    onCleanup(() => (cancelled = true))
+    const discussion = await fetchDiscussion(discussionId)
+    if (cancelled) return
+    if (!discussion) {
       console.warn(`Discussion ${discussionId} not found for this subject.`)
       router.replace(allDiscussionsRoute.value)
       return
     }
-    if (selectedDiscussion.value) {
-      nextTick(() =>
-        header.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      )
-    }
+    selectedDiscussion.value = discussion
+    nextTick(() =>
+      header.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    )
   },
   { immediate: true }
 )

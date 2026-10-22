@@ -11,10 +11,9 @@ export const rewriteDiscussionHash = (
   const id = to.hash.slice('#discussion-'.length)
   if (!id) return
   return {
-    name: to.name ?? undefined,
+    name: to.name,
     params: { ...to.params, tab: Tab.DISCUSSIONS },
     query: { discussion_id: id },
-    hash: '',
     replace: true
   }
 }
