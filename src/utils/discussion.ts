@@ -13,8 +13,12 @@ import DiscussionsAPI from '@/services/api/resources/DiscussionsAPI'
 
 const discussionsAPI = new DiscussionsAPI()
 
-/** Current page of discussions for a subject, with its mutations */
-export const useDiscussions = (subjectId: Ref<SubjectId>) => {
+/** Current page of discussions for a subject, plus an optionally selected one, with their mutations */
+export const useDiscussions = (
+  subjectId: Ref<SubjectId>,
+  selectedDiscussionId: Ref<DiscussionId | undefined>,
+  onDiscussionNotFound: (discussionId: DiscussionId) => void
+) => {
   const currentPage = ref(1)
   const discussions: Ref<DiscussionResponse | undefined> = ref()
   const closedCount: Ref<number | undefined> = ref()
@@ -69,16 +73,25 @@ export const useDiscussions = (subjectId: Ref<SubjectId>) => {
 
   // Discussion fetched on its own (deep link), independently of pagination
   const selectedDiscussion: Ref<Discussion | null> = ref(null)
-
-  // Undefined if the discussion doesn't exist or belongs to another subject
-  const fetchDiscussion = async (
-    discussionId: DiscussionId
-  ): Promise<Discussion | undefined> => {
-    const discussion = await discussionsAPI
-      .getDiscussion(discussionId)
-      .catch(() => undefined)
-    return discussion?.subject.id === subjectId.value ? discussion : undefined
-  }
+  watch(
+    [selectedDiscussionId, subjectId],
+    async ([id], _, onCleanup) => {
+      selectedDiscussion.value = null
+      if (!id) return
+      let cancelled = false
+      onCleanup(() => (cancelled = true))
+      const discussion = await discussionsAPI
+        .getDiscussion(id)
+        .catch(() => undefined)
+      if (cancelled) return
+      if (discussion?.subject.id !== subjectId.value) {
+        onDiscussionNotFound(id)
+        return
+      }
+      selectedDiscussion.value = discussion
+    },
+    { immediate: true }
+  )
 
   const findDiscussion = (discussionId: DiscussionId) =>
     selectedDiscussion.value?.id === discussionId
@@ -169,7 +182,6 @@ export const useDiscussions = (subjectId: Ref<SubjectId>) => {
     closedCount,
     pages,
     selectedDiscussion,
-    fetchDiscussion,
     createDiscussion,
     createComment,
     updateDiscussionTitle,

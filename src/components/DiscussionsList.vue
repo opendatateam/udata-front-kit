@@ -53,30 +53,58 @@ const props = defineProps({
   }
 })
 
+const selectedDiscussionId = computed(() => {
+  const id = route.query.discussion_id
+  return typeof id === 'string' ? id : undefined
+})
+
+// subject is stale while the parent view loads another item: wait for it
+const subjectDiscussionId = computed(() => {
+  const itemId = route.params.item_id
+  const isCurrent = itemId === props.subject.id || itemId === props.subject.slug
+  return isCurrent ? selectedDiscussionId.value : undefined
+})
+
+const allDiscussionsRoute = computed(() => ({
+  query: { ...route.query, discussion_id: undefined }
+}))
+
 const {
   currentPage,
   discussions,
   closedCount,
   pages,
   selectedDiscussion,
-  fetchDiscussion,
   createDiscussion,
   createComment,
   updateDiscussionTitle,
   updateComment,
   deleteDiscussion,
   deleteComment
-} = useDiscussions(toRef(() => props.subject.id))
+} = useDiscussions(
+  toRef(() => props.subject.id),
+  subjectDiscussionId,
+  (discussionId) => {
+    console.warn(`Discussion ${discussionId} not found for this subject.`)
+    router.replace(allDiscussionsRoute.value)
+  }
+)
 
 // Undefined until loaded, so parents can fall back to their own count
 const total = computed(() => discussions.value?.total)
 
-const selectedDiscussionId = computed(() => {
-  const id = route.query.discussion_id
-  return typeof id === 'string' ? id : undefined
-})
-
 const header = useTemplateRef('header')
+
+// id rather than object, so replies and edits don't scroll
+watch(
+  () => selectedDiscussion.value?.id,
+  (id) => {
+    if (!id) return
+    nextTick(() =>
+      header.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    )
+  }
+)
 
 // only the selected discussion while one is deeplinked (empty until loaded)
 const shownDiscussions = computed(() => {
@@ -282,36 +310,6 @@ const discussionPermalink = (discussionId: DiscussionId) => {
   })
   return new URL(href, window.location.origin).href
 }
-
-const allDiscussionsRoute = computed(() => ({
-  query: { ...route.query, discussion_id: undefined }
-}))
-
-// Deeplinked discussion, fetched on its own so it doesn't depend on pagination
-watch(
-  [selectedDiscussionId, () => props.subject.id],
-  async ([discussionId], _, onCleanup) => {
-    selectedDiscussion.value = null
-    if (!discussionId) return
-    // subject is stale while the parent view loads another item: wait for it
-    const itemId = route.params.item_id
-    if (itemId !== props.subject.id && itemId !== props.subject.slug) return
-    let cancelled = false
-    onCleanup(() => (cancelled = true))
-    const discussion = await fetchDiscussion(discussionId)
-    if (cancelled) return
-    if (!discussion) {
-      console.warn(`Discussion ${discussionId} not found for this subject.`)
-      router.replace(allDiscussionsRoute.value)
-      return
-    }
-    selectedDiscussion.value = discussion
-    nextTick(() =>
-      header.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    )
-  },
-  { immediate: true }
-)
 
 const changePage = (page: number) => {
   currentPage.value = page
