@@ -1,7 +1,7 @@
 FROM node:22 AS builder
 
-# Install pnpm
-RUN corepack enable && corepack prepare pnpm@latest-11 --activate
+# Install pnpm, pinned by "packageManager" in package.json
+RUN corepack enable
 
 WORKDIR /app
 
@@ -16,7 +16,7 @@ COPY ./ /app
 ARG VITE_SITE_ID
 RUN test -n "$VITE_SITE_ID" || { echo "VITE_SITE_ID build arg is required" >&2; exit 1; }
 
-# node:22 and pnpm@latest-11 are floating tags: log what they resolved to
+# node base image is a floating tag: log what it resolved to, and the pnpm in use
 RUN echo "$(date) - node $(node --version), pnpm $(pnpm --version)" && \
     pnpm run build
 
