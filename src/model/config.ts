@@ -198,6 +198,7 @@ type FooterMandatoryLink = {
 
 export type FooterConf = {
   logo?: Logo
+  logo_text?: string
   phrase?: string
   external_links?: FooterExternalLink[]
   mandatory_links?: FooterMandatoryLink[]
