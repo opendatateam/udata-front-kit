@@ -1,0 +1,176 @@
+# config file for solidarites
+
+# used as extras key
+site_id: solidarites
+
+datagouvfr:
+  # data.gouv.fr base URL (use www subdomain on prod)
+  base_url: https://demo.data.gouv.fr
+  # oauth settings
+  oauth_client_id: 68b1ac79a751200a42f2ba19
+  tabular_api_url: https://tabular-api.data.gouv.fr
+
+# UI customizations
+website:
+  title: 'solidarites.data.gouv.fr'
+  seo:
+    canonical_url: https://solidarites.preprod.data.gouv.fr
+    meta:
+      keywords:
+      description:
+      robots: 'noindex, nofollow'
+    robots_txt:
+      disallow:
+        - /admin
+    sitemap_xml:
+      topics_pages: []
+      datasets_pages: []
+      dataservices_pages: []
+  formatted_title: '<i>solidarites.</i><b>data.gouv</b><i>.fr</i>'
+  rf_title: 'Ministère<br>
+    de la Santé, des Familles,<br>
+    de l’Autonomie<br>
+    et des Personnes handicapées'
+  # leave empty if not pertinent
+  homepage:
+    title:
+    subtitle:
+    sections:
+      - title:
+        content:
+        sub_section_datasets:
+        sub_section_cards:
+        sub_section_tiles:
+        sub_section_buttons:
+    meta_description: solidarites.data.gouv.fr référence et centralise les données du domaine de la santé.
+  footer:
+    logo:
+    phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives au domaine de la solidarité, réalisé par le ministère de la Santé'
+    external_links:
+      - label: 'info.gouv.fr'
+        href: 'https://www.info.gouv.fr/'
+      - label: 'service-public.gouv.fr'
+        href: 'https://www.service-public.gouv.fr/'
+      - label: 'legifrance.gouv.fr'
+        href: 'https://www.legifrance.gouv.fr/'
+      - label: 'data.gouv.fr'
+        href: 'https://www.data.gouv.fr'
+    mandatory_links:
+      - label: 'Plan du site'
+        to: '/sitemap'
+  header:
+    logo:
+    title_image:
+    admin_shortcut: true
+    beta: true
+    button:
+      display: false
+      label:
+      link:
+    search:
+      display: true
+      placeholder: Rechercher un jeu de données solidarité
+  search_bar:
+    display: true
+    placeholder: Rechercher un jeu de données solidarité
+  secondary_search:
+    display: false
+    name:
+    link:
+  notice:
+    display: false
+    content:
+    closeable: false
+  # ⚠️ When updating this menu, also update the sitemap below if needed
+  menu:
+    - text: Accueil
+      to: /
+    - text: Données
+      to: /datasets
+    - text: Contributeurs
+      to: /organizations
+  router:
+    # ⚠️ When updating this list, also update the sitemap below if needed
+    static_pages:
+  sitemap:
+    - name: Accueil
+      path: /
+    - name: Données
+      path: /datasets
+    - name: Contributeurs
+      path: /organizations
+    - name: Plan du site
+      path: /sitemap
+  show_quality_component: true
+  oauth_option: true
+  # debounce high enough for accessibility (screen readers will announce results)
+  default_debounce_wait: 600
+  pagination_sizes:
+    organizations_list: 9
+    topics_drafts_list: 9
+    files_list: 6
+  contact_email: datagouv@datagouv.gouv.fr
+  home_banner_colors:
+    - '#f6f6f6'
+    - '#e3e3fd'
+    - '#019FE3'
+  matomo:
+    host: 'https://stats.data.gouv.fr'
+    siteId: 312
+  datasets:
+    # TODO: better place for that?
+    add_to_topic:
+      enable: false
+      page:
+    # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
+    harvest_backends_quality_warning: []
+    show_extended_information_panel:
+  # TODO: better place for that?
+  topics:
+    can_add_topics:
+      everyone: true
+      authorized_users:
+
+  # Grist organisations ministère de la Santé https://grist.numerique.gouv.fr/o/verticalesolidarites/api/docs/sPQmuF8WuFGV/tables/Demo/records?filter={"Type": ["organization"]}
+  # Organisations transversale des données ouvertes de la solidarité
+organizations:
+  datasets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/solidarites-demo/organizations-datasets.json
+  page: # organizations.page is a special case of config.pages
+    breadcrumb_title: Contributeurs
+    labels:
+      singular: contributeur
+    meta:
+      title: Liste des contributeurs
+      description: Recherchez une organisation qui a partagé un jeu de données
+
+pages:
+  # DATASETS
+  datasets:
+    object_type: datasets
+    list_all: true
+    universe_query:
+      topic: 6ad9cf67e9b6f18b46b4ab90
+    filter_prefix:
+    title: Données
+    breadcrumb_title: Données
+    labels:
+      singular: jeu de données
+      plural: jeux de données
+      extended: jeu de données
+    search:
+      input: Rechercher un jeu de données
+      placeholder: null
+    resources_tabs:
+      discussions:
+        display: true
+        create: true
+      datasets:
+        display: true
+      reuses:
+        display: true
+    editable: true
+    filters:
+      - name: Organisation
+        default_option: Toutes les organisations
+        id: organization
+        type: organization_custom
