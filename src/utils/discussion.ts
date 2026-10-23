@@ -13,6 +13,15 @@ import DiscussionsAPI from '@/services/api/resources/DiscussionsAPI'
 
 const discussionsAPI = new DiscussionsAPI()
 
+// Each call starts a request; the returned check tells if it's still the latest one
+const latestRequest = () => {
+  let last = 0
+  return () => {
+    const request = ++last
+    return () => request === last
+  }
+}
+
 interface SelectedDiscussionOptions {
   selectedDiscussionId: Ref<DiscussionId | undefined>
   onSelectedLoaded: (discussion: Discussion) => void
@@ -31,16 +40,16 @@ export const useDiscussions = (
   const currentPage = ref(1)
   const discussions: Ref<DiscussionResponse | undefined> = ref()
   const closedCount: Ref<number | undefined> = ref()
-  let lastRequest = 0
 
+  const pageRequest = latestRequest()
   const fetchPage = async () => {
-    const request = ++lastRequest
+    const isLatest = pageRequest()
     const res = await discussionsAPI.getDiscussions(
       subjectId.value,
       currentPage.value
     )
     // Drop responses superseded by a later request (e.g. fast page changes)
-    if (request !== lastRequest) return
+    if (!isLatest()) return
     // Page emptied (e.g. last item deleted): step back, the watcher fetches it
     if (!res.data.length && currentPage.value > 1) {
       currentPage.value -= 1
@@ -49,13 +58,12 @@ export const useDiscussions = (
     discussions.value = res
   }
 
-  let lastCountRequest = 0
-
+  const countRequest = latestRequest()
   const refreshClosedCount = async () => {
-    const request = ++lastCountRequest
+    const isLatest = countRequest()
     const count = await discussionsAPI.getClosedCount(subjectId.value)
     // Drop responses superseded by a later request
-    if (request !== lastCountRequest) return
+    if (!isLatest()) return
     closedCount.value = count
   }
 
@@ -82,18 +90,19 @@ export const useDiscussions = (
 
   // Discussion fetched on its own (deep link), independently of pagination
   const selectedDiscussion: Ref<Discussion | null> = ref(null)
-  let lastSelectedRequest = 0
+  const selectedRequest = latestRequest()
   watch(
     [selectedDiscussionId, subjectId],
     async ([id]) => {
-      const request = ++lastSelectedRequest
+      // started before the !id early return, so clearing the id also drops a pending fetch
+      const isLatest = selectedRequest()
       selectedDiscussion.value = null
       if (!id) return
       const discussion = await discussionsAPI
         .getDiscussion(id)
         .catch(() => undefined)
       // Drop responses superseded by a later request
-      if (request !== lastSelectedRequest) return
+      if (!isLatest()) return
       if (discussion?.subject.id !== subjectId.value) {
         onSelectedNotFound(id)
         return
