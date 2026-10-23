@@ -229,9 +229,7 @@ const clearHash = () => {
   window.history.replaceState(window.history.state, '', url.toString())
 }
 
-// Handle deeplinks: #factor-{id} switches to Données tab and scrolls to the
-// factor; #discussion-{id} switches to the Discussions tab and
-// scrolls to the discussion.
+// Handle #factor-{id} deeplinks: switch to the Données tab and scroll to the factor
 watch(
   () => router.currentRoute.value.hash,
   (hash) => {
@@ -244,14 +242,6 @@ watch(
           nextTick(() =>
             topicFactorsListRef.value?.navigateToElement(elementId)
           )
-      )
-      clearHash()
-    } else if (hash.startsWith('#discussion-')) {
-      selectTab(Tab.DISCUSSIONS)
-      const discussionId = hash.replace('#discussion-', '')
-      runWhenReady(
-        () => !!discussionsListRef.value,
-        () => discussionsListRef.value?.navigateToDiscussion(discussionId)
       )
       clearHash()
     }

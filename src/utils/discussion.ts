@@ -13,23 +13,43 @@ import DiscussionsAPI from '@/services/api/resources/DiscussionsAPI'
 
 const discussionsAPI = new DiscussionsAPI()
 
-/** Current page of discussions for a subject, with its mutations */
-export const useDiscussions = (subjectId: Ref<SubjectId>) => {
+// Each call starts a request; the returned check tells if it's still the latest one
+const latestRequest = () => {
+  let last = 0
+  return () => {
+    const request = ++last
+    return () => request === last
+  }
+}
+
+interface SelectedDiscussionOptions {
+  selectedDiscussionId: Ref<DiscussionId | undefined>
+  onSelectedLoaded: (discussion: Discussion) => void
+  onSelectedNotFound: (discussionId: DiscussionId) => void
+}
+
+/** Current page of discussions for a subject, plus an optionally selected one, with their mutations */
+export const useDiscussions = (
+  subjectId: Ref<SubjectId>,
+  {
+    selectedDiscussionId,
+    onSelectedLoaded,
+    onSelectedNotFound
+  }: SelectedDiscussionOptions
+) => {
   const currentPage = ref(1)
   const discussions: Ref<DiscussionResponse | undefined> = ref()
   const closedCount: Ref<number | undefined> = ref()
 
-  let loading: Promise<void> | undefined
-  let lastRequest = 0
-
+  const pageRequest = latestRequest()
   const fetchPage = async () => {
-    const request = ++lastRequest
+    const isLatest = pageRequest()
     const res = await discussionsAPI.getDiscussions(
       subjectId.value,
       currentPage.value
     )
     // Drop responses superseded by a later request (e.g. fast page changes)
-    if (request !== lastRequest) return
+    if (!isLatest()) return
     // Page emptied (e.g. last item deleted): step back, the watcher fetches it
     if (!res.data.length && currentPage.value > 1) {
       currentPage.value -= 1
@@ -38,19 +58,17 @@ export const useDiscussions = (subjectId: Ref<SubjectId>) => {
     discussions.value = res
   }
 
-  let lastCountRequest = 0
-
+  const countRequest = latestRequest()
   const refreshClosedCount = async () => {
-    const request = ++lastCountRequest
+    const isLatest = countRequest()
     const count = await discussionsAPI.getClosedCount(subjectId.value)
     // Drop responses superseded by a later request
-    if (request !== lastCountRequest) return
+    if (!isLatest()) return
     closedCount.value = count
   }
 
   const reload = (): Promise<void> => {
-    loading = Promise.all([fetchPage(), refreshClosedCount()]).then(() => {})
-    return loading
+    return Promise.all([fetchPage(), refreshClosedCount()]).then(() => {})
   }
 
   const reloadFirstPage = async () => {
@@ -70,7 +88,39 @@ export const useDiscussions = (subjectId: Ref<SubjectId>) => {
     }))
   })
 
+  // Discussion fetched on its own (deep link), independently of pagination
+  const selectedDiscussion: Ref<Discussion | null> = ref(null)
+  const selectedRequest = latestRequest()
+  watch(
+    [selectedDiscussionId, subjectId],
+    async ([id]) => {
+      // started before the !id early return, so clearing the id also drops a pending fetch
+      const isLatest = selectedRequest()
+      selectedDiscussion.value = null
+      if (!id) return
+      const discussion = await discussionsAPI
+        .getDiscussion(id)
+        .catch(() => undefined)
+      // Drop responses superseded by a later request
+      if (!isLatest()) return
+      if (discussion?.subject.id !== subjectId.value) {
+        onSelectedNotFound(id)
+        return
+      }
+      selectedDiscussion.value = discussion
+      onSelectedLoaded(discussion)
+    },
+    { immediate: true }
+  )
+
+  const findDiscussion = (discussionId: DiscussionId) =>
+    selectedDiscussion.value?.id === discussionId
+      ? selectedDiscussion.value
+      : discussions.value?.data.find((d) => d.id === discussionId)
+
   const replaceDiscussion = (discussion: Discussion) => {
+    if (selectedDiscussion.value?.id === discussion.id)
+      selectedDiscussion.value = discussion
     if (!discussions.value) return
     discussions.value.data = discussions.value.data.map((d) =>
       d.id === discussion.id ? discussion : d
@@ -122,9 +172,7 @@ export const useDiscussions = (subjectId: Ref<SubjectId>) => {
     commentId: string
   ) => {
     await discussionsAPI.deleteComment(discussionId, commentId)
-    const discussion = discussions.value?.data.find(
-      (d) => d.id === discussionId
-    )
+    const discussion = findDiscussion(discussionId)
     if (!discussion) return
     replaceDiscussion({
       ...discussion,
@@ -133,7 +181,7 @@ export const useDiscussions = (subjectId: Ref<SubjectId>) => {
   }
 
   watch(currentPage, () => {
-    loading = fetchPage()
+    fetchPage()
   })
   // Subject can change with the same composable used (e.g. TopicDetail swaps the Topic)
   watch(
@@ -153,8 +201,7 @@ export const useDiscussions = (subjectId: Ref<SubjectId>) => {
     discussions,
     closedCount,
     pages,
-    // Resolves once the in-flight load is done
-    loaded: () => loading,
+    selectedDiscussion,
     createDiscussion,
     createComment,
     updateDiscussionTitle,

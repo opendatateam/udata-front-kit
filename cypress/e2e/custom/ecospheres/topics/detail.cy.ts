@@ -20,7 +20,7 @@ describe('Topic Detail View - Tab counts', () => {
   })
 })
 
-describe('Topic Detail View - Discussion notification links', () => {
+describe('Topic Detail View - Discussion deeplinks', () => {
   it('should send a notification URL pointing to the Discussions tab', () => {
     const { testTopic } = setupTopicWithExistingFactors()
     cy.intercept('POST', /data\.gouv\.fr\/api\/1\/discussions\/?$/, {
@@ -39,23 +39,116 @@ describe('Topic Detail View - Discussion notification links', () => {
       .should('match', new RegExp(`/bouquets/${testTopic.slug}/discussions$`))
   })
 
-  // bare URL + hash: format stored on discussions created before the tab was in the path
-  it('should open the Discussions tab from a #discussion- hash', () => {
-    const discussions = discussionFactory.many(2)
-    const target = discussions[1]
-    const { testTopic } = setupTopicWithExistingFactors({ discussions })
+  // target is not in the first page of the list: it is fetched on its own
+  const setupDeeplinkedDiscussion = () => {
+    const firstPage = discussionFactory.many(2)
+    const { testTopic } = setupTopicWithExistingFactors({
+      discussions: firstPage
+    })
+    const target = discussionFactory.one({
+      overrides: { subject: { class: 'Topic', id: testTopic.id } }
+    })
+    cy.mockDatagouvObject('discussions', target.id, target)
+    return { testTopic, firstPage, target }
+  }
 
-    cy.visit(`/bouquets/${testTopic.slug}#discussion-${target.id}`)
+  const assertSingleDiscussion = (slug: string, targetId: string) => {
+    cy.location('pathname').should('eq', `/bouquets/${slug}/discussions`)
+    cy.location('search').should('eq', `?discussion_id=${targetId}`)
+    cy.location('hash').should('eq', '')
+    cy.get('[role="tab"][aria-selected="true"]').should(
+      'contain',
+      'Discussions'
+    )
+    cy.contains('a', 'Voir toutes les discussions').should('be.visible')
+    cy.get(`#discussion-${targetId}`).should('be.visible')
+  }
+
+  it('should open a single discussion from a ?discussion_id= link', () => {
+    const { testTopic, firstPage, target } = setupDeeplinkedDiscussion()
+
+    cy.visit(
+      `/bouquets/${testTopic.slug}/discussions?discussion_id=${target.id}`
+    )
+
+    assertSingleDiscussion(testTopic.slug, target.id)
+    cy.get(`#discussion-${firstPage[0].id}`).should('not.exist')
+  })
+
+  it('should go back to all discussions from a single discussion', () => {
+    const { testTopic, firstPage, target } = setupDeeplinkedDiscussion()
+
+    cy.visit(
+      `/bouquets/${testTopic.slug}/discussions?discussion_id=${target.id}`
+    )
+    cy.get(`#discussion-${target.id}`).should('be.visible')
+    cy.contains('a', 'Voir toutes les discussions').click()
 
     cy.location('pathname').should(
       'eq',
       `/bouquets/${testTopic.slug}/discussions`
     )
-    cy.url().should('not.include', '#discussion-')
-    cy.get('[role="tab"][aria-selected="true"]').should(
-      'contain',
-      'Discussions'
+    cy.location('search').should('eq', '')
+    cy.get(`#discussion-${firstPage[0].id}`).should('be.visible')
+    cy.get(`#discussion-${target.id}`).should('not.exist')
+  })
+
+  it('should fall back to all discussions for an invalid discussion', () => {
+    const { testTopic, firstPage } = setupDeeplinkedDiscussion()
+    const foreign = discussionFactory.one()
+    cy.mockDatagouvObject('discussions', foreign.id, foreign)
+
+    cy.visit(
+      `/bouquets/${testTopic.slug}/discussions?discussion_id=${foreign.id}`
     )
-    cy.get(`#discussion-${target.id}`).should('be.visible')
+
+    cy.location('pathname').should(
+      'eq',
+      `/bouquets/${testTopic.slug}/discussions`
+    )
+    cy.location('search').should('eq', '')
+    cy.get(`#discussion-${firstPage[0].id}`).should('be.visible')
+  })
+
+  it('should copy a permalink to a discussion', () => {
+    const { testTopic, firstPage } = setupDeeplinkedDiscussion()
+
+    cy.visit(`/bouquets/${testTopic.slug}/discussions`, {
+      onBeforeLoad(win) {
+        cy.stub(win.navigator.clipboard, 'writeText').as('writeText').resolves()
+      }
+    })
+    cy.get(`#discussion-${firstPage[0].id}`)
+      .parent()
+      .contains('button', 'Copier le lien vers cette discussion')
+      .click()
+
+    cy.get('@writeText').should(
+      'have.been.calledWith',
+      `${Cypress.config('baseUrl')}/bouquets/${testTopic.slug}/discussions?discussion_id=${firstPage[0].id}`
+    )
+  })
+
+  // TODO: drop along with rewriteDiscussionHash
+  describe('legacy #discussion- links', () => {
+    // udata appends #discussion-{id} to the notification external_url
+    it('should rewrite a /discussions#discussion- link', () => {
+      const { testTopic, target } = setupDeeplinkedDiscussion()
+
+      cy.visit(
+        `/bouquets/${testTopic.slug}/discussions#discussion-${target.id}`
+      )
+
+      assertSingleDiscussion(testTopic.slug, target.id)
+    })
+
+    // format stored on discussions created before the tab was in the path
+    it('should rewrite a bare #discussion- link', () => {
+      const { testTopic, target } = setupDeeplinkedDiscussion()
+
+      cy.visit(`/bouquets/${testTopic.slug}#discussion-${target.id}`)
+
+      assertSingleDiscussion(testTopic.slug, target.id)
+    })
   })
 })
