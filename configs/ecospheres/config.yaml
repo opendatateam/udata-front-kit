@@ -663,7 +663,7 @@ pages:
 #                                   # Network pages stop at the list view — items link to the standard
 #                                   # page sharing their subpath's name (e.g. `datasets` -> /datasets/:id),
 #                                   # so `resources_tabs`/`editable` (detail-view-only) can be omitted.
-networks:
+x-disabled-networks: # FIXME: rename to `networks` to enable
   tag: ecospheres-networks
   entries:
     sieau:
