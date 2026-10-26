@@ -17,7 +17,6 @@ on:
           - accessibilite
           - defis
           - hackathon
-          - simplifions
           - culture
       pr_number:
         description: 'Pull Request number to deploy'
@@ -42,7 +41,6 @@ jobs:
           - accessibilite
           - defis
           - hackathon
-          - simplifions
           - culture
     permissions:
       deployments: write
@@ -135,7 +133,7 @@ jobs:
 
       - name: Start deployment
         if: env.SHOULD_DEPLOY == 'true'
-        uses: chrnorm/deployment-action@55729fcebec3d284f60f5bcabbd8376437d696b1 # v2.0.7
+        uses: chrnorm/deployment-action@500aa6a23c81ffa1acf71072aee3cfa2cc2e556a # v2.0.8
         id: deployment
         with:
           token: ${{ github.token }}
@@ -197,7 +195,7 @@ jobs:
 
       - name: Update deployment status
         if: env.SHOULD_DEPLOY == 'true'
-        uses: chrnorm/deployment-status@9a72af4586197112e0491ea843682b5dc280d806 # v2.0.3
+        uses: chrnorm/deployment-status@6df8d036fd2fee9eb82936733953da1f8382b41e # v2.0.4
         with:
           token: ${{ github.token }}
           environment-url: https://deploy-preview-${{ env.PR_NUMBER }}--${{ env.SITE }}.sandbox.data.developpement-durable.gouv.fr

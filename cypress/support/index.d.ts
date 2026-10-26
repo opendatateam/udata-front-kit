@@ -4,7 +4,6 @@ declare global {
   namespace Cypress {
     interface Chainable {
       allowExternalRequests(): Chainable<void>
-      baseMocksForSimplifions(topics?: object[]): Chainable<void>
       catchUnmockedRequests(): Chainable<void>
       checkRGAAContrast(): Chainable<void>
       clickCheckbox(checkbox_name: string): Chainable<void>
@@ -20,6 +19,7 @@ declare global {
       mockDatasetBadges(): Chainable<void>
       mockDatasetFrequencies(): Chainable<void>
       mockDatasetLicenses(): Chainable<void>
+      mockDatasetNetworks(datasetId: string, topics?: object[]): Chainable<void>
       mockDatasetSchemas(): Chainable<void>
       mockGristImages(): Chainable<void>
       mockGristRecord(resourceId: string, element: { id: number; [key: string]: unknown }): Chainable<void>

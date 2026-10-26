@@ -50,6 +50,10 @@ if (
 
 routerPromise
   .then((router) => {
+    if (Sentry.getClient() && config.sentry?.tracesSampleRate) {
+      Sentry.addIntegration(Sentry.browserTracingIntegration({ router }))
+    }
+
     app.use(router)
     app.use(pinia)
     app.use(head)
