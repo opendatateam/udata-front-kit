@@ -3,12 +3,17 @@ import { datasetFactory } from 'cypress/support/factories/datasets_factory'
 import { discussionFactory } from 'cypress/support/factories/discussions_factory'
 import { resourceFactory } from 'cypress/support/factories/resources_factory'
 
+const NETWORKS = Cypress.env('siteConfig').networks
 const SIMM_TOPIC_ID: string =
-  Cypress.env('siteConfig').networks.entries.simm.pages.datasets.universe_query
-    .topic
+  NETWORKS?.entries?.simm?.pages.datasets.universe_query.topic
 
 describe('Dataset Detail View - Networks (univers)', () => {
   let dataset: DatasetV2
+
+  // networks can be disabled per environment (e.g. prod)
+  before(function () {
+    if (!NETWORKS) this.skip()
+  })
 
   beforeEach(() => {
     cy.mockMatomo()
