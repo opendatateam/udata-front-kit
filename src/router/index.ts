@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
 import config from '@/config'
 import type { StaticPageConfig } from '@/model/config'
+import { rewriteDiscussionHash } from '@/router/deeplinks'
 import LocalStorageService from '@/services/LocalStorageService'
 import { useResourceExplorer } from '@/utils/explorer'
 import NotFoundView from '@/views/NotFoundView.vue'
@@ -125,20 +126,14 @@ const routerPromise = siteRoutesPromise.then((siteRoutes) => {
   siteRoutes.forEach((route) => {
     routesMap.set(route.path, route)
   })
-  // FIXME: remove me when simplifions is out of front-kit (SEO/sitemap hack)
-  // static pages never override an already registered route (default or site-specific)
-  pages.forEach((route) => {
-    if (!routesMap.has(route.path)) {
-      routesMap.set(route.path, route)
-    }
-  })
   const routes = Array.from(routesMap.values())
+  routes.push(...pages)
   // catch all 404 (keep at the end of the list)
   routes.push({
     path: '/:pathMatch(.*)',
     component: NotFoundView
   })
-  return createRouter({
+  const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes,
     scrollBehavior(to, from, savedPosition) {
@@ -153,6 +148,14 @@ const routerPromise = siteRoutesPromise.then((siteRoutes) => {
           return { el: to.hash }
         }
         return false
+      }
+      // Preserve scroll when switching tabs or query on a detail page, unless back/forward
+      if (
+        to.meta.objectType &&
+        to.name === from.name &&
+        to.params.item_id === from.params.item_id
+      ) {
+        return savedPosition ?? false
       }
       // Preserve scroll when switching between search list pages (e.g. datasets ↔ indicators)
       if (to.meta.searchConfig && from.meta.searchConfig) {
@@ -169,6 +172,8 @@ const routerPromise = siteRoutesPromise.then((siteRoutes) => {
       }
     }
   })
+  router.beforeEach(rewriteDiscussionHash)
+  return router
 })
 
 export default routerPromise

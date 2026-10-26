@@ -146,11 +146,11 @@ describe('Datasets - List Page', () => {
     // The indicator card wraps both the badge and the DatasetCard.
     // Check that the indicator dataset has the "Indicateur" badge
     cy.contains('.indicator-card-wrapper', 'Indicator Dataset Title')
-      .find('.indicator-badge')
+      .find('.card-type-badge')
       .should('contain.text', 'Indicateur')
       .and('be.visible')
 
     // Only one indicator badge should exist in the list (the regular dataset has none)
-    cy.get('.indicator-badge').should('have.length', 1)
+    cy.get('.card-type-badge').should('have.length', 1)
   })
 })
