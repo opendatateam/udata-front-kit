@@ -3,6 +3,7 @@ import type {
   DatasetV2,
   DatasetV2WithFullObject
 } from '@datagouv/components-next'
+import { discussionFactory } from 'cypress/support/factories/discussions_factory'
 import { dataserviceFactory } from '../../../../support/factories/dataservices_factory'
 import { datasetFactory } from '../../../../support/factories/datasets_factory'
 import { createIndicator } from '../indicators/support'
@@ -203,7 +204,7 @@ describe('Dataservices (API) - Detail Page', () => {
       cy.wait('@getDataserviceDatasets')
 
       // The datasets tab content should be visible
-      cy.get('#tab-content-0').should('be.visible')
+      cy.get('#tab-content-datasets').should('be.visible')
       cy.contains(`${testDatasets.length} jeux de données`).should('be.visible')
     })
 
@@ -219,7 +220,7 @@ describe('Dataservices (API) - Detail Page', () => {
       cy.contains('button', 'Discussions').click()
 
       // Discussions tab content should be visible
-      cy.get('#tab-content-1').should('be.visible')
+      cy.get('#tab-content-discussions').should('be.visible')
       cy.contains("Il n'y a pas encore de discussion pour cette API").should(
         'be.visible'
       )
@@ -229,10 +230,57 @@ describe('Dataservices (API) - Detail Page', () => {
       cy.contains('button', 'Informations').click()
 
       // Informations tab content should be visible
-      cy.get('#tab-content-2').should('be.visible')
+      cy.get('#tab-content-informations').should('be.visible')
       cy.contains('Informations techniques').should('be.visible')
       cy.contains('ID').should('be.visible')
       cy.contains(testDataservice.id).should('be.visible')
+    })
+  })
+
+  describe('Addressable tabs', () => {
+    const basePath = () => `/dataservices/${testDataservice.id}`
+
+    it('should reflect the selected tab in the URL', () => {
+      cy.visit(basePath())
+      cy.wait(`@get_dataservices_${testDataservice.id}`)
+
+      cy.contains('button', 'Discussions').click()
+      cy.location('pathname').should('eq', `${basePath()}/discussions`)
+
+      cy.contains('button', 'Données').click()
+      cy.location('pathname').should('eq', basePath())
+    })
+
+    it('should open the tab from the URL', () => {
+      cy.visit(`${basePath()}/informations`)
+      cy.wait(`@get_dataservices_${testDataservice.id}`)
+
+      cy.get('#tab-content-informations').should('be.visible')
+      cy.get('[role="tab"][aria-selected="true"]').should(
+        'contain',
+        'Informations'
+      )
+    })
+
+    it('should fall back to the default tab for an unknown slug', () => {
+      cy.visit(`${basePath()}/unknown`)
+      cy.wait(`@get_dataservices_${testDataservice.id}`)
+
+      cy.get('#tab-content-datasets').should('be.visible')
+      cy.get('[role="tab"][aria-selected="true"]').should('contain', 'Données')
+    })
+
+    it('should not scroll to top when switching tabs', () => {
+      // short viewport so the tabs are below the fold
+      cy.viewport(1280, 400)
+      cy.visit(basePath())
+      cy.wait(`@get_dataservices_${testDataservice.id}`)
+
+      cy.get('[role="tablist"]').scrollIntoView()
+      cy.window().its('scrollY').should('be.gt', 0)
+      cy.contains('button', 'Discussions').click()
+      cy.location('pathname').should('eq', `${basePath()}/discussions`)
+      cy.window().its('scrollY').should('be.gt', 0)
     })
   })
 
@@ -251,12 +299,15 @@ describe('Dataservices (API) - Detail Page', () => {
         datasetFactory.many(3)
       )
 
+      // Differs from metrics.discussions: the tab shows the loaded list's total
+      cy.mockDatagouvObjectList('discussions', discussionFactory.many(2))
+
       cy.visit(`/dataservices/${countsDataservice.id}`)
       cy.wait(`@get_dataservices_${countsDataservice.id}`)
       cy.wait('@getDataserviceDatasets')
 
       cy.contains('button', 'Données (3)').should('be.visible')
-      cy.contains('button', 'Discussions (6)').should('be.visible')
+      cy.contains('button', 'Discussions (2)').should('be.visible')
       cy.contains('button', 'Informations')
         .find('sup.tab-count')
         .should('not.exist')

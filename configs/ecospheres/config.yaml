@@ -95,8 +95,9 @@ website:
       label: 'Donnez votre avis'
       link: https://grist.numerique.gouv.fr/o/ecospheres/forms/dr3oLSZ7hZUeZchdd5wJE9/4
     search:
-      display: false
+      display: true
       placeholder:
+      hide_on_home: true
   search_bar:
     display: true
     placeholder: Rechercher une donnée environnementale
@@ -121,7 +122,7 @@ website:
     - text: Collections thématiques
       to: /bouquets
     - text: Contributeurs
-      to: /organizations
+      to: /contributors
     - text: À propos
       to: /about
   router:
@@ -157,7 +158,7 @@ website:
     - name: Indicateurs phares
       path: /indicators
     - name: Contributeurs
-      path: /organizations
+      path: /contributors
     - name: À propos
       path: /about
     - name: Conditions générales d'utilisation
@@ -211,7 +212,7 @@ organizations:
       title: Liste des contributeurs
       description: Recherchez une organisation qui a partagé un jeu de données ou une réutilisation sur la transition écologique
 
-# shared themes list for indicators and bouquets
+# shared value lists used across pages/networks
 definitions: &definitions
   fnv_themes: &fnv_themes
     - id: mieux-consommer
@@ -228,6 +229,100 @@ definitions: &definitions
       name: Mieux se nourrir
     - id: autre
       name: Autre
+  inspire_themes: &inspire_themes
+    - id: adresses
+      name: Adresses
+    - id: altitude
+      name: Altitude
+    - id: batiments
+      name: Bâtiments
+    - id: caracteristiques-geographiques-meteorologiques
+      name: Caractéristiques géographiques météorologiques
+    - id: caracteristiques-geographiques-oceanographiques
+      name: Caractéristiques géographiques océanographiques
+    - id: conditions-atmospheriques
+      name: Conditions atmosphériques
+    - id: denominations-geographiques
+      name: Dénominations géographiques
+    - id: geologie
+      name: Géologie
+    - id: habitats-et-biotopes
+      name: Habitats et biotopes
+    - id: hydrographie
+      name: Hydrographie
+    - id: installations-agricoles-et-aquacoles
+      name: Installations agricoles et aquacoles
+    - id: installations-de-suivi-environnemental
+      name: Installations de suivi environnemental
+    - id: lieux-de-production-et-sites-industriels
+      name: Lieux de production et sites industriels
+    - id: occupation-des-terres
+      name: Occupation des terres
+    - id: ortho-imagerie
+      name: Ortho-imagerie
+    - id: parcelles-cadastrales
+      name: Parcelles cadastrales
+    - id: ressources-minerales
+      name: Ressources minérales
+    - id: referentiels-de-coordonnees
+      name: Référentiels de coordonnées
+    - id: regions-biogeographiques
+      name: Régions biogéographiques
+    - id: regions-maritimes
+      name: Régions maritimes
+    - id: repartition-de-la-population-demographie
+      name: Répartition de la population — démographie
+    - id: repartition-des-especes
+      name: Répartition des espèces
+    - id: reseaux-de-transport
+      name: Réseaux de transport
+    - id: sante-et-securite-des-personnes
+      name: Santé et sécurité des personnes
+    - id: services-dutilite-publique-et-services-publics
+      name: Services d'utilité publique et services publics
+    - id: sites-proteges
+      name: Sites protégés
+    - id: sols
+      name: Sols
+    - id: sources-denergie
+      name: Sources d'énergie
+    - id: systemes-de-maillage-geographique
+      name: Systèmes de maillage géographique
+    - id: unites-administratives
+      name: Unités administratives
+    - id: unites-statistiques
+      name: Unités statistiques
+    - id: usage-des-sols
+      name: Usage des sols
+    - id: zones-de-gestion-de-restriction-ou-de-reglementation-et-unites-de-declaration
+      name: Zones de gestion, de restriction ou de réglementation et unités de déclaration
+    - id: zones-a-risque-naturel
+      name: Zones à risque naturel
+  filter_badge: &filter_badge
+    id: badge
+    name: Label de donnée
+    type: badge
+  filter_org: &filter_org
+    id: org
+    name: Organisation
+    default_option: Toutes les organisations
+    type: organization_custom
+  filter_inspire: &filter_inspire
+    id: inspire
+    name: Thème INSPIRE
+    default_option: Tous les thèmes
+    type: select
+    use_filter_prefix: false
+    values: *inspire_themes
+  label_datasets: &label_datasets
+    singular: jeu de données
+    plural: jeux de données
+    extended: jeu de données
+  label_dataservices: &label_dataservices
+    singular: API
+    plural: APIs
+    extended: API
+    feminine: true
 
 # Configuration format for pages:
 #
@@ -269,7 +364,7 @@ definitions: &definitions
 #         name: {string}              # name of the filter ⚠️ only used in templates by custom filters
 #         type: {string}              # type of the filter (CustomFilterType or any BuiltInFilterKey from data.gouv.fr GlobalSearch)
 #         child: {string?}            # id of the child filter (optional)
-#         color: {string}             # color of the filter's tag
+#         color: {string}             # DSFR color of the filter's tag, append ::outlined for an outlined tag (e.g. purple-glycine::outlined)
 #         use_filter_prefix: {bool}   # whether to use {filter_prefix}-{filter.id}-{value} when building filter value
 #         api_param: {string?}        # API query parameter name to use (optional, defaults to "tag")
 #         default_option: {string?}   # default option for the filter (optional)
@@ -290,10 +385,7 @@ pages:
     filter_prefix:
     title: Toutes les données
     breadcrumb_title: Toutes les données
-    labels:
-      singular: jeu de données
-      plural: jeux de données
-      extended: jeu de données
+    labels: *label_datasets
     search:
       input: Rechercher un jeu de données
       placeholder: null
@@ -318,92 +410,14 @@ pages:
       - id: last_update_range
         name: Date de mise à jour
         type: last_update_range
-      - id: badge
-        name: Label de donnée
-        type: badge
-      - id: org
-        name: Organisation
-        default_option: Toutes les organisations
-        type: organization_custom
-      - id: inspire
-        name: Thème INSPIRE
-        default_option: Tous les thèmes
-        type: select
-        use_filter_prefix: false
-        values:
-          - id: adresses
-            name: Adresses
-          - id: altitude
-            name: Altitude
-          - id: batiments
-            name: Bâtiments
-          - id: caracteristiques-geographiques-meteorologiques
-            name: Caractéristiques géographiques météorologiques
-          - id: caracteristiques-geographiques-oceanographiques
-            name: Caractéristiques géographiques océanographiques
-          - id: conditions-atmospheriques
-            name: Conditions atmosphériques
-          - id: denominations-geographiques
-            name: Dénominations géographiques
-          - id: geologie
-            name: Géologie
-          - id: habitats-et-biotopes
-            name: Habitats et biotopes
-          - id: hydrographie
-            name: Hydrographie
-          - id: installations-agricoles-et-aquacoles
-            name: Installations agricoles et aquacoles
-          - id: installations-de-suivi-environnemental
-            name: Installations de suivi environnemental
-          - id: lieux-de-production-et-sites-industriels
-            name: Lieux de production et sites industriels
-          - id: occupation-des-terres
-            name: Occupation des terres
-          - id: ortho-imagerie
-            name: Ortho-imagerie
-          - id: parcelles-cadastrales
-            name: Parcelles cadastrales
-          - id: ressources-minerales
-            name: Ressources minérales
-          - id: referentiels-de-coordonnees
-            name: Référentiels de coordonnées
-          - id: regions-biogeographiques
-            name: Régions biogéographiques
-          - id: regions-maritimes
-            name: Régions maritimes
-          - id: repartition-de-la-population-demographie
-            name: Répartition de la population — démographie
-          - id: repartition-des-especes
-            name: Répartition des espèces
-          - id: reseaux-de-transport
-            name: Réseaux de transport
-          - id: sante-et-securite-des-personnes
-            name: Santé et sécurité des personnes
-          - id: services-dutilite-publique-et-services-publics
-            name: Services d'utilité publique et services publics
-          - id: sites-proteges
-            name: Sites protégés
-          - id: sols
-            name: Sols
-          - id: sources-denergie
-            name: Sources d'énergie
-          - id: systemes-de-maillage-geographique
-            name: Systèmes de maillage géographique
-          - id: unites-administratives
-            name: Unités administratives
-          - id: unites-statistiques
-            name: Unités statistiques
-          - id: usage-des-sols
-            name: Usage des sols
-          - id: zones-de-gestion-de-restriction-ou-de-reglementation-et-unites-de-declaration
-            name: Zones de gestion, de restriction ou de réglementation et unités de déclaration
-          - id: zones-a-risque-naturel
-            name: Zones à risque naturel
+      - *filter_badge
+      - *filter_org
+      - *filter_inspire
   # INDICATORS
   indicators:
     object_type: datasets # indicators are datasets filtered by universe_query
     list_all: true
-    icon: fr-icon-lightbulb-line
+    icon: fr-icon-bar-chart-2-line
     universe_query:
       tag: ecospheres-indicateurs
       organization: 67884b4da4fca9c97bbef479
@@ -469,7 +483,7 @@ pages:
         name: Levier
         default_option: Tous les leviers
         type: select
-        color: green-archipel
+        color: purple-glycine::outlined
         use_filter_prefix: true
         values:
           - id: 2-roues-elec-efficacite
@@ -558,11 +572,7 @@ pages:
     filter_prefix:
     title: API
     breadcrumb_title: API
-    labels:
-      singular: API
-      plural: APIs
-      extended: API
-      feminine: true
+    labels: *label_dataservices
     search:
       input: Rechercher une API
       placeholder: null
@@ -585,10 +595,7 @@ pages:
       - id: last_update_range
         name: Date de mise à jour
         type: last_update_range
-      - id: org
-        name: Organisation
-        default_option: Toutes les organisations
-        type: organization_custom
+      - *filter_org
   # BOUQUETS
   bouquets:
     object_type: topics
@@ -628,10 +635,7 @@ pages:
       - id: last_update_range
         name: Date de mise à jour
         type: last_update_range
-      - id: org
-        name: Organisation
-        default_option: Toutes les organisations
-        type: organization_custom
+      - *filter_org
       - id: theme
         name: Thématique
         default_option: Toutes les thématiques
@@ -642,6 +646,106 @@ pages:
         form:
           required: true
         values: *fnv_themes
+
+# Configuration format for networks (SIF — Systèmes d'Information Fédérateurs):
+#
+# networks:
+#   tag: {string}              # tag on the udata side identifying a network's backing topic, so a
+#                               # dataset's page can look up "which network(s) is this in"
+#   entries:                   # map of network identifier -> config
+#     {slug}:                    # network identifier, used as /contributors/{slug}
+#       pages:                    # one entry per object type this network exposes, keyed by URL subpath
+#                                  # (rendered at /contributors/{slug}/{subpath}); the FIRST key listed is
+#                                  # the default — used for the bare /contributors/{slug} redirect and as
+#                                  # the network's display identity (title/logo) on the /contributors list.
+#         {subpath}:               # reuses the exact `pages.{page_id}` format documented below; its
+#                                   # `banner.logo`/`banner.external_link` render above the page's search.
+#                                   # Network pages stop at the list view — items link to the standard
+#                                   # page sharing their subpath's name (e.g. `datasets` -> /datasets/:id),
+#                                   # so `resources_tabs`/`editable` (detail-view-only) can be omitted.
+x-disabled-networks: # FIXME: rename to `networks` to enable
+  tag: ecospheres-networks
+  entries:
+    sieau:
+      x-sieau-common: &sieau_common
+        universe_query:
+          topic: 6a8eff5ce148bf49b3267152
+        filter_prefix:
+        title: Eaufrance
+        banner:
+          title: Le service public d'information sur l'eau
+          content: Eaufrance fédère et diffuse les données et informations publiques sur l'eau et les milieux aquatiques en France, dans le cadre du Système d'information sur l'eau (SIE).
+          logo: /static/ecospheres/logos/networks/sieau.svg
+          external_link:
+            url: https://www.eaufrance.fr/
+            label: Accéder au site
+        list_all: true
+      pages:
+        datasets:
+          <<: *sieau_common
+          object_type: datasets
+          breadcrumb_title: Jeux de données
+          labels: *label_datasets
+          search:
+            input: Rechercher dans les données du réseau Eaufrance
+            placeholder: null
+          filters:
+            - *filter_badge
+            - *filter_org
+            - *filter_inspire
+        dataservices:
+          <<: *sieau_common
+          object_type: dataservices
+          breadcrumb_title: API
+          labels: *label_dataservices
+          search:
+            input: Rechercher dans les API du réseau Eaufrance
+            placeholder: null
+          filters:
+            - *filter_org
+      organizations:
+        datasets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-sieau-demo/organizations-datasets.json
+        dataservices: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-sieau-demo/organizations-dataservices.json
+    simm:
+      x-simm-common: &simm_common
+        universe_query:
+          topic: 6a82baef02381db0dc7229cf
+        filter_prefix:
+        title: Milieu Marin France
+        banner:
+          title: L'accès de référence aux données publiques sur le milieu marin français
+          content: Milieu Marin France fédère et diffuse les données des politiques publiques françaises sur le milieu marin dans le cadre du Système d’information sur le milieu marin (SIMM).
+          logo: /static/ecospheres/logos/networks/simm.svg
+          external_link:
+            url: https://www.milieumarinfrance.fr/
+            label: Accéder au site
+        list_all: true
+      pages:
+        datasets:
+          <<: *simm_common
+          object_type: datasets
+          breadcrumb_title: Jeux de données
+          labels: *label_datasets
+          search:
+            input: Rechercher dans les données du réseau SIMM
+            placeholder: null
+          filters:
+            - *filter_badge
+            - *filter_org
+            - *filter_inspire
+        dataservices:
+          <<: *simm_common
+          object_type: dataservices
+          breadcrumb_title: API
+          labels: *label_dataservices
+          search:
+            input: Rechercher dans les API du réseau SIMM
+            placeholder: null
+          filters:
+            - *filter_org
+      organizations:
+        datasets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-simm-demo/organizations-datasets.json
+        dataservices: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-simm-demo/organizations-dataservices.json
 
 ecospheres:
   homepage:

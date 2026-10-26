@@ -57,19 +57,22 @@ export const stripFromMarkdown = (value: string, maxSize?: number) => {
 
 /**
  * Format date
+ *
+ * - 'full': jeudi 15 octobre 2026 à 16:30
+ * - 'medium': 15 octobre 2026
+ * - 'short': 15 oct. 2026
  */
-export const formatDate = (dateString: string, short = false) => {
+export const formatDate = (
+  dateString: string,
+  format: 'full' | 'medium' | 'short' = 'full'
+) => {
   const date = new Date(dateString)
-  const params: Intl.DateTimeFormatOptions = short
-    ? {
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric'
-      }
-    : {
-        dateStyle: 'full',
-        timeStyle: 'short'
-      }
+  const params: Intl.DateTimeFormatOptions =
+    format === 'short'
+      ? { day: 'numeric', month: 'short', year: 'numeric' }
+      : format === 'medium'
+        ? { day: 'numeric', month: 'long', year: 'numeric' }
+        : { dateStyle: 'full', timeStyle: 'short' }
   return new Intl.DateTimeFormat('default', params).format(date)
 }
 

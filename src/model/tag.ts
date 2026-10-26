@@ -3,4 +3,5 @@ export interface ResolvedTag {
   name: string
   type: string
   color: string | null
+  outlined: boolean
 }
