@@ -1,15 +1,27 @@
 <script setup lang="ts">
+import CardTypeBadge from '@/components/CardTypeBadge.vue'
 import { isIndicator } from '@/custom/ecospheres/utils/indicator'
+import type { TitleTag } from '@/model'
 import type { DatasetV2 } from '@datagouv/components-next'
 import { DatasetCard } from '@datagouv/components-next'
+import { RiBarChart2Line } from '@remixicon/vue'
 import { toRef } from 'vue'
 
-const props = defineProps<{
-  dataset: DatasetV2
-  datasetUrl: object
-  organizationUrl?: string | object | null
-  showDescription?: boolean
-}>()
+// same props as DatasetCard, which this component replaces through route meta
+const props = withDefaults(
+  defineProps<{
+    dataset: DatasetV2
+    datasetUrl: object
+    organizationUrl?: string | object | null
+    showDescriptionShort?: boolean
+    titleTag?: TitleTag
+  }>(),
+  {
+    organizationUrl: undefined,
+    showDescriptionShort: true,
+    titleTag: undefined
+  }
+)
 
 const datasetIsIndicator = isIndicator(toRef(props, 'dataset'))
 
@@ -21,37 +33,17 @@ const url = computed(() =>
 </script>
 
 <template>
-  <div :class="{ 'indicator-card-wrapper': datasetIsIndicator }">
-    <p
-      v-if="datasetIsIndicator"
-      class="fr-badge fr-badge--sm fr-badge--mention-grey text-grey-425 indicator-badge"
-    >
-      <span
-        class="fr-icon-lightbulb-line fr-icon--sm"
-        aria-hidden="true"
-      ></span>
-      Indicateur
-    </p>
+  <CardTypeBadge
+    :label="datasetIsIndicator ? 'Indicateur' : undefined"
+    :icon="RiBarChart2Line"
+    :class="{ 'indicator-card-wrapper': datasetIsIndicator }"
+  >
     <DatasetCard
       :dataset="dataset"
       :dataset-url="url"
       :organization-url="organizationUrl"
-      :show-description="showDescription ?? true"
-      title-tag="p"
+      :show-description-short="showDescriptionShort"
+      :title-tag="titleTag"
     />
-  </div>
+  </CardTypeBadge>
 </template>
-
-<style scoped>
-.indicator-card-wrapper {
-  position: relative;
-}
-
-.indicator-badge {
-  position: absolute;
-  top: 0;
-  left: 0.5rem;
-  transform: translateY(-50%);
-  z-index: 1;
-}
-</style>

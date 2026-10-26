@@ -5,13 +5,15 @@ import { useCurrentPageConf } from '@/router/utils'
 import { useLabels } from '@/utils/labels'
 import { ActivityList as ActivityListComponent } from '@datagouv/components-next'
 import { ref, type Ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 const props = defineProps<{
   topic: Topic
   factors: ResolvedFactor[]
 }>()
 
-const { pageConf } = useCurrentPageConf()
+const router = useRouter()
+const { pageKey, pageConf } = useCurrentPageConf()
 const labels = useLabels(pageConf.labels)
 
 const activityListKey: Ref<number> = ref(0)
@@ -78,9 +80,15 @@ const handleActivityClick = (activity: Activity) => {
   emit('navigateToFactor', elementId)
 }
 
-const getFactorHash = (activity: Activity): string => {
+// absolute: a relative hash would carry the current /activity segment
+const getFactorHref = (activity: Activity): string => {
   const elementId = getElementId(activity)
-  return elementId ? `#factor-${elementId}` : '#'
+  if (!elementId) return '#'
+  return router.resolve({
+    name: `${pageKey}_detail`,
+    params: { item_id: props.topic.slug },
+    hash: `#factor-${elementId}`
+  }).href
 }
 </script>
 
@@ -90,7 +98,7 @@ const getFactorHash = (activity: Activity): string => {
       <template #activity="{ activity }">
         <a
           v-if="isFactorActivity(activity)"
-          :href="getFactorHash(activity)"
+          :href="getFactorHref(activity)"
           class="activity-link"
           @click.prevent.stop="handleActivityClick(activity)"
         >

@@ -1,6 +1,7 @@
 import 'vue-router'
 import type { GlobalSearchConfig } from '@datagouv/components-next'
-import type { PageObjectType } from '@/model/config'
+import type { BreadcrumbItem } from '@/model/breadcrumb'
+import type { PageListConf, PageObjectType } from '@/model/config'
 import type { CustomFilterConfig } from '@/router/utils'
 
 // To ensure it is treated as a module, add at least one `export` statement
@@ -24,5 +25,15 @@ declare module 'vue-router' {
     searchType?: PageObjectType
     searchConfig?: GlobalSearchConfig
     customFilters?: CustomFilterConfig[]
+    // Override set only for network pages (not in config.pages); typed as the lighter PageListConf since those never carry detail-only fields.
+    pageConf?: PageListConf
+    // Overrides NavigationComponent's isActive() path-prefix matching for pages
+    // whose route doesn't share a path prefix with their nav menu entry.
+    activeMenuLink?: string
+    // Extra breadcrumb entries spliced between "Accueil" and the page's own title.
+    parentBreadcrumbs?: BreadcrumbItem[]
+    // Overrides the pageKey used to build item detail links, for pages whose items
+    // are detailed on another page's route (see buildListPageRoute in router/utils.ts).
+    detailPageKey?: string
   }
 }

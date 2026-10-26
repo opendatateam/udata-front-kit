@@ -8,6 +8,16 @@ interface HasTags {
   tags: string[] | null
 }
 
+/**
+ * Parse a filter color from config, e.g. `purple-glycine` or `purple-glycine::outlined`
+ */
+const parseTagColor = (
+  value: string | null
+): Pick<ResolvedTag, 'color' | 'outlined'> => {
+  const [color, variant] = value?.split('::') ?? []
+  return { color: color || null, outlined: variant === 'outlined' }
+}
+
 export const useTagsForFilter = <T extends HasTags>(
   filter: PageFilterConf,
   filterPrefixFromPage: string | null,
@@ -18,7 +28,7 @@ export const useTagsForFilter = <T extends HasTags>(
     const matchingValue = parseFilterValue(filter, filterPrefixFromPage, tag)
     if (matchingValue) {
       tags.push({
-        color: filter.color,
+        ...parseTagColor(filter.color),
         name: matchingValue.name,
         type: filter.id,
         id: matchingValue.id
@@ -85,7 +95,7 @@ export const useTagFromId = (
   const tag = filter.values.find((v) => v.id === tagId)
   if (!tag) return null
   return {
-    color: filter.color,
+    ...parseTagColor(filter.color),
     type: filter.id,
     name: tag.name,
     id: tag.id
