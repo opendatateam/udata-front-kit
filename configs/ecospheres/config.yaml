@@ -107,6 +107,16 @@ website:
     display: true
     content: ⚠️ Vous naviguez sur une version de développement d'ecologie.data.gouv.fr ⚠️
     closeable: false
+  # satisfaction survey modal, shown after `delay` seconds of browsing until the user ticks "Ne plus afficher"
+  survey:
+    display: true
+    # FIXME: point to prod form
+    url: https://grist.numerique.gouv.fr/o/ecospheres/forms/dr3oLSZ7hZUeZchdd5wJE9/4
+    # FIXME: move to 180 seconds for prod
+    delay: 15 # seconds
+    title: Donnez-nous votre avis !
+    content: Une minute pour nous aider à améliorer votre expérience sur ecologie.data.gouv.fr.
+    button_label: Répondre au questionnaire
   # ⚠️ When updating this menu, also update the sitemap below if needed
   menu:
     - text: Accueil
