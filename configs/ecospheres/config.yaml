@@ -110,6 +110,8 @@ website:
   # satisfaction survey modal, shown after `delay` seconds of browsing until the user ticks "Ne plus afficher"
   survey:
     display: true
+    # used to store the "Ne plus afficher" choice: change it for a new survey
+    id: satisfaction-umux-lite
     # FIXME: point to prod form
     url: https://grist.numerique.gouv.fr/o/ecospheres/forms/dr3oLSZ7hZUeZchdd5wJE9/4
     # FIXME: move to 180 seconds for prod

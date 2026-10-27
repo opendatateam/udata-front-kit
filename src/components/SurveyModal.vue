@@ -4,18 +4,21 @@ import { useMutationObserver, useTimeoutFn } from '@vueuse/core'
 import LocalStorageService from '@/services/LocalStorageService'
 import { useSurveyConf } from '@/utils/config'
 
-const DISMISSED_KEY = 'survey_dismissed_at'
 const DEFAULT_DELAY_SECONDS = 180
 
 const route = useRoute()
 const conf = useSurveyConf()
 
+// Keyed by survey id so a new survey shows again to users who dismissed a previous one.
+const dismissedKey = `survey_dismissed_${conf?.id}`
+
 // Without storage the "Ne plus afficher" choice can't be kept, so never show the modal.
 const enabled =
   !!conf?.display &&
+  !!conf.id &&
   !!conf.url &&
   LocalStorageService.isAvailable() &&
-  !LocalStorageService.getItem(DISMISSED_KEY)
+  !LocalStorageService.getItem(dismissedKey)
 
 const due = ref(false)
 const opened = ref(false)
@@ -50,14 +53,14 @@ watchEffect(() => {
   }
   due.value = false
   // Re-check in case it was dismissed from another tab meanwhile.
-  if (LocalStorageService.getItem(DISMISSED_KEY)) return
+  if (LocalStorageService.getItem(dismissedKey)) return
   opened.value = true
 })
 
 const close = () => {
   opened.value = false
   if (dontShowAgain.value) {
-    LocalStorageService.setItem(DISMISSED_KEY, new Date().toISOString())
+    LocalStorageService.setItem(dismissedKey, new Date().toISOString())
   }
 }
 </script>

@@ -1,10 +1,10 @@
 const SURVEY = Cypress.env('siteConfig').website.survey
 const DELAY_MS = (SURVEY?.delay ?? 180) * 1000
-const DISMISSED_KEY = 'survey_dismissed_at'
+const DISMISSED_KEY = `survey_dismissed_${SURVEY?.id}`
 
 describe('Survey modal', () => {
   beforeEach(function () {
-    if (!SURVEY?.display || !SURVEY?.url) this.skip()
+    if (!SURVEY?.display || !SURVEY?.id || !SURVEY?.url) this.skip()
     cy.mockMatomo()
     cy.mockStaticDatagouv()
     cy.mockSpatialLevels()

@@ -205,6 +205,7 @@ export type FooterConf = {
 
 export type SurveyConf = {
   display: boolean
+  id: string // change it for a new survey, so that users who dismissed the previous one see it
   url: string
   delay?: number // seconds of browsing before opening the modal
   title: string
