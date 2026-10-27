@@ -11,15 +11,20 @@ describe('Survey modal', () => {
     cy.mockDatagouvObjectList('topics', [])
   })
 
-  const visitAndWait = () => {
+  // App mounts after the router loads, so wait for it before ticking or the timer isn't set yet.
+  const visitMounted = () => {
     cy.clock()
     cy.visit('/')
+    cy.get('#main-content').should('exist')
+  }
+
+  const visitAndWait = () => {
+    visitMounted()
     cy.tick(DELAY_MS)
   }
 
   it('opens after the configured delay, not before', () => {
-    cy.clock()
-    cy.visit('/')
+    visitMounted()
     cy.tick(DELAY_MS - 1000)
     cy.contains(SURVEY.title).should('not.exist')
     cy.tick(1000)
