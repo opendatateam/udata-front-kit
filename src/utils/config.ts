@@ -5,6 +5,7 @@ import type {
   NetworkEntriesConf,
   NetworksConf,
   PagesConf,
+  SurveyConf,
   TopicsConf,
   WebsiteConfig
 } from '@/model/config'
@@ -65,6 +66,8 @@ export const useDatasetsConf = () => {
   const datasetsConf: DatasetsConf = config.website.datasets
   return datasetsConf
 }
+
+export const useSurveyConf = (): SurveyConf | undefined => config.website.survey
 
 export const useSiteId = () => {
   return config.site_id as SiteId

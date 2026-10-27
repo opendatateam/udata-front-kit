@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import { useMutationObserver, useTimeoutFn } from '@vueuse/core'
 
-import config from '@/config'
-import type { SurveyConf } from '@/model/config'
 import LocalStorageService from '@/services/LocalStorageService'
+import { useSurveyConf } from '@/utils/config'
 
 const DISMISSED_KEY = 'survey_dismissed_at'
 const DEFAULT_DELAY_SECONDS = 180
 
 const route = useRoute()
-const conf: SurveyConf | undefined = config.website.survey
+const conf = useSurveyConf()
 
 // Without storage the "Ne plus afficher" choice can't be kept, so never show the modal.
 const enabled =
