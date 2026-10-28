@@ -18,6 +18,7 @@ on:
           - defis
           - hackathon
           - culture
+          - solidarites
       pr_number:
         description: 'Pull Request number to deploy'
         required: true
