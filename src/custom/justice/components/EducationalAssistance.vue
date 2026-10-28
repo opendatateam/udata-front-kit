@@ -26,8 +26,8 @@ import {
   type TabularRow
 } from '@/custom/justice/utils/tabular'
 
-const RESOURCE_ID = '3c7cd710-4ebc-41f4-a957-c6fba6d45c66'
-const AGE_RESOURCE_ID = '8ef7c510-666b-4f33-ae0a-8c98f4ea9920'
+const RESOURCE_ID = 'c7dc992b-59c6-4a6d-a85e-80b6d48dfd14'
+const AGE_RESOURCE_ID = 'a81d9562-75f2-49b4-bcba-ec7b2e74dde6'
 
 const AGE_CLASSES = [
   { key: '0-6_ans', label: '0 à 6 ans', color: BLUE },

@@ -17,22 +17,22 @@ const COURTS = [
   {
     id: 'tj',
     label: 'Tribunaux judiciaires',
-    resource: 'cfc80063-b967-40a0-ac79-919a7a88b63b'
+    resource: 'e9fd69b3-f5d7-4c27-89bf-97989b201683'
   },
   {
     id: 'tp',
     label: 'Tribunaux de proximité',
-    resource: 'd3091d74-3959-4a19-9a36-5954ee51d227'
+    resource: '4314cf11-4385-45b9-95bc-962f94950525'
   },
   {
     id: 'cph',
     label: 'Conseils de prud’hommes',
-    resource: '4b3eb8d5-b55a-465c-a99c-0ee20d98279a'
+    resource: 'eacc14d4-9845-41fe-9644-dedb5d171555'
   },
   {
     id: 'ca',
     label: 'Cours d’appel',
-    resource: 'c1e45b14-a15e-453a-8d16-582df58d77b5'
+    resource: 'db341dde-27b2-4d08-af1f-f3a960fcfaa9'
   }
 ] as const
 
