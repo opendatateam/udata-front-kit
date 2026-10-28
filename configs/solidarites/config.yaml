@@ -88,7 +88,7 @@ website:
     - text: Données
       to: /datasets
     - text: Contributeurs
-      to: /organizations
+      to: /contributors
   router:
     # ⚠️ When updating this list, also update the sitemap below if needed
     static_pages:
@@ -98,7 +98,7 @@ website:
     - name: Données
       path: /datasets
     - name: Contributeurs
-      path: /organizations
+      path: /contributors
     - name: Plan du site
       path: /sitemap
   show_quality_component: true
@@ -143,13 +143,20 @@ organizations:
       title: Liste des contributeurs
       description: Recherchez une organisation qui a partagé un jeu de données
 
+definitions: &definitions
+  filter_org: &filter_org
+    id: org
+    name: Organisation
+    default_option: Toutes les organisations
+    type: organization_custom
+
 pages:
   # DATASETS
   datasets:
     object_type: datasets
     list_all: true
     universe_query:
-      topic: 6ad9cf67e9b6f18b46b4ab90
+      topic: 6ae2290671218d1466f1af57
     filter_prefix:
     title: Données
     breadcrumb_title: Données
@@ -170,7 +177,44 @@ pages:
         display: true
     editable: true
     filters:
-      - name: Organisation
-        default_option: Toutes les organisations
-        id: organization
-        type: organization_custom
+      - *filter_org
+solidarites:
+  selections:
+    - title: Les effectifs de retraités, montants de pensions et âges de départ à la retraite
+      href: datasets/6226330b5eafccb7033e0c48
+    - title: Le baromètre d'opinion
+      href: https://data.drees.solidarites-sante.gouv.fr/explore/dataset/431_le-barometre-d-opinion/
+  news:
+    sub_section_cards:
+      title: Les actualités
+      cards:
+        - name: Recherche unifiée
+          url: https://guides.data.gouv.fr/ecologie.data.gouv.fr/le-projet/actualites#id-11-juin-2026-recherche-unifiee
+          image_url: /static/solidarites/assets/webinaires/webinaireia.png
+        - name: Nouveaux indicateurs sur la forêt
+          url: https://guides.data.gouv.fr/ecologie.data.gouv.fr/le-projet/actualites#id-8-juin-2026-nouveaux-indicateurs-sur-la-forets
+          image_url:
+        - name: Vers la mutualisation de plugins QGIS pour l'analyse territoriale
+          url: https://guides.data.gouv.fr/ecologie.data.gouv.fr/le-projet/actualites#id-25-mai-2026-vers-la-mutualisation-de-plugin-qgis-pour-lanalyse-territoriale
+          image_url:
+        - name: Vers la mutualisation de plugins QGIS pour l'analyse territoriale (copie)
+          url: https://guides.data.gouv.fr/ecologie.data.gouv.fr/le-projet/actualites#id-25-mai-2026-vers-la-mutualisation-de-plugin-qgis-pour-lanalyse-territoriale
+          image_url:
+  # WEBINAIRES
+  webinaires:
+    webinaires:
+      # Le 1er webinaire sera affiché sur la page d'accueil
+      - title: Défi "IA Culturelles"
+        date: Vendredi 2 octobre 2026
+        description: |
+          Le Service du Numérique - Ministère de la Culture, en partenariat avec Latitudes, lance officiellement le défi « IA Culturelles » à destination des universités, écoles et des étudiants.
+          Objectif : sensibiliser aux enjeux de l’IA, des biais algorithmiques et de l’usage des données ouvertes, notamment dans le champ culturel. Le défi sera présenté lors d’un webinaire, organisé dans le cadre des 10 ans de la loi République numérique et de l’ouverture des données.
+        href: /
+        href_title: Inscription
+        img: /static/solidarites/assets/webinaires/webinaireia.png
+      - title: découvrez la transversale culture
+        date: Vendredi 4 septembre 2026
+        description: Discussion sur les portails de données thématiques
+        href:
+        href_title: Voir le replay
+        img: /static/solidarites/assets/webinaires/vendredi261126.png
