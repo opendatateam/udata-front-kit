@@ -1,7 +1,7 @@
 import config from '@/config'
 
-export const ACTIVITY_DATASET_SLUG = 'sample-donnees-test-j'
-export const ACTIVITY_RESOURCE_ID = '43716f2b-ddbc-4e8d-8b4b-e867d98b9cca'
+export const ACTIVITY_DATASET_ID = '6ae223be71218d1466f1af54'
+export const ACTIVITY_RESOURCE_ID = 'f3794b99-7e3d-4cb9-9d57-1f8a508ead98'
 
 export const ACTIVITY_YEARS = [2020, 2021, 2022, 2023, 2024] as const
 

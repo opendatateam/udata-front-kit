@@ -8,7 +8,7 @@ import {
   type Ref
 } from 'vue'
 
-import { ACTIVITY_DATASET_SLUG } from '@/custom/justice/utils/activityData'
+import { ACTIVITY_DATASET_ID } from '@/custom/justice/utils/activityData'
 import { useDatasetStore } from '@/store/DatasetStore'
 
 const JUSTICE_DATASET: InjectionKey<
@@ -17,7 +17,7 @@ const JUSTICE_DATASET: InjectionKey<
 
 export async function loadJusticeDataset(): Promise<DatasetV2WithFullObject | null> {
   return useDatasetStore()
-    .load(ACTIVITY_DATASET_SLUG)
+    .load(ACTIVITY_DATASET_ID)
     .catch(() => null)
 }
 

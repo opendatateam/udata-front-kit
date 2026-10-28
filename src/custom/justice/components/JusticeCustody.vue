@@ -23,9 +23,9 @@ import {
   type TabularRow
 } from '@/custom/justice/utils/tabular'
 
-const SERIES_RESOURCE = '8ddb7039-ebf2-4366-b8a7-909ae1fedc09'
-const TERRITORY_RESOURCE = '9f6e4624-a94c-4a1e-bd95-3bec14ae5033'
-const GEOJSON_RESOURCE = 'c6edcdac-1148-40d8-9f73-c5bb607940c3'
+const SERIES_RESOURCE = '0eb7b9de-9ba4-4311-856c-152e2b957b23'
+const TERRITORY_RESOURCE = '11a294e4-604f-406d-949b-4ecb6a7212b1'
+const GEOJSON_RESOURCE = 'ff5d71ac-2ee0-440b-862e-be17efe45876'
 
 const METRICS = [
   { id: 'personnes_ecrouees', label: 'Personnes écrouées' },

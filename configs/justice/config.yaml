@@ -123,7 +123,7 @@ pages:
     object_type: datasets
     list_all: true
     universe_query:
-      topic: 6acf9f741c489f42a17feee0
+      topic: 6ae22343c299924210c524a7
     filter_prefix:
     title: Jeux de données
     breadcrumb_title: Jeux de données

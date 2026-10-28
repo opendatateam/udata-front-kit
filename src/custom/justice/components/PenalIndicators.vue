@@ -17,11 +17,11 @@ import {
   type TabularRow
 } from '@/custom/justice/utils/tabular'
 
-const TRAITEES_RESOURCE = '734c5ba5-e676-4bb8-8522-5ba65c8cc521'
-const CLASSEES_RESOURCE = '8ed68112-ee45-4224-896d-5e3a09e15e5e'
-const POURSUITES_RESOURCE = '1b5982b1-f772-494c-89d8-bd0d62078479'
-const VICTIMES_RESOURCE = 'aada346c-03a0-4c0b-a41d-b239fce22fcc'
-const JUGEES_RESOURCE = 'df307b95-6ab3-499b-9000-37a9051dfabf'
+const TRAITEES_RESOURCE = '6a8c4345-d723-4428-b67f-33c94d214b6d'
+const CLASSEES_RESOURCE = '288def34-d190-4f94-9e2e-c797ca0590e7'
+const POURSUITES_RESOURCE = 'e04718ae-0fb2-4692-a4f6-6463c590062d'
+const VICTIMES_RESOURCE = '32705eef-b22f-4a97-b0f8-5352944b3d23'
+const JUGEES_RESOURCE = 'fe7a8dd4-e14d-4084-8f47-ddec497644e7'
 
 const CLASSEES_ROWS = [
   'CSS pour infraction non poursuivable',
