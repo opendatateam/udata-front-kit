@@ -666,7 +666,7 @@ networks:
     sieau:
       x-sieau-common: &sieau_common
         universe_query:
-          topic: 6a8eff5ce148bf49b3267152
+          topic: 6ae214df8133edd8c87d1bf7
         filter_prefix:
         title: Eaufrance
         banner:
@@ -706,7 +706,7 @@ networks:
     simm:
       x-simm-common: &simm_common
         universe_query:
-          topic: 6a82baef02381db0dc7229cf
+          topic: 6ae214d79061ab8eddb4a087
         filter_prefix:
         title: Milieu Marin France
         banner:
