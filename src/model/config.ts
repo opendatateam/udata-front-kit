@@ -203,9 +203,20 @@ export type FooterConf = {
   mandatory_links?: FooterMandatoryLink[]
 }
 
+export type SurveyConf = {
+  display: boolean
+  id: string // change it for a new survey, so that users who dismissed the previous one see it
+  url: string
+  delay?: number // seconds of browsing before opening the modal
+  title: string
+  content: string
+  button_label: string
+}
+
 export type WebsiteConfig = {
   title: string
   rf_title: string
+  survey?: SurveyConf
   seo?: {
     canonical_url?: string
     meta?: {
