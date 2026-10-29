@@ -48,6 +48,11 @@ describe('Home Page Ecologie', () => {
   })
 
   describe('Catalogues partenaires', () => {
+    // networks can be disabled per environment (e.g. prod)
+    before(function () {
+      if (!Cypress.env('siteConfig').networks) this.skip()
+    })
+
     it('should link to the internal partner network pages', () => {
       cy.visit('/')
 

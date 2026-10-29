@@ -13,7 +13,7 @@ datagouvfr:
   # data.gouv.fr base URL (use www subdomain on prod)
   base_url: https://demo.data.gouv.fr
   # oauth settings
-  oauth_client_id: 66e30254d3cc5d5b52a4b6ec
+  oauth_client_id: 6ae2255fc8f9fa6f88af573f
   tabular_api_url: https://tabular-api.preprod.data.gouv.fr
 
 # UI customizations
@@ -666,7 +666,7 @@ networks:
     sieau:
       x-sieau-common: &sieau_common
         universe_query:
-          topic: 6a8eff5ce148bf49b3267152
+          topic: 6ae214df8133edd8c87d1bf7
         filter_prefix:
         title: Eaufrance
         banner:
@@ -706,7 +706,7 @@ networks:
     simm:
       x-simm-common: &simm_common
         universe_query:
-          topic: 6a82baef02381db0dc7229cf
+          topic: 6ae214d79061ab8eddb4a087
         filter_prefix:
         title: Milieu Marin France
         banner:
