@@ -154,7 +154,7 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
   <DsfrFooter
     v-if="!route.meta.fullscreen"
     :class="[siteID, 'fr-mt-16w']"
-    :logo-text="rf_title"
+    :logo-text="footer.logo_text || rf_title"
     :operator-img-src="logo?.src"
     :operator-img-style="{
       height: logo?.height,

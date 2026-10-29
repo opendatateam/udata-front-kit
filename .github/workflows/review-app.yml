@@ -18,6 +18,7 @@ on:
           - defis
           - hackathon
           - culture
+          - justice
       pr_number:
         description: 'Pull Request number to deploy'
         required: true
@@ -42,6 +43,7 @@ jobs:
           - defis
           - hackathon
           - culture
+          - justice
     permissions:
       deployments: write
     # Run for all PRs including forks and for manual triggers
