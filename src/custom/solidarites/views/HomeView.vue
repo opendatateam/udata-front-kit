@@ -101,11 +101,27 @@ const doSearch = (q: string) => {
         horizontal
         img-ratio="md"
       />
+      <div class="fr-grid-row fr-col-12 justify-end fr-mt-5w">
+        <RouterLink
+          :to="{ name: 'webinaires' }"
+          class="fr-btn fr-btn--secondary"
+        >
+          Voir tous les webinaires
+        </RouterLink>
+      </div>
     </section>
 
     <section v-if="limitedSubSection" class="fr-container fr-py-2w">
       <div class="fr-grid-row fr-col-12">
         <SubSectionCards :subsection="limitedSubSection" />
+      </div>
+      <div class="fr-grid-row fr-col-12 justify-end fr-mt-5w">
+        <RouterLink
+          :to="{ name: 'actualites' }"
+          class="fr-btn fr-btn--secondary"
+        >
+          Voir toutes les actualités
+        </RouterLink>
       </div>
     </section>
   </div>
