@@ -7,6 +7,14 @@ export interface NewsItemConf {
   sub_section_cards: SubSectionCardsConf
 }
 
+export interface OutilsItemConf {
+  description: string
+  title: string
+  href: string
+  href_title: string
+  img: string
+}
+
 export interface WebinairesItemConf {
   description: string
   title: string
@@ -19,6 +27,10 @@ export interface WebinairesItemConf {
 export interface SelectionsItemConf {
   title: string
   href: string
+}
+
+export interface OutilsConf {
+  outils: OutilsItemConf[]
 }
 
 export interface WebinairesConf {
