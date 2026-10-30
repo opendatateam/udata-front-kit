@@ -47,15 +47,25 @@ website:
     logo:
     phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives au domaine de la solidarité, réalisé par le ministère de la Santé'
     external_links:
-      - label: 'info.gouv.fr'
-        href: 'https://www.info.gouv.fr/'
-      - label: 'service-public.gouv.fr'
-        href: 'https://www.service-public.gouv.fr/'
-      - label: 'legifrance.gouv.fr'
-        href: 'https://www.legifrance.gouv.fr/'
       - label: 'data.gouv.fr'
-        href: 'https://www.data.gouv.fr'
+        href: 'https://data.gouv.fr'
+      - label: 'numerique.gouv.fr'
+        href: 'https://numerique.gouv.fr/'
+      - label: 'sante.gouv.fr'
+        href: 'https://sante.gouv.fr/'
     mandatory_links:
+      - label: 'Mentions légales'
+        to: '/mentions-legales'
+      - label: "Modalités d'utilisation"
+        to: '/modalites'
+      - label: 'Politique de confidentialité'
+        to: '/rgpd'
+      - label: 'Licences'
+        to: '/licences'
+      - label: 'Nous contacter'
+        to: '/contact'
+      - label: 'Accessibilité : non conforme'
+        to: '/accessibility'
       - label: 'Plan du site'
         to: '/sitemap'
   header:
@@ -93,9 +103,39 @@ website:
       to: /outils-exploration
     - text: Contributeurs
       to: /contributors
+    - text: À propos du réseau
+      to: /a-propos
   router:
     # ⚠️ When updating this list, also update the sitemap below if needed
     static_pages:
+      - title: 'À propos'
+        id: 'about'
+        route: '/a-propos'
+        url: '/static/solidarites/pages/about.md'
+      - title: 'Accessibilité'
+        id: 'accessibility'
+        route: '/accessibility'
+        url: '/static/solidarites/pages/accessibility.md'
+      - title: 'Mentions légales'
+        id: 'mentions-legales'
+        route: '/mentions-legales'
+        url: '/static/solidarites/pages/mentions-legales.md'
+      - title: 'Licences'
+        id: 'licences'
+        route: '/licences'
+        url: '/static/solidarites/pages/licences.md'
+      - title: "Modalités d'utilisation"
+        id: 'modalites'
+        route: '/modalites'
+        url: '/static/solidarites/pages/modalites.md'
+      - title: 'Nous contacter'
+        id: 'contact'
+        route: '/contact'
+        url: '/static/solidarites/pages/contact.md'
+      - title: 'Politique de confidentialité'
+        id: 'rgpd'
+        route: '/rgpd'
+        url: '/static/solidarites/pages/rgpd.md'
   sitemap:
     - name: Accueil
       path: /
@@ -107,8 +147,22 @@ website:
       path: /outils-exploration
     - name: Contributeurs
       path: /contributors
+    - name: À propos du réseau
+      path: /a-propos
+    - name: Mentions légales
+      path: /mentions-legales
+    - name: Politique de confidentialité
+      path: /rgpd
+    - name: Modalités d'utilisation
+      path: /modalites
+    - name: Nous contacter
+      path: /contact
     - name: Plan du site
       path: /sitemap
+    - name: Accessibilité
+      path: /accessibility
+    - name: Licences
+      path: /licences
   show_quality_component: true
   oauth_option: true
   # debounce high enough for accessibility (screen readers will announce results)
