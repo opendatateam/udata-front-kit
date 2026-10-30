@@ -97,11 +97,21 @@ const doSearch = (q: string) => {
         horizontal
         img-ratio="md"
       />
+      <div class="fr-grid-row fr-col-12 justify-end fr-mt-5w">
+        <a href="/webinaires" class="fr-btn fr-btn--secondary">
+          Voir tous les webinaires
+        </a>
+      </div>
     </section>
 
     <section v-if="limitedSubSection" class="fr-container fr-py-2w">
       <div class="fr-grid-row fr-col-12">
         <SubSectionCards :subsection="limitedSubSection" />
+      </div>
+      <div class="fr-grid-row fr-col-12 justify-end fr-mt-5w">
+        <a href="/actualites" class="fr-btn fr-btn--secondary"
+          >Voir toutes les actualités</a
+        >
       </div>
     </section>
   </div>
