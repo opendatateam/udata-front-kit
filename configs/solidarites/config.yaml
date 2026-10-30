@@ -56,6 +56,14 @@ website:
       - label: 'data.gouv.fr'
         href: 'https://www.data.gouv.fr'
     mandatory_links:
+      - label: 'Accessibilité : non conforme'
+        to: '/accessibility'
+      - label: 'Mentions légales'
+        to: '/mentions-legales'
+      - label: 'Données personnelles'
+        to: '/rgpd'
+      - label: 'Gestion des cookies'
+        to: '/cookies'
       - label: 'Plan du site'
         to: '/sitemap'
   header:
@@ -93,9 +101,31 @@ website:
       to: /outils-exploration
     - text: Contributeurs
       to: /contributors
+    - text: À propos du réseau
+      to: /a-propos
   router:
     # ⚠️ When updating this list, also update the sitemap below if needed
     static_pages:
+      - title: 'À propos'
+        id: 'about'
+        route: '/a-propos'
+        url: '/static/solidarites/pages/about.md'
+      - title: 'Accessibilité'
+        id: 'accessibility'
+        route: '/accessibility'
+        url: '/static/solidarites/pages/accessibility.md'
+      - title: 'Mentions légales'
+        id: 'mentions-legales'
+        route: '/mentions-legales'
+        url: '/static/solidarites/pages/mentions-legales.md'
+      - title: 'Gestion des cookies'
+        id: 'cookies'
+        route: '/cookies'
+        url: '/static/solidarites/pages/cookies.md'
+      - title: 'Données personnelles'
+        id: 'rgpd'
+        route: '/rgpd'
+        url: '/static/solidarites/pages/rgpd.md'
   sitemap:
     - name: Accueil
       path: /
@@ -107,8 +137,18 @@ website:
       path: /outils-exploration
     - name: Contributeurs
       path: /contributors
+    - name: À propos du réseau
+      path: /a-propos
+    - name: Mentions légales
+      path: /mentions-legales
+    - name: Données personnelles
+      path: /rgpd
+    - name: Gestion des cookies
+      path: /cookies
     - name: Plan du site
       path: /sitemap
+    - name: Accessibilité
+      path: /accessibility
   show_quality_component: true
   oauth_option: true
   # debounce high enough for accessibility (screen readers will announce results)
