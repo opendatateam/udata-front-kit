@@ -20,6 +20,7 @@ defineProps({
           :link="item.url"
           :title="item.name"
           :title-link-attrs="{}"
+          :badges="item.badges"
         />
       </div>
     </div>

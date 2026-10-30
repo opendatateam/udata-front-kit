@@ -188,6 +188,15 @@ solidarites:
     sub_section_cards:
       title: Les actualités
       cards:
+        # Suivre la doc VueDSFR pour DsfrBadge
+        #- name: Titre Exemple
+        #badges:
+        #- label: loi
+        #type: standard
+        #noIcon: true
+        #url:
+        #image_url: /static/solidarites/assets/news/image.png
+        #description: Exemple description
         - name: Lancement des Rendez-vous des Données de Solidarités
           image_url: /static/solidarites/assets/news/news-2.png
           description: |
