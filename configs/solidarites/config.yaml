@@ -89,6 +89,8 @@ website:
       to: /webinaires
     - text: Données
       to: /datasets
+    - text: "Outils d'exploration"
+      to: /outils-exploration
     - text: Contributeurs
       to: /contributors
   router:
@@ -101,6 +103,8 @@ website:
       path: /webinaires
     - name: Données
       path: /datasets
+    - name: Outils d'exploration
+      path: /outils-exploration
     - name: Contributeurs
       path: /contributors
     - name: Plan du site
@@ -212,6 +216,59 @@ solidarites:
           name: Vers la mutualisation de plugins QGIS pour l'analyse territoriale (copie)
           url: https://guides.data.gouv.fr/ecologie.data.gouv.fr/le-projet/actualites#id-25-mai-2026-vers-la-mutualisation-de-plugin-qgis-pour-lanalyse-territoriale
           image_url:
+  # OUTILS
+  outils:
+    outils:
+      - title: 'Vilas : Visualisation d’Indicateurs Localisés sur l’Action Sociale'
+        description: L’outil VILAS vise à regrouper un certain nombre d’indicateurs basés sur les données produites à l’échelle départementale et fournies par les Conseils Départementaux. Ces indicateurs, dont la liste est disponible sur le site, sont, organisés par rubrique thématique. Le site permet également des comparaisons entre départements ayant des caractéristiques sociales proches.
+        href: https://odin-dataviz-drees.sante.gouv.fr/digdash_dashboard_dataviz_drees/?defaultPage=vilas_Accueil&user=dataviz_sante&pass=dataviz_sante
+        href_title: Accéder à l'outils VILAS
+        img: drees.png
+      - title: Panorama des prestations légales
+        description: Basé sur le fichier statistique des allocataires (FR6), le panorama des prestations légales propose une vue mensuelle des indicateurs sur les différentes prestations versées aux allocataires, de l’échelle départementale à l’échelle nationale.
+        href: https://data.caf.fr/pages/dataviz-kpi/
+        href_title: Accéder au panorama
+        img: caf.png
+      - title: Explorer un territoire
+        description: Cet outil d’exploration propose des visualisations détaillées par thématique et par territoire (de l’échelle communale à l’échelle nationale) des dernières données disponibles concernant les prestations versées aux allocataires.
+        href: https://data.caf.fr/pages/accueil/
+        href_title: Explorer un territoire
+        img:
+      - title: Accueil du jeune enfant
+        description: Cet outil d’exploration propose des visualisations détaillées des données d’accueil des jeunes en France depuis 2017, par territoire et par type d’accueil. Il permet également les comparaisons entre territoires
+        href: https://data.caf.fr/carto-mode-accueil/?annee=2023&geographicalLevel=regions&indicator=petite-enfance-couverture&type_accueil=tout&visualizationMode=map
+        href_title: Accéder à l’accueil du jeune enfant
+        img:
+      - title: Baromètre des maisons départementales des personnes handicapées
+        description: Le baromètre, publié chaque trimestre, mesure certaines des activités des maisons départementales des personnes handicapées (MDPH) - telles que le délai de traitement des demandes, l’intensité de l’activité, la scolarisation des enfants handicapés - ainsi que la perception des personnes handicapées et de leurs proches sur leur MDPH. Il publie les données les plus récentes ainsi que celles de la période précédente afin de montrer l’évolution dans le temps des résultats obtenus
+        href: https://data.cnsa.fr/Layouts/dashonic/Applications/DashboardPage.aspx?Key=lEMuvhDH&Plateform=false&OverrideConnection=false&customAppKey=4nloMAqQ
+        href_title: Accéder au baromètre
+        img: cnsa.png
+      - title: 'Data Autonomie : Visualisations'
+        description: Le portail Data Autonomie propose des visualisations à travers différents tableaux de bords thématiques
+        href: https://data-autonomie.cnsa.fr/pages/visualisations/
+        href_title: Accéder à Data Autonomie
+        img:
+      - title: Observatoire de l’offre
+        description: L’ambition de ce portail est de proposer un outil d’aide à la décision pour les acteurs du médico-social en permettant de visualiser des données et des indicateurs clés de l’offre autonomie sur les territoires
+        href: https://cnsa.opendatasoft.com/pages/observatoire/
+        href_title: Accéder à l’observatoire de l’offre
+        img:
+      - title: Portrait des territoires
+        description: Cette application permet de consulter l’ensemble des données disponibles pour caractériser la politique de l’autonomie sur un territoire. Ciblée au niveau départemental, cette dernière vous permet, selon différents axes choisis, de comparer les indicateurs d’un département à ceux des autres départements de sa région, ou à tout autre département choisi.
+        href: https://cnsa-apps.shinyapps.io/portraits-des-territoires/
+        href_title: Accéder au portrait des territoires
+        img:
+      - title: Situation financière des établissements sociaux ou médico-sociaux
+        description: Cette application propose des graphiques interactifs et des tableaux de données, vous permettant de filtrer et explorer les résultats financiers des établissements sociaux ou médicaux sociaux (ESMS) en fonction de l’année, de la région ou de la catégorie d’établissement.
+        href: https://cnsa-apps.shinyapps.io/Situation_financiere_des_ESMS/
+        href_title: Accéder à la situation financière
+        img:
+      - title: Observatoire des Situations de Fragilité
+        description: 'Géofragilité propose des données thématiques sous forme de cartes et rapports qui permettent d’identifier les territoires prioritaires d’intervention. Il permet également de réaliser des diagnostics au regard de la fragilité sur le champ de la santé et du social. Plusieurs niveaux géographiques sont disponibles : communes, départements, nouvelles régions administratives, régions Carsat.'
+        href: https://www.observatoires-fragilites-national.fr/
+        href_title: Accéder à l’Observatoire des Situations de Fragilité
+        img: geo.png
   # WEBINAIRES
   webinaires:
     webinaires:
