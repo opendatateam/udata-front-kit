@@ -188,16 +188,24 @@ solidarites:
     sub_section_cards:
       title: Les actualités
       cards:
-        - name: Recherche unifiée
+        # Suivre la doc VueDSFR pour DsfrBadge
+        - badges:
+            - label: loi
+              type: standard
+              noIcon: true
+          name: Recherche unifiée
           url: https://guides.data.gouv.fr/ecologie.data.gouv.fr/le-projet/actualites#id-11-juin-2026-recherche-unifiee
           image_url: /static/solidarites/assets/webinaires/webinaireia.png
-        - name: Nouveaux indicateurs sur la forêt
+        - badge: data
+          name: Nouveaux indicateurs sur la forêt
           url: https://guides.data.gouv.fr/ecologie.data.gouv.fr/le-projet/actualites#id-8-juin-2026-nouveaux-indicateurs-sur-la-forets
           image_url:
-        - name: Vers la mutualisation de plugins QGIS pour l'analyse territoriale
+        - badge: data
+          name: Vers la mutualisation de plugins QGIS pour l'analyse territoriale
           url: https://guides.data.gouv.fr/ecologie.data.gouv.fr/le-projet/actualites#id-25-mai-2026-vers-la-mutualisation-de-plugin-qgis-pour-lanalyse-territoriale
           image_url:
-        - name: Vers la mutualisation de plugins QGIS pour l'analyse territoriale (copie)
+        - badge: data
+          name: Vers la mutualisation de plugins QGIS pour l'analyse territoriale (copie)
           url: https://guides.data.gouv.fr/ecologie.data.gouv.fr/le-projet/actualites#id-25-mai-2026-vers-la-mutualisation-de-plugin-qgis-pour-lanalyse-territoriale
           image_url:
   # WEBINAIRES
