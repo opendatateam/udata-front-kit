@@ -16,6 +16,7 @@ on:
           - defis
           - ecospheres
           - hackathon
+          - justice
           - logistique
           - meteo-france
       environment:

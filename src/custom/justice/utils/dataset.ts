@@ -1,0 +1,44 @@
+import type { DatasetV2WithFullObject } from '@datagouv/components-next'
+import {
+  computed,
+  inject,
+  provide,
+  type ComputedRef,
+  type InjectionKey,
+  type Ref
+} from 'vue'
+
+import { ACTIVITY_DATASET_ID } from '@/custom/justice/utils/activityData'
+import { useDatasetStore } from '@/store/DatasetStore'
+
+const JUSTICE_DATASET: InjectionKey<
+  ComputedRef<DatasetV2WithFullObject | null>
+> = Symbol('justice-dataset')
+
+export async function loadJusticeDataset(): Promise<DatasetV2WithFullObject | null> {
+  return useDatasetStore()
+    .load(ACTIVITY_DATASET_ID)
+    .catch(() => null)
+}
+
+export function provideJusticeDataset(
+  dataset: Ref<DatasetV2WithFullObject | null>
+) {
+  provide(
+    JUSTICE_DATASET,
+    computed(() => dataset.value)
+  )
+}
+
+export function useJusticeDataset() {
+  const dataset = inject(
+    JUSTICE_DATASET,
+    computed(() => null)
+  )
+  const datasetUrl = computed(() =>
+    dataset.value
+      ? { name: 'datasets_detail', params: { item_id: dataset.value.slug } }
+      : undefined
+  )
+  return { dataset, datasetUrl }
+}
