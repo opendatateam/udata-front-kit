@@ -214,10 +214,18 @@ pages:
       - *filter_org
 solidarites:
   selections:
+    - title: Toutes prestations - Répartition des allocataires selon la prestation et la situation familiale [National]
+      href: datasets/66d1e5ab79919854e97093c3
+    - title: Taux de couverture d'accueil du jeune enfant [Communal]
+      href: datasets/66d1e5ac79919854e97093c6
+    - title: Prix hébergement et tarifs dépendance des EHPAD
+      href: datasets/5dadc5b7634f4142ddf7b41e
+    - title: Les subventions de la Caisse nationale de solidarité pour l'autonomie (CNSA)
+      href: datasets/5cf92430634f417e13c47bf8
     - title: Les effectifs de retraités, montants de pensions et âges de départ à la retraite
       href: datasets/6226330b5eafccb7033e0c48
-    - title: Le baromètre d'opinion
-      href: https://data.drees.solidarites-sante.gouv.fr/explore/dataset/431_le-barometre-d-opinion/
+    - title: ISD - Protection de l'enfance
+      href: datasets/6226330da9c4efef2f3e0c47
   news:
     sub_section_cards:
       title: Les actualités
