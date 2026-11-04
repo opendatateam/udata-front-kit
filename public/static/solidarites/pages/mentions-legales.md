@@ -12,10 +12,10 @@ L’Administration ministérielle des données, algorithmes et codes sources des
 
 ### Siège :
 
-RCS Lille Métropole 424 761 419 00045\
-Code APE 2620Z\
-N° TVA : FR 22 424 761 419\
-Siège social : 2 rue Kellermann - 59100 Roubaix - France
+Administration Ministériel des Données, Algorithmes et Codes sources Santé- Solidarités
+Tour Olivier de Serres
+[78-84 rue Olivier de Serres
+75015 Paris](https://www.google.com/maps/search/78-84+rue+Olivier+de+Serres+%0D%0A+%E2%80%82%E2%80%82%E2%80%82%E2%80%8275015+Paris?entry=gmail&source=g)
 
 **Contact :** [amd@sante.gouv.fr](mailto:amd@sante.gouv.fr)
 

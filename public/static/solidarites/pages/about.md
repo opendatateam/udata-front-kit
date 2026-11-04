@@ -3,7 +3,7 @@
 ## Un réseau structuré au service des données de solidarités
 
 Le Réseau des Producteurs de Données de Solidarités (RPDS) prend sa genèse dans le projet emblématique de création d’un Espace Commun de Données
-de Solidarités de la feuille de route 2024-2026 de l’Administration Ministérielle des Données, Algorithmes et Codes source des ministères
+de Solidarités de la [feuille de route 2024-2026](https://fichiers.numerique.gouv.fr/explorer/items/files/34c83dc7-5916-4de0-bf65-a00f00449786) de l’Administration Ministérielle des Données, Algorithmes et Codes source des ministères
 Santé & Solidarités (AMDAC MSS).
 
 Il répond à un besoin partagé : mieux structurer, partager et valoriser les données produites dans le champ des solidarités, dans une logique
