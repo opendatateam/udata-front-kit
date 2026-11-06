@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ReadMore, SimpleBanner } from '@datagouv/components-next'
 import { capitalize, computed, onMounted, ref, useTemplateRef } from 'vue'
+import { useRouter } from 'vue-router'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
@@ -20,6 +21,7 @@ import { useResourceStore } from '@/store/ResourceStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
 import { useDatasetsConf, usePageConf } from '@/utils/config'
+import { getParentDatasetId } from '@/utils/dataset'
 import { useResourceExplorer } from '@/utils/explorer'
 import { useLabels } from '@/utils/labels'
 import type { OgcLayerInfo } from '@/utils/ogcServices'
@@ -80,6 +82,21 @@ const canAddToTopic = computed(() => {
 })
 
 const dataset = computed(() => datasetStore.get(datasetIdOrSlug))
+
+const router = useRouter()
+const parentDataset = computed(() => {
+  const parentId = getParentDatasetId(dataset.value)
+  return parentId ? datasetStore.get(parentId) : undefined
+})
+// plain href: this view doesn't reload on same-route navigation
+const parentDatasetHref = computed(
+  () =>
+    parentDataset.value &&
+    router.resolve({
+      name: `${pageKey || 'datasets'}_detail`,
+      params: { item_id: parentDataset.value.slug }
+    }).href
+)
 
 const showAddToTopicModal = ref(false)
 
@@ -166,6 +183,12 @@ onMounted(() => {
           console.error('Failed to compute OGC info:', err)
         )
       }
+      const parentId = getParentDatasetId(dataset.value)
+      if (parentId) {
+        datasetStore
+          .load(parentId, { toasted: false })
+          .catch((err) => console.error('Failed to load parent dataset:', err))
+      }
     })
 })
 </script>
@@ -220,6 +243,18 @@ onMounted(() => {
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-1w">
       <div class="fr-col-12 fr-col-md-8">
         <h1 class="fr-mb-2v">{{ dataset.title }}</h1>
+        <DsfrCallout
+          v-if="parentDataset && parentDatasetHref"
+          title="Jeu de données parent"
+          title-tag="p"
+          class="fr-mb-4v"
+        >
+          <p>
+            Ce jeu de données est lié à un jeu de données parent :
+            <a :href="parentDatasetHref">{{ parentDataset.title }}</a
+            >.
+          </p>
+        </DsfrCallout>
         <ReadMore max-height="600">
           <!-- eslint-disable-next-line vue/no-v-html -->
           <div v-html="description"></div>

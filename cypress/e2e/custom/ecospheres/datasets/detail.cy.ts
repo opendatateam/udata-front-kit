@@ -87,3 +87,38 @@ describe('Dataset Page - Tab counts', () => {
       .should('not.exist')
   })
 })
+
+describe('Dataset Page - Parent dataset', () => {
+  beforeEach(() => {
+    cy.mockMatomo()
+    cy.mockStaticDatagouv()
+  })
+
+  it('should display a callout linking to the parent dataset', () => {
+    const parent = datasetFactory.one({
+      overrides: { title: 'Jeu de données parent de test' }
+    })
+    const child = datasetFactory.one({
+      overrides: { extras: { dcat: { parent: parent.id } } }
+    })
+    cy.mockDatasetAndRelatedObjects(child)
+    cy.mockDatagouvObject('datasets', parent.id, parent)
+
+    cy.visit(`/datasets/${child.id}`)
+    cy.wait(`@get_datasets_${parent.id}`)
+
+    cy.get('.fr-callout')
+      .contains('a', parent.title)
+      .should('have.attr', 'href', `/datasets/${parent.slug}`)
+  })
+
+  it('should not display the callout without a parent dataset', () => {
+    const dataset = datasetFactory.one()
+    cy.mockDatasetAndRelatedObjects(dataset)
+
+    cy.visit(`/datasets/${dataset.id}`)
+    cy.wait(`@get_datasets_${dataset.id}`)
+
+    cy.contains('Jeu de données parent').should('not.exist')
+  })
+})
