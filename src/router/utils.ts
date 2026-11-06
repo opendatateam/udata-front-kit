@@ -26,9 +26,10 @@ import {
   type GlobalSearchConfig,
   type TopicSearchConfig
 } from '@datagouv/components-next'
-import { type Component } from 'vue'
+import { type Component, type Ref } from 'vue'
 import {
   useRoute,
+  useRouter,
   type RouteLocationNormalizedLoaded,
   type RouteRecordRaw
 } from 'vue-router'
@@ -88,16 +89,59 @@ export const useRouteParamsAsString = (): RouteLocationParamsAsString => {
   return { ...route, params }
 }
 
-/**
- * Reactive version of useRouteParamsAsString
- * Returns a computed ref that updates when route params change
- */
-export const useRouteParamsAsStringReactive = () => {
+// reactive item_id, ignoring changes once navigated away from the route
+const useRouteItemId = (): Ref<string> => {
   const route = useRoute()
-  return computed(() => ({
-    ...route,
-    params: convertParamsToString(route.params)
-  }))
+  const routeName = route.name
+  const itemId = ref(convertParamsToString(route.params).item_id)
+  watch(
+    () => route.params.item_id,
+    () => {
+      if (route.name === routeName) {
+        itemId.value = convertParamsToString(route.params).item_id
+      }
+    }
+  )
+  return itemId
+}
+
+/**
+ * Loads the item of a detail route, again on every item_id change
+ * Results of a load superseded by another navigation are dropped
+ */
+export const useRouteItem = <T extends { slug: string }>(
+  load: (idOrSlug: string) => Promise<T>,
+  {
+    onLoaded,
+    replaceWithSlug = false
+  }: {
+    onLoaded?: (item: T) => void
+    // canonicalize the URL from id to slug
+    replaceWithSlug?: boolean
+  } = {}
+): Ref<string> => {
+  const itemId = useRouteItemId()
+  const router = useRouter()
+  watch(
+    itemId,
+    (idOrSlug) => {
+      if (!idOrSlug) return
+      load(idOrSlug).then((item) => {
+        if (idOrSlug !== itemId.value) return
+        onLoaded?.(item)
+        if (replaceWithSlug && item.slug !== idOrSlug) {
+          const current = router.currentRoute.value
+          router.replace({
+            name: current.name,
+            params: { ...current.params, item_id: item.slug },
+            query: current.query
+          })
+        }
+      })
+    },
+    { immediate: true }
+  )
+  return itemId
 }
 
 /**

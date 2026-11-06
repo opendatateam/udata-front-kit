@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ReadMore, SimpleBanner } from '@datagouv/components-next'
-import { capitalize, computed, onMounted, ref, useTemplateRef } from 'vue'
-import { useRouter } from 'vue-router'
+import { capitalize, computed, ref, useTemplateRef } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
@@ -15,7 +14,7 @@ import ExtendedInformationPanel from '@/components/datasets/ExtendedInformationP
 import ResourcesTabContent from '@/components/datasets/ResourcesTabContent.vue'
 import config from '@/config'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
-import { useCurrentPageConf, useRouteParamsAsString } from '@/router/utils'
+import { useCurrentPageConf, useRouteItem } from '@/router/utils'
 import { useDatasetStore } from '@/store/DatasetStore'
 import { useResourceStore } from '@/store/ResourceStore'
 import { useUserStore } from '@/store/UserStore'
@@ -29,9 +28,6 @@ import { fetchAllOgcResources } from '@/utils/ogcServices'
 import { openInQgis } from '@/utils/qgis'
 import { useMeta } from '@/utils/seo'
 import { Tab, tabIds, useRoutedTabs } from '@/utils/tabs'
-
-const route = useRouteParamsAsString()
-const datasetIdOrSlug = route.params.item_id
 
 const datasetStore = useDatasetStore()
 const resourceStore = useResourceStore()
@@ -59,6 +55,24 @@ const handleOpenInQgis = async () => {
   }
 }
 
+const datasetIdOrSlug = useRouteItem(
+  (idOrSlug) =>
+    datasetStore.load(idOrSlug, { toasted: false, redirectNotFound: true }),
+  {
+    onLoaded: (loaded) => {
+      computeOgcInfo(loaded.id).catch((err) =>
+        console.error('Failed to compute OGC info:', err)
+      )
+      const parentId = getParentDatasetId(loaded)
+      if (parentId) {
+        datasetStore
+          .load(parentId, { toasted: false })
+          .catch((err) => console.error('Failed to load parent dataset:', err))
+      }
+    }
+  }
+)
+
 const { pageKey, pageConf } = useCurrentPageConf()
 const showDiscussions = pageConf.resources_tabs.discussions.display
 
@@ -81,22 +95,12 @@ const canAddToTopic = computed(() => {
   )
 })
 
-const dataset = computed(() => datasetStore.get(datasetIdOrSlug))
+const dataset = computed(() => datasetStore.get(datasetIdOrSlug.value))
 
-const router = useRouter()
 const parentDataset = computed(() => {
   const parentId = getParentDatasetId(dataset.value)
   return parentId ? datasetStore.get(parentId) : undefined
 })
-// plain href: this view doesn't reload on same-route navigation
-const parentDatasetHref = computed(
-  () =>
-    parentDataset.value &&
-    router.resolve({
-      name: `${pageKey || 'datasets'}_detail`,
-      params: { item_id: parentDataset.value.slug }
-    }).href
-)
 
 const showAddToTopicModal = ref(false)
 
@@ -173,24 +177,6 @@ useMeta({
   description: () => dataset.value?.description,
   canonicalUrl: () => dataset.value?.page
 })
-
-onMounted(() => {
-  datasetStore
-    .load(datasetIdOrSlug, { toasted: false, redirectNotFound: true })
-    .then(() => {
-      if (dataset.value) {
-        computeOgcInfo(dataset.value.id).catch((err) =>
-          console.error('Failed to compute OGC info:', err)
-        )
-      }
-      const parentId = getParentDatasetId(dataset.value)
-      if (parentId) {
-        datasetStore
-          .load(parentId, { toasted: false })
-          .catch((err) => console.error('Failed to load parent dataset:', err))
-      }
-    })
-})
 </script>
 
 <template>
@@ -239,19 +225,24 @@ onMounted(() => {
       />
     </div>
   </div>
-  <GenericContainer v-if="dataset">
+  <GenericContainer v-if="dataset" :key="dataset.id">
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-1w">
       <div class="fr-col-12 fr-col-md-8">
         <h1 class="fr-mb-2v">{{ dataset.title }}</h1>
         <DsfrCallout
-          v-if="parentDataset && parentDatasetHref"
+          v-if="parentDataset"
           title="Jeu de données parent"
           title-tag="p"
           class="fr-mb-4v"
         >
           <p>
             Ce jeu de données est lié à un jeu de données parent :
-            <a :href="parentDatasetHref">{{ parentDataset.title }}</a
+            <RouterLink
+              :to="{
+                name: `${pageKey}_detail`,
+                params: { item_id: parentDataset.slug }
+              }"
+              >{{ parentDataset.title }}</RouterLink
             >.
           </p>
         </DsfrCallout>

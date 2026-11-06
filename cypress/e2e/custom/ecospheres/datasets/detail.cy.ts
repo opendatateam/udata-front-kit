@@ -112,6 +112,24 @@ describe('Dataset Page - Parent dataset', () => {
       .should('have.attr', 'href', `/datasets/${parent.slug}`)
   })
 
+  it('should navigate to the parent dataset', () => {
+    const parent = datasetFactory.one({
+      overrides: { title: 'Jeu de données parent de test' }
+    })
+    const child = datasetFactory.one({
+      overrides: { extras: { dcat: { parent: parent.id } } }
+    })
+    cy.mockDatasetAndRelatedObjects(child)
+    cy.mockDatasetAndRelatedObjects(parent)
+
+    cy.visit(`/datasets/${child.id}`)
+    cy.get('.fr-callout').contains('a', parent.title).click()
+
+    cy.location('pathname').should('eq', `/datasets/${parent.slug}`)
+    cy.get('h1').should('contain', parent.title)
+    cy.get('.fr-callout').should('not.exist')
+  })
+
   it('should not display the callout without a parent dataset', () => {
     const dataset = datasetFactory.one()
     cy.mockDatasetAndRelatedObjects(dataset)
