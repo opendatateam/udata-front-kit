@@ -229,12 +229,7 @@ useMeta({
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-1w">
       <div class="fr-col-12 fr-col-md-8">
         <h1 class="fr-mb-2v">{{ dataset.title }}</h1>
-        <DsfrCallout
-          v-if="parentDataset"
-          title="Jeu de données parent"
-          title-tag="p"
-          class="fr-mb-4v"
-        >
+        <DsfrCallout v-if="parentDataset" class="fr-mb-4v">
           <p>
             Ce jeu de données est lié à un jeu de données parent :
             <RouterLink

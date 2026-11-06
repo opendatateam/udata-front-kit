@@ -137,6 +137,6 @@ describe('Dataset Page - Parent dataset', () => {
     cy.visit(`/datasets/${dataset.id}`)
     cy.wait(`@get_datasets_${dataset.id}`)
 
-    cy.contains('Jeu de données parent').should('not.exist')
+    cy.get('.fr-callout').should('not.exist')
   })
 })
