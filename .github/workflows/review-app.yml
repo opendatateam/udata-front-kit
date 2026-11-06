@@ -43,6 +43,7 @@ jobs:
           - defis
           - hackathon
           - culture
+          - solidarites
     permissions:
       deployments: write
     # Run for all PRs including forks and for manual triggers
