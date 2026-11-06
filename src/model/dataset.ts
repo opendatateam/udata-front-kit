@@ -29,10 +29,19 @@ export interface DatasetModalData {
   mode: 'edit' | 'create'
 }
 
+// extras written by the DCAT harvester
+export type DcatExtras = {
+  [key: string]: string | string[] | undefined
+  accessRights?: string[]
+  provenance?: string[]
+  // data.gouv.fr id of the parent dataset
+  parent?: string
+}
+
 export type ExtendedDatasetV2WithFullObject = DatasetV2WithFullObject & {
   extras: {
     [key: string]: unknown
-    dcat?: Record<string, string[] | undefined>
+    dcat?: DcatExtras
   }
   harvest: TypedHarvest | null
 }

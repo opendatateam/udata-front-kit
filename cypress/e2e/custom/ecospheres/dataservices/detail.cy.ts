@@ -312,6 +312,25 @@ describe('Dataservices (API) - Detail Page', () => {
         .find('sup.tab-count')
         .should('not.exist')
     })
+
+    it('should show the linked datasets count when visited by slug', () => {
+      const slugDataservice = createMockedDataservice(
+        {},
+        datasetFactory.many(3)
+      )
+      cy.mockDatagouvObject(
+        'dataservices',
+        slugDataservice.slug,
+        slugDataservice
+      )
+
+      cy.visit(`/dataservices/${slugDataservice.slug}`)
+      cy.wait(`@get_dataservices_${slugDataservice.slug}`)
+      cy.wait('@getDataserviceDatasets')
+
+      cy.contains('button', 'Données (3)').should('be.visible')
+      cy.contains('3 jeux de données').should('be.visible')
+    })
   })
 
   describe('Access Type And Availability Variations', () => {
