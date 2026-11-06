@@ -24,7 +24,7 @@ import IndicatorInformationPanel from '../../components/indicators/IndicatorInfo
 import IndicatorSourcesList from '../../components/indicators/IndicatorSourcesList.vue'
 import IndicatorTags from '../../components/indicators/IndicatorTags.vue'
 import type { Indicator } from '../../model/indicator'
-import { useIndicatorTags } from '../../utils/indicator'
+import { isBetaIndicator, useIndicatorTags } from '../../utils/indicator'
 
 const datasetStore = useDatasetStore()
 const userStore = useUserStore()
@@ -39,6 +39,7 @@ const indicator = computed(
   () => datasetStore.get(indicatorId.value) as Indicator
 )
 const tags = useIndicatorTags(indicator)
+const isBeta = isBetaIndicator(indicator)
 
 const tabularApiUrl = config.datagouvfr?.tabular_api_url
 
@@ -136,6 +137,23 @@ useMeta({
           <h1 class="fr-mb-1v fr-mr-2v">{{ indicator.title }}</h1>
           <IndicatorTags :tags="tags" class="fr-mb-1w" />
         </div>
+        <DsfrCallout
+          v-if="isBeta"
+          title="Indicateur en cours de revue"
+          title-tag="p"
+          class="fr-mb-4v"
+        >
+          <p>
+            Aidez-nous à le fiabiliser : faites-nous part de vos retours dans
+            <RouterLink
+              :to="{
+                name: 'indicators_detail',
+                params: { item_id: indicator.slug, tab: Tab.DISCUSSIONS }
+              }"
+              >l'onglet Discussions</RouterLink
+            >.
+          </p>
+        </DsfrCallout>
         <ReadMore max-height="600">
           <!-- eslint-disable-next-line vue/no-v-html -->
           <div v-html="description"></div>
