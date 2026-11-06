@@ -93,15 +93,11 @@ export const useRouteParamsAsString = (): RouteLocationParamsAsString => {
 const useRouteItemId = (): Ref<string> => {
   const route = useRoute()
   const routeName = route.name
-  const itemId = ref(convertParamsToString(route.params).item_id)
-  watch(
-    () => route.params.item_id,
-    () => {
-      if (route.name === routeName) {
-        itemId.value = convertParamsToString(route.params).item_id
-      }
-    }
-  )
+  const currentItemId = () => convertParamsToString(route.params).item_id
+  const itemId = ref(currentItemId())
+  watch(currentItemId, (id) => {
+    if (route.name === routeName) itemId.value = id
+  })
   return itemId
 }
 
