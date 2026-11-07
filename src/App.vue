@@ -8,6 +8,7 @@ import HeaderComponent from './components/header/HeaderComponent.vue'
 import type { InfoToAnnounce } from './components/LiveRegion.vue'
 import LiveRegion from './components/LiveRegion.vue'
 import SkipLinks, { type SkipLinksProps } from './components/SkipLinks.vue'
+import SurveyModal from './components/SurveyModal.vue'
 import {
   AccessibilityPropertiesKey,
   type AccessibilityPropertiesType
@@ -165,6 +166,7 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
     :mandatory-links="mandatory_links"
     :home-title="`Retour à l'accueil du site - ${title}`"
   />
+  <SurveyModal />
 </template>
 
 <!-- global styles -->
