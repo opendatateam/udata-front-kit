@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useCanonicalUrl, useMeta } from '@/utils/seo'
 import { ReadMore } from '@datagouv/components-next'
-import { capitalize, computed, onMounted, ref, useTemplateRef } from 'vue'
+import { capitalize, computed, ref, useTemplateRef } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
@@ -13,7 +13,7 @@ import DatasetSidebar from '@/components/datasets/DatasetSidebar.vue'
 import ResourcesTabContent from '@/components/datasets/ResourcesTabContent.vue'
 import config from '@/config'
 import IndicatorVizChart from '@/custom/ecospheres/components/indicators/viz/IndicatorVizChart.vue'
-import { useRouteParamsAsString } from '@/router/utils'
+import { useRouteItem } from '@/router/utils'
 import { useDatasetStore } from '@/store/DatasetStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
@@ -24,17 +24,22 @@ import IndicatorInformationPanel from '../../components/indicators/IndicatorInfo
 import IndicatorSourcesList from '../../components/indicators/IndicatorSourcesList.vue'
 import IndicatorTags from '../../components/indicators/IndicatorTags.vue'
 import type { Indicator } from '../../model/indicator'
-import { useIndicatorTags } from '../../utils/indicator'
-
-const route = useRouteParamsAsString()
-const indicatorId = route.params.item_id
-const router = useRouter()
+import { isBetaIndicator, useIndicatorTags } from '../../utils/indicator'
 
 const datasetStore = useDatasetStore()
 const userStore = useUserStore()
 
-const indicator = computed(() => datasetStore.get(indicatorId) as Indicator)
+const indicatorId = useRouteItem(
+  (idOrSlug) =>
+    datasetStore.load(idOrSlug, { toasted: false, redirectNotFound: true }),
+  { replaceWithSlug: true }
+)
+
+const indicator = computed(
+  () => datasetStore.get(indicatorId.value) as Indicator
+)
 const tags = useIndicatorTags(indicator)
+const isBeta = isBetaIndicator(indicator)
 
 const tabularApiUrl = config.datagouvfr?.tabular_api_url
 
@@ -99,21 +104,6 @@ useMeta({
     return { name: 'indicators_detail', params: { item_id: slug } }
   })
 })
-
-onMounted(() => {
-  datasetStore
-    .load(indicatorId, { toasted: false, redirectNotFound: true })
-    .then(() => {
-      if (indicator.value?.slug && indicator.value.slug !== indicatorId) {
-        const current = router.currentRoute.value
-        router.replace({
-          name: 'indicators_detail',
-          params: { ...current.params, item_id: indicator.value.slug },
-          query: current.query
-        })
-      }
-    })
-})
 </script>
 
 <template>
@@ -140,13 +130,30 @@ onMounted(() => {
       />
     </div>
   </div>
-  <GenericContainer v-if="indicator">
+  <GenericContainer v-if="indicator" :key="indicator.id">
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-1w">
       <div class="fr-col-12 fr-col-md-8">
         <div class="fr-mb-4v">
           <h1 class="fr-mb-1v fr-mr-2v">{{ indicator.title }}</h1>
           <IndicatorTags :tags="tags" class="fr-mb-1w" />
         </div>
+        <DsfrCallout
+          v-if="isBeta"
+          title="Indicateur en cours de revue"
+          title-tag="p"
+          class="fr-mb-4v"
+        >
+          <p>
+            Aidez-nous à le fiabiliser : faites-nous part de vos retours dans
+            <RouterLink
+              :to="{
+                name: 'indicators_detail',
+                params: { item_id: indicator.slug, tab: Tab.DISCUSSIONS }
+              }"
+              >l'onglet Discussions</RouterLink
+            >.
+          </p>
+        </DsfrCallout>
         <ReadMore max-height="600">
           <!-- eslint-disable-next-line vue/no-v-html -->
           <div v-html="description"></div>
