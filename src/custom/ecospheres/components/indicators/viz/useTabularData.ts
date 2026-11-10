@@ -41,12 +41,16 @@ export function useTabularData(
   const isLoading = ref(false)
   const error = ref<string | null>(null)
 
-  const availableAxisValues = computed<Record<string, string[]>>(() => {
-    const resource = resources.value.find(
+  const currentResource = computed(() =>
+    resources.value.find(
       (r) =>
         r.extras['ecospheres-indicateurs']?.maille ===
         selectedIndicatorVizMesh.value
     )
+  )
+
+  const availableAxisValues = computed<Record<string, string[]>>(() => {
+    const resource = currentResource.value
     if (!resource || rawData.value.length === 0) return {}
     const axisKeys = Object.keys(
       resource.extras['ecospheres-indicateurs']?.axes ?? {}
@@ -72,9 +76,7 @@ export function useTabularData(
       return
     }
 
-    const resource = resources.value.find(
-      (r) => r.extras['ecospheres-indicateurs']?.maille === mesh
-    )
+    const resource = currentResource.value
     if (!resource) return
 
     if (mesh !== 'fr' && !selectedTerritory.value) return
@@ -119,17 +121,12 @@ export function useTabularData(
   }
 
   // resource id is watched too: a mesh from the URL is set before resources load
-  const currentResourceId = computed(
-    () =>
-      resources.value.find(
-        (r) =>
-          r.extras['ecospheres-indicateurs']?.maille ===
-          selectedIndicatorVizMesh.value
-      )?.id
-  )
-
   watch(
-    [selectedIndicatorVizMesh, selectedTerritory, currentResourceId],
+    [
+      selectedIndicatorVizMesh,
+      selectedTerritory,
+      () => currentResource.value?.id
+    ],
     () => fetchData(),
     { immediate: true }
   )
