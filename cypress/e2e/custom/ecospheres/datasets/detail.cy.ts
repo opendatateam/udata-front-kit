@@ -102,14 +102,8 @@ describe('Dataset Page - Keywords', () => {
     cy.wait(`@get_datasets_${dataset.id}`)
     cy.contains('button', 'Informations').click()
 
-    cy.location('origin').then((origin) => {
-      dataset.tags?.forEach((tag) => {
-        cy.contains('a', tag).should(
-          'have.attr',
-          'href',
-          `${origin}/datasets?tag=${tag}`
-        )
-      })
+    dataset.tags?.forEach((tag) => {
+      cy.contains('a', tag).should('have.attr', 'href', `/datasets?tag=${tag}`)
     })
   })
 })
