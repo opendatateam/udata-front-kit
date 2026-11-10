@@ -19,6 +19,11 @@ export function useIndicatorVizParams(defaultMesh: IndicatorMesh = 'fr') {
 
   const touched = ref(false)
 
+  // Marks a user selection, as opposed to an automatic fallback
+  function touch() {
+    touched.value = true
+  }
+
   function setMesh(newMesh: IndicatorMesh) {
     territory.value = ''
     mesh.value = newMesh
@@ -31,15 +36,10 @@ export function useIndicatorVizParams(defaultMesh: IndicatorMesh = 'fr') {
   const meshModel = computed({
     get: () => mesh.value,
     set: (newMesh: IndicatorMesh) => {
-      touched.value = true
+      touch()
       setMesh(newMesh)
     }
   })
-
-  // Marks a user territory selection, as opposed to an automatic fallback
-  function touch() {
-    touched.value = true
-  }
 
   watch([mesh, territory], async ([newMesh, newTerritory]) => {
     if (!touched.value) return
