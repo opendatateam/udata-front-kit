@@ -1,7 +1,12 @@
 import type { Ref } from 'vue'
 import type { IndicatorMesh, IndicatorResource } from '../../../model/indicator'
 import { debug } from './debug'
-import { DEFAULT_TABULAR_API_URL, GEOCOLUMNS, YEAR_COLUMN } from './enums'
+import {
+  DEFAULT_TABULAR_API_URL,
+  GEOCOLUMNS,
+  YEAR_COLUMN,
+  needsTerritory
+} from './enums'
 import { formatData } from './format'
 import type { IndicatorVizFormattedRow } from './types'
 
@@ -79,15 +84,14 @@ export function useTabularData(
     const resource = currentResource.value
     if (!resource) return
 
-    if (mesh !== 'fr' && !selectedTerritory.value) return
+    if (needsTerritory(mesh) && !selectedTerritory.value) return
 
     isLoading.value = true
     error.value = null
 
-    const geoCondition =
-      mesh !== 'fr'
-        ? `${GEOCOLUMNS[mesh]}__exact=${selectedTerritory.value}&`
-        : ''
+    const geoCondition = needsTerritory(mesh)
+      ? `${GEOCOLUMNS[mesh]}__exact=${selectedTerritory.value}&`
+      : ''
 
     const baseUrl = tabularApiUrl.value || DEFAULT_TABULAR_API_URL
     const url = `${baseUrl}/api/resources/${resource.id}/data/?${geoCondition}${YEAR_COLUMN}__sort=asc`

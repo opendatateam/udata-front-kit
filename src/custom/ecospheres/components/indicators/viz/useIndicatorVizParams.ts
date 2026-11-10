@@ -1,9 +1,6 @@
 import type { LocationQueryValue } from 'vue-router'
 import type { IndicatorMesh } from '../../../model/indicator'
-import { GEOCOLUMNS, MESHES } from './enums'
-
-// territorial meshes are those filterable by geocode
-const needsTerritory = (mesh: string) => Object.keys(GEOCOLUMNS).includes(mesh)
+import { MESHES, needsTerritory } from './enums'
 
 const isMesh = (value: string | undefined): value is IndicatorMesh =>
   value === 'commune' || MESHES.some(([mesh]) => mesh === value)

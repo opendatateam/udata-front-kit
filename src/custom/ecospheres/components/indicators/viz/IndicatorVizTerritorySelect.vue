@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import FilterSelectComponent from '@/components/FilterSelectComponent.vue'
 import type { IndicatorMesh } from '../../../model/indicator'
+import { needsTerritory } from './enums'
 
 const props = defineProps<{ mesh: IndicatorMesh }>()
 const selectedTerritory = defineModel<string>({ required: true })
@@ -22,7 +23,7 @@ const userSelectedTerritory = computed({
 watch(
   () => props.mesh,
   async (mesh) => {
-    if (mesh === 'fr' || mesh === 'commune') {
+    if (!needsTerritory(mesh)) {
       territoryOptions.value = []
       return
     }
@@ -59,7 +60,7 @@ watch(
 </script>
 
 <template>
-  <div v-if="mesh !== 'fr' && mesh !== 'commune'" class="territory-select">
+  <div v-if="needsTerritory(mesh)" class="territory-select">
     <FilterSelectComponent
       v-model="userSelectedTerritory"
       :options="territoryOptions"
