@@ -1,25 +1,20 @@
-import type { LocationQueryValue } from 'vue-router'
+import { useRouteQueryAsString } from '@/router/utils'
 import type { IndicatorMesh } from '../../../model/indicator'
 import { MESHES, needsTerritory } from './enums'
 
-const isMesh = (value: string | undefined): value is IndicatorMesh =>
+const isMesh = (value: string | null | undefined): value is IndicatorMesh =>
   value === 'commune' || MESHES.some(([mesh]) => mesh === value)
-
-const queryString = (value: LocationQueryValue | LocationQueryValue[]) =>
-  typeof value === 'string' ? value : undefined
 
 // state from ?mesh/?territory; URL written only after a user change (chart stays mounted on other tabs)
 export function useIndicatorVizParams(defaultMesh: IndicatorMesh = 'fr') {
   const route = useRoute()
   const router = useRouter()
 
-  const queryMesh = queryString(route.query.mesh)
-  const initialMesh = isMesh(queryMesh) ? queryMesh : defaultMesh
+  const { query } = useRouteQueryAsString()
+  const initialMesh = isMesh(query.mesh) ? query.mesh : defaultMesh
   const mesh = ref<IndicatorMesh>(initialMesh)
   const territory = ref(
-    needsTerritory(initialMesh)
-      ? (queryString(route.query.territory) ?? '')
-      : ''
+    needsTerritory(initialMesh) ? (query.territory ?? '') : ''
   )
 
   const touched = ref(false)
