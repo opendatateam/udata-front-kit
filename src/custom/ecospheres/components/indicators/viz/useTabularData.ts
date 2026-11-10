@@ -57,12 +57,15 @@ export function useTabularData(
     }, {})
   })
 
+  let latestRequestId = 0
+
   async function fetchData() {
     const mesh = selectedIndicatorVizMesh.value
 
     // Commune preview isn't supported (see IndicatorVizChart's isCommuneMesh
     // alert): clear any stale data from a previous mesh instead of fetching.
     if (mesh === 'commune') {
+      latestRequestId++
       rawData.value = []
       isLoading.value = false
       error.value = null
@@ -89,6 +92,10 @@ export function useTabularData(
 
     debug.log(`🔄 Fetching data for resource ${resource.id}`, { mesh, url })
 
+    const requestId = ++latestRequestId
+    // a newer request was started while this one was pending
+    const isStale = () => requestId !== latestRequestId
+
     try {
       if (fetchCache.has(url)) {
         rawData.value = fetchCache.get(url)!
@@ -98,14 +105,16 @@ export function useTabularData(
       const allData = await fetchAllPages(url)
       const formatted = formatData(allData, resource)
       fetchCache.set(url, formatted)
+      if (isStale()) return
       rawData.value = formatted
       debug.log(`✅ Data fetched: ${formatted.length} records`)
     } catch (err) {
+      if (isStale()) return
       debug.error('Failed to fetch data', err)
       error.value = err instanceof Error ? err.message : String(err)
       rawData.value = []
     } finally {
-      isLoading.value = false
+      if (!isStale()) isLoading.value = false
     }
   }
 

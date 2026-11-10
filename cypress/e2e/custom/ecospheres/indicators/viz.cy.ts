@@ -160,11 +160,23 @@ describe('Indicator Viz', () => {
 
     it('should fall back to the first territory without rewriting the URL', () => {
       const indicator = setup()
+      // late failing response for the invalid territory must not override the fallback
+      cy.intercept(
+        {
+          method: 'GET',
+          url: 'https://tabular-api*.data.gouv.fr/api/resources/*/data/**',
+          query: { geocode_region__exact: 'unknown' }
+        },
+        { statusCode: 500, body: 'Internal Server Error', delay: 1000 }
+      ).as('unknownData')
       cy.visit(`/indicators/${indicator.id}?mesh=region&territory=unknown`)
       cy.get('#viz-mesh-select').should('have.value', 'region')
-      cy.wait('@regionData')
-        .its('request.url')
-        .should('include', 'geocode_region__exact=84')
+      cy.contains('Auvergne-Rhône-Alpes - 84').should('be.visible')
+      cy.wait('@unknownData')
+      cy.contains('Erreur lors du chargement').should('not.exist')
+      cy.contains(
+        'Aucune donnée disponible pour le territoire sélectionné.'
+      ).should('be.visible')
       cy.location('search').should('eq', '?mesh=region&territory=unknown')
     })
 
