@@ -122,6 +122,77 @@ describe('Indicator Viz', () => {
     })
   })
 
+  describe('Deep link', () => {
+    const setup = () => {
+      const indicatorWithViz = createIndicator(
+        {},
+        { enable_visualization: true }
+      )
+      const frResource = createIndicatorResource('fr')
+      const regionResource = createIndicatorResource('region')
+      cy.mockDatasetAndRelatedObjects(indicatorWithViz, [
+        frResource,
+        regionResource
+      ])
+      cy.intercept(
+        'GET',
+        `https://tabular-api*.data.gouv.fr/api/resources/${regionResource.id}/data/**`,
+        { statusCode: 200, body: { data: [] } }
+      ).as('regionData')
+      cy.intercept(
+        'GET',
+        `https://tabular-api*.data.gouv.fr/api/resources/${frResource.id}/data/**`,
+        { statusCode: 200, body: { data: [] } }
+      ).as('frData')
+      return indicatorWithViz
+    }
+
+    it('should preselect mesh and territory from the URL', () => {
+      const indicator = setup()
+      cy.visit(`/indicators/${indicator.id}?mesh=region&territory=53`)
+      cy.get('#viz-mesh-select').should('have.value', 'region')
+      cy.contains('Bretagne - 53').should('be.visible')
+      cy.wait('@regionData')
+        .its('request.url')
+        .should('include', 'geocode_region__exact=53')
+      cy.location('search').should('eq', '?mesh=region&territory=53')
+    })
+
+    it('should fall back to the first territory without rewriting the URL', () => {
+      const indicator = setup()
+      cy.visit(`/indicators/${indicator.id}?mesh=region&territory=unknown`)
+      cy.get('#viz-mesh-select').should('have.value', 'region')
+      cy.wait('@regionData')
+        .its('request.url')
+        .should('include', 'geocode_region__exact=84')
+      cy.location('search').should('eq', '?mesh=region&territory=unknown')
+    })
+
+    it('should fall back to the first mesh for an unknown mesh', () => {
+      const indicator = setup()
+      cy.visit(`/indicators/${indicator.id}?mesh=unknown`)
+      cy.get('#viz-mesh-select').should('have.value', 'fr')
+      cy.wait('@frData')
+    })
+
+    it('should not write the URL on load', () => {
+      const indicator = setup()
+      cy.visit(`/indicators/${indicator.id}`)
+      cy.wait('@frData')
+      cy.location('search').should('eq', '')
+    })
+
+    it('should write the URL on user changes', () => {
+      const indicator = setup()
+      cy.visit(`/indicators/${indicator.id}`)
+      cy.wait('@frData')
+      cy.get('#viz-mesh-select').select('region')
+      cy.location('search').should('eq', '?mesh=region&territory=84')
+      cy.get('#viz-mesh-select').select('fr')
+      cy.location('search').should('eq', '?mesh=fr')
+    })
+  })
+
   describe('Resource link', () => {
     it('should open the Fichiers tab instead of the default Prévisualisation tab', () => {
       const indicatorWithViz = createIndicator(

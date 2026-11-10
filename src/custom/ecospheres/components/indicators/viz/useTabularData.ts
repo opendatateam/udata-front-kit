@@ -109,9 +109,21 @@ export function useTabularData(
     }
   }
 
-  watch([selectedIndicatorVizMesh, selectedTerritory], () => fetchData(), {
-    immediate: true
-  })
+  // resource id is watched too: a mesh from the URL is set before resources load
+  const currentResourceId = computed(
+    () =>
+      resources.value.find(
+        (r) =>
+          r.extras['ecospheres-indicateurs']?.maille ===
+          selectedIndicatorVizMesh.value
+      )?.id
+  )
+
+  watch(
+    [selectedIndicatorVizMesh, selectedTerritory, currentResourceId],
+    () => fetchData(),
+    { immediate: true }
+  )
 
   return { rawData, availableAxisValues, isLoading, error }
 }
