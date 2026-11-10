@@ -1,12 +1,12 @@
 import type { LocationQueryValue } from 'vue-router'
 import type { IndicatorMesh } from '../../../model/indicator'
-import { GEOCOLUMNS } from './enums'
+import { GEOCOLUMNS, MESHES } from './enums'
 
-const hasTerritory = (mesh: string) =>
-  Object.prototype.hasOwnProperty.call(GEOCOLUMNS, mesh)
+// territorial meshes are those filterable by geocode
+const needsTerritory = (mesh: string) => Object.keys(GEOCOLUMNS).includes(mesh)
 
 const isMesh = (value: string | undefined): value is IndicatorMesh =>
-  value === 'fr' || value === 'commune' || (!!value && hasTerritory(value))
+  value === 'commune' || MESHES.some(([mesh]) => mesh === value)
 
 const queryString = (value: LocationQueryValue | LocationQueryValue[]) =>
   typeof value === 'string' ? value : undefined
@@ -20,7 +20,9 @@ export function useIndicatorVizParams(defaultMesh: IndicatorMesh = 'fr') {
   const initialMesh = isMesh(queryMesh) ? queryMesh : defaultMesh
   const mesh = ref<IndicatorMesh>(initialMesh)
   const territory = ref(
-    hasTerritory(initialMesh) ? (queryString(route.query.territory) ?? '') : ''
+    needsTerritory(initialMesh)
+      ? (queryString(route.query.territory) ?? '')
+      : ''
   )
 
   const touched = ref(false)
@@ -50,12 +52,12 @@ export function useIndicatorVizParams(defaultMesh: IndicatorMesh = 'fr') {
   watch([mesh, territory], async ([newMesh, newTerritory]) => {
     if (!touched.value) return
     // skip the transient state while territory options load
-    if (hasTerritory(newMesh) && !newTerritory) return
+    if (needsTerritory(newMesh) && !newTerritory) return
     await router.replace({
       query: {
         ...route.query,
         mesh: newMesh,
-        territory: hasTerritory(newMesh) ? newTerritory : undefined
+        territory: needsTerritory(newMesh) ? newTerritory : undefined
       }
     })
   })
