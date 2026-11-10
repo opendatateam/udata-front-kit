@@ -125,6 +125,22 @@ describe('Datasets - List Page', () => {
     cy.get('.search-results').should('contain', 'Filtered Dataset')
   })
 
+  it('should filter by tag from the URL and show it in the keyword filter', () => {
+    cy.expectActionToCallApi(
+      () => cy.visit('/datasets?tag=climat'),
+      'datasets',
+      { tag: 'climat' },
+      { drain: false }
+    )
+
+    // Keyword filter lives in the collapsed advanced section
+    cy.contains('button', 'Filtres avancés').click()
+    cy.contains('label.fr-label', 'Mots clés')
+      .closest('.fr-input-group')
+      .find('input')
+      .should('have.value', 'climat')
+  })
+
   it('should display indicator datasets with the Indicateur badge', () => {
     // Create a mix of regular datasets and indicator datasets
     const regularDataset = datasetFactory.one({

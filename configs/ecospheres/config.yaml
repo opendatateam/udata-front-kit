@@ -411,6 +411,10 @@ pages:
       - *filter_badge
       - *filter_org
       - *filter_inspire
+      - id: tag
+        name: Mot-clé
+        type: tag
+        advanced: true
   # INDICATORS
   indicators:
     object_type: datasets # indicators are datasets filtered by universe_query
