@@ -126,6 +126,7 @@ describe('Datasets - List Page', () => {
   })
 
   it('should filter by tag from the URL and show it in the keyword filter', () => {
+    cy.mockTagsSuggest()
     cy.expectActionToCallApi(
       () => cy.visit('/datasets?tag=climat'),
       'datasets',
