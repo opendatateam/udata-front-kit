@@ -43,15 +43,11 @@ const resourceExternalUrl = buildResourceExternalUrl(
   datasetForExplorer,
   props.fromRouteName
 )
-// Absolute URL needed for upstream component.
-const exploreTo = (resource: Resource) =>
-  `${window.location.origin}${
-    router.resolve({
-      name: 'explore',
-      params: { item_id: props.dataset.slug },
-      query: { resource_id: resource.id, from: props.fromRouteName }
-    }).href
-  }`
+const exploreTo = (resource: Resource) => ({
+  name: 'explore',
+  params: { item_id: props.dataset.slug },
+  query: { resource_id: resource.id, from: props.fromRouteName }
+})
 
 // Without this, a rejected async resource fetch leaves the Suspense fallback spinning forever.
 const loadError = ref(false)
@@ -68,6 +64,7 @@ onErrorCaptured(() => {
     message="Une erreur est survenue lors du chargement des ressources."
   />
   <Suspense v-else>
+    <!-- @vue-expect-error exploreTo accepts route locations at runtime, typed upstream in datagouv/cdata#1341 -->
     <DatagouvfrResourceExplorer
       :dataset="datasetForExplorer"
       :fullscreen="fullscreen"
