@@ -13,7 +13,7 @@ import SidebarOwner from '@/components/SidebarOwner.vue'
 import TabsWithCounts from '@/components/TabsWithCounts.vue'
 import VIconDsfr from '@/components/VIconDsfr.vue'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
-import { useCurrentPageConf, useRouteParamsAsString } from '@/router/utils'
+import { useCurrentPageConf, useRouteItem } from '@/router/utils'
 import { useDataserviceStore } from '@/store/DataserviceStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { useAsyncComponent } from '@/utils/component'
@@ -22,16 +22,32 @@ import { useMeta } from '@/utils/seo'
 import { Tab, tabIds, useRoutedTabs } from '@/utils/tabs'
 import { OpenApiViewer } from '@datagouv/components-next'
 
-const route = useRouteParamsAsString()
-const dataserviceId = route.params.item_id
-
 const dataserviceStore = useDataserviceStore()
 
-const dataservice = computed(() => dataserviceStore.get(dataserviceId))
 const datasets: Ref<DatasetV2[]> = ref([])
 const currentPage = ref(1)
+
+const dataserviceIdOrSlug = useRouteItem(
+  (idOrSlug) =>
+    dataserviceStore.load(idOrSlug, {
+      toasted: false,
+      redirectNotFound: true
+    }),
+  {
+    onLoaded: () => {
+      datasets.value = []
+      currentPage.value = 1
+      loadDatasets()
+    }
+  }
+)
+
+const dataservice = computed(() =>
+  dataserviceStore.get(dataserviceIdOrSlug.value)
+)
+// totals are stored by id, while the route can hold a slug
 const total = computed(
-  () => dataserviceStore.datasetsTotals[dataserviceId]?.total || 0
+  () => dataserviceStore.datasetsTotals[dataservice.value?.id ?? '']?.total || 0
 )
 
 const { pageKey, meta, pageConf } = useCurrentPageConf()
@@ -44,15 +60,19 @@ const showDiscussions = pageConf.resources_tabs.discussions.display
 const isSwaggerOpened = ref(false)
 
 const pagination = computed(() =>
-  dataserviceStore.getDatasetsPagination(dataserviceId)
+  dataservice.value
+    ? dataserviceStore.getDatasetsPagination(dataservice.value.id)
+    : []
 )
 
 const loadDatasets = async () => {
+  const current = dataservice.value
   const response = await dataserviceStore.getDatasetsForDataservice(
-    dataservice.value,
+    current,
     currentPage.value
   )
-  if (response) {
+  // skip if the user navigated elsewhere meanwhile
+  if (response && current === dataservice.value) {
     datasets.value = response.data
   }
 }
@@ -118,19 +138,13 @@ useMeta({
   description: () => dataservice.value?.description,
   canonicalUrl: () => dataservice.value?.self_web_url
 })
-
-onMounted(() => {
-  dataserviceStore
-    .load(dataserviceId, { toasted: false, redirectNotFound: true })
-    .then(loadDatasets)
-})
 </script>
 
 <template>
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
-  <GenericContainer v-if="dataservice">
+  <GenericContainer v-if="dataservice" :key="dataservice.id">
     <div class="fr-grid-row fr-grid-row--gutters fr-mb-2w">
       <div class="fr-col-12 fr-col-md-8">
         <h1 class="fr-mb-2v">{{ dataservice.title }}</h1>
