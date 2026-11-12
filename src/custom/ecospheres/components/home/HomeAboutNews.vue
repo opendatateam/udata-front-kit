@@ -51,7 +51,7 @@ onMounted(async () => {
             <ul class="news-list fr-m-0 fr-p-0 fr-mb-4w" role="list">
               <li v-for="item in news" :key="item.id" class="fr-pb-1w">
                 <p v-if="item.published" class="news-date fr-text--sm">
-                  {{ formatDate(item.published, true) }}
+                  {{ formatDate(item.published, 'short') }}
                 </p>
                 <RouterLink
                   :to="routeForNewsItem(item)"

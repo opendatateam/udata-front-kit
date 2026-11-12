@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import type { DsfrTabItemProps } from '@gouvminint/vue-dsfr'
 
-export type TabWithCount = DsfrTabItemProps & {
+import { tabIds } from '@/utils/tabs'
+
+// ids are derived from the slug by tabIds
+export type TabWithCount = Omit<DsfrTabItemProps, 'tabId' | 'panelId'> & {
+  slug: string
   title: string
   count?: number
 }
@@ -19,9 +23,8 @@ const activeTab = defineModel<number>({ required: true })
     <template #tab-items>
       <DsfrTabItem
         v-for="(tab, index) in tabs"
-        :key="tab.tabId"
-        :tab-id="tab.tabId"
-        :panel-id="tab.panelId"
+        :key="tab.slug"
+        v-bind="tabIds(tab.slug)"
         :icon="tab.icon"
         @click="activeTab = index"
         @next="activeTab = index === tabs.length - 1 ? 0 : index + 1"

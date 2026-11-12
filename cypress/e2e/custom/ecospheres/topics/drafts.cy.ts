@@ -98,7 +98,7 @@ describe('Topics - Drafts Page', () => {
         cy.wait('@get_drafts')
 
         mockDraftsApi([drafts[0]])
-        cy.get('.fr-search-bar input').type('test{enter}')
+        cy.get('#main-content .fr-search-bar input').type('test{enter}')
         cy.wait('@get_drafts').then((interception) => {
           expect(interception.request.url).to.match(/[?&]q=test(?:&|$)/)
         })
@@ -111,7 +111,7 @@ describe('Topics - Drafts Page', () => {
         cy.wait('@get_drafts')
 
         mockDraftsApi([drafts[0]])
-        cy.get('.fr-search-bar input').type('abc')
+        cy.get('#main-content .fr-search-bar input').type('abc')
         cy.wait('@get_drafts').then((interception) => {
           expect(interception.request.url).to.match(/[?&]q=abc(?:&|$)/)
         })
@@ -123,7 +123,7 @@ describe('Topics - Drafts Page', () => {
         cy.visit('/admin/bouquets/drafts')
         cy.wait('@get_drafts')
 
-        cy.get('.fr-search-bar input').type('ab')
+        cy.get('#main-content .fr-search-bar input').type('ab')
         cy.get('@get_drafts.all').should('have.length', 1)
       })
 
@@ -133,7 +133,7 @@ describe('Topics - Drafts Page', () => {
         cy.wait('@get_drafts')
 
         mockDraftsApi([])
-        cy.get('.fr-search-bar input').type('xyz{enter}')
+        cy.get('#main-content .fr-search-bar input').type('xyz{enter}')
         cy.wait('@get_drafts')
         cy.contains('Aucun brouillon ne correspond à votre recherche.').should(
           'be.visible'
@@ -147,11 +147,11 @@ describe('Topics - Drafts Page', () => {
         cy.wait('@get_drafts')
 
         mockDraftsApi([])
-        cy.get('.fr-search-bar input').type('abc')
+        cy.get('#main-content .fr-search-bar input').type('abc')
         cy.wait('@get_drafts')
 
         mockDraftsApi(drafts)
-        cy.get('.fr-search-bar input').clear()
+        cy.get('#main-content .fr-search-bar input').clear()
         cy.wait('@get_drafts').then((interception) => {
           expect(interception.request.url).not.to.match(/[?&]q=/)
         })

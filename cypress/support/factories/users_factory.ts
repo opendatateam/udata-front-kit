@@ -1,5 +1,19 @@
-import type { User } from '@datagouv/components-next'
+import type { User, UserReference } from '@datagouv/components-next'
 import { build } from 'mimicry-js'
+
+export const UserReferenceFactory = build<UserReference>({
+  fields: {
+    class: 'User',
+    id: 'default-user-id',
+    first_name: 'Default',
+    last_name: 'User',
+    slug: 'default-user',
+    page: '',
+    uri: '',
+    avatar: '',
+    avatar_thumbnail: ''
+  }
+})
 
 export const UserFactory = build<User>({
   fields: {

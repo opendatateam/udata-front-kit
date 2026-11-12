@@ -151,7 +151,7 @@ const handleDelete = async (page: CmsPage) => {
                       {{ page.published ? 'Publié' : 'Brouillon' }}
                     </span>
                   </td>
-                  <td>{{ formatDate(page.last_modified, true) }}</td>
+                  <td>{{ formatDate(page.last_modified, 'short') }}</td>
                   <td>
                     <div class="fr-grid-row fr-grid-row--middle flex-gap">
                       <RouterLink

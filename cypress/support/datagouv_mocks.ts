@@ -24,10 +24,11 @@ export const datagouvHost = () =>
 
 export const datagouvUrlRegex = (
   resourceName: string,
-  resourceId: string | null = null
+  resourceId: string | null = null,
+  queryParams: string | null = null
 ) => {
   return new RegExp(
-    `.*${datagouvHost()}/api/\\d/${resourceName}${resourceId ? `/${resourceId}` : ''}.*`
+    `.*${datagouvHost()}/api/\\d/${resourceName}${resourceId ? `/${resourceId}` : ''}${queryParams ? `/\\?${queryParams}` : ''}.*`
   )
 }
 
@@ -246,6 +247,17 @@ Cypress.Commands.add('mockResources', (datasetId, data = []) => {
   }).as(`get_resources_${datasetId}`)
 })
 
+Cypress.Commands.add('mockDatasetNetworks', (datasetId, topics = []) => {
+  cy.intercept(
+    'GET',
+    datagouvUrlRegex('topics', null, `dataset=${datasetId}`),
+    {
+      statusCode: 200,
+      body: datagouvResponseBuilder(topics)
+    }
+  ).as(`get_dataset_networks_${datasetId}`)
+})
+
 Cypress.Commands.add('mockMetricsApi', (datasetId) => {
   cy.intercept(
     'GET',
@@ -315,5 +327,6 @@ Cypress.Commands.add(
     cy.mockDatagouvObjectList('dataservices', dataservices)
     cy.mockResources(dataset.id, resources)
     cy.mockMetricsApi(dataset.id)
+    cy.mockDatasetNetworks(dataset.id)
   }
 )

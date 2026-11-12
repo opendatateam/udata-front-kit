@@ -12,24 +12,42 @@ import SidebarList from '@/components/SidebarList.vue'
 import SidebarOwner from '@/components/SidebarOwner.vue'
 import TabsWithCounts from '@/components/TabsWithCounts.vue'
 import VIconDsfr from '@/components/VIconDsfr.vue'
-import { useCurrentPageConf, useRouteParamsAsString } from '@/router/utils'
+import type { BreadcrumbItem } from '@/model/breadcrumb'
+import { useCurrentPageConf, useRouteItem } from '@/router/utils'
 import { useDataserviceStore } from '@/store/DataserviceStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { useAsyncComponent } from '@/utils/component'
 import { useLabels } from '@/utils/labels'
 import { useMeta } from '@/utils/seo'
+import { Tab, tabIds, useRoutedTabs } from '@/utils/tabs'
 import { OpenApiViewer } from '@datagouv/components-next'
-
-const route = useRouteParamsAsString()
-const dataserviceId = route.params.item_id
 
 const dataserviceStore = useDataserviceStore()
 
-const dataservice = computed(() => dataserviceStore.get(dataserviceId))
 const datasets: Ref<DatasetV2[]> = ref([])
 const currentPage = ref(1)
+
+const dataserviceIdOrSlug = useRouteItem(
+  (idOrSlug) =>
+    dataserviceStore.load(idOrSlug, {
+      toasted: false,
+      redirectNotFound: true
+    }),
+  {
+    onLoaded: () => {
+      datasets.value = []
+      currentPage.value = 1
+      loadDatasets()
+    }
+  }
+)
+
+const dataservice = computed(() =>
+  dataserviceStore.get(dataserviceIdOrSlug.value)
+)
+// totals are stored by id, while the route can hold a slug
 const total = computed(
-  () => dataserviceStore.datasetsTotals[dataserviceId]?.total || 0
+  () => dataserviceStore.datasetsTotals[dataservice.value?.id ?? '']?.total || 0
 )
 
 const { pageKey, meta, pageConf } = useCurrentPageConf()
@@ -42,15 +60,19 @@ const showDiscussions = pageConf.resources_tabs.discussions.display
 const isSwaggerOpened = ref(false)
 
 const pagination = computed(() =>
-  dataserviceStore.getDatasetsPagination(dataserviceId)
+  dataservice.value
+    ? dataserviceStore.getDatasetsPagination(dataservice.value.id)
+    : []
 )
 
 const loadDatasets = async () => {
+  const current = dataservice.value
   const response = await dataserviceStore.getDatasetsForDataservice(
-    dataservice.value,
+    current,
     currentPage.value
   )
-  if (response) {
+  // skip if the user navigated elsewhere meanwhile
+  if (response && current === dataservice.value) {
     datasets.value = response.data
   }
 }
@@ -61,32 +83,30 @@ const goToPage = (page: number) => {
 }
 
 const links = computed(() => {
-  const breadcrumbs = [{ to: '/', text: 'Accueil' }]
+  const breadcrumbs: BreadcrumbItem[] = [{ to: '/', text: 'Accueil' }]
   breadcrumbs.push({
-    to: pageConf.list_all === true ? `/${pageKey || 'dataservices'}` : '',
+    to: pageConf.list_all === true ? { name: pageKey || 'dataservices' } : '',
     text: pageConf.breadcrumb_title || pageConf.title
   })
   breadcrumbs.push({ to: '', text: dataservice.value?.title ?? '' })
   return breadcrumbs
 })
 
-const tabs = computed(() => [
-  {
-    title: 'Données',
-    count: total.value,
-    tabId: 'tab-0',
-    panelId: 'tab-content-0'
-  },
-  {
-    title: 'Discussions',
-    count: dataservice.value?.metrics.discussions ?? 0,
-    tabId: 'tab-1',
-    panelId: 'tab-content-1'
-  },
-  { title: 'Informations', tabId: 'tab-2', panelId: 'tab-content-2' }
-])
+const discussionsList =
+  useTemplateRef<InstanceType<typeof DiscussionsList>>('discussionsList')
 
-const activeTab = ref(0)
+const { tabs, activeIndex } = useRoutedTabs(() => [
+  { slug: Tab.DATASETS, title: 'Données', count: total.value },
+  {
+    slug: Tab.DISCUSSIONS,
+    title: 'Discussions',
+    count:
+      discussionsList.value?.total ??
+      dataservice.value?.metrics.discussions ??
+      0
+  },
+  { slug: Tab.INFORMATIONS, title: 'Informations' }
+])
 
 const description = computed(() => descriptionFromMarkdown(dataservice))
 
@@ -118,19 +138,13 @@ useMeta({
   description: () => dataservice.value?.description,
   canonicalUrl: () => dataservice.value?.self_web_url
 })
-
-onMounted(() => {
-  dataserviceStore
-    .load(dataserviceId, { toasted: false, redirectNotFound: true })
-    .then(loadDatasets)
-})
 </script>
 
 <template>
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
   </div>
-  <GenericContainer v-if="dataservice">
+  <GenericContainer v-if="dataservice" :key="dataservice.id">
     <div class="fr-grid-row fr-grid-row--gutters fr-mb-2w">
       <div class="fr-col-12 fr-col-md-8">
         <h1 class="fr-mb-2v">{{ dataservice.title }}</h1>
@@ -155,7 +169,7 @@ onMounted(() => {
           </SidebarItem>
           <!-- last update -->
           <SidebarItem term="Dernière mise à jour">
-            {{ formatDate(dataservice.metadata_modified_at, true) }}
+            {{ formatDate(dataservice.metadata_modified_at, 'short') }}
           </SidebarItem>
           <!-- rate limiting -->
           <SidebarItem v-if="dataservice.rate_limiting" term="Limite d'appels">
@@ -243,13 +257,13 @@ onMounted(() => {
     </div>
 
     <TabsWithCounts
-      v-model="activeTab"
+      v-model="activeIndex"
       class="fr-mt-4w"
       tab-list-name="Groupes d'attributs de l'API"
       :tabs="tabs"
     >
       <!-- Données -->
-      <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0">
+      <DsfrTabContent v-bind="tabIds(Tab.DATASETS)">
         <div id="datasets" class="fr-pb-2w">
           <h2 class="fr-mb-1v subtitle subtitle--uppercase">
             {{ `${total} jeu${total > 1 ? 'x' : ''} de données` }}
@@ -263,7 +277,7 @@ onMounted(() => {
               class="fr-col-12 fr-col-lg-6"
             >
               <CardComponent
-                :show-description="false"
+                :show-description-short="false"
                 :dataset="dataset"
                 :dataset-url="getDatasetPage(dataset.id)"
                 :organization-url="null"
@@ -283,7 +297,7 @@ onMounted(() => {
       </DsfrTabContent>
 
       <!-- Discussions -->
-      <DsfrTabContent panel-id="tab-content-1" tab-id="tab-1">
+      <DsfrTabContent v-bind="tabIds(Tab.DISCUSSIONS)">
         <SimpleBanner
           v-if="!pageConf.resources_tabs.discussions.create"
           type="primary"
@@ -308,13 +322,14 @@ onMounted(() => {
         </SimpleBanner>
         <DiscussionsList
           v-if="showDiscussions"
+          ref="discussionsList"
           :subject="dataservice"
           empty-message="Il n'y a pas encore de discussion pour cette API."
         />
       </DsfrTabContent>
 
       <!-- Informations -->
-      <DsfrTabContent panel-id="tab-content-2" tab-id="tab-2">
+      <DsfrTabContent v-bind="tabIds(Tab.INFORMATIONS)">
         <div class="fr-pb-3w">
           <h2 class="fr-mb-3w subtitle subtitle--uppercase">
             Informations techniques

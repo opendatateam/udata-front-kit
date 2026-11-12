@@ -1,6 +1,7 @@
 import type { Indicator } from '@/custom/ecospheres/model/indicator'
 import type { Dataservice, Reuse } from '@datagouv/components-next'
 import { dataserviceFactory } from 'cypress/support/factories/dataservices_factory'
+import { discussionFactory } from 'cypress/support/factories/discussions_factory'
 import { resourceFactory } from 'cypress/support/factories/resources_factory'
 import { reuseFactory } from 'cypress/support/factories/reuses_factory'
 import { createIndicator } from './support'
@@ -49,6 +50,25 @@ describe('Indicator Detail View', () => {
     })
   })
 
+  describe('Beta callout', () => {
+    it('should display the review callout for a beta indicator', () => {
+      const betaIndicator = createIndicator({
+        tags: ['ecospheres-indicateurs', 'ecospheres-indicateurs-beta']
+      })
+      cy.mockDatasetAndRelatedObjects(betaIndicator)
+      cy.visit(`/indicators/${betaIndicator.id}`)
+      cy.contains('.fr-callout', 'Indicateur en cours de revue').should(
+        'be.visible'
+      )
+    })
+
+    it('should not display the review callout for a regular indicator', () => {
+      cy.visit(`/indicators/${indicator.id}`)
+      cy.contains(indicator.title).should('be.visible')
+      cy.contains('Indicateur en cours de revue').should('not.exist')
+    })
+  })
+
   describe('Informations Tab', () => {
     beforeEach(() => {
       cy.visit(`/indicators/${indicator.id}`)
@@ -56,7 +76,7 @@ describe('Indicator Detail View', () => {
     })
 
     it('should display all metadata', () => {
-      cy.get('#tab-content-infos').within(() => {
+      cy.get('#tab-content-informations').within(() => {
         // Couverture géographique
         cy.contains('Couverture géographique').should('be.visible')
         cy.contains('Île-de-France').should('be.visible')
@@ -167,13 +187,15 @@ describe('Indicator Detail View', () => {
         }
       )
       cy.mockDatasetAndRelatedObjects(countsIndicator, resourceFactory.many(5))
+      // Differs from metrics.discussions: the tab shows the loaded list's total
+      cy.mockDatagouvObjectList('discussions', discussionFactory.many(3))
 
       cy.visit(`/indicators/${countsIndicator.id}`)
 
       cy.contains('button', 'Fichiers (5)').should('be.visible')
       cy.contains('button', 'Sources (2)').should('be.visible')
       cy.contains('button', 'Réutilisations et API (7)').should('be.visible')
-      cy.contains('button', 'Discussions (9)').should('be.visible')
+      cy.contains('button', 'Discussions (3)').should('be.visible')
       cy.contains('button', 'Informations')
         .find('sup.tab-count')
         .should('not.exist')

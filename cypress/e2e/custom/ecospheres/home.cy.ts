@@ -46,4 +46,23 @@ describe('Home Page Ecologie', () => {
       cy.url().should('include', '/bouquets/')
     })
   })
+
+  describe('Catalogues partenaires', () => {
+    // networks can be disabled per environment (e.g. prod)
+    before(function () {
+      if (!Cypress.env('siteConfig').networks) this.skip()
+    })
+
+    it('should link to the internal partner network pages', () => {
+      cy.visit('/')
+
+      cy.contains('Catalogues partenaires').should('be.visible')
+      cy.get('.network-catalog-link[href="/contributors/sieau"]').should(
+        'be.visible'
+      )
+      cy.get('.network-catalog-link[href="/contributors/simm"]').should(
+        'be.visible'
+      )
+    })
+  })
 })

@@ -39,9 +39,10 @@ const factorRef = toRef(props, 'factor')
       name: 'datasets_detail',
       params: { item_id: datasetContent.id }
     }"
-    :show-description="false"
+    :show-description-short="false"
     :organization-url="null"
-    class="dataset-card fr-my-2w fr-mx-0"
+    title-tag="p"
+    class="fr-my-2w fr-mx-0"
   />
   <DsfrAlert
     v-if="factor.remoteDeleted"
@@ -56,13 +57,3 @@ const factorRef = toRef(props, 'factor')
     </div>
   </DsfrAlert>
 </template>
-
-<style scoped>
-/* fix overflow from "mis à jour" text in DatasetCard */
-:deep(h4 + div) {
-  flex-wrap: wrap;
-}
-.dataset-card {
-  background-color: var(--background-default-grey, #fff);
-}
-</style>

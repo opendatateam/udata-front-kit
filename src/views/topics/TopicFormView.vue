@@ -75,6 +75,8 @@ const sortedErrors = computed(() =>
 )
 
 const errorMsg = ref('')
+// title source for the page meta, kept apart from the live form value
+const loadedName = ref<string>()
 
 const isReadyForForm = computed(() => {
   const extras = topic.value?.extras?.[useSiteId()]
@@ -182,12 +184,12 @@ const onSubmit = async () => {
 useMeta({
   title: () => {
     if (props.isCreate && routeQuery.clone != null) {
-      return topic.value.name
-        ? `Cloner ${labels.articles.le} ${labels.singular} ${topic.value.name}`
+      return loadedName.value
+        ? `Cloner ${labels.articles.le} ${labels.singular} ${loadedName.value}`
         : undefined
     } else if (!props.isCreate) {
-      return topic.value.name
-        ? `Éditer ${labels.articles.le} ${labels.singular} ${topic.value.name}`
+      return loadedName.value
+        ? `Éditer ${labels.articles.le} ${labels.singular} ${loadedName.value}`
         : undefined
     }
     return `Ajouter ${labels.articles.un} ${labels.singular}`
@@ -202,6 +204,7 @@ onMounted(() => {
     useTopicStore()
       .load(routeQuery.clone || routeParams.item_id)
       .then((remoteTopic) => {
+        loadedName.value = remoteTopic.name
         if (routeQuery.clone != null) {
           cloneTopic(remoteTopic, routeQuery['keep-datasets'] === '1').then(
             (newTopic) => {

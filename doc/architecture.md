@@ -159,7 +159,7 @@ Les filtres se répartissent en deux catégories selon la façon dont ils sont t
 | `select`              | Liste déroulante de valeurs prédéfinies |
 | `organization_custom` | Sélection d'une organisation            |
 
-Le filtre `organization_custom` ne déclare pas de `values` : la liste des organisations est chargée dynamiquement depuis l'URL configurée sous `organizations.<pageKey>` dans `config.yaml`. On peut ainsi filtrer la liste des organisations par rapport à l'univers du site, vs le filtre natif `organization` de data.gouv.fr qui travaille sur toutes les organisations.
+Le filtre `organization_custom` ne déclare pas de `values` : la liste des organisations est chargée dynamiquement depuis l'URL configurée sous `organizations.<pageKey>` (ou, pour une page de réseau, `networks.entries.<slug>.organizations.<subpath>`) dans `config.yaml`. On peut ainsi filtrer la liste des organisations par rapport à l'univers du site, vs le filtre natif `organization` de data.gouv.fr qui travaille sur toutes les organisations.
 
 ### Options avancées
 
