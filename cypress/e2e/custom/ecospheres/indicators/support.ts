@@ -2,8 +2,10 @@ import type {
   Indicator,
   IndicatorExtras
 } from '@/custom/ecospheres/model/indicator'
+import type { Resource } from '@/model/resource'
 import { datasetFactory } from 'cypress/support/factories/datasets_factory'
 import { resourceFactory } from 'cypress/support/factories/resources_factory'
+import type { StaticResponse } from 'cypress/types/net-stubbing'
 
 // Helper to create an indicator from a dataset
 export function createIndicator(
@@ -100,4 +102,16 @@ export function createIndicatorResource(maille: string = 'region') {
       }
     }
   })
+}
+
+// mocks the tabular API data endpoint of a resource, empty by default
+export function interceptTabularData(
+  resource: Resource,
+  response: StaticResponse = { statusCode: 200, body: { data: [] } }
+) {
+  return cy.intercept(
+    'GET',
+    `https://tabular-api*.data.gouv.fr/api/resources/${resource.id}/data/**`,
+    response
+  )
 }
