@@ -195,6 +195,13 @@ Cypress.Commands.add('mockSpatialZonesSuggest', () => {
   }).as('get_spatial_zones_suggest')
 })
 
+Cypress.Commands.add('mockTagsSuggest', () => {
+  cy.intercept('GET', datagouvUrlRegex('tags/suggest'), {
+    statusCode: 200,
+    body: [{ text: 'climat' }, { text: 'qualite-air' }]
+  }).as('get_tags_suggest')
+})
+
 Cypress.Commands.add('mockSpatialZone', () => {
   cy.intercept('GET', datagouvUrlRegex('spatial/zone/fr:commune:75056'), {
     statusCode: 200,

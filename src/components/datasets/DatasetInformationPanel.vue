@@ -12,11 +12,13 @@ import {
 } from '@datagouv/components-next'
 
 import { storeToRefs } from 'pinia'
+import { useRouter } from 'vue-router'
 import DatasetTemporalitySection from './DatasetTemporalitySection.vue'
 
 import LeafletMap from './LeafletMap.vue'
 
 import config from '@/config'
+import { useCurrentPageConf } from '@/router/utils'
 import { useUserStore } from '@/store/UserStore'
 
 defineProps<{
@@ -26,6 +28,19 @@ defineProps<{
 const userStore = useUserStore()
 const { isAdmin } = storeToRefs(userStore)
 
+const router = useRouter()
+const { pageKey, pageConf } = useCurrentPageConf()
+
+// Link tags to the local list page when it supports tag filtering, else keep the data.gouv.fr default
+const hasLocalTagSearch =
+  pageConf.list_all &&
+  pageConf.filters.some((f) => f.type === 'tag') &&
+  router.hasRoute(pageKey)
+
+const tagUrl = hasLocalTagSearch
+  ? (tag: string) => ({ name: pageKey, query: { tag } })
+  : undefined
+
 const goToHarvester = (sourceId: string) => {
   const url = `${config.datagouvfr.base_url}/admin/harvesters/${sourceId}`
   window.location.href = url
@@ -34,7 +49,8 @@ const goToHarvester = (sourceId: string) => {
 
 <template>
   <div class="divide-y">
-    <DatasetInformationSection :dataset="dataset" />
+    <!-- @vue-expect-error tagUrl accepts route locations at runtime, typed upstream in datagouv/cdata#1341 -->
+    <DatasetInformationSection :dataset="dataset" :tag-url="tagUrl" />
     <DatasetTemporalitySection :dataset="dataset" />
     <DatasetSpatialSection :dataset="dataset">
       <template #map="{ geojson }">
