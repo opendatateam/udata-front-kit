@@ -53,7 +53,8 @@ const {
   mesh: selectedIndicatorVizMesh,
   territory: selectedTerritory,
   meshModel,
-  setMesh
+  setMesh,
+  touch
 } = useIndicatorVizParams()
 
 watch(
@@ -159,6 +160,7 @@ onMounted(async () => {
           <IndicatorVizTerritorySelect
             v-model="selectedTerritory"
             :mesh="selectedIndicatorVizMesh"
+            @select="touch"
           />
         </div>
         <IndicatorVizAxesFilter
