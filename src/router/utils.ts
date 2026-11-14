@@ -2,6 +2,7 @@ import config from '@/config'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
 import {
   CUSTOM_FILTER_TYPES,
+  type CmsConfig,
   type CustomFilterType,
   type NetworkConf,
   type OrganizationsConfig,
@@ -9,6 +10,7 @@ import {
   type PageListConf,
   type PageObjectType
 } from '@/model/config'
+import { hasCmsAccess } from '@/utils/cmsAccess'
 import {
   networkBaseRouteName,
   networkDefaultPage,
@@ -594,6 +596,63 @@ export const useContributorsRoutes = (
       useNetworkRoutes(slug, network, path)
     )
   ]
+}
+
+export const useCmsRoutes = (cms: CmsConfig): RouteRecordRaw[] => {
+  const adminRoutes: RouteRecordRaw = {
+    path: '/admin/cms',
+    // there's no separate CMS permission — edit rights on the CMS topic is the guard
+    beforeEnter: async () =>
+      (await hasCmsAccess()) ? true : { name: 'not_found' },
+    children: [
+      {
+        path: '',
+        name: 'cms_list',
+        component: async () => await import('@/views/cms/CmsPageListView.vue'),
+        meta: { requiresAuth: true, title: 'Pages CMS' }
+      },
+      {
+        path: 'add',
+        name: 'cms_add',
+        component: async () => await import('@/views/cms/CmsPageFormView.vue'),
+        meta: { requiresAuth: true, title: 'Nouvelle page' }
+      },
+      {
+        path: 'view/:id',
+        name: 'cms_view',
+        component: async () => await import('@/views/cms/CmsPageView.vue'),
+        meta: { requiresAuth: true, title: 'Aperçu' }
+      },
+      {
+        path: 'edit/:id',
+        name: 'cms_edit',
+        component: async () => await import('@/views/cms/CmsPageFormView.vue'),
+        meta: { requiresAuth: true, title: 'Modifier la page' }
+      }
+    ]
+  }
+  // known pages, statically mapped to a fixed route
+  const pageRoutes: RouteRecordRaw[] = (cms.pages ?? []).map(
+    (p): RouteRecordRaw => ({
+      path: p.route,
+      component: async () => await import('@/views/cms/CmsPageView.vue'),
+      props: { id: p.id },
+      meta: { title: p.title }
+    })
+  )
+  // self-service pages, resolved by slug so no deploy is needed to add one
+  const categoryRoutes: RouteRecordRaw[] = (cms.categories ?? []).map(
+    (c): RouteRecordRaw => ({
+      path: `${c.route_prefix}/:slug`,
+      component: async () => await import('@/views/cms/CmsPageView.vue'),
+      props: (route: RouteLocationNormalizedLoaded) => ({
+        id: route.params.slug as string,
+        categoryId: c.id
+      }),
+      meta: { title: c.label }
+    })
+  )
+  return [adminRoutes, ...pageRoutes, ...categoryRoutes]
 }
 
 export const useRouteMeta = () => {

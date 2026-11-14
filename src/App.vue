@@ -15,11 +15,15 @@ import {
 } from './model/injectionKeys'
 import { useUserStore } from './store/UserStore'
 import { fromMarkdown } from './utils'
+import { useCmsAccess } from './utils/cmsAccess'
 import { useWebsiteConfig } from './utils/config'
 
 const userStore = useUserStore()
 const route = useRoute()
 const isNoticeClosed = ref(false)
+
+// only shows the shortcut to users who'll actually be let into the admin route
+const canManageCms = useCmsAccess()
 
 const skipLinks: SkipLinksProps['links'] = [
   {
@@ -65,6 +69,16 @@ const quickLinks = computed(() => {
         }
       : null
 
+  const cmsShortcut =
+    config.website.cms?.enabled && canManageCms.value
+      ? {
+          label: 'CMS',
+          icon: 'fr-icon-article-line',
+          to: '/admin/cms',
+          iconRight: true
+        }
+      : null
+
   const userProfile = isLoggedIn.value
     ? {
         button: true,
@@ -86,7 +100,13 @@ const quickLinks = computed(() => {
       }
     : null
 
-  const buttons = [userProfile, headerButton, adminShorcut, logLink]
+  const buttons = [
+    userProfile,
+    headerButton,
+    cmsShortcut,
+    adminShorcut,
+    logLink
+  ]
 
   return buttons.filter((button) => button !== null)
 })
