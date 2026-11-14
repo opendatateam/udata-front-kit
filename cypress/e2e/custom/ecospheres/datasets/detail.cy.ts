@@ -88,6 +88,26 @@ describe('Dataset Page - Tab counts', () => {
   })
 })
 
+describe('Dataset Page - Keywords', () => {
+  it('should link keywords to the local datasets list filtered by tag', () => {
+    cy.mockMatomo()
+    cy.mockStaticDatagouv()
+
+    const dataset = datasetFactory.one({
+      overrides: { tags: ['climat', 'qualite-air'] }
+    })
+    cy.mockDatasetAndRelatedObjects(dataset)
+
+    cy.visit(`/datasets/${dataset.id}`)
+    cy.wait(`@get_datasets_${dataset.id}`)
+    cy.contains('button', 'Informations').click()
+
+    dataset.tags?.forEach((tag) => {
+      cy.contains('a', tag).should('have.attr', 'href', `/datasets?tag=${tag}`)
+    })
+  })
+})
+
 describe('Dataset Page - Parent dataset', () => {
   beforeEach(() => {
     cy.mockMatomo()

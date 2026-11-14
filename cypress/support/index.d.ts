@@ -36,6 +36,7 @@ declare global {
       mockSpatialZone(): Chainable<void>
       mockSpatialZonesSuggest(): Chainable<void>
       mockStaticDatagouv(): Chainable<void>
+      mockTagsSuggest(): Chainable<void>
       mockTopicElements(resourceId: string, elements?: object[]): Chainable<void>
       mockUniverseOrganizations(): Chainable<void>
       selectFilterValue(selectLabel: string, optionLabel: string): Chainable<void>
