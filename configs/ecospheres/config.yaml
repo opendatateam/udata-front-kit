@@ -107,6 +107,16 @@ website:
     display: true
     content: ⚠️ Vous naviguez sur une version de développement d'ecologie.data.gouv.fr ⚠️
     closeable: false
+  # satisfaction survey modal, shown after `delay` seconds of browsing until the user ticks "Ne plus afficher"
+  survey:
+    display: true
+    # used to store the "Ne plus afficher" choice: change it for a new survey
+    id: satisfaction-umux-lite
+    url: https://grist.numerique.gouv.fr/o/ecospheres/forms/dr3oLSZ7hZUeZchdd5wJE9/4
+    delay: 180 # seconds
+    title: Donnez-nous votre avis !
+    content: Une minute pour nous aider à améliorer votre expérience sur ecologie.data.gouv.fr.
+    button_label: Répondre au questionnaire
   # ⚠️ When updating this menu, also update the sitemap below if needed
   menu:
     - text: Accueil
@@ -411,6 +421,10 @@ pages:
       - *filter_badge
       - *filter_org
       - *filter_inspire
+      - id: tag
+        name: Mot-clé
+        type: tag
+        advanced: true
   # INDICATORS
   indicators:
     object_type: datasets # indicators are datasets filtered by universe_query
