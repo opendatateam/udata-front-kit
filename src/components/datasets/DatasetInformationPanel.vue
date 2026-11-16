@@ -67,9 +67,8 @@ const goToHarvester = (sourceId: string) => {
             target="_blank"
             rel="noopener noreferrer"
             :title="`${doi} - nouvelle fenêtre`"
+            >{{ doi }}</a
           >
-            {{ doi }}
-          </a>
           <CopyButton
             class="!-mt-0.5"
             label="Copier le DOI"
@@ -89,9 +88,8 @@ const goToHarvester = (sourceId: string) => {
             target="_blank"
             rel="noopener"
             title="Demander un DOI sur data.gouv.fr - nouvelle fenêtre"
+            >Demander un DOI sur data.gouv.fr</a
           >
-            Demander un DOI sur data.gouv.fr
-          </a>
         </DescriptionListDetails>
       </div>
     </DatasetInformationSection>
