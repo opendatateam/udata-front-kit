@@ -278,9 +278,9 @@ describe('Topic Elements - Factor List Display', () => {
       cy.contains(referencedDataservices[0].title).click()
 
       // Verify navigation occurred to the referenced dataservice
-      cy.url().should(
-        'include',
-        `/dataservices/${referencedDataservices[0].id}`
+      cy.location('pathname').should(
+        'eq',
+        `/dataservices/${referencedDataservices[0].slug}`
       )
     })
   })
