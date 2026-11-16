@@ -78,8 +78,8 @@ describe('Dataservices (API) - Detail Page', () => {
 
   describe('Basic Information Display', () => {
     beforeEach(() => {
-      cy.visit(`/dataservices/${testDataservice.id}`)
-      cy.wait(`@get_dataservices_${testDataservice.id}`)
+      cy.visit(`/dataservices/${testDataservice.slug}`)
+      cy.wait(`@get_dataservices_${testDataservice.slug}`)
     })
 
     it('should display the dataservice title', () => {
@@ -106,8 +106,8 @@ describe('Dataservices (API) - Detail Page', () => {
 
   describe('Producer Information', () => {
     beforeEach(() => {
-      cy.visit(`/dataservices/${testDataservice.id}`)
-      cy.wait(`@get_dataservices_${testDataservice.id}`)
+      cy.visit(`/dataservices/${testDataservice.slug}`)
+      cy.wait(`@get_dataservices_${testDataservice.slug}`)
     })
 
     it('should display producer section', () => {
@@ -123,8 +123,8 @@ describe('Dataservices (API) - Detail Page', () => {
 
   describe('Metadata Display', () => {
     beforeEach(() => {
-      cy.visit(`/dataservices/${testDataservice.id}`)
-      cy.wait(`@get_dataservices_${testDataservice.id}`)
+      cy.visit(`/dataservices/${testDataservice.slug}`)
+      cy.wait(`@get_dataservices_${testDataservice.slug}`)
     })
 
     it('should display last update date', () => {
@@ -149,8 +149,8 @@ describe('Dataservices (API) - Detail Page', () => {
 
   describe('Contact Points', () => {
     beforeEach(() => {
-      cy.visit(`/dataservices/${testDataservice.id}`)
-      cy.wait(`@get_dataservices_${testDataservice.id}`)
+      cy.visit(`/dataservices/${testDataservice.slug}`)
+      cy.wait(`@get_dataservices_${testDataservice.slug}`)
     })
 
     it('should display contact points when available', () => {
@@ -161,8 +161,8 @@ describe('Dataservices (API) - Detail Page', () => {
 
   describe('Documentation Links', () => {
     beforeEach(() => {
-      cy.visit(`/dataservices/${testDataservice.id}`)
-      cy.wait(`@get_dataservices_${testDataservice.id}`)
+      cy.visit(`/dataservices/${testDataservice.slug}`)
+      cy.wait(`@get_dataservices_${testDataservice.slug}`)
       cy.intercept('GET', 'https://example.com/docs/swagger.json', {
         statusCode: 200,
         body: {}
@@ -191,8 +191,8 @@ describe('Dataservices (API) - Detail Page', () => {
 
   describe('Tabs Navigation', () => {
     beforeEach(() => {
-      cy.visit(`/dataservices/${testDataservice.id}`)
-      cy.wait(`@get_dataservices_${testDataservice.id}`)
+      cy.visit(`/dataservices/${testDataservice.slug}`)
+      cy.wait(`@get_dataservices_${testDataservice.slug}`)
     })
 
     it('should display all three tabs', () => {
@@ -329,8 +329,8 @@ describe('Dataservices (API) - Detail Page', () => {
       // Differs from metrics.discussions: the tab shows the loaded list's total
       cy.mockDatagouvObjectList('discussions', discussionFactory.many(2))
 
-      cy.visit(`/dataservices/${countsDataservice.id}`)
-      cy.wait(`@get_dataservices_${countsDataservice.id}`)
+      cy.visit(`/dataservices/${countsDataservice.slug}`)
+      cy.wait(`@get_dataservices_${countsDataservice.slug}`)
       cy.wait('@getDataserviceDatasets')
 
       cy.contains('button', 'Données (3)').should('be.visible')
@@ -344,11 +344,6 @@ describe('Dataservices (API) - Detail Page', () => {
       const slugDataservice = createMockedDataservice(
         {},
         datasetFactory.many(3)
-      )
-      cy.mockDatagouvObject(
-        'dataservices',
-        slugDataservice.slug,
-        slugDataservice
       )
 
       cy.visit(`/dataservices/${slugDataservice.slug}`)
@@ -366,8 +361,8 @@ describe('Dataservices (API) - Detail Page', () => {
         access_type: 'open_with_account'
       })
 
-      cy.visit(`/dataservices/${restrictedDataservice.id}`)
-      cy.wait(`@get_dataservices_${restrictedDataservice.id}`)
+      cy.visit(`/dataservices/${restrictedDataservice.slug}`)
+      cy.wait(`@get_dataservices_${restrictedDataservice.slug}`)
 
       cy.contains('Ouvert avec compte').should('be.visible')
     })
@@ -378,8 +373,8 @@ describe('Dataservices (API) - Detail Page', () => {
         authorization_request_url: 'https://example.com/request-access'
       })
 
-      cy.visit(`/dataservices/${restrictedDataservice.id}`)
-      cy.wait(`@get_dataservices_${restrictedDataservice.id}`)
+      cy.visit(`/dataservices/${restrictedDataservice.slug}`)
+      cy.wait(`@get_dataservices_${restrictedDataservice.slug}`)
 
       cy.contains('Restreint').should('be.visible')
       cy.contains("Faire une demande d'habilitation").should('be.visible')
@@ -390,8 +385,8 @@ describe('Dataservices (API) - Detail Page', () => {
         availability: null
       })
 
-      cy.visit(`/dataservices/${noAvailabilityDataservice.id}`)
-      cy.wait(`@get_dataservices_${noAvailabilityDataservice.id}`)
+      cy.visit(`/dataservices/${noAvailabilityDataservice.slug}`)
+      cy.wait(`@get_dataservices_${noAvailabilityDataservice.slug}`)
 
       cy.contains('Taux de disponibilité').should('be.visible')
       cy.contains('Non communiqué').should('be.visible')
@@ -403,8 +398,8 @@ describe('Dataservices (API) - Detail Page', () => {
       // Create a dataservice with no datasets
       const emptyDataservice = createMockedDataservice()
 
-      cy.visit(`/dataservices/${emptyDataservice.id}`)
-      cy.wait(`@get_dataservices_${emptyDataservice.id}`)
+      cy.visit(`/dataservices/${emptyDataservice.slug}`)
+      cy.wait(`@get_dataservices_${emptyDataservice.slug}`)
 
       cy.contains('0 jeu de données').should('be.visible')
     })
@@ -422,8 +417,8 @@ describe('Dataservices (API) - Detail Page', () => {
 
       const ds = createMockedDataservice({}, [regularDataset, indicatorDataset])
 
-      cy.visit(`/dataservices/${ds.id}`)
-      cy.wait(`@get_dataservices_${ds.id}`)
+      cy.visit(`/dataservices/${ds.slug}`)
+      cy.wait(`@get_dataservices_${ds.slug}`)
       cy.wait('@getDataserviceDatasets')
 
       // Check that both datasets are displayed
