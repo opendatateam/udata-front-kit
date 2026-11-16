@@ -45,6 +45,6 @@ export type ExtendedDatasetV2WithFullObject = DatasetV2WithFullObject & {
     dcat?: DcatExtras
   }
   harvest: TypedHarvest | null
-  // not yet typed upstream in @datagouv/components-next
+  // FIXME: remove when typed upstream in @datagouv/components-next
   doi?: string | null
 }

@@ -164,7 +164,6 @@ describe('Dataset Page - Parent dataset', () => {
 describe('Dataset Page - DOI', () => {
   const DOI = '10.1234/abcd'
 
-  // DatasetV2 has no doi field yet, so it is added outside the factory
   const visitInformations = (dataset: DatasetV2) => {
     cy.mockDatasetAndRelatedObjects(dataset)
     cy.visit(`/datasets/${dataset.id}`)
@@ -178,7 +177,10 @@ describe('Dataset Page - DOI', () => {
   })
 
   it('should display the dataset DOI', () => {
-    const dataset = { ...datasetFactory.one(), doi: DOI }
+    const dataset = datasetFactory.one({
+      // @ts-expect-error doi not yet typed upstream in DatasetV2
+      overrides: { doi: DOI }
+    })
     visitInformations(dataset)
 
     cy.contains('a', DOI).should('have.attr', 'href', `https://doi.org/${DOI}`)
@@ -202,7 +204,7 @@ describe('Dataset Page - DOI', () => {
     cy.contains('a', 'Demander un DOI sur data.gouv.fr').should(
       'have.attr',
       'href',
-      `${dataset.page.replace(/\/$/, '')}/informations`
+      `${dataset.page}/informations`
     )
   })
 

@@ -30,9 +30,7 @@ const props = defineProps<{
 const doi = computed(() => getDatasetDoi(props.dataset))
 
 // The request form lives on data.gouv.fr
-const doiRequestUrl = computed(
-  () => `${props.dataset.page.replace(/\/$/, '')}/informations`
-)
+const doiRequestUrl = computed(() => `${props.dataset.page}/informations`)
 
 const userStore = useUserStore()
 const { isAdmin } = storeToRefs(userStore)

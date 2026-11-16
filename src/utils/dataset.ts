@@ -16,7 +16,7 @@ export const getDatasetDoi = (
   dataset: ExtendedDatasetV2WithFullObject
 ): string | null => dataset.doi ?? dataset.harvest?.doi ?? null
 
-// Mirrors udata's DOI eligibility: public dataset published by an organization
+// DOI eligibility: public dataset published by an organization
 export const canRequestDoi = (dataset: DatasetV2WithFullObject): boolean =>
   !!dataset.organization &&
   !dataset.private &&
