@@ -160,3 +160,40 @@ describe('Dataset Page - Parent dataset', () => {
     cy.get('.fr-callout').should('not.exist')
   })
 })
+
+describe('Dataset Page - Slug URL', () => {
+  let dataset: DatasetV2
+
+  beforeEach(() => {
+    cy.mockMatomo()
+    cy.mockStaticDatagouv()
+    dataset = datasetFactory.one()
+    cy.mockDatasetAndRelatedObjects(dataset)
+  })
+
+  it('should replace the id with the slug in the URL', () => {
+    cy.visit(`/datasets/${dataset.id}`)
+    cy.wait(`@get_datasets_${dataset.id}`)
+
+    cy.location('pathname').should('eq', `/datasets/${dataset.slug}`)
+    cy.get('h1').should('contain', dataset.title)
+  })
+
+  it('should keep the tab and query when replacing the id', () => {
+    cy.visit(`/datasets/${dataset.id}/files?resource_id=abc`)
+    cy.wait(`@get_datasets_${dataset.id}`)
+
+    cy.location('pathname').should('eq', `/datasets/${dataset.slug}/files`)
+    cy.location('search').should('eq', '?resource_id=abc')
+  })
+
+  it('should keep the slug URL as is', () => {
+    cy.mockDatagouvObject('datasets', dataset.slug, dataset)
+
+    cy.visit(`/datasets/${dataset.slug}`)
+    cy.wait(`@get_datasets_${dataset.slug}`)
+
+    cy.location('pathname').should('eq', `/datasets/${dataset.slug}`)
+    cy.get('h1').should('contain', dataset.title)
+  })
+})

@@ -127,8 +127,8 @@ const goToBusinessDocumentation = () => {
   window.open(dataservice.value?.business_documentation_url ?? undefined)
 }
 
-const getDatasetPage = (id: string) => {
-  return { name: 'datasets_detail', params: { item_id: id } }
+const getDatasetPage = (slug: string) => {
+  return { name: 'datasets_detail', params: { item_id: slug } }
 }
 
 useMeta({
@@ -279,7 +279,7 @@ useMeta({
               <CardComponent
                 :show-description-short="false"
                 :dataset="dataset"
-                :dataset-url="getDatasetPage(dataset.id)"
+                :dataset-url="getDatasetPage(dataset.slug)"
                 :organization-url="null"
                 title-tag="p"
               />
