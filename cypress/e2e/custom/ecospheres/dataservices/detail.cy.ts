@@ -237,18 +237,46 @@ describe('Dataservices (API) - Detail Page', () => {
     })
   })
 
+  describe('Slug URL', () => {
+    it('should replace the id with the slug without reloading', () => {
+      cy.visit(`/dataservices/${testDataservice.id}`)
+      cy.wait(`@get_dataservices_${testDataservice.id}`)
+      cy.wait('@getDataserviceDatasets')
+
+      cy.location('pathname').should(
+        'eq',
+        `/dataservices/${testDataservice.slug}`
+      )
+      cy.get('h1').should('contain', testDataservice.title)
+      cy.get('@getDataserviceDatasets.all').should('have.length', 1)
+    })
+
+    it('should keep the tab and query when replacing the id', () => {
+      cy.visit(`/dataservices/${testDataservice.id}/discussions?foo=bar`)
+      cy.wait(`@get_dataservices_${testDataservice.id}`)
+
+      cy.location('pathname').should(
+        'eq',
+        `/dataservices/${testDataservice.slug}/discussions`
+      )
+      cy.location('search').should('eq', '?foo=bar')
+    })
+  })
+
   describe('Addressable tabs', () => {
     const basePath = () => `/dataservices/${testDataservice.id}`
+    // id is replaced with the slug once loaded
+    const slugPath = () => `/dataservices/${testDataservice.slug}`
 
     it('should reflect the selected tab in the URL', () => {
       cy.visit(basePath())
       cy.wait(`@get_dataservices_${testDataservice.id}`)
 
       cy.contains('button', 'Discussions').click()
-      cy.location('pathname').should('eq', `${basePath()}/discussions`)
+      cy.location('pathname').should('eq', `${slugPath()}/discussions`)
 
       cy.contains('button', 'Données').click()
-      cy.location('pathname').should('eq', basePath())
+      cy.location('pathname').should('eq', slugPath())
     })
 
     it('should open the tab from the URL', () => {
@@ -279,7 +307,7 @@ describe('Dataservices (API) - Detail Page', () => {
       cy.get('[role="tablist"]').scrollIntoView()
       cy.window().its('scrollY').should('be.gt', 0)
       cy.contains('button', 'Discussions').click()
-      cy.location('pathname').should('eq', `${basePath()}/discussions`)
+      cy.location('pathname').should('eq', `${slugPath()}/discussions`)
       cy.window().its('scrollY').should('be.gt', 0)
     })
   })

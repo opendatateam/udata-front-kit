@@ -118,14 +118,22 @@ export const useRouteItem = <T extends { slug: string }>(
 ): Ref<string> => {
   const itemId = useRouteItemId()
   const router = useRouter()
+  // slug set by our own replace, whose item is already loaded
+  let replacedSlug: string | undefined
   watch(
     itemId,
     (idOrSlug) => {
       if (!idOrSlug) return
+      if (idOrSlug === replacedSlug) {
+        replacedSlug = undefined
+        return
+      }
+      replacedSlug = undefined
       load(idOrSlug).then((item) => {
         if (idOrSlug !== itemId.value) return
         onLoaded?.(item)
         if (replaceWithSlug && item.slug !== idOrSlug) {
+          replacedSlug = item.slug
           const current = router.currentRoute.value
           router.replace({
             name: current.name,

@@ -38,7 +38,8 @@ const dataserviceIdOrSlug = useRouteItem(
       datasets.value = []
       currentPage.value = 1
       loadDatasets()
-    }
+    },
+    replaceWithSlug: true
   }
 )
 
