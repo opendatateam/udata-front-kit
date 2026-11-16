@@ -1,4 +1,8 @@
-import { createIndicator, createIndicatorResource } from './support'
+import {
+  createIndicator,
+  createIndicatorResource,
+  interceptTabularData
+} from './support'
 
 describe('Indicator Viz', () => {
   beforeEach(() => {
@@ -23,11 +27,10 @@ describe('Indicator Viz', () => {
       )
       const vizResource = createIndicatorResource()
       cy.mockDatasetAndRelatedObjects(indicatorWithViz, [vizResource])
-      cy.intercept(
-        'GET',
-        `https://tabular-api*.data.gouv.fr/api/resources/${vizResource.id}/data/**`,
-        { statusCode: 500, body: 'Internal Server Error' }
-      )
+      interceptTabularData(vizResource, {
+        statusCode: 500,
+        body: 'Internal Server Error'
+      })
       cy.visit(`/indicators/${indicatorWithViz.id}`)
       cy.contains('Prévisualisation').click()
       cy.contains('Erreur lors du chargement').should('be.visible')
@@ -41,11 +44,7 @@ describe('Indicator Viz', () => {
       )
       const vizResource = createIndicatorResource('fr')
       cy.mockDatasetAndRelatedObjects(indicatorWithViz, [vizResource])
-      cy.intercept(
-        'GET',
-        `https://tabular-api*.data.gouv.fr/api/resources/${vizResource.id}/data/**`,
-        { statusCode: 200, body: { data: [] } }
-      )
+      interceptTabularData(vizResource)
       cy.visit(`/indicators/${indicatorWithViz.id}`)
       cy.contains('Prévisualisation').click()
       cy.contains(
@@ -65,11 +64,7 @@ describe('Indicator Viz', () => {
         vizResource,
         communeResource
       ])
-      cy.intercept(
-        'GET',
-        `https://tabular-api*.data.gouv.fr/api/resources/${vizResource.id}/data/**`,
-        { statusCode: 200, body: { data: [] } }
-      )
+      interceptTabularData(vizResource)
       cy.visit(`/indicators/${indicatorWithViz.id}`)
       cy.contains('Prévisualisation').click()
       cy.get('#viz-mesh-select').select('commune')
@@ -86,11 +81,7 @@ describe('Indicator Viz', () => {
       )
       const vizResource = createIndicatorResource('region')
       cy.mockDatasetAndRelatedObjects(indicatorWithViz, [vizResource])
-      cy.intercept(
-        'GET',
-        `https://tabular-api*.data.gouv.fr/api/resources/${vizResource.id}/data/**`,
-        { statusCode: 200, body: { data: [] } }
-      )
+      interceptTabularData(vizResource)
       cy.visit(`/indicators/${indicatorWithViz.id}`)
       cy.contains('Prévisualisation').click()
       cy.get('#viz-mesh-select')
@@ -110,15 +101,86 @@ describe('Indicator Viz', () => {
       )
       const vizResource = createIndicatorResource('fr')
       cy.mockDatasetAndRelatedObjects(indicatorWithViz, [vizResource])
-      cy.intercept(
-        'GET',
-        `https://tabular-api*.data.gouv.fr/api/resources/${vizResource.id}/data/**`,
-        { statusCode: 200, body: { data: [] } }
-      )
+      interceptTabularData(vizResource)
 
       cy.visit(`/indicators/${indicatorWithViz.id}`)
       cy.contains('Prévisualisation').click()
       cy.get('#viz-mesh-select').should('exist')
+    })
+  })
+
+  describe('Deep link', () => {
+    const setup = () => {
+      const indicatorWithViz = createIndicator(
+        {},
+        { enable_visualization: true }
+      )
+      const frResource = createIndicatorResource('fr')
+      const regionResource = createIndicatorResource('region')
+      cy.mockDatasetAndRelatedObjects(indicatorWithViz, [
+        frResource,
+        regionResource
+      ])
+      interceptTabularData(regionResource).as('regionData')
+      interceptTabularData(frResource).as('frData')
+      return indicatorWithViz
+    }
+
+    it('should preselect mesh and territory from the URL', () => {
+      const indicator = setup()
+      cy.visit(`/indicators/${indicator.id}?mesh=region&territory=53`)
+      cy.get('#viz-mesh-select').should('have.value', 'region')
+      cy.contains('Bretagne - 53').should('be.visible')
+      cy.wait('@regionData')
+        .its('request.url')
+        .should('include', 'geocode_region__exact=53')
+      cy.location('search').should('eq', '?mesh=region&territory=53')
+    })
+
+    it('should fall back to the first territory without rewriting the URL', () => {
+      const indicator = setup()
+      // late failing response for the invalid territory must not override the fallback
+      cy.intercept(
+        {
+          method: 'GET',
+          url: 'https://tabular-api*.data.gouv.fr/api/resources/*/data/**',
+          query: { geocode_region__exact: 'unknown' }
+        },
+        { statusCode: 500, body: 'Internal Server Error', delay: 1000 }
+      ).as('unknownData')
+      cy.visit(`/indicators/${indicator.id}?mesh=region&territory=unknown`)
+      cy.get('#viz-mesh-select').should('have.value', 'region')
+      cy.contains('Auvergne-Rhône-Alpes - 84').should('be.visible')
+      cy.wait('@unknownData')
+      cy.contains('Erreur lors du chargement').should('not.exist')
+      cy.contains(
+        'Aucune donnée disponible pour le territoire sélectionné.'
+      ).should('be.visible')
+      cy.location('search').should('eq', '?mesh=region&territory=unknown')
+    })
+
+    it('should fall back to the first mesh for an unknown mesh', () => {
+      const indicator = setup()
+      cy.visit(`/indicators/${indicator.id}?mesh=unknown`)
+      cy.get('#viz-mesh-select').should('have.value', 'fr')
+      cy.wait('@frData')
+    })
+
+    it('should not write the URL on load', () => {
+      const indicator = setup()
+      cy.visit(`/indicators/${indicator.id}`)
+      cy.wait('@frData')
+      cy.location('search').should('eq', '')
+    })
+
+    it('should write the URL on user changes', () => {
+      const indicator = setup()
+      cy.visit(`/indicators/${indicator.id}`)
+      cy.wait('@frData')
+      cy.get('#viz-mesh-select').select('region')
+      cy.location('search').should('eq', '?mesh=region&territory=84')
+      cy.get('#viz-mesh-select').select('fr')
+      cy.location('search').should('eq', '?mesh=fr')
     })
   })
 
@@ -131,11 +193,7 @@ describe('Indicator Viz', () => {
       const resource = createIndicatorResource()
       cy.mockDatasetAndRelatedObjects(indicatorWithViz, [resource])
       // the preview panel is mounted even when hidden, so its chart still fetches
-      cy.intercept(
-        'GET',
-        `https://tabular-api*.data.gouv.fr/api/resources/${resource.id}/data/**`,
-        { statusCode: 200, body: { data: [] } }
-      )
+      interceptTabularData(resource)
 
       cy.visit(
         `/indicators/${indicatorWithViz.id}/files?resource_id=${resource.id}`
