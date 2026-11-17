@@ -2,6 +2,7 @@
 import type { ExtendedDatasetV2WithFullObject } from '@/model/dataset'
 import {
   AnimatedLoader,
+  CopyButton,
   DatasetEmbedSection,
   DatasetInformationSection,
   DatasetSchemaSection,
@@ -20,10 +21,16 @@ import LeafletMap from './LeafletMap.vue'
 import config from '@/config'
 import { useCurrentPageConf } from '@/router/utils'
 import { useUserStore } from '@/store/UserStore'
+import { canRequestDoi, getDatasetDoi } from '@/utils/dataset'
 
-defineProps<{
+const props = defineProps<{
   dataset: ExtendedDatasetV2WithFullObject
 }>()
+
+const doi = computed(() => getDatasetDoi(props.dataset))
+
+// The request form lives on data.gouv.fr
+const doiRequestUrl = computed(() => `${props.dataset.page}/informations`)
 
 const userStore = useUserStore()
 const { isAdmin } = storeToRefs(userStore)
@@ -50,7 +57,42 @@ const goToHarvester = (sourceId: string) => {
 <template>
   <div class="divide-y">
     <!-- @vue-expect-error tagUrl accepts route locations at runtime, typed upstream in datagouv/cdata#1341 -->
-    <DatasetInformationSection :dataset="dataset" :tag-url="tagUrl" />
+    <DatasetInformationSection :dataset="dataset" :tag-url="tagUrl">
+      <div v-if="doi || canRequestDoi(dataset)">
+        <DescriptionListTerm>DOI</DescriptionListTerm>
+        <DescriptionListDetails v-if="doi" class="flex items-center gap-2">
+          <a
+            :href="`https://doi.org/${doi}`"
+            class="fr-text--sm fr-link"
+            target="_blank"
+            rel="noopener noreferrer"
+            :title="`${doi} - nouvelle fenêtre`"
+            >{{ doi }}</a
+          >
+          <CopyButton
+            class="!-mt-0.5"
+            label="Copier le DOI"
+            copied-label="DOI copié !"
+            :text="doi"
+            :hide-label="true"
+          />
+        </DescriptionListDetails>
+        <DescriptionListDetails
+          v-else
+          class="flex flex-wrap items-center gap-x-3 gap-y-1"
+        >
+          <span>Ce jeu de données n'a pas de DOI.</span>
+          <a
+            :href="doiRequestUrl"
+            class="fr-text--sm fr-link"
+            target="_blank"
+            rel="noopener"
+            title="Demander un DOI sur data.gouv.fr - nouvelle fenêtre"
+            >Demander un DOI sur data.gouv.fr</a
+          >
+        </DescriptionListDetails>
+      </div>
+    </DatasetInformationSection>
     <DatasetTemporalitySection :dataset="dataset" />
     <DatasetSpatialSection :dataset="dataset">
       <template #map="{ geojson }">

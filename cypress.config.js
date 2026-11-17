@@ -1,5 +1,5 @@
 import { defineConfig } from 'cypress'
-import { readFileSync } from 'fs'
+import { readdirSync, readFileSync } from 'fs'
 import { load } from 'js-yaml'
 
 export default defineConfig({
@@ -24,11 +24,10 @@ export default defineConfig({
       }
 
       if (siteId) {
-        // Only include tests for the specific site
-        config.specPattern = [
-          'cypress/e2e/*.cy.{js,jsx,ts,tsx}', // General tests
-          `cypress/e2e/custom/${siteId}/**/*.cy.{js,jsx,ts,tsx}` // Site-specific tests
-        ]
+        // Exclude other sites' tests
+        config.excludeSpecPattern = readdirSync('cypress/e2e/custom')
+          .filter((dir) => dir !== siteId)
+          .map((dir) => `cypress/e2e/custom/${dir}/**`)
       } else {
         // If no site ID is set, exclude all custom site tests
         config.excludeSpecPattern = 'cypress/e2e/custom/**/*.cy.{js,jsx,ts,tsx}'
