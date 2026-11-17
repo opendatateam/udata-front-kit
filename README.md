@@ -34,7 +34,7 @@ La configuration résolue est publiée par le build sous `/site-config.json`, à
 Pour afficher la configuration résolue d'un site :
 
 ```shell
-node --input-type=module -e "import { loadSiteConfig } from './scripts/site-config.mjs'; console.log(JSON.stringify(loadSiteConfig('ecospheres', 'prod'), null, 2))"
+node --input-type=module -e "import { loadSiteConfig } from './scripts/site-config.ts'; console.log(JSON.stringify(loadSiteConfig('ecospheres', 'prod'), null, 2))"
 ```
 
 Toute la configuration, quel que soit l'environnement, est maintenue sur `main` : les branches `{site}-{env}` ne modifient pas les fichiers de `configs/`.

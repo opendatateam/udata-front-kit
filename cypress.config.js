@@ -1,6 +1,6 @@
 import { defineConfig } from 'cypress'
 
-import { loadSiteConfig } from './scripts/site-config.mjs'
+import { loadSiteConfig } from './scripts/site-config.ts'
 
 export default defineConfig({
   e2e: {

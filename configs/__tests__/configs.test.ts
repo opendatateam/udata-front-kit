@@ -9,7 +9,7 @@ import {
   CONFIGS_DIR,
   DEPLOY_ENVS,
   envConfigPath
-} from '../../scripts/site-config.mjs'
+} from '../../scripts/site-config'
 
 // top-level keys an env override may add even if absent from config.yaml
 const ALLOWED_NEW_KEYS = ['sentry']

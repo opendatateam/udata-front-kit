@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { describe, expect, it } from 'vitest'
 
-import { applyMergePatch } from '../site-config.mjs'
+import { applyMergePatch } from '../site-config'
 
 // RFC 7396 behaviours the env overrides rely on
 describe('applyMergePatch', () => {

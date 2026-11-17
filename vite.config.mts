@@ -9,7 +9,7 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 import { vueDsfrAutoimportPreset } from '@gouvminint/vue-dsfr/meta'
 import AutoImport from 'unplugin-auto-import/vite'
-import { CONFIGS_DIR, loadSiteConfig } from './scripts/site-config.mjs'
+import { CONFIGS_DIR, loadSiteConfig } from './scripts/site-config'
 import type { SentryConfig, WebsiteConfig } from './src/model/config'
 
 interface Config {
@@ -60,10 +60,10 @@ const esbuildOptions = {
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
-  const config = loadSiteConfig(
+  const config = loadSiteConfig<Config>(
     env.VITE_SITE_ID,
     env.VITE_DEPLOY_ENV || undefined
-  ) as Config
+  )
   return {
     base: '/',
     plugins: [
