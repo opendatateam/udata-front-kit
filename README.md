@@ -29,7 +29,7 @@ Le fichier d'environnement est appliqué comme un [JSON Merge Patch (RFC 7396)](
 - les scalaires et les listes sont remplacés en entier ;
 - `null` supprime la clé (ex : `networks: null` pour désactiver une fonctionnalité).
 
-La configuration résolue est publiée par le build sous `/site-config.json`, à destination des outils externes (ex : `udata-front-kit-seo`). Un test ([`scripts/__tests__/site-config.test.ts`](scripts/__tests__/site-config.test.ts)) vérifie qu'un fichier d'environnement ne surcharge que des clés existant dans `config.yaml`, afin de détecter les fautes de frappe.
+La configuration résolue est publiée par le build sous `/site-config.json`, à destination des outils externes (ex : `udata-front-kit-seo`). Un test ([`configs/__tests__/configs.test.ts`](configs/__tests__/configs.test.ts)) vérifie qu'un fichier d'environnement ne surcharge que des clés existant dans `config.yaml`, afin de détecter les fautes de frappe.
 
 Pour afficher la configuration résolue d'un site :
 
