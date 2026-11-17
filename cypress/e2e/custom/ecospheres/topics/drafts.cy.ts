@@ -3,9 +3,9 @@ import { topicFactory } from 'cypress/support/factories/topics_factory'
 
 describe('Topics - Drafts Page', () => {
   const universeTag =
-    Cypress.env('siteConfig').pages.bouquets.universe_query.tag
+    Cypress.expose('siteConfig').pages.bouquets.universe_query.tag
   const pageSize: number =
-    Cypress.env('siteConfig').website.pagination_sizes.topics_drafts_list
+    Cypress.expose('siteConfig').website.pagination_sizes.topics_drafts_list
 
   const mockDraftsApi = (
     drafts: Topic[],
