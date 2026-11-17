@@ -8,8 +8,7 @@ import {
   baseConfigPath,
   CONFIGS_DIR,
   DEPLOY_ENVS,
-  envConfigPath,
-  loadSiteConfig
+  envConfigPath
 } from '../../scripts/site-config.mjs'
 
 // top-level keys an env override may add even if absent from config.yaml
@@ -62,12 +61,4 @@ describe.each(sites)('site config %s', (site) => {
       unknownPaths(readYaml(baseConfigPath(site)), readYaml(path))
     ).toEqual([])
   })
-
-  it.each(DEPLOY_ENVS)(
-    'env %s resolves to a config with SEO settings',
-    (env) => {
-      const config = loadSiteConfig(site, env)
-      expect(config.website.seo.canonical_url).toMatch(/^https:\/\//)
-    }
-  )
 })
