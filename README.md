@@ -29,7 +29,7 @@ Le fichier d'environnement est appliqué comme un [JSON Merge Patch (RFC 7396)](
 - les scalaires et les listes sont remplacés en entier ;
 - `null` supprime la clé (ex : `networks: null` pour désactiver une fonctionnalité).
 
-La configuration résolue est publiée sous `/site-config.json` (ex : <https://ecologie.data.gouv.fr/site-config.json>, ou <http://localhost:5173/site-config.json> en développement), notamment à destination des outils externes (ex : `udata-front-kit-seo`). En local, `VITE_DEPLOY_ENV=prod pnpm dev` permet de lancer un site avec sa configuration de production.
+La configuration résolue est publiée par le build sous `/site-config.json` (ex : <https://ecologie.data.gouv.fr/site-config.json>), notamment à destination des outils externes (ex : `udata-front-kit-seo`). En local, `VITE_DEPLOY_ENV=prod pnpm build` la génère dans `dist/site-config.json`, et `VITE_DEPLOY_ENV=prod pnpm dev` lance un site avec sa configuration de production.
 
 Un test ([`configs/__tests__/configs.test.ts`](configs/__tests__/configs.test.ts)) vérifie qu'un fichier d'environnement ne surcharge que des clés existant dans `config.yaml`, afin de détecter les fautes de frappe.
 

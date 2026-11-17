@@ -17,31 +17,22 @@ interface Config {
   sentry?: SentryConfig
 }
 
-const SITE_CONFIG_MODULE_ID = 'virtual:site-config'
-const SITE_CONFIG_FILE = 'site-config.json'
-
-// Serves the resolved site config to the app, and publishes it as /site-config.json for external jobs
+// Publishes the resolved site config as /site-config.json for external jobs
 function siteConfigPlugin(config: Config): Plugin {
-  const resolvedId = `\0${SITE_CONFIG_MODULE_ID}`
-  const json = JSON.stringify(config, null, 2)
   return {
     name: 'site-config',
-    // run before vite-plugin-html's history fallback, which would rewrite /site-config.json to index.html
-    enforce: 'pre',
-    resolveId: (id) => (id === SITE_CONFIG_MODULE_ID ? resolvedId : undefined),
-    load: (id) => (id === resolvedId ? `export default ${json}` : undefined),
     generateBundle() {
-      this.emitFile({ type: 'asset', fileName: SITE_CONFIG_FILE, source: json })
+      this.emitFile({
+        type: 'asset',
+        fileName: 'site-config.json',
+        source: JSON.stringify(config, null, 2)
+      })
     },
     configureServer(server) {
       // config is resolved once in vite.config, so a config change needs a restart
       server.watcher.add(CONFIGS_DIR)
       server.watcher.on('change', (file) => {
         if (file.startsWith(CONFIGS_DIR)) void server.restart()
-      })
-      server.middlewares.use(`/${SITE_CONFIG_FILE}`, (_req, res) => {
-        res.setHeader('Content-Type', 'application/json')
-        res.end(json)
       })
     }
   }
@@ -66,6 +57,9 @@ export default defineConfig(({ mode }) => {
   )
   return {
     base: '/',
+    define: {
+      __SITE_CONFIG__: JSON.stringify(config)
+    },
     plugins: [
       vueDevTools(),
       vue({
