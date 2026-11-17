@@ -226,7 +226,7 @@ describe('Topic Elements - Factor List Display', () => {
         overrides: {
           extras: {
             ['ecospheres' as SiteId]: {
-              uri: `${Cypress.env('siteConfig').datagouvfr.base_url}/dataservices/referenced-dataservice-2`,
+              uri: `${Cypress.expose('siteConfig').datagouvfr.base_url}/dataservices/referenced-dataservice-2`,
               availability: Availability.LOCAL_AVAILABLE,
               group: 'Test Group'
             }

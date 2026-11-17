@@ -1,4 +1,4 @@
-const SURVEY = Cypress.env('siteConfig').website.survey
+const SURVEY = Cypress.expose('siteConfig').website.survey
 const DELAY_MS = (SURVEY?.delay ?? 180) * 1000
 const DISMISSED_KEY = `survey_dismissed_${SURVEY?.id}`
 
