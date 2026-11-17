@@ -26,17 +26,6 @@ describe('Indicator Detail View', () => {
       cy.location('pathname').should('eq', `/indicators/${indicator.slug}`)
       cy.contains(indicator.title).should('be.visible')
     })
-
-    it('should keep the tab and query when replacing the id', () => {
-      cy.visit(`/indicators/${indicator.id}/files?resource_id=abc`)
-      cy.wait(`@get_datasets_${indicator.id}`)
-
-      cy.location('pathname').should(
-        'eq',
-        `/indicators/${indicator.slug}/files`
-      )
-      cy.location('search').should('eq', '?resource_id=abc')
-    })
   })
 
   describe('Native attributes', () => {

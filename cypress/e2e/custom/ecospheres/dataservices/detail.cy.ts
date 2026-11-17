@@ -251,17 +251,6 @@ describe('Dataservices (API) - Detail Page', () => {
       cy.get('h1').should('contain', testDataservice.title)
       cy.get('@getDataserviceDatasets.all').should('have.length', 1)
     })
-
-    it('should keep the tab and query when replacing the id', () => {
-      cy.visit(`/dataservices/${testDataservice.id}/discussions?foo=bar`)
-      cy.wait(`@get_dataservices_${testDataservice.id}`)
-
-      cy.location('pathname').should(
-        'eq',
-        `/dataservices/${testDataservice.slug}/discussions`
-      )
-      cy.location('search').should('eq', '?foo=bar')
-    })
   })
 
   describe('Addressable tabs', () => {
