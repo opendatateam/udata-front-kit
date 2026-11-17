@@ -5,9 +5,9 @@ import { load } from 'js-yaml'
 import { describe, expect, it } from 'vitest'
 
 import {
+  applyMergePatch,
   baseConfigPath,
   CONFIGS_DIR,
-  deepMerge,
   DEPLOY_ENVS,
   envConfigPath,
   loadSiteConfig
@@ -45,31 +45,37 @@ const sites = readdirSync(CONFIGS_DIR, { withFileTypes: true })
   )
   .map((entry) => entry.name)
 
-describe('deepMerge', () => {
+// RFC 7396 behaviours the env overrides rely on
+describe('applyMergePatch', () => {
   it('merges objects key by key', () => {
-    expect(deepMerge({ a: { b: 1, c: 2 } }, { a: { c: 3 } })).toEqual({
+    expect(applyMergePatch({ a: { b: 1, c: 2 } }, { a: { c: 3 } })).toEqual({
       a: { b: 1, c: 3 }
     })
   })
 
   it('replaces arrays and scalars', () => {
-    expect(deepMerge({ a: [1, 2], b: 'x' }, { a: [3], b: 'y' })).toEqual({
+    expect(applyMergePatch({ a: [1, 2], b: 'x' }, { a: [3], b: 'y' })).toEqual({
       a: [3],
       b: 'y'
     })
   })
 
-  it('clears a value with null', () => {
-    expect(deepMerge({ a: { b: 1 } }, { a: null })).toEqual({ a: null })
+  it('removes a key set to null', () => {
+    expect(applyMergePatch({ a: { b: 1 }, c: 1 }, { a: null })).toEqual({
+      c: 1
+    })
   })
 
   it('adds new keys', () => {
-    expect(deepMerge({ a: 1 }, { b: { c: 2 } })).toEqual({ a: 1, b: { c: 2 } })
+    expect(applyMergePatch({ a: 1 }, { b: { c: 2 } })).toEqual({
+      a: 1,
+      b: { c: 2 }
+    })
   })
 
   it('does not mutate base', () => {
     const base = { a: { b: 1 } }
-    deepMerge(base, { a: { b: 2 } })
+    applyMergePatch(base, { a: { b: 2 } })
     expect(base).toEqual({ a: { b: 1 } })
   })
 })

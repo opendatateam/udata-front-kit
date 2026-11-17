@@ -23,11 +23,11 @@ Les valeurs propres à un environnement de déploiement (`demo`, `preprod`, `pro
 
 La variable `VITE_DEPLOY_ENV` (positionnée automatiquement par le workflow de déploiement) sélectionne l'environnement. Sans elle, seul `config.yaml` est utilisé : c'est le cas en développement local, sur les review apps et dans la CI.
 
-Règles de fusion :
+Le fichier d'environnement est appliqué comme un [JSON Merge Patch (RFC 7396)](https://www.rfc-editor.org/rfc/rfc7396) :
 
 - les objets sont fusionnés clé par clé ;
 - les scalaires et les listes sont remplacés en entier ;
-- `null` efface une valeur (ex : `networks: null` pour désactiver une fonctionnalité).
+- `null` supprime la clé (ex : `networks: null` pour désactiver une fonctionnalité).
 
 La configuration résolue est publiée par le build sous `/site-config.json`, à destination des outils externes (ex : `udata-front-kit-seo`). Un test ([`scripts/__tests__/site-config.test.ts`](scripts/__tests__/site-config.test.ts)) vérifie qu'un fichier d'environnement ne surcharge que des clés existant dans `config.yaml`, afin de détecter les fautes de frappe.
 

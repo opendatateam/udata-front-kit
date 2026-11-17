@@ -1,4 +1,4 @@
-# prod overrides, deep-merged on top of ../config.yaml (see README "Configuration par environnement")
+# prod overrides, applied to ../config.yaml as a JSON Merge Patch (see README "Configuration par environnement")
 website:
   seo:
     canonical_url: https://meteo.data.gouv.fr

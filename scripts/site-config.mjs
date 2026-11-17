@@ -1,9 +1,9 @@
-// Resolves a site config: configs/<site>/config.yaml, deep-merged with configs/<site>/env/<env>.yaml if any.
-// Merge rules: objects merge key by key, scalars and arrays are replaced, null clears a value.
+// Resolves a site config: configs/<site>/config.yaml, with configs/<site>/env/<env>.yaml applied as a JSON Merge Patch (RFC 7396).
 import { existsSync, readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 
 import { load } from 'js-yaml'
+import mergePatch from 'json-merge-patch'
 
 export const DEPLOY_ENVS = ['demo', 'preprod', 'prod']
 
@@ -11,17 +11,9 @@ export const CONFIGS_DIR = fileURLToPath(
   new URL('../configs/', import.meta.url)
 )
 
-const isObject = (value) =>
-  value !== null && typeof value === 'object' && !Array.isArray(value)
-
-export function deepMerge(base, override) {
-  if (!isObject(base) || !isObject(override)) return override
-  const merged = { ...base }
-  for (const [key, value] of Object.entries(override)) {
-    merged[key] = key in base ? deepMerge(base[key], value) : value
-  }
-  return merged
-}
+// json-merge-patch mutates its target, so patch a copy
+export const applyMergePatch = (base, patch) =>
+  mergePatch.apply(structuredClone(base), patch)
 
 export const baseConfigPath = (siteId) => `${CONFIGS_DIR}${siteId}/config.yaml`
 
@@ -40,5 +32,5 @@ export function loadSiteConfig(siteId, deployEnv) {
     )
   }
   const envPath = envConfigPath(siteId, deployEnv)
-  return existsSync(envPath) ? deepMerge(base, readYaml(envPath)) : base
+  return existsSync(envPath) ? applyMergePatch(base, readYaml(envPath)) : base
 }
