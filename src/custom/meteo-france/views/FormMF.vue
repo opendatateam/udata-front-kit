@@ -542,17 +542,18 @@ const getAPIUrl = (endpoint: string) => {
       <br />
       <br />
       <h5>Fichiers</h5>
+      <!-- ResourceAccordion tabs (e.g. data structure) have an async setup and need a Suspense boundary -->
       <div v-for="item in datasetResources" :key="item['id']">
-        <ResourceAccordion
+        <Suspense
           v-if="
             datasetMetadata &&
             item['id'] != 'b1d97b5b-cb0e-4991-90be-4c8a16a6c2a7' &&
             filteredResources.includes(item['title']) &&
             item['type'] == 'main'
           "
-          :dataset="datasetMetadata"
-          :resource="item"
-        />
+        >
+          <ResourceAccordion :dataset="datasetMetadata" :resource="item" />
+        </Suspense>
       </div>
 
       <br />
@@ -563,22 +564,20 @@ const getAPIUrl = (endpoint: string) => {
             selectedDataset && ['LSH', 'SQR'].includes(selectedDataset['id'])
           "
         >
-          <ResourceAccordion
+          <Suspense
             v-if="
               datasetMetadata &&
               item['title'].includes('_' + selectedIndicateur + '_') &&
               item['type'] == 'documentation'
             "
-            :dataset="datasetMetadata"
-            :resource="item"
-          />
+          >
+            <ResourceAccordion :dataset="datasetMetadata" :resource="item" />
+          </Suspense>
         </span>
         <span v-else>
-          <ResourceAccordion
-            v-if="datasetMetadata && item['type'] == 'documentation'"
-            :dataset="datasetMetadata"
-            :resource="item"
-          />
+          <Suspense v-if="datasetMetadata && item['type'] == 'documentation'">
+            <ResourceAccordion :dataset="datasetMetadata" :resource="item" />
+          </Suspense>
         </span>
       </div>
     </div>
