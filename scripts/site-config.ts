@@ -6,7 +6,7 @@ import { load } from 'js-yaml'
 import { apply } from 'json-merge-patch'
 
 export const DEPLOY_ENVS = ['demo', 'preprod', 'prod'] as const
-export type DeployEnv = (typeof DEPLOY_ENVS)[number]
+type DeployEnv = (typeof DEPLOY_ENVS)[number]
 
 type Yaml = Record<string, unknown>
 
@@ -21,10 +21,9 @@ const isDeployEnv = (value: string): value is DeployEnv =>
 export const applyMergePatch = <T>(base: T, patch: unknown): T =>
   apply(structuredClone(base), patch) as T
 
-export const baseConfigPath = (siteId: string) =>
-  `${CONFIGS_DIR}${siteId}/config.yaml`
+const baseConfigPath = (siteId: string) => `${CONFIGS_DIR}${siteId}/config.yaml`
 
-export const envConfigPath = (siteId: string, deployEnv: DeployEnv) =>
+const envConfigPath = (siteId: string, deployEnv: DeployEnv) =>
   `${CONFIGS_DIR}${siteId}/env/${deployEnv}.yaml`
 
 const readYaml = (path: string): Yaml =>

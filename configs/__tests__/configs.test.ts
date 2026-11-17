@@ -4,61 +4,54 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { load } from 'js-yaml'
 import { describe, expect, it } from 'vitest'
 
-import {
-  baseConfigPath,
-  CONFIGS_DIR,
-  DEPLOY_ENVS,
-  envConfigPath
-} from '../../scripts/site-config'
-
-// top-level keys an env override may add even if absent from config.yaml
-const ALLOWED_NEW_KEYS = ['sentry']
-// free-form maps (API params) whose content may differ in keys per env
-const OPEN_MAPS = ['universe_query']
+import { CONFIGS_DIR, DEPLOY_ENVS } from '../../scripts/site-config'
 
 type Yaml = Record<string, unknown>
+
+const readYaml = (path: string) => load(readFileSync(path, 'utf-8')) as Yaml
 
 const isObject = (value: unknown): value is Yaml =>
   value !== null && typeof value === 'object' && !Array.isArray(value)
 
-const readYaml = (path: string) => load(readFileSync(path, 'utf-8')) as Yaml
+// keys an override may add: a top-level sentry block, and any universe_query (API params)
+const mayBeNew = (path: string[]) =>
+  path.join('.') === 'sentry' || path.includes('universe_query')
 
-// lists override paths that don't exist in base (typos, renamed or stale keys)
-function unknownPaths(base: Yaml, override: Yaml, prefix = ''): string[] {
+// override keys missing from base, i.e. typos, renamed or stale keys
+function unknownKeys(
+  base: Yaml,
+  override: Yaml,
+  path: string[] = []
+): string[] {
   return Object.entries(override).flatMap(([key, value]) => {
-    const path = `${prefix}${key}`
-    if (!(key in base)) {
-      return prefix === '' && ALLOWED_NEW_KEYS.includes(key) ? [] : [path]
-    }
+    const keyPath = [...path, key]
+    if (mayBeNew(keyPath)) return []
+    if (!(key in base)) return [keyPath.join('.')]
     const baseValue = base[key]
-    return isObject(baseValue) && isObject(value) && !OPEN_MAPS.includes(key)
-      ? unknownPaths(baseValue, value, `${path}.`)
+    return isObject(baseValue) && isObject(value)
+      ? unknownKeys(baseValue, value, keyPath)
       : []
   })
 }
 
-const sites = readdirSync(CONFIGS_DIR, { withFileTypes: true })
-  .filter(
-    (entry) => entry.isDirectory() && existsSync(baseConfigPath(entry.name))
-  )
-  .map((entry) => entry.name)
-
-describe.each(sites)('site config %s', (site) => {
+// <site>/env/<file> for every env override file
+const envFiles = readdirSync(CONFIGS_DIR).flatMap((site) => {
   const envDir = `${CONFIGS_DIR}${site}/env`
-  const envFiles = existsSync(envDir) ? readdirSync(envDir) : []
+  return existsSync(envDir)
+    ? readdirSync(envDir).map((file) => `${site}/env/${file}`)
+    : []
+})
 
-  it('only has env overrides for known deploy envs', () => {
-    const unknown = envFiles.filter(
-      (file) => !DEPLOY_ENVS.some((env) => file === `${env}.yaml`)
-    )
-    expect(unknown).toEqual([])
+describe.each(envFiles)('%s', (envFile) => {
+  const [site, , file] = envFile.split('/')
+
+  it('is named after a deploy env', () => {
+    expect(DEPLOY_ENVS.map((env) => `${env}.yaml`)).toContain(file)
   })
 
-  it.each(DEPLOY_ENVS)('env %s only overrides existing keys', (env) => {
-    const path = envConfigPath(site, env)
-    if (!existsSync(path)) return
-    expect(
-      unknownPaths(readYaml(baseConfigPath(site)), readYaml(path))
-    ).toEqual([])
+  it('only overrides keys from config.yaml', () => {
+    const base = readYaml(`${CONFIGS_DIR}${site}/config.yaml`)
+    const override = readYaml(`${CONFIGS_DIR}${envFile}`)
+    expect(unknownKeys(base, override)).toEqual([])
   })
 })
