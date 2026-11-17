@@ -1,0 +1,6 @@
+# prod overrides, deep-merged on top of ../config.yaml (see README "Configuration par environnement")
+website:
+  seo:
+    canonical_url: https://meteo.data.gouv.fr
+    meta:
+      robots: 'index, follow'

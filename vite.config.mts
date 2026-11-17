@@ -1,22 +1,48 @@
 import { sentryVitePlugin } from '@sentry/vite-plugin'
 import vue from '@vitejs/plugin-vue'
-import { readFileSync } from 'fs'
-import { load } from 'js-yaml'
 import { fileURLToPath, URL } from 'node:url'
 import { resolve } from 'path'
-import ViteYaml from 'unplugin-yaml/vite'
-import { defineConfig, loadEnv } from 'vite'
+import { defineConfig, loadEnv, type Plugin } from 'vite'
 import dynamicImport from 'vite-plugin-dynamic-import'
 import { createHtmlPlugin } from 'vite-plugin-html'
 import vueDevTools from 'vite-plugin-vue-devtools'
 
 import { vueDsfrAutoimportPreset } from '@gouvminint/vue-dsfr/meta'
 import AutoImport from 'unplugin-auto-import/vite'
+import { CONFIGS_DIR, loadSiteConfig } from './scripts/site-config.mjs'
 import type { SentryConfig, WebsiteConfig } from './src/model/config'
 
 interface Config {
   website: WebsiteConfig
   sentry?: SentryConfig
+}
+
+const SITE_CONFIG_MODULE_ID = 'virtual:site-config'
+const SITE_CONFIG_FILE = 'site-config.json'
+
+// Serves the resolved site config to the app, and publishes it as /site-config.json for external jobs
+function siteConfigPlugin(config: Config): Plugin {
+  const resolvedId = `\0${SITE_CONFIG_MODULE_ID}`
+  const json = JSON.stringify(config, null, 2)
+  return {
+    name: 'site-config',
+    resolveId: (id) => (id === SITE_CONFIG_MODULE_ID ? resolvedId : undefined),
+    load: (id) => (id === resolvedId ? `export default ${json}` : undefined),
+    generateBundle() {
+      this.emitFile({ type: 'asset', fileName: SITE_CONFIG_FILE, source: json })
+    },
+    configureServer(server) {
+      // config is resolved once in vite.config, so a config change needs a restart
+      server.watcher.add(CONFIGS_DIR)
+      server.watcher.on('change', (file) => {
+        if (file.startsWith(CONFIGS_DIR)) void server.restart()
+      })
+      server.middlewares.use(`/${SITE_CONFIG_FILE}`, (_req, res) => {
+        res.setHeader('Content-Type', 'application/json')
+        res.end(json)
+      })
+    }
+  }
 }
 
 // Shared esbuild config for dev and prod
@@ -32,9 +58,10 @@ const esbuildOptions = {
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
-  const configDir = `./configs/${env.VITE_SITE_ID}`
-  const configFileUrl = new URL(`${configDir}/config.yaml`, import.meta.url)
-  const config = load(readFileSync(configFileUrl, 'utf-8')) as Config
+  const config = loadSiteConfig(
+    env.VITE_SITE_ID,
+    env.VITE_DEPLOY_ENV || undefined
+  ) as Config
   return {
     base: '/',
     plugins: [
@@ -64,7 +91,7 @@ export default defineConfig(({ mode }) => {
           globalsPropValue: true
         }
       }),
-      ViteYaml(),
+      siteConfigPlugin(config),
       createHtmlPlugin({
         minify: true,
         inject: {
@@ -102,7 +129,6 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         '@root': resolve(__dirname, './'),
-        '@siteConfig': fileURLToPath(new URL(configDir, import.meta.url)),
         '@': fileURLToPath(new URL('./src', import.meta.url)),
         vue: 'vue/dist/vue.esm-bundler.js',
         // FIXME: xmlbuilder2 uses Node's EventEmitter, requiring this polyfill for the browser.

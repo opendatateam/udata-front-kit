@@ -1,3 +1,3 @@
-import config from '@siteConfig/config.yaml'
+import config from 'virtual:site-config'
 
 export default config
