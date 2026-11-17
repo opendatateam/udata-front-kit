@@ -23,10 +23,8 @@ website:
         - /admin
     sitemap_xml:
       topics_pages: []
-      datasets_pages:
-        - datasets
-      dataservices_pages:
-        - dataservices
+      datasets_pages: []
+      dataservices_pages: []
   formatted_title: '<i>meteo.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'RÉPUBLIQUE<br>
     FRANÇAISE'

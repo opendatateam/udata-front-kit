@@ -341,6 +341,8 @@ Le référencement des verticales est géré via la section `website.seo` du fic
 
 Les clés dans `sitemap_xml` (`topics_pages`, `datasets_pages`, `dataservices_pages`) doivent correspondre aux identifiants définis dans la section `pages:` du fichier de configuration.
 
+Le sitemap ne doit lister que des pages dont l'URL canonique est sur le site lui-même. Les pages de détail génériques des jeux de données et des API ayant leur URL canonique sur data.gouv.fr ne doivent pas y figurer. Les topics et les pages ayant une URL canonique propre (ex : `indicators` sur ecospheres) peuvent y figurer.
+
 Exemple :
 
 ```yaml
@@ -359,8 +361,7 @@ website:
         - bouquets
       datasets_pages:
         - indicators
-      dataservices_pages:
-        - dataservices
+      dataservices_pages: []
 ```
 
 ### Gestion des meta tags dans l'application
