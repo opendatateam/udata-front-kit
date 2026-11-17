@@ -10,11 +10,17 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 import { vueDsfrAutoimportPreset } from '@gouvminint/vue-dsfr/meta'
 import AutoImport from 'unplugin-auto-import/vite'
 import { CONFIGS_DIR, loadSiteConfig } from './scripts/site-config'
-import type { SentryConfig, WebsiteConfig } from './src/model/config'
 
+// Subset of the site config model (src/model/config.ts) used at build time, redefined here because
+// importing the model pulls @datagouv/components-next sources into the tsconfig.node.json project
 interface Config {
-  website: WebsiteConfig
-  sentry?: SentryConfig
+  website: {
+    title: string
+    seo?: {
+      meta?: { keywords?: string; description?: string; robots?: string }
+    }
+  }
+  sentry?: { domain_url?: string }
 }
 
 // Publishes the resolved site config as /site-config.json, and restarts the dev server on config changes
@@ -72,11 +78,8 @@ export default defineConfig(({ mode }) => {
       AutoImport({
         include: [/\.[tj]sx?$/, /\.vue$/, /\.vue\?vue/],
         imports: [
-          // @ts-expect-error TS2322
           'vue',
-          // @ts-expect-error TS2322
           'vue-router',
-          // @ts-expect-error TS2322
           vueDsfrAutoimportPreset // Autoimport des composables de VueDsfr
         ],
         vueTemplate: true,
