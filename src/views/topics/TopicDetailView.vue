@@ -22,11 +22,7 @@ import config from '@/config'
 import type { BreadcrumbItem } from '@/model/breadcrumb'
 import type { Topic } from '@/model/topic'
 import type { TopicPageRouterConf } from '@/router/model'
-import {
-  useCurrentPageConf,
-  useRouteMeta,
-  useRouteParamsAsStringReactive
-} from '@/router/utils'
+import { useCurrentPageConf, useRouteItem, useRouteMeta } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
@@ -44,7 +40,6 @@ const router = useRouter()
 const meta = useRouteMeta()
 const store = useTopicStore()
 const loading = useLoading()
-const route = useRouteParamsAsStringReactive()
 
 const topic: Ref<Topic | null> = ref(null)
 const spatialCoverage = useSpatialCoverage(topic)
@@ -252,24 +247,12 @@ watch(
 // Callback to hide the loader, passed to custom description components
 const hideLoader = ref<(() => void) | null>(null)
 
-watch(
-  () => route.value?.params.item_id,
-  (itemId) => {
-    if (!itemId) return
+useRouteItem(
+  (idOrSlug) => {
     const loader = loading.show({ enforceFocus: false })
     hideLoader.value = () => loader.hide()
-    store
-      .load(itemId, { toasted: false, redirectNotFound: true })
-      .then((res) => {
-        topic.value = res
-        if (topic.value.slug !== itemId) {
-          router.replace({
-            name: `${pageKey}_detail`,
-            params: { ...route.value.params, item_id: topic.value.slug },
-            query: route.value.query
-          })
-        }
-      })
+    return store
+      .load(idOrSlug, { toasted: false, redirectNotFound: true })
       .finally(() => {
         // Only auto-hide if there's no custom description component
         // Custom components are responsible for calling hideLoader when ready
@@ -278,7 +261,12 @@ watch(
         }
       })
   },
-  { immediate: true }
+  {
+    onLoaded: (loaded) => {
+      topic.value = loaded
+    },
+    replaceWithSlug: true
+  }
 )
 </script>
 

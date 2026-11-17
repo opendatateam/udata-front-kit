@@ -15,6 +15,9 @@ export const UNFILLED_LABEL = 'Non renseigné'
 
 const EXCLUDE_TAGS = ['usage', 'maille']
 
+// marks an indicator as under review after its publication
+const BETA_TAG = 'ecospheres-indicateurs-beta'
+
 /**
  * Displayable tags of an indicator (secteur, levier...)
  */
@@ -64,6 +67,11 @@ export const useIndicatorExtras = (indicator: Ref<Indicator | undefined>) => {
     sources
   }
 }
+
+export const isBetaIndicator = (
+  indicator: MaybeRefOrGetter<Indicator | DatasetV2 | undefined>
+): ComputedRef<boolean> =>
+  computed(() => toValue(indicator)?.tags?.includes(BETA_TAG) ?? false)
 
 export const isIndicator = (
   dataset: Ref<DatasetV2 | undefined>
