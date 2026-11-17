@@ -3,7 +3,7 @@ import { datasetFactory } from 'cypress/support/factories/datasets_factory'
 import { discussionFactory } from 'cypress/support/factories/discussions_factory'
 import { resourceFactory } from 'cypress/support/factories/resources_factory'
 
-const NETWORKS = Cypress.env('siteConfig').networks
+const NETWORKS = Cypress.expose('siteConfig').networks
 const SIMM_TOPIC_ID: string =
   NETWORKS?.entries?.simm?.pages.datasets.universe_query.topic
 

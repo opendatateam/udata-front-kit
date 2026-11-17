@@ -1,8 +1,10 @@
 import { defineConfig } from 'cypress'
+import { readdirSync } from 'fs'
 
 import { loadSiteConfig } from './scripts/site-config.ts'
 
 export default defineConfig({
+  allowCypressEnv: false,
   e2e: {
     baseUrl: process.env.CYPRESS_BASE_URL || 'http://localhost:4173',
     supportFile: 'cypress/support/e2e.ts',
@@ -17,19 +19,18 @@ export default defineConfig({
 
       // Load site config and make it available to tests
       if (siteId) {
-        config.env.siteConfig = loadSiteConfig(
+        const siteConfig = loadSiteConfig(
           siteId,
           process.env.VITE_DEPLOY_ENV || undefined
         )
-        config.env.siteId = siteId
+        config.expose = { ...config.expose, siteConfig, siteId }
       }
 
       if (siteId) {
-        // Only include tests for the specific site
-        config.specPattern = [
-          'cypress/e2e/*.cy.{js,jsx,ts,tsx}', // General tests
-          `cypress/e2e/custom/${siteId}/**/*.cy.{js,jsx,ts,tsx}` // Site-specific tests
-        ]
+        // Exclude other sites' tests
+        config.excludeSpecPattern = readdirSync('cypress/e2e/custom')
+          .filter((dir) => dir !== siteId)
+          .map((dir) => `cypress/e2e/custom/${dir}/**`)
       } else {
         // If no site ID is set, exclude all custom site tests
         config.excludeSpecPattern = 'cypress/e2e/custom/**/*.cy.{js,jsx,ts,tsx}'
