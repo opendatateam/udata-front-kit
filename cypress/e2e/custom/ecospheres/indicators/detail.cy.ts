@@ -50,6 +50,25 @@ describe('Indicator Detail View', () => {
     })
   })
 
+  describe('Beta callout', () => {
+    it('should display the review callout for a beta indicator', () => {
+      const betaIndicator = createIndicator({
+        tags: ['ecospheres-indicateurs', 'ecospheres-indicateurs-beta']
+      })
+      cy.mockDatasetAndRelatedObjects(betaIndicator)
+      cy.visit(`/indicators/${betaIndicator.id}`)
+      cy.contains('.fr-callout', 'Indicateur en cours de revue').should(
+        'be.visible'
+      )
+    })
+
+    it('should not display the review callout for a regular indicator', () => {
+      cy.visit(`/indicators/${indicator.id}`)
+      cy.contains(indicator.title).should('be.visible')
+      cy.contains('Indicateur en cours de revue').should('not.exist')
+    })
+  })
+
   describe('Informations Tab', () => {
     beforeEach(() => {
       cy.visit(`/indicators/${indicator.id}`)
