@@ -60,7 +60,7 @@ describe('Home Page', () => {
 
   it('should render footer mandatory links with the expected href', () => {
     const mandatoryLinks: { label: string; to?: string; href?: string }[] =
-      Cypress.env('siteConfig')?.website?.footer?.mandatory_links ?? []
+      Cypress.expose('siteConfig')?.website?.footer?.mandatory_links ?? []
 
     mandatoryLinks.forEach((link) => {
       const expectedHref = link.href ?? link.to

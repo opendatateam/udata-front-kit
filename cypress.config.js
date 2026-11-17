@@ -3,6 +3,7 @@ import { readFileSync } from 'fs'
 import { load } from 'js-yaml'
 
 export default defineConfig({
+  allowCypressEnv: false,
   e2e: {
     baseUrl: process.env.CYPRESS_BASE_URL || 'http://localhost:4173',
     supportFile: 'cypress/support/e2e.ts',
@@ -19,8 +20,7 @@ export default defineConfig({
       if (siteId) {
         const configPath = `./configs/${siteId}/config.yaml`
         const siteConfig = load(readFileSync(configPath, 'utf-8'))
-        config.env.siteConfig = siteConfig
-        config.env.siteId = siteId
+        config.expose = { ...config.expose, siteConfig, siteId }
       }
 
       if (siteId) {
