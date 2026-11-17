@@ -17,7 +17,7 @@ interface Config {
   sentry?: SentryConfig
 }
 
-// Publishes the resolved site config as /site-config.json for external jobs
+// Publishes the resolved site config as /site-config.json, and restarts the dev server on config changes
 function siteConfigPlugin(config: Config): Plugin {
   return {
     name: 'site-config',
