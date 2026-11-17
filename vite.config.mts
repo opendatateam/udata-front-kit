@@ -26,6 +26,8 @@ function siteConfigPlugin(config: Config): Plugin {
   const json = JSON.stringify(config, null, 2)
   return {
     name: 'site-config',
+    // run before vite-plugin-html's history fallback, which would rewrite /site-config.json to index.html
+    enforce: 'pre',
     resolveId: (id) => (id === SITE_CONFIG_MODULE_ID ? resolvedId : undefined),
     load: (id) => (id === resolvedId ? `export default ${json}` : undefined),
     generateBundle() {
