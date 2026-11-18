@@ -83,6 +83,14 @@ export default defineConfig(({ mode }) => {
               routeFile.includes(`custom/${env.VITE_SITE_ID}/routes.ts`)
             )
           }
+          // same for the design system custom cards
+          if (id.includes('/src/utils/design/loadSiteCards.ts')) {
+            return files.filter((cardsFile) =>
+              cardsFile.includes(
+                `custom/${env.VITE_SITE_ID}/components/design/`
+              )
+            )
+          }
         }
       }),
       // Only enable Sentry if the site config has sentry configured and not in test environment
