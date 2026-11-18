@@ -2,12 +2,26 @@ import type { IndicatorMesh } from '../../../model/indicator'
 
 export const DEFAULT_TABULAR_API_URL = 'https://tabular-api.data.gouv.fr'
 
-export const GEOCOLUMNS: Record<Exclude<IndicatorMesh, 'fr'>, string> = {
+// 'fr' has no entry: national-level data needs no territory filter.
+// 'commune' has no entry: the tabular API doesn't expose a commune-level
+// geocode column to filter on.
+export const GEOCOLUMNS: Record<
+  Exclude<IndicatorMesh, 'fr' | 'commune'>,
+  string
+> = {
   departement: 'geocode_departement',
   region: 'geocode_region',
   epci: 'geocode_epci'
 }
 
+export type TerritorialMesh = keyof typeof GEOCOLUMNS
+
+// territorial meshes are those filterable by geocode
+export const needsTerritory = (mesh: string): mesh is TerritorialMesh =>
+  Object.keys(GEOCOLUMNS).includes(mesh)
+
+// 'commune' is excluded (see GEOCOLUMNS above); IndicatorVizMeshSelect lists
+// it separately, gated on commune-level data actually being available.
 export const MESHES: [IndicatorMesh, string][] = [
   ['fr', 'National'],
   ['region', 'Région'],
@@ -58,3 +72,7 @@ export const COLORS = [
   '#6A6156',
   '#C9191E'
 ]
+
+export function getSeriesColor(index: number): string {
+  return COLORS[index % COLORS.length]
+}

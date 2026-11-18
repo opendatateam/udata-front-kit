@@ -1,31 +1,33 @@
 <script setup lang="ts">
 import { ReadMore, SimpleBanner } from '@datagouv/components-next'
-import { capitalize, computed, onMounted, ref } from 'vue'
+import { capitalize, computed, ref, useTemplateRef } from 'vue'
 
 import DiscussionsList from '@/components/DiscussionsList.vue'
 import GenericContainer from '@/components/GenericContainer.vue'
+import TabsWithCounts from '@/components/TabsWithCounts.vue'
 import DatasetAddToTopicModal from '@/components/datasets/DatasetAddToTopicModal.vue'
 import DatasetDataservicesList from '@/components/datasets/DatasetDataservicesList.vue'
 import DatasetInformationPanel from '@/components/datasets/DatasetInformationPanel.vue'
 import DatasetReusesList from '@/components/datasets/DatasetReusesList.vue'
 import DatasetSidebar from '@/components/datasets/DatasetSidebar.vue'
 import ExtendedInformationPanel from '@/components/datasets/ExtendedInformationPanel.vue'
-import ResourcesList from '@/components/datasets/ResourcesList.vue'
+import ResourcesTabContent from '@/components/datasets/ResourcesTabContent.vue'
 import config from '@/config'
-import { useCurrentPageConf, useRouteParamsAsString } from '@/router/utils'
+import type { BreadcrumbItem } from '@/model/breadcrumb'
+import { useCurrentPageConf, useRouteItem } from '@/router/utils'
 import { useDatasetStore } from '@/store/DatasetStore'
 import { useResourceStore } from '@/store/ResourceStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown } from '@/utils'
 import { useDatasetsConf, usePageConf } from '@/utils/config'
+import { getParentDatasetId } from '@/utils/dataset'
+import { useResourceExplorer } from '@/utils/explorer'
 import { useLabels } from '@/utils/labels'
 import type { OgcLayerInfo } from '@/utils/ogcServices'
 import { fetchAllOgcResources } from '@/utils/ogcServices'
 import { openInQgis } from '@/utils/qgis'
 import { useMeta } from '@/utils/seo'
-
-const route = useRouteParamsAsString()
-const datasetIdOrSlug = route.params.item_id
+import { Tab, tabIds, useRoutedTabs } from '@/utils/tabs'
 
 const datasetStore = useDatasetStore()
 const resourceStore = useResourceStore()
@@ -53,6 +55,24 @@ const handleOpenInQgis = async () => {
   }
 }
 
+const datasetIdOrSlug = useRouteItem(
+  (idOrSlug) =>
+    datasetStore.load(idOrSlug, { toasted: false, redirectNotFound: true }),
+  {
+    onLoaded: (loaded) => {
+      computeOgcInfo(loaded.id).catch((err) =>
+        console.error('Failed to compute OGC info:', err)
+      )
+      const parentId = getParentDatasetId(loaded)
+      if (parentId) {
+        datasetStore
+          .load(parentId, { toasted: false })
+          .catch((err) => console.error('Failed to load parent dataset:', err))
+      }
+    }
+  }
+)
+
 const { pageKey, pageConf } = useCurrentPageConf()
 const showDiscussions = pageConf.resources_tabs.discussions.display
 
@@ -61,6 +81,7 @@ const topicPageKey = datasetsConf.add_to_topic?.page
 const topicPageConf = topicPageKey ? usePageConf(topicPageKey) : null
 const labels = useLabels(pageConf.labels)
 const topicLabels = topicPageConf ? useLabels(topicPageConf.labels) : null
+const { enabled: resourceExplorerEnabled } = useResourceExplorer()
 
 const canEdit = computed(() => {
   return pageConf.editable && userStore.hasEditPermissions(dataset.value)
@@ -74,28 +95,49 @@ const canAddToTopic = computed(() => {
   )
 })
 
-const dataset = computed(() => datasetStore.get(datasetIdOrSlug))
+const dataset = computed(() => datasetStore.get(datasetIdOrSlug.value))
+
+const parentDataset = computed(() => {
+  const parentId = getParentDatasetId(dataset.value)
+  return parentId ? datasetStore.get(parentId) : undefined
+})
 
 const showAddToTopicModal = ref(false)
 
 const links = computed(() => {
-  const breadcrumbs = [{ to: '/', text: 'Accueil' }]
+  const breadcrumbs: BreadcrumbItem[] = [{ to: '/', text: 'Accueil' }]
   breadcrumbs.push({
-    to: pageConf.list_all === true ? `/${pageKey || 'datasets'}` : '',
+    to: pageConf.list_all === true ? { name: pageKey || 'datasets' } : '',
     text: pageConf.breadcrumb_title || pageConf.title
   })
   breadcrumbs.push({ to: '', text: dataset.value?.title ?? '' })
   return breadcrumbs
 })
 
-const tabTitles = [
-  { title: 'Fichiers', tabId: 'tab-0', panelId: 'tab-content-0' },
-  { title: 'Réutilisations et API', tabId: 'tab-1', panelId: 'tab-content-1' },
-  { title: 'Discussions', tabId: 'tab-2', panelId: 'tab-content-2' },
-  { title: 'Informations', tabId: 'tab-3', panelId: 'tab-content-3' }
-]
+const discussionsList =
+  useTemplateRef<InstanceType<typeof DiscussionsList>>('discussionsList')
 
-const activeTab = ref(0)
+const { tabs, activeIndex } = useRoutedTabs(() => [
+  {
+    slug: Tab.FILES,
+    title: 'Fichiers',
+    count: dataset.value?.resources.total ?? 0
+  },
+  {
+    slug: Tab.REUSES_AND_DATASERVICES,
+    title: 'Réutilisations et API',
+    count:
+      (dataset.value?.metrics.reuses ?? 0) +
+      (dataset.value?.metrics.dataservices ?? 0)
+  },
+  {
+    slug: Tab.DISCUSSIONS,
+    title: 'Discussions',
+    count:
+      discussionsList.value?.total ?? dataset.value?.metrics.discussions ?? 0
+  },
+  { slug: Tab.INFORMATIONS, title: 'Informations' }
+])
 
 const description = computed(() => descriptionFromMarkdown(dataset))
 
@@ -135,18 +177,6 @@ useMeta({
   description: () => dataset.value?.description,
   canonicalUrl: () => dataset.value?.page
 })
-
-onMounted(() => {
-  datasetStore
-    .load(datasetIdOrSlug, { toasted: false, redirectNotFound: true })
-    .then(() => {
-      if (dataset.value) {
-        computeOgcInfo(dataset.value.id).catch((err) =>
-          console.error('Failed to compute OGC info:', err)
-        )
-      }
-    })
-})
 </script>
 
 <template>
@@ -155,7 +185,10 @@ onMounted(() => {
       <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
     </div>
     <div
-      v-if="dataset && (canEdit || canAddToTopic || exploreUrl)"
+      v-if="
+        dataset &&
+        (canEdit || canAddToTopic || (exploreUrl && !resourceExplorerEnabled))
+      "
       class="fr-col-auto fr-grid-row fr-grid-row--middle flex-gap"
     >
       <!-- add dataset to topic (if enabled) -->
@@ -175,7 +208,7 @@ onMounted(() => {
         />
       </template>
       <DsfrButton
-        v-if="exploreUrl"
+        v-if="exploreUrl && !resourceExplorerEnabled"
         size="sm"
         label="Explorer les données"
         icon="fr-icon-table-line"
@@ -192,10 +225,22 @@ onMounted(() => {
       />
     </div>
   </div>
-  <GenericContainer v-if="dataset">
+  <GenericContainer v-if="dataset" :key="dataset.id">
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-1w">
       <div class="fr-col-12 fr-col-md-8">
         <h1 class="fr-mb-2v">{{ dataset.title }}</h1>
+        <DsfrCallout v-if="parentDataset" class="fr-mb-4v">
+          <p>
+            Ce jeu de données est lié à un jeu de données parent :
+            <RouterLink
+              :to="{
+                name: `${pageKey}_detail`,
+                params: { item_id: parentDataset.slug }
+              }"
+              >{{ parentDataset.title }}</RouterLink
+            >.
+          </p>
+        </DsfrCallout>
         <ReadMore max-height="600">
           <!-- eslint-disable-next-line vue/no-v-html -->
           <div v-html="description"></div>
@@ -204,15 +249,15 @@ onMounted(() => {
       <DatasetSidebar :dataset="dataset" />
     </div>
 
-    <DsfrTabs
-      v-model="activeTab"
+    <TabsWithCounts
+      v-model="activeIndex"
       class="fr-mt-2w"
       tab-list-name="Groupes d'attributs du jeu de données"
-      :tab-titles="tabTitles"
+      :tabs="tabs"
     >
       <!-- Fichiers -->
-      <DsfrTabContent panel-id="tab-content-0" tab-id="tab-0">
-        <ResourcesList :dataset="dataset" />
+      <DsfrTabContent v-bind="tabIds(Tab.FILES)">
+        <ResourcesTabContent :dataset="dataset" />
         <div v-if="ogcLayerInfo.has(dataset.id)" class="fr-mt-2w">
           <DsfrButton
             secondary
@@ -227,13 +272,13 @@ onMounted(() => {
       </DsfrTabContent>
 
       <!-- Réutilisations et API -->
-      <DsfrTabContent panel-id="tab-content-1" tab-id="tab-1">
+      <DsfrTabContent v-bind="tabIds(Tab.REUSES_AND_DATASERVICES)">
         <DatasetDataservicesList :dataset-id="dataset.id" />
         <DatasetReusesList :dataset-id="dataset.id" />
       </DsfrTabContent>
 
       <!-- Discussions -->
-      <DsfrTabContent panel-id="tab-content-2" tab-id="tab-2">
+      <DsfrTabContent v-bind="tabIds(Tab.DISCUSSIONS)">
         <SimpleBanner
           v-if="!pageConf.resources_tabs.discussions.create"
           type="primary"
@@ -256,11 +301,15 @@ onMounted(() => {
             </div>
           </div>
         </SimpleBanner>
-        <DiscussionsList v-if="showDiscussions" :subject="dataset" />
+        <DiscussionsList
+          v-if="showDiscussions"
+          ref="discussionsList"
+          :subject="dataset"
+        />
       </DsfrTabContent>
 
       <!-- Informations -->
-      <DsfrTabContent panel-id="tab-content-3" tab-id="tab-3">
+      <DsfrTabContent v-bind="tabIds(Tab.INFORMATIONS)">
         <div class="divide-y">
           <ExtendedInformationPanel
             v-if="
@@ -271,6 +320,6 @@ onMounted(() => {
           <DatasetInformationPanel :dataset="dataset" />
         </div>
       </DsfrTabContent>
-    </DsfrTabs>
+    </TabsWithCounts>
   </GenericContainer>
 </template>

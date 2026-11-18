@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import VIconDsfr from '@/components/VIconDsfr.vue'
+import { trackSearchValidated } from '@/utils/tracking'
 import { ref } from 'vue'
 
 import { useRouter } from 'vue-router'
@@ -22,6 +23,11 @@ const props = defineProps({
   isFilter: {
     type: Boolean,
     default: false
+  },
+  // where the search is performed from, used to distinguish sources in tracking (unused when isFilter)
+  trackingSource: {
+    type: String,
+    default: ''
   },
   labelVisible: {
     type: Boolean,
@@ -54,12 +60,22 @@ const buildSearchQueryParams = (q: string) => {
 }
 
 const doSimpleSearch = (event: string) => {
-  query.value = event
-  router.push({
-    path: props.searchEndpoint || router.resolve({ name: 'datasets' }).href,
-    query: buildSearchQueryParams(query.value)
-  })
-  query.value = ''
+  // DsfrSearchBar's native form submit on Enter fires @search a second time, asynchronously
+  // and after our own reset below — reading the already-emptied value. A real search is
+  // never empty, so just ignore it rather than race that delayed, duplicate event.
+  if (!event) return
+
+  if (!props.isFilter) {
+    trackSearchValidated(event, props.trackingSource)
+  }
+  router
+    .push({
+      path: props.searchEndpoint || router.resolve({ name: 'datasets' }).href,
+      query: buildSearchQueryParams(event)
+    })
+    .then(() => {
+      query.value = ''
+    })
   emits('doSearch')
 }
 </script>

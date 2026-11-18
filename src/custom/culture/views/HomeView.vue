@@ -163,6 +163,7 @@ onMounted(() => {
             id="big-select-search"
             :placeholder="config.website.header.search.placeholder"
             search-label="Rechercher"
+            tracking-source="Accueil"
           />
         </div>
       </template>

@@ -71,8 +71,9 @@ describe('Topic Elements - Factor List Display', () => {
       const ungroupedFactors = factorFactory.many(2, {
         traits: ['missing_no_group']
       })
-      const { testTopic, testFactors } =
-        setupTopicWithExistingFactors(ungroupedFactors)
+      const { testTopic, testFactors } = setupTopicWithExistingFactors({
+        factors: ungroupedFactors
+      })
       visitTopic(testTopic.slug)
 
       cy.wait('@getElementsNone')
@@ -225,7 +226,7 @@ describe('Topic Elements - Factor List Display', () => {
         overrides: {
           extras: {
             ['ecospheres' as SiteId]: {
-              uri: `${Cypress.env('siteConfig').datagouvfr.base_url}/dataservices/referenced-dataservice-2`,
+              uri: `${Cypress.expose('siteConfig').datagouvfr.base_url}/dataservices/referenced-dataservice-2`,
               availability: Availability.LOCAL_AVAILABLE,
               group: 'Test Group'
             }
