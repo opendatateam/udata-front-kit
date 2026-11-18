@@ -37,6 +37,27 @@ const defaultRoutes: RouteRecordRaw[] = [
       }
     }
   },
+  // design system showcase
+  {
+    path: '/_design',
+    component: async () => await import('@/views/design/DesignLayoutView.vue'),
+    children: [
+      {
+        path: '',
+        name: 'design',
+        redirect: { name: 'design_cards' }
+      },
+      {
+        path: 'cards',
+        name: 'design_cards',
+        meta: {
+          title: 'Cartes'
+        },
+        component: async () =>
+          await import('@/views/design/DesignCardsView.vue')
+      }
+    ]
+  },
   // technical pages
   {
     path: '/404',
