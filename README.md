@@ -430,7 +430,6 @@ Il faut un client par instance. La demande se fait auprès de l'équipe data.gou
 | ------------------- | ------------------------- | -------------------------------------------------------------------------------------------- |
 | Développement local | `demo.data.gouv.fr`       | `http://localhost:5173/login/callback`                                                       |
 | Review apps         | `demo.data.gouv.fr` seule | `https://deploy-preview-*--{site}.sandbox.data.developpement-durable.gouv.fr/login/callback` |
-| Demo                | `demo.data.gouv.fr`       | `https://{domaine de demo}/login/callback`                                                   |
 | Preprod             | Celle de `base_url`       | `https://{domaine de preprod}/login/callback`                                                |
 | Production          | `www.data.gouv.fr`        | `https://{domaine de production}/login/callback`                                             |
 
