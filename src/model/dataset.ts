@@ -16,6 +16,7 @@ export type TypedHarvest = Harvest & {
   issued_at?: string
   modified_at?: string
   source_id?: string
+  doi?: string | null
 }
 
 export interface DatasetV2Response extends GenericResponse {
@@ -44,4 +45,6 @@ export type ExtendedDatasetV2WithFullObject = DatasetV2WithFullObject & {
     dcat?: DcatExtras
   }
   harvest: TypedHarvest | null
+  // FIXME: remove when typed upstream in @datagouv/components-next
+  doi?: string | null
 }
