@@ -4,6 +4,8 @@ import { useDesignSection } from '@/utils/design/designSections'
 const props = defineProps<{
   id: string
   title: string
+  // technical name of the component(s) shown in the section
+  component: string
   description?: string
   // the card can't render on this site: shows a note instead of the examples
   unavailable?: boolean
@@ -16,7 +18,10 @@ if (!props.unavailable) {
 
 <template>
   <section :id="id" class="fr-mb-6w">
-    <h3 class="fr-h5 fr-mb-1w">{{ title }}</h3>
+    <h3 class="fr-h5 fr-mb-1w">
+      {{ title }}
+      <code class="design-section__component">{{ component }}</code>
+    </h3>
     <p v-if="unavailable" class="design-section__note fr-text--sm fr-mb-0">
       Non disponible sur ce site.
     </p>
@@ -30,6 +35,11 @@ if (!props.unavailable) {
 </template>
 
 <style scoped>
+.design-section__component {
+  font-size: 0.875rem;
+  font-weight: 400;
+}
+
 .design-section__note {
   color: var(--text-mention-grey);
 }
