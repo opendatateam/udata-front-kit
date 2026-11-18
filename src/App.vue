@@ -8,6 +8,7 @@ import HeaderComponent from './components/header/HeaderComponent.vue'
 import type { InfoToAnnounce } from './components/LiveRegion.vue'
 import LiveRegion from './components/LiveRegion.vue'
 import SkipLinks, { type SkipLinksProps } from './components/SkipLinks.vue'
+import SurveyModal from './components/SurveyModal.vue'
 import {
   AccessibilityPropertiesKey,
   type AccessibilityPropertiesType
@@ -17,6 +18,7 @@ import { fromMarkdown } from './utils'
 import { useWebsiteConfig } from './utils/config'
 
 const userStore = useUserStore()
+const route = useRoute()
 const isNoticeClosed = ref(false)
 
 const skipLinks: SkipLinksProps['links'] = [
@@ -38,6 +40,9 @@ const noticeContent = computed(() => {
 
 const siteID = config.site_id
 const isLoggedIn = computed(() => userStore.$state.isLoggedIn)
+const hideHeaderSearch = computed(
+  () => route.name === 'home' && !!config.website.header.search.hide_on_home
+)
 
 const userName = computed(() => userStore.userName)
 const quickLinks = computed(() => {
@@ -120,10 +125,15 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
 <template>
   <Toaster rich-colors />
   <div id="tooltips" />
-  <SkipLinks ref="skipLinksComp" :links="skipLinks" />
+  <!-- fullscreen mode is responsible for its own skiplinks -->
+  <SkipLinks
+    v-if="!route.meta.fullscreen"
+    ref="skipLinksComp"
+    :links="skipLinks"
+  />
   <LiveRegion v-if="liveInfos" :infos="liveInfos" aria-live-mode="assertive" />
   <DsfrNotice
-    v-if="!isNoticeClosed && noticeContent"
+    v-if="!route.meta.fullscreen && !isNoticeClosed && noticeContent"
     :closeable="config.website.notice?.closeable ? true : undefined"
     @close="isNoticeClosed = true"
   >
@@ -131,9 +141,11 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
     <span v-html="noticeContent"></span>
   </DsfrNotice>
   <HeaderComponent
+    v-if="!route.meta.fullscreen"
     :user-name="userName"
     :quick-links="quickLinks"
     :custom-search="true"
+    :hide-search="hideHeaderSearch"
   />
 
   <main id="main-content" :class="siteID" role="main">
@@ -141,6 +153,7 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
   </main>
 
   <DsfrFooter
+    v-if="!route.meta.fullscreen"
     :class="[siteID, 'fr-mt-16w']"
     :logo-text="rf_title"
     :operator-img-src="logo?.src"
@@ -153,6 +166,7 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
     :mandatory-links="mandatory_links"
     :home-title="`Retour à l'accueil du site - ${title}`"
   />
+  <SurveyModal />
 </template>
 
 <!-- global styles -->
@@ -170,7 +184,6 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
 .fr-footer__logo {
   max-width: 100%;
 }
-.simplifions.fr-mt-16w,
 .culture.fr-mt-16w {
   margin-top: 0 !important;
 }

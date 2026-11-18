@@ -44,7 +44,7 @@ export type Indicator = DatasetV2WithFullObject & {
   extras: IndicatorExtras
 }
 
-export type IndicatorMesh = 'fr' | 'region' | 'departement' | 'epci'
+export type IndicatorMesh = 'fr' | 'region' | 'departement' | 'epci' | 'commune'
 
 export type IndicatorResourceExtras = {
   maille: IndicatorMesh

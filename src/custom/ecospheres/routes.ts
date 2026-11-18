@@ -1,6 +1,6 @@
 import {
+  useContributorsRoutes,
   useGlobalSearchPageRoutes,
-  useOrganizationsRoutes,
   useTopicAdminPagesRoutes
 } from '@/router/utils'
 import type { RouteRecordRaw } from 'vue-router'
@@ -49,12 +49,12 @@ export const routes: RouteRecordRaw[] = [
     topicConf,
     datasetCardComponent: async () =>
       await import(
-        '@/custom/ecospheres/components/datasets/DatasetOrIndicatorCard.vue'
+        '@/custom/ecospheres/components/datasets/DatasetOrIndicatorInTopicCard.vue'
       )
   }),
   ...useTopicAdminPagesRoutes({
     pageKey: 'bouquets',
     topicConf
   }),
-  useOrganizationsRoutes()
+  ...useContributorsRoutes()
 ]

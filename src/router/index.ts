@@ -2,8 +2,12 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
 import config from '@/config'
 import type { StaticPageConfig } from '@/model/config'
+import { rewriteDiscussionHash } from '@/router/deeplinks'
+import LocalStorageService from '@/services/LocalStorageService'
+import { useResourceExplorer } from '@/utils/explorer'
 import NotFoundView from '@/views/NotFoundView.vue'
 import StaticPageView from '@/views/StaticPageView.vue'
+import { toast } from '@datagouv/components-next'
 
 // common/default routes
 const defaultRoutes: RouteRecordRaw[] = [
@@ -15,6 +19,23 @@ const defaultRoutes: RouteRecordRaw[] = [
       title: 'Accueil'
     },
     component: async () => await import('@/views/HomeView.vue')
+  },
+  // fullscreen resource explorer, opt-in per site
+  {
+    path: '/explore/:item_id',
+    name: 'explore',
+    meta: {
+      fullscreen: true,
+      preserveScrollOnReplace: true
+    },
+    component: async () =>
+      await import('@/views/datasets/DatasetExploreView.vue'),
+    beforeEnter: () => {
+      const { eligible } = useResourceExplorer()
+      if (!eligible.value) {
+        return { name: 'not_found' }
+      }
+    }
   },
   // technical pages
   {
@@ -45,6 +66,15 @@ if (config.website.oauth_option === true) {
     {
       path: '/login',
       name: 'login',
+      // the oauth flow relies on localStorage to persist PKCE state across the redirect
+      beforeEnter: () => {
+        if (!LocalStorageService.isAvailable()) {
+          toast.error(
+            'La connexion nécessite que votre navigateur autorise le stockage local.'
+          )
+          return { name: 'home' }
+        }
+      },
       component: async () => await import('@/views/LoginView.vue')
     },
     {
@@ -96,20 +126,14 @@ const routerPromise = siteRoutesPromise.then((siteRoutes) => {
   siteRoutes.forEach((route) => {
     routesMap.set(route.path, route)
   })
-  // FIXME: remove me when simplifions is out of front-kit (SEO/sitemap hack)
-  // static pages never override an already registered route (default or site-specific)
-  pages.forEach((route) => {
-    if (!routesMap.has(route.path)) {
-      routesMap.set(route.path, route)
-    }
-  })
   const routes = Array.from(routesMap.values())
+  routes.push(...pages)
   // catch all 404 (keep at the end of the list)
   routes.push({
     path: '/:pathMatch(.*)',
     component: NotFoundView
   })
-  return createRouter({
+  const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes,
     scrollBehavior(to, from, savedPosition) {
@@ -125,8 +149,20 @@ const routerPromise = siteRoutesPromise.then((siteRoutes) => {
         }
         return false
       }
+      // Preserve scroll when switching tabs or query on a detail page, unless back/forward
+      if (
+        to.meta.objectType &&
+        to.name === from.name &&
+        to.params.item_id === from.params.item_id
+      ) {
+        return savedPosition ?? false
+      }
       // Preserve scroll when switching between search list pages (e.g. datasets ↔ indicators)
       if (to.meta.searchConfig && from.meta.searchConfig) {
+        return false
+      }
+      // When asked explicitely by route, do not scroll to top when navigating on the same page
+      if (to.path === from.path && to.meta.preserveScrollOnReplace) {
         return false
       }
       if (savedPosition !== null) {
@@ -136,6 +172,8 @@ const routerPromise = siteRoutesPromise.then((siteRoutes) => {
       }
     }
   })
+  router.beforeEach(rewriteDiscussionHash)
+  return router
 })
 
 export default routerPromise
