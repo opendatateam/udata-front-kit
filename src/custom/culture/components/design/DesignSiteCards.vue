@@ -10,7 +10,11 @@ const link = '/_design/cards#culture-datasets'
 </script>
 
 <template>
-  <DesignSection id="culture-datasets" title="Jeu de données culturel">
+  <DesignSection
+    id="culture-datasets"
+    title="Jeu de données culturel"
+    component="CultureDatasetCard"
+  >
     <DesignExample label="Avec image et libellé d'action" narrow>
       <CultureDatasetCard
         title="Pratiques culturelles des Français"

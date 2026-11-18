@@ -27,7 +27,7 @@ const indicator: DatasetV2 = {
 </script>
 
 <template>
-  <DesignSection id="indicators" title="Indicateur">
+  <DesignSection id="indicators" title="Indicateur" component="IndicatorCard">
     <DesignExample label="Avec tags">
       <IndicatorCard
         :dataset="indicator"
@@ -49,6 +49,7 @@ const indicator: DatasetV2 = {
   <DesignSection
     id="datasets-or-indicators"
     title="Jeu de données ou indicateur"
+    component="DatasetOrIndicatorCard, DatasetOrIndicatorInTopicCard"
   >
     <DesignExample label="Liste de jeux de données, indicateur">
       <DatasetOrIndicatorCard

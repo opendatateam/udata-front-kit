@@ -3,17 +3,7 @@ import { provideDesignMenu } from '@/utils/design/designSections'
 import { useCanonicalUrl, useMeta } from '@/utils/seo'
 
 const route = useRoute()
-const groupMenuItems = provideDesignMenu()
-
-const menuItems = computed(() => [
-  ...groupMenuItems.value,
-  {
-    id: 'design-datagouv',
-    to: 'https://demo.data.gouv.fr/design',
-    text: 'Système de design de data.gouv.fr',
-    active: false
-  }
-])
+const menuItems = provideDesignMenu()
 
 const links = computed(() => [
   { to: '/', text: 'Accueil' },
@@ -46,9 +36,23 @@ useMeta({
           heading-title="Système de design"
           title-tag="p"
           button-label="Dans cette rubrique"
-          :menu-items="menuItems"
           @click="scrollToCurrentSection"
-        />
+        >
+          <DsfrSideMenuList id="design-menu-list" :menu-items="menuItems" />
+          <ul class="fr-sidemenu__list">
+            <DsfrSideMenuListItem>
+              <a
+                class="fr-sidemenu__link"
+                href="https://demo.data.gouv.fr/design"
+                target="_blank"
+                rel="noopener"
+                title="Système de design de data.gouv.fr - nouvelle fenêtre"
+              >
+                Système de design de data.gouv.fr
+              </a>
+            </DsfrSideMenuListItem>
+          </ul>
+        </DsfrSideMenu>
       </div>
       <div class="fr-col-12 fr-col-md-9">
         <RouterView />

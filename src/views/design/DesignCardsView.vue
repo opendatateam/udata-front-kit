@@ -27,14 +27,17 @@ import {
   galleryUrl
 } from '@/utils/design/cardExamples'
 import { loadSiteCards } from '@/utils/design/loadSiteCards'
+import { useLabels } from '@/utils/labels'
 
 const router = useRouter()
 
 const topicsPageKey = findTopicsPageKey()
 const topics = topicsPageKey ? exampleTopics(topicsPageKey) : []
-const topicLabel = topicsPageKey
-  ? usePageConf(topicsPageKey).labels.singular
-  : 'thématique'
+const topicLabels = topicsPageKey
+  ? useLabels(usePageConf(topicsPageKey).labels)
+  : undefined
+const topicLabel = topicLabels?.singular ?? 'thématique'
+const inTopicLabel = `Dans ${topicLabels?.articles.un ?? 'une'} ${topicLabel}, avec badge de type`
 
 // the organization card links to a named route that only exists on some sites
 const hasOrganizationRoute = router.hasRoute('organization_detail')
@@ -54,7 +57,7 @@ loadSiteCards().then((siteCards) => {
   </p>
 
   <DesignGroup id="generic" title="Cartes génériques">
-    <DesignSection id="datasets" title="Jeu de données">
+    <DesignSection id="datasets" title="Jeu de données" component="DatasetCard">
       <DesignExample
         v-for="example in exampleDatasets"
         :key="example.data.id"
@@ -70,7 +73,11 @@ loadSiteCards().then((siteCards) => {
       </DesignExample>
     </DesignSection>
 
-    <DesignSection id="dataservices" title="API">
+    <DesignSection
+      id="dataservices"
+      title="API"
+      component="DataserviceCard, CardTypeBadge"
+    >
       <DesignExample
         v-for="example in exampleDataservices"
         :key="example.data.id"
@@ -84,7 +91,7 @@ loadSiteCards().then((siteCards) => {
           title-tag="h4"
         />
       </DesignExample>
-      <DesignExample label="Dans un élément de liste, avec badge de type">
+      <DesignExample :label="inTopicLabel">
         <CardTypeBadge label="API" :icon="RiTerminalLine">
           <DataserviceCard
             :dataservice="exampleDataservices[0].data"
@@ -97,7 +104,7 @@ loadSiteCards().then((siteCards) => {
       </DesignExample>
     </DesignSection>
 
-    <DesignSection id="reuses" title="Réutilisation">
+    <DesignSection id="reuses" title="Réutilisation" component="ReuseCard">
       <DesignExample
         v-for="example in exampleReuses"
         :key="example.data.id"
@@ -129,6 +136,7 @@ loadSiteCards().then((siteCards) => {
     <DesignSection
       id="topics"
       :title="capitalize(topicLabel)"
+      component="TopicCard, CardTypeBadge"
       :unavailable="!topicsPageKey"
     >
       <template v-if="topicsPageKey">
@@ -145,7 +153,7 @@ loadSiteCards().then((siteCards) => {
             title-tag="h4"
           />
         </DesignExample>
-        <DesignExample label="Dans un élément de liste, avec badge de type">
+        <DesignExample :label="inTopicLabel">
           <CardTypeBadge :label="topicLabel" :icon="RiBookShelfLine">
             <TopicCard
               :page-key="topicsPageKey"
@@ -163,6 +171,7 @@ loadSiteCards().then((siteCards) => {
     <DesignSection
       id="organizations"
       title="Organisation"
+      component="OrganizationCard"
       :unavailable="!hasOrganizationRoute"
     >
       <DesignExample
@@ -178,6 +187,7 @@ loadSiteCards().then((siteCards) => {
     <DesignSection
       id="networks"
       title="Réseau"
+      component="NetworkCard"
       description="Réseaux réels issus de la configuration du site."
       :unavailable="networks.length === 0"
     >
@@ -191,7 +201,11 @@ loadSiteCards().then((siteCards) => {
       </DesignExample>
     </DesignSection>
 
-    <DesignSection id="subsections" title="Carte de contenu">
+    <DesignSection
+      id="subsections"
+      title="Carte de contenu"
+      component="SubSectionCards"
+    >
       <DesignExample label="Avec et sans image">
         <SubSectionCards :subsection="exampleSubsection" />
       </DesignExample>
