@@ -6,14 +6,9 @@ const props = defineProps<{
   title: string
   // technical name of the component(s) shown in the section
   component: string
-  description?: string
-  // the card can't render on this site: shows a note instead of the examples
-  unavailable?: boolean
 }>()
 
-if (!props.unavailable) {
-  useDesignSection(props.id, props.title)
-}
+useDesignSection(props.id, props.title)
 </script>
 
 <template>
@@ -22,15 +17,9 @@ if (!props.unavailable) {
       {{ title }}
       <code class="design-section__component">{{ component }}</code>
     </h3>
-    <p v-if="unavailable" class="design-section__note fr-text--sm fr-mb-0">
-      Non disponible sur ce site.
-    </p>
-    <template v-else>
-      <p v-if="description" class="fr-text--sm fr-mb-2w">{{ description }}</p>
-      <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list fr-p-0">
-        <slot />
-      </ul>
-    </template>
+    <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list fr-p-0">
+      <slot />
+    </ul>
   </section>
 </template>
 
@@ -38,9 +27,5 @@ if (!props.unavailable) {
 .design-section__component {
   font-size: 0.875rem;
   font-weight: 400;
-}
-
-.design-section__note {
-  color: var(--text-mention-grey);
 }
 </style>
