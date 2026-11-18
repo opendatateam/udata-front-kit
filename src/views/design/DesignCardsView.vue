@@ -26,7 +26,6 @@ import {
   findTopicsPageKey,
   galleryUrl
 } from '@/utils/design/cardExamples'
-import { loadSiteCards } from '@/utils/design/loadSiteCards'
 import { useLabels } from '@/utils/labels'
 
 const router = useRouter()
@@ -43,10 +42,15 @@ const inTopicLabel = `Dans ${topicLabels?.articles.un ?? 'une'} ${topicLabel}, a
 const hasOrganizationRoute = router.hasRoute('organization_detail')
 const networks = Object.entries(useNetworksEntries()).slice(0, 2)
 
-const SiteCards = shallowRef<Component>()
-loadSiteCards().then((siteCards) => {
-  SiteCards.value = siteCards
-})
+// lazy loaded: site blocks can't be imported on the other sites
+const siteCardsLoaders = import.meta.glob<{ default: Component }>(
+  '../../custom/*/components/design/DesignSiteCards.vue'
+)
+const loadSiteCards =
+  siteCardsLoaders[
+    `../../custom/${import.meta.env.VITE_SITE_ID}/components/design/DesignSiteCards.vue`
+  ]
+const SiteCards = loadSiteCards ? defineAsyncComponent(loadSiteCards) : null
 </script>
 
 <template>
@@ -65,7 +69,7 @@ loadSiteCards().then((siteCards) => {
       >
         <DatasetCard
           :dataset="example.data"
-          :dataset-url="galleryUrl('datasets')"
+          :dataset-url="galleryUrl"
           :organization-url="null"
           :show-description-short="example.showDescription ?? true"
           title-tag="h4"
@@ -85,7 +89,7 @@ loadSiteCards().then((siteCards) => {
       >
         <DataserviceCard
           :dataservice="example.data"
-          :dataservice-url="galleryUrl('dataservices')"
+          :dataservice-url="galleryUrl"
           :organization-url="null"
           :show-description="example.showDescription ?? true"
           title-tag="h4"
@@ -95,7 +99,7 @@ loadSiteCards().then((siteCards) => {
         <CardTypeBadge label="API" :icon="RiTerminalLine">
           <DataserviceCard
             :dataservice="exampleDataservices[0].data"
-            :dataservice-url="galleryUrl('dataservices')"
+            :dataservice-url="galleryUrl"
             :organization-url="null"
             :show-description="false"
             title-tag="h4"
@@ -113,7 +117,7 @@ loadSiteCards().then((siteCards) => {
       >
         <ReuseCard
           :reuse="example.data"
-          :reuse-url="galleryUrl('reuses')"
+          :reuse-url="galleryUrl"
           :organization-url="null"
           title-tag="h4"
         />
@@ -125,7 +129,7 @@ loadSiteCards().then((siteCards) => {
       >
         <ReuseCard
           :reuse="example.data"
-          :reuse-url="galleryUrl('reuses')"
+          :reuse-url="galleryUrl"
           :organization-url="null"
           title-tag="h4"
           horizontal
@@ -134,45 +138,43 @@ loadSiteCards().then((siteCards) => {
     </DesignSection>
 
     <DesignSection
+      v-if="topicsPageKey"
       id="topics"
       :title="capitalize(topicLabel)"
       component="TopicCard, CardTypeBadge"
-      :unavailable="!topicsPageKey"
     >
-      <template v-if="topicsPageKey">
-        <DesignExample
-          v-for="example in topics"
-          :key="example.data.id"
-          :label="example.label"
-        >
+      <DesignExample
+        v-for="example in topics"
+        :key="example.data.id"
+        :label="example.label"
+      >
+        <TopicCard
+          :page-key="topicsPageKey"
+          :topic="example.data"
+          :topic-url="galleryUrl"
+          :show-description="example.showDescription ?? true"
+          title-tag="h4"
+        />
+      </DesignExample>
+      <DesignExample :label="inTopicLabel">
+        <CardTypeBadge :label="topicLabel" :icon="RiBookShelfLine">
           <TopicCard
             :page-key="topicsPageKey"
-            :topic="example.data"
-            :topic-url="galleryUrl('topics')"
-            :show-description="example.showDescription ?? true"
+            :topic="topics[0].data"
+            :topic-url="galleryUrl"
+            :show-description="false"
+            :show-tags="false"
             title-tag="h4"
           />
-        </DesignExample>
-        <DesignExample :label="inTopicLabel">
-          <CardTypeBadge :label="topicLabel" :icon="RiBookShelfLine">
-            <TopicCard
-              :page-key="topicsPageKey"
-              :topic="topics[0].data"
-              :topic-url="galleryUrl('topics')"
-              :show-description="false"
-              :show-tags="false"
-              title-tag="h4"
-            />
-          </CardTypeBadge>
-        </DesignExample>
-      </template>
+        </CardTypeBadge>
+      </DesignExample>
     </DesignSection>
 
     <DesignSection
+      v-if="hasOrganizationRoute"
       id="organizations"
       title="Organisation"
       component="OrganizationCard"
-      :unavailable="!hasOrganizationRoute"
     >
       <DesignExample
         v-for="example in exampleOrganizations"
@@ -185,11 +187,10 @@ loadSiteCards().then((siteCards) => {
     </DesignSection>
 
     <DesignSection
+      v-if="networks.length > 0"
       id="networks"
       title="Réseau"
       component="NetworkCard"
-      description="Réseaux réels issus de la configuration du site."
-      :unavailable="networks.length === 0"
     >
       <DesignExample
         v-for="[slug, network] in networks"

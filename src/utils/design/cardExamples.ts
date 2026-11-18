@@ -4,10 +4,8 @@ import type {
   Organization,
   OrganizationReference,
   Quality,
-  Reuse,
-  UserReference
+  Reuse
 } from '@datagouv/components-next'
-import type { RouteLocationRaw } from 'vue-router'
 
 import type { Topic, TopicExtras } from '@/model/topic'
 import { usePageConf, usePagesConf } from '@/utils/config'
@@ -31,18 +29,12 @@ const svg = (content: string) =>
 const logo = svg(
   '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="8" fill="#ececfe"/><path d="M12 45 32 12l20 33H12Zm13-7h14l-7-12-7 12Z" fill="#000091"/></svg>'
 )
-const avatar = svg(
-  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" fill="#e3f2ed"/><circle cx="32" cy="24" r="12" fill="#18753c"/><path d="M10 64c0-16 10-24 22-24s22 8 22 24Z" fill="#18753c"/></svg>'
-)
 export const illustration = svg(
   '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360"><rect width="640" height="360" fill="#e3f2ed"/><path d="M0 60 640 240M80 0 500 360M0 280 640 80" stroke="white" stroke-width="28"/><path d="M80 280 220 180 390 230 540 80" fill="none" stroke="#000091" stroke-width="8"/></svg>'
 )
 
 // keeps fictional cards links inside the gallery
-export const galleryUrl = (section: string): RouteLocationRaw => ({
-  name: 'design_cards',
-  hash: `#${section}`
-})
+export const galleryUrl = { name: 'design_cards' }
 
 const organization = (
   id: string,
@@ -108,20 +100,7 @@ export const exampleOrganizations: CardExample<
   { label: 'Collectivité, nom long et sans logo', data: localOrganization }
 ]
 
-const user: UserReference = {
-  class: 'User',
-  id: 'demo-user',
-  first_name: 'Camille',
-  last_name: 'Martin',
-  slug: 'demo-user',
-  uri: '',
-  page,
-  avatar,
-  avatar_thumbnail: avatar
-}
-
 const ownedByOrganization = { organization: publicOrganization, owner: null }
-const ownedByUser = { organization: null, owner: user }
 
 const rel = { rel: 'subsection', href: '', total: 0, type: 'GET' }
 
@@ -207,10 +186,9 @@ export const exampleDatasets: CardExample<DatasetV2>[] = [
     }
   },
   {
-    label: 'Brouillon, publié par un utilisateur',
+    label: 'Brouillon',
     data: {
       ...exampleDataset,
-      ...ownedByUser,
       id: 'demo-dataset-draft',
       title: 'Budget participatif, édition 2026',
       private: true

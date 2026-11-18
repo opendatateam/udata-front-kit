@@ -44,7 +44,6 @@ const defaultRoutes: RouteRecordRaw[] = [
     children: [
       {
         path: '',
-        name: 'design',
         redirect: { name: 'design_cards' }
       },
       {

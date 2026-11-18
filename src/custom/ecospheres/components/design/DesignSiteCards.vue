@@ -49,37 +49,44 @@ const indicator: DatasetV2 = {
   <DesignSection
     id="datasets-or-indicators"
     title="Jeu de données ou indicateur"
-    component="DatasetOrIndicatorCard, DatasetOrIndicatorInTopicCard"
+    component="DatasetOrIndicatorCard"
   >
-    <DesignExample label="Liste de jeux de données, indicateur">
+    <DesignExample label="Indicateur">
       <DatasetOrIndicatorCard
         :dataset="indicator"
-        :dataset-url="galleryUrl('datasets-or-indicators') as object"
+        :dataset-url="galleryUrl"
         :organization-url="null"
         title-tag="h4"
       />
     </DesignExample>
-    <DesignExample label="Liste de jeux de données, jeu de données">
+    <DesignExample label="Jeu de données">
       <DatasetOrIndicatorCard
         :dataset="exampleDataset"
-        :dataset-url="galleryUrl('datasets-or-indicators') as object"
+        :dataset-url="galleryUrl"
         :organization-url="null"
         title-tag="h4"
       />
     </DesignExample>
-    <DesignExample label="Dans une collection, indicateur">
+  </DesignSection>
+
+  <DesignSection
+    id="datasets-or-indicators-in-topic"
+    title="Jeu de données ou indicateur dans une collection"
+    component="DatasetOrIndicatorInTopicCard"
+  >
+    <DesignExample label="Indicateur">
       <DatasetOrIndicatorInTopicCard
         :dataset="indicator"
-        :dataset-url="galleryUrl('datasets-or-indicators') as object"
+        :dataset-url="galleryUrl"
         :organization-url="null"
         :show-description-short="false"
         title-tag="h4"
       />
     </DesignExample>
-    <DesignExample label="Dans une collection, jeu de données">
+    <DesignExample label="Jeu de données">
       <DatasetOrIndicatorInTopicCard
         :dataset="exampleDataset"
-        :dataset-url="galleryUrl('datasets-or-indicators') as object"
+        :dataset-url="galleryUrl"
         :organization-url="null"
         :show-description-short="false"
         title-tag="h4"

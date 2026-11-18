@@ -9,7 +9,7 @@ defineProps<{
 <template>
   <li :class="['design-example', 'fr-col-12', { 'fr-col-md-6': narrow }]">
     <p class="design-example__label fr-text--sm fr-mb-2w">{{ label }}</p>
-    <div class="design-example__card">
+    <div>
       <slot />
     </div>
   </li>
