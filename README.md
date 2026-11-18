@@ -385,6 +385,56 @@ sentry:
 
 D'autres éléments de configuration sont disponibles dans le fichier [src/model/config.ts](./src/model/config.ts)
 
+## Configurer l'authentification OAuth
+
+OAuth permet aux utilisateurs de se connecter à une verticale avec leur compte data.gouv.fr. Le site utilise le flux _Authorization Code_ avec PKCE, via un client OAuth public (sans secret). Le jeton obtenu est ensuite joint aux appels à l'API data.gouv.fr pour les actions authentifiées.
+
+### Paramètres
+
+```yaml
+datagouvfr:
+  base_url: https://demo.data.gouv.fr # instance data.gouv.fr utilisée pour la connexion
+  oauth_client_id: 6ae2255fc8f9fa6f88af573f # client OAuth enregistré sur cette instance
+
+website:
+  oauth_option: true # active les routes /login, /login/callback et /logout, et le bouton de connexion
+```
+
+L'URL de callback n'est pas configurable : elle vaut toujours `{origine du site}/login/callback`.
+
+### Configuration par environnement
+
+Un client OAuth n'existe que sur l'instance où il a été créé : `base_url` et `oauth_client_id` doivent donc toujours être modifiés ensemble. Ces valeurs sont définies dans le `config.yaml` de chaque branche `{site}-{env}` (voir [Workflow de déploiement recommandé](#workflow-de-déploiement-recommandé)).
+
+Exemple pour `ecospheres` :
+
+| Branche           | `base_url`                  | `oauth_client_id`          |
+| ----------------- | --------------------------- | -------------------------- |
+| `ecospheres-demo` | `https://demo.data.gouv.fr` | `6ae2255fc8f9fa6f88af573f` |
+| `ecospheres-prod` | `https://www.data.gouv.fr`  | `66fa76d405b98d06ca73854a` |
+
+Une preprod peut viser `demo.data.gouv.fr` ou `www.data.gouv.fr` selon les sites : son client doit être enregistré sur l'instance choisie.
+
+:warning: Les review apps reprennent la configuration de la branche de la PR. La connexion n'y fonctionne que si `base_url` vise `demo.data.gouv.fr`, seule instance acceptant les URLs de callback avec wildcard.
+
+### Demander un client OAuth à data.gouv.fr
+
+Il faut un client par instance. La demande se fait auprès de l'équipe data.gouv.fr, en précisant :
+
+- le nom du site ;
+- l'instance visée (`demo.data.gouv.fr` ou `www.data.gouv.fr`) ;
+- le type de client : public (sans secret), flux _Authorization Code_ avec PKCE (`S256`), scope `default` ;
+- les URLs de callback, listées ci-dessous.
+
+| Environnement       | Instance                  | URL de callback                                                                              |
+| ------------------- | ------------------------- | -------------------------------------------------------------------------------------------- |
+| Développement local | `demo.data.gouv.fr` seule | `http://localhost:5173/login/callback`                                                       |
+| Review apps         | `demo.data.gouv.fr` seule | `https://deploy-preview-*--{site}.sandbox.data.developpement-durable.gouv.fr/login/callback` |
+| Preprod             | Celle de `base_url`       | `https://{domaine de preprod}/login/callback`                                                |
+| Production          | `www.data.gouv.fr`        | `https://{domaine de production}/login/callback`                                             |
+
+`{site}` est l'identifiant du site dans [`configs/`](configs) (par exemple `ecospheres`). Il peut différer du domaine public (par exemple `ecologie.data.gouv.fr`).
+
 ## 👥 Auteurs
 
 - data.gouv.fr, Direction interministérielle du numérique.
