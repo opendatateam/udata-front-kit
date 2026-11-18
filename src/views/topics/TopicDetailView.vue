@@ -12,19 +12,17 @@ import GenericContainer from '@/components/GenericContainer.vue'
 import SidebarItem from '@/components/SidebarItem.vue'
 import SidebarList from '@/components/SidebarList.vue'
 import SidebarOwner from '@/components/SidebarOwner.vue'
+import TabsWithCounts from '@/components/TabsWithCounts.vue'
 import TagComponent from '@/components/TagComponent.vue'
 import TopicActivityList from '@/components/topics/TopicActivityList.vue'
 import TopicFactorsList from '@/components/topics/TopicFactorsList.vue'
 import TopicFactorsListExport from '@/components/topics/TopicFactorsListExport.vue'
 import TopicReusesList from '@/components/topics/TopicReusesList.vue'
 import config from '@/config'
+import type { BreadcrumbItem } from '@/model/breadcrumb'
 import type { Topic } from '@/model/topic'
 import type { TopicPageRouterConf } from '@/router/model'
-import {
-  useCurrentPageConf,
-  useRouteMeta,
-  useRouteParamsAsStringReactive
-} from '@/router/utils'
+import { useCurrentPageConf, useRouteItem, useRouteMeta } from '@/router/utils'
 import { useTopicStore } from '@/store/TopicStore'
 import { useUserStore } from '@/store/UserStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
@@ -32,6 +30,7 @@ import { useAsyncComponent } from '@/utils/component'
 import { useLabels } from '@/utils/labels'
 import { useCanonicalUrl, useMeta } from '@/utils/seo'
 import { useSpatialCoverage } from '@/utils/spatial'
+import { Tab, tabIds, useRoutedTabs } from '@/utils/tabs'
 import { useTagsByRef } from '@/utils/tags'
 import { useExtras, useTopicFactors } from '@/utils/topic'
 
@@ -41,7 +40,6 @@ const router = useRouter()
 const meta = useRouteMeta()
 const store = useTopicStore()
 const loading = useLoading()
-const route = useRouteParamsAsStringReactive()
 
 const topic: Ref<Topic | null> = ref(null)
 const spatialCoverage = useSpatialCoverage(topic)
@@ -70,7 +68,7 @@ const showReuses = pageConf.resources_tabs.reuses.display
 const tags = useTagsByRef(pageKey, topic)
 
 const { clonedFrom } = useExtras(topic)
-const { factors } = useTopicFactors(topic)
+const { factors, nbFactors } = useTopicFactors(topic)
 const topicFactorsListRef = ref<InstanceType<typeof TopicFactorsList> | null>(
   null
 )
@@ -80,6 +78,9 @@ const discussionsListRef = ref<InstanceType<typeof DiscussionsList> | null>(
 const topicActivityListRef = ref<InstanceType<typeof TopicActivityList> | null>(
   null
 )
+const topicReusesListRef = ref<InstanceType<typeof TopicReusesList> | null>(
+  null
+)
 
 const handleFactorChanged = () => {
   // Refresh activity list when factors are added, modified, or deleted
@@ -87,10 +88,10 @@ const handleFactorChanged = () => {
 }
 
 const breadcrumbLinks = computed(() => {
-  const breadcrumbs = [{ to: '/', text: 'Accueil' }]
+  const breadcrumbs: BreadcrumbItem[] = [{ to: '/', text: 'Accueil' }]
   if (pageConf.list_all === true) {
     breadcrumbs.push({
-      to: `/${meta.pageKey || 'topics'}`,
+      to: { name: meta.pageKey || 'topics' },
       text: pageConf.breadcrumb_title || pageConf.title
     })
   }
@@ -100,42 +101,27 @@ const breadcrumbLinks = computed(() => {
 
 const showActivity = computed(() => canEdit.value)
 
-const tabTitles = computed(() => {
-  const tabs: { title: string; tabId: string; panelId: string }[] = []
-
-  if (showDatasets) {
-    tabs.push({
-      title: 'Données',
-      tabId: 'tab-datasets',
-      panelId: 'tab-content-datasets'
-    })
-  }
-  if (showDiscussions) {
-    tabs.push({
-      title: 'Discussions',
-      tabId: 'tab-discussions',
-      panelId: 'tab-content-discussions'
-    })
-  }
-  if (showReuses) {
-    tabs.push({
-      title: 'Réutilisations',
-      tabId: 'tab-reuses',
-      panelId: 'tab-content-reuses'
-    })
-  }
-  if (showActivity.value) {
-    tabs.push({
-      title: 'Activité',
-      tabId: 'tab-activity',
-      panelId: 'tab-content-activity'
-    })
-  }
-
-  return tabs
-})
-
-const activeTab = ref(0)
+const { tabs, activeIndex, selectTab } = useRoutedTabs(() => [
+  {
+    slug: Tab.FACTORS,
+    title: 'Données',
+    count: nbFactors.value,
+    visible: showDatasets
+  },
+  {
+    slug: Tab.DISCUSSIONS,
+    title: 'Discussions',
+    count: discussionsListRef.value?.total ?? 0,
+    visible: showDiscussions
+  },
+  {
+    slug: Tab.REUSES,
+    title: 'Réutilisations',
+    count: topicReusesListRef.value?.reuses.length ?? 0,
+    visible: showReuses
+  },
+  { slug: Tab.ACTIVITY, title: 'Activité', visible: showActivity.value }
+])
 
 const cloneModalActions = [
   {
@@ -190,8 +176,8 @@ const metaTitle = computed(() => {
   return topic.value?.name
 })
 
-const handleNavigateToFactor = (elementId: string) => {
-  activeTab.value = 0
+const handleNavigateToFactor = async (elementId: string) => {
+  await selectTab('factors')
   nextTick(() => {
     topicFactorsListRef.value?.navigateToElement(elementId)
   })
@@ -238,14 +224,12 @@ const clearHash = () => {
   window.history.replaceState(window.history.state, '', url.toString())
 }
 
-// Handle deeplinks: #factor-{id} switches to Données tab and scrolls to the
-// factor; #discussion-{id} switches to the Discussions tab and
-// scrolls to the discussion.
+// Handle #factor-{id} deeplinks: switch to the Données tab and scroll to the factor
 watch(
   () => router.currentRoute.value.hash,
   (hash) => {
     if (hash.startsWith('#factor-')) {
-      activeTab.value = 0
+      selectTab('factors')
       const elementId = hash.replace('#factor-', '')
       runWhenReady(
         () => !!topicFactorsListRef.value && factors.value.length > 0,
@@ -253,17 +237,6 @@ watch(
           nextTick(() =>
             topicFactorsListRef.value?.navigateToElement(elementId)
           )
-      )
-      clearHash()
-    } else if (hash.startsWith('#discussion-')) {
-      const tabIndex = tabTitles.value.findIndex(
-        (t) => t.tabId === 'tab-discussions'
-      )
-      if (tabIndex !== -1) activeTab.value = tabIndex
-      const discussionId = hash.replace('#discussion-', '')
-      runWhenReady(
-        () => !!discussionsListRef.value,
-        () => discussionsListRef.value?.navigateToDiscussion(discussionId)
       )
       clearHash()
     }
@@ -274,23 +247,12 @@ watch(
 // Callback to hide the loader, passed to custom description components
 const hideLoader = ref<(() => void) | null>(null)
 
-watch(
-  () => route.value?.params.item_id,
-  (itemId) => {
-    if (!itemId) return
+useRouteItem(
+  (idOrSlug) => {
     const loader = loading.show({ enforceFocus: false })
     hideLoader.value = () => loader.hide()
-    store
-      .load(itemId, { toasted: false, redirectNotFound: true })
-      .then((res) => {
-        topic.value = res
-        if (topic.value.slug !== itemId) {
-          router.push({
-            name: `${pageKey}_detail`,
-            params: { item_id: topic.value.slug }
-          })
-        }
-      })
+    return store
+      .load(idOrSlug, { toasted: false, redirectNotFound: true })
       .finally(() => {
         // Only auto-hide if there's no custom description component
         // Custom components are responsible for calling hideLoader when ready
@@ -299,7 +261,12 @@ watch(
         }
       })
   },
-  { immediate: true }
+  {
+    onLoaded: (loaded) => {
+      topic.value = loaded
+    },
+    replaceWithSlug: true
+  }
 )
 </script>
 
@@ -437,18 +404,17 @@ watch(
       </div>
     </div>
 
-    <DsfrTabs
-      v-if="tabTitles.length > 0"
-      v-model="activeTab"
+    <TabsWithCounts
+      v-if="tabs.length > 0"
+      v-model="activeIndex"
       class="fr-mt-2w"
-      :tab-titles="tabTitles"
+      :tabs="tabs"
       :tab-list-name="`Groupes d'attributs ${labels.articles.du} ${labels.singular}`"
     >
       <!-- Jeux de données -->
       <DsfrTabContent
         v-if="showDatasets"
-        panel-id="tab-content-datasets"
-        tab-id="tab-datasets"
+        v-bind="tabIds(Tab.FACTORS)"
         class="fr-px-2w"
       >
         <TopicFactorsList
@@ -472,8 +438,7 @@ watch(
       <!-- Discussions -->
       <DsfrTabContent
         v-if="showDiscussions && topic"
-        panel-id="tab-content-discussions"
-        tab-id="tab-discussions"
+        v-bind="tabIds(Tab.DISCUSSIONS)"
       >
         <DiscussionsList
           ref="discussionsListRef"
@@ -483,19 +448,11 @@ watch(
         />
       </DsfrTabContent>
       <!-- Réutilisations -->
-      <DsfrTabContent
-        v-if="showReuses"
-        panel-id="tab-content-reuses"
-        tab-id="tab-reuses"
-      >
-        <TopicReusesList :topic="topic" />
+      <DsfrTabContent v-if="showReuses" v-bind="tabIds(Tab.REUSES)">
+        <TopicReusesList ref="topicReusesListRef" :topic="topic" />
       </DsfrTabContent>
       <!-- Activité -->
-      <DsfrTabContent
-        v-if="showActivity"
-        panel-id="tab-content-activity"
-        tab-id="tab-activity"
-      >
+      <DsfrTabContent v-if="showActivity" v-bind="tabIds(Tab.ACTIVITY)">
         <TopicActivityList
           ref="topicActivityListRef"
           :topic
@@ -503,7 +460,7 @@ watch(
           @navigate-to-factor="handleNavigateToFactor"
         />
       </DsfrTabContent>
-    </DsfrTabs>
+    </TabsWithCounts>
   </GenericContainer>
 </template>
 
