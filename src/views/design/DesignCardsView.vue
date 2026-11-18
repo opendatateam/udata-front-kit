@@ -14,13 +14,10 @@ import DesignSection from '@/components/design/DesignSection.vue'
 import NetworkCard from '@/components/NetworkCard.vue'
 import OrganizationCard from '@/components/OrganizationCard.vue'
 import SubSectionCards from '@/components/sections/SubSectionCards.vue'
-import DatasetInTopicCard from '@/components/topics/DatasetInTopicCard.vue'
 import TopicCard from '@/components/topics/TopicCard.vue'
-import { ResolvedFactor, type Factor } from '@/model/topic'
-import { useNetworksEntries, usePageConf, useSiteId } from '@/utils/config'
+import { useNetworksEntries, usePageConf } from '@/utils/config'
 import {
   exampleDataservices,
-  exampleDataset,
   exampleDatasets,
   exampleOrganizations,
   exampleReuses,
@@ -39,20 +36,9 @@ const topicLabel = topicsPageKey
   ? usePageConf(topicsPageKey).labels.singular
   : 'thématique'
 
-// these cards link to named routes that only exist on some sites
+// the organization card links to a named route that only exists on some sites
 const hasOrganizationRoute = router.hasRoute('organization_detail')
-const hasDatasetRoute = router.hasRoute('datasets_detail')
 const networks = Object.entries(useNetworksEntries()).slice(0, 2)
-
-const factor: Factor = {
-  title: exampleDataset.title,
-  description: null,
-  tags: [],
-  extras: {} as Factor['extras'],
-  element: { class: 'Dataset', id: exampleDataset.id }
-}
-const deletedFactor = new ResolvedFactor(factor, useSiteId())
-deletedFactor.remoteDeleted = true
 
 const SiteCards = shallowRef<Component>()
 loadSiteCards().then((siteCards) => {
@@ -170,15 +156,6 @@ loadSiteCards().then((siteCards) => {
               title-tag="h4"
             />
           </CardTypeBadge>
-        </DesignExample>
-        <DesignExample
-          v-if="hasDatasetRoute"
-          label="Jeu de données d'un élément, supprimé sur data.gouv.fr"
-        >
-          <DatasetInTopicCard
-            :factor="deletedFactor"
-            :dataset-content="exampleDataset"
-          />
         </DesignExample>
       </template>
     </DesignSection>

@@ -105,14 +105,7 @@ export const exampleOrganizations: CardExample<
   Organization & OrganizationReference
 >[] = [
   { label: 'Service public certifié, avec logo', data: publicOrganization },
-  { label: 'Collectivité, nom long et sans logo', data: localOrganization },
-  {
-    label: 'Association, sans description',
-    data: {
-      ...organization('demo-association', 'Les données en partage', [], true),
-      description: ''
-    }
-  }
+  { label: 'Collectivité, nom long et sans logo', data: localOrganization }
 ]
 
 const user: UserReference = {
@@ -378,15 +371,6 @@ export const exampleReuses: CardExample<Reuse>[] = [
       image: null,
       image_thumbnail: null
     }
-  },
-  {
-    label: 'Archivée',
-    data: {
-      ...reuse,
-      id: 'demo-reuse-archived',
-      title: 'Évolution des usages du vélo',
-      archived: date
-    }
   }
 ]
 
@@ -441,10 +425,6 @@ export const exampleTopics = (pageKey: string): CardExample<Topic>[] => {
   }
   return [
     { label: 'Publié par une organisation', data: topic },
-    {
-      label: 'Publié par un utilisateur',
-      data: { ...topic, ...ownedByUser, id: 'demo-topic-user' }
-    },
     {
       label: 'Titre long, sans tags ni description',
       data: { ...topic, id: 'demo-topic-long', name: longTitle, tags: [] },
