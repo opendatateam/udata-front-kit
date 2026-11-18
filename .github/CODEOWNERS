@@ -1,20 +1,2 @@
-# Default owners
-
-*  @abulte @geoffreyaldebert @streino
-
-
-# Special owners
-
-/.github/CODEOWNERS  @abulte @geoffreyaldebert @streino
-
-
-# Vertical owners
-# /configs/<vertical> and /src/custom/<vertical>
-
-**/defis/         @geoffreyaldebert @abulte @enidul
-**/ecospheres/    @opendatateam/ecospheres-admin
-**/hackathon/     @geoffreyaldebert @abulte
-**/logistique/    @johanricher
-**/meteo-france/  @geoffreyaldebert @maudetes @abulte
-**/accessibilite/ @opendatateam/accessibilite
-**/culture/       @opendatateam/culture
+# culture-* deployment branches ONLY
+*  @opendatateam/culture
