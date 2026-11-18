@@ -7,9 +7,14 @@ import type {
   Reuse
 } from '@datagouv/components-next'
 
-import type { Topic, TopicExtras } from '@/model/topic'
+import type { Topic } from '@/model/topic'
 import { usePageConf, usePagesConf } from '@/utils/config'
 import { useFilterValue } from '@/utils/filters'
+import { dataserviceFactory } from '../../../cypress/support/factories/dataservices_factory'
+import { datasetFactory } from '../../../cypress/support/factories/datasets_factory'
+import { organizationFactory } from '../../../cypress/support/factories/organizations_factory'
+import { reuseFactory } from '../../../cypress/support/factories/reuses_factory'
+import { topicFactory } from '../../../cypress/support/factories/topics_factory'
 
 export interface CardExample<T> {
   label: string
@@ -17,7 +22,6 @@ export interface CardExample<T> {
   showDescription?: boolean
 }
 
-const date = '2026-01-12T12:00:00+00:00'
 const page = '/_design/cards'
 const description =
   'Des données ouvertes pour comprendre les territoires, comparer les usages et construire de nouveaux services. Cette description volontairement longue permet de vérifier la limitation du nombre de lignes et la lisibilité de la carte.'
@@ -36,58 +40,27 @@ export const illustration = svg(
 // keeps fictional cards links inside the gallery
 export const galleryUrl = { name: 'design_cards' }
 
-const organization = (
-  id: string,
-  name: string,
-  badges: string[],
-  withLogo: boolean
-): Organization & OrganizationReference => ({
-  class: 'Organization',
-  id,
-  name,
-  acronym: null,
-  slug: id,
-  uri: '',
-  page,
-  logo: withLogo ? logo : '',
-  logo_thumbnail: withLogo ? logo : '',
-  badges: badges.map((kind) => ({ kind })),
-  permissions: {
-    delete: false,
-    edit: false,
-    harvest: false,
-    members: false,
-    private: false
-  },
-  url: '',
-  description,
-  business_number_id: '',
-  created_at: date,
-  last_modified: date,
-  deleted: null,
-  extras: {},
-  members: [],
-  metrics: {
-    datasets: 1240,
-    datasets_by_months: {},
-    dataservices: 12,
-    dataservices_by_months: {},
-    reuses: 37,
-    reuses_by_months: {},
-    followers: 2400,
-    members: 8,
-    views: 120000
-  }
-})
+const organization = (name: string, badges: string[], withLogo: boolean) =>
+  organizationFactory.one({
+    overrides: {
+      name,
+      acronym: null,
+      page,
+      logo: withLogo ? logo : '',
+      logo_thumbnail: withLogo ? logo : '',
+      badges: badges.map((kind) => ({ kind })),
+      description,
+      metrics: { datasets: 1240, dataservices: 12, reuses: 37, followers: 2400 }
+    },
+    postBuild: (built) => ({ ...built, class: 'Organization' as const })
+  })
 
 const publicOrganization = organization(
-  'demo-public',
   'Observatoire des territoires',
   ['public-service', 'certified'],
   true
 )
 const localOrganization = organization(
-  'demo-local',
   'Communauté de communes des vallées et des plateaux, service des données et de la transition écologique',
   ['local-authority'],
   false
@@ -102,8 +75,6 @@ export const exampleOrganizations: CardExample<
 
 const ownedByOrganization = { organization: publicOrganization, owner: null }
 
-const rel = { rel: 'subsection', href: '', total: 0, type: 'GET' }
-
 const quality: Quality = {
   score: 1,
   dataset_description_quality: true,
@@ -117,54 +88,24 @@ const quality: Quality = {
   all_resources_available: true
 }
 
-export const exampleDataset: DatasetV2 = {
-  ...ownedByOrganization,
-  id: 'demo-dataset',
-  slug: 'demo-dataset',
-  title: 'Aménagements cyclables',
-  acronym: '',
-  archived: false,
-  description,
-  description_short: description,
-  tags: [],
-  license: 'lov2',
-  frequency: 'monthly',
-  temporal_coverage: null,
-  frequency_date: null,
-  page,
-  private: false,
-  spatial: null,
-  contact_points: [],
-  featured: false,
-  badges: [],
-  deleted: null,
-  doi: null,
-  resources: rel,
-  community_resources: rel,
-  created_at: date,
-  last_modified: date,
-  last_update: date,
-  internal: { created_at_internal: date, last_modified_internal: date },
-  uri: '',
-  quality,
-  metrics: {
-    dataservices: 3,
-    discussions: 0,
-    discussions_open: 0,
-    followers: 120,
-    resources_downloads: 42500,
-    reuses: 18,
-    views: 1250000
-  },
-  harvest: null,
-  extras: {},
-  permissions: { edit: false, edit_resources: false, delete: false },
-  access_type: 'open',
-  access_audiences: [],
-  access_type_reason: null,
-  access_type_reason_category: null,
-  authorization_request_url: null
-}
+export const exampleDataset: DatasetV2 = datasetFactory.one({
+  overrides: {
+    ...ownedByOrganization,
+    title: 'Aménagements cyclables',
+    acronym: '',
+    description,
+    description_short: description,
+    page,
+    quality,
+    metrics: {
+      dataservices: 3,
+      followers: 120,
+      resources_downloads: 42500,
+      reuses: 18,
+      views: 1250000
+    }
+  }
+})
 
 export const exampleDatasets: CardExample<DatasetV2>[] = [
   { label: 'Qualité complète, métriques élevées', data: exampleDataset },
@@ -175,6 +116,7 @@ export const exampleDatasets: CardExample<DatasetV2>[] = [
       id: 'demo-dataset-long',
       title: longTitle,
       organization: localOrganization,
+      owner: null,
       quality: {
         ...quality,
         score: 0.33,
@@ -210,62 +152,29 @@ export const exampleDatasets: CardExample<DatasetV2>[] = [
   }
 ]
 
-const dataservice: Dataservice = {
-  ...ownedByOrganization,
-  id: 'demo-api',
-  slug: 'demo-api',
-  title: 'API des mobilités',
-  acronym: '',
-  archived_at: null,
-  availability: 99.9,
-  base_api_url: null,
-  contact_points: [],
-  created_at: date,
-  datasets: { href: '', rel: 'subsection', total: 2, type: 'GET' },
-  deleted_at: null,
-  description,
-  featured: false,
-  machine_documentation_url: null,
-  technical_documentation_url: null,
-  business_documentation_url: null,
-  extras: {},
-  format: '',
-  harvest: null,
-  license: 'lov2',
-  metadata_modified_at: date,
-  metrics: {
-    discussions: 0,
-    discussions_open: 0,
-    followers: 42,
-    reuses: 8,
-    views: 24300
-  },
-  permissions: { edit: false, delete: false },
-  private: false,
-  rate_limiting: '',
-  rate_limiting_url: null,
-  self_api_url: '',
-  self_web_url: page,
-  tags: [],
-  quality: {
-    score: 1,
-    has_description: true,
-    has_machine_documentation: true,
-    has_technical_documentation: true,
-    has_business_documentation: true,
-    license: true,
-    has_contact_point: true,
-    has_base_api_url: true,
-    availability_documented: true,
-    rate_limiting_documented: true,
-    access_conditions_clear: true
-  },
-  access_type: 'open',
-  access_audiences: [],
-  access_type_reason: null,
-  access_type_reason_category: null,
-  authorization_request_url: null
-}
+const dataservice: Dataservice = dataserviceFactory.one({
+  overrides: {
+    ...ownedByOrganization,
+    title: 'API des mobilités',
+    acronym: '',
+    description,
+    availability: 99.9,
+    metrics: { followers: 42, reuses: 8, views: 24300 },
+    quality: {
+      score: 1,
+      has_description: true,
+      has_machine_documentation: true,
+      has_technical_documentation: true,
+      has_business_documentation: true,
+      license: true,
+      has_contact_point: true,
+      has_base_api_url: true,
+      availability_documented: true,
+      rate_limiting_documented: true,
+      access_conditions_clear: true
+    }
+  }
+})
 
 export const exampleDataservices: CardExample<Dataservice>[] = [
   { label: 'Accès ouvert', data: dataservice },
@@ -285,7 +194,8 @@ export const exampleDataservices: CardExample<Dataservice>[] = [
       id: 'demo-api-restricted',
       title: 'API des demandes administratives',
       access_type: 'restricted',
-      organization: localOrganization
+      organization: localOrganization,
+      owner: null
     }
   },
   {
@@ -304,39 +214,19 @@ export const exampleDataservices: CardExample<Dataservice>[] = [
   }
 ]
 
-const reuse: Reuse = {
-  ...ownedByOrganization,
-  id: 'demo-reuse',
-  slug: 'demo-reuse',
-  title: 'Les mobilités en cartes',
-  description,
-  tags: [],
-  datasets: [],
-  dataservices: [],
-  topic: 'transport_and_mobility',
-  type: 'application',
-  url: page,
-  private: false,
-  badges: [],
-  created_at: date,
-  archived: null,
-  deleted: null,
-  extras: {},
-  featured: false,
-  image: illustration,
-  image_thumbnail: illustration,
-  last_modified: date,
-  metrics: {
-    datasets: 4,
-    discussions: 0,
-    discussions_open: 0,
-    followers: 340,
-    views: 98700
-  },
-  page,
-  uri: '',
-  permissions: { edit: false, delete: false }
-}
+const reuse: Reuse = reuseFactory.one({
+  overrides: {
+    ...ownedByOrganization,
+    title: 'Les mobilités en cartes',
+    description,
+    topic: 'transport_and_mobility',
+    url: page,
+    image: illustration,
+    image_thumbnail: illustration,
+    metrics: { datasets: 4, followers: 340, views: 98700 },
+    page
+  }
+})
 
 export const exampleReuses: CardExample<Reuse>[] = [
   { label: 'Avec illustration', data: reuse },
@@ -383,24 +273,17 @@ export const exampleTagsForPage = (pageKey: string): string[] =>
     )
 
 export const exampleTopics = (pageKey: string): CardExample<Topic>[] => {
-  // no elements nor spatial coverage: the card footer would query the API
-  const topic: Topic = {
-    ...ownedByOrganization,
-    id: 'demo-topic',
-    slug: 'demo-topic',
-    name: 'Se déplacer à vélo',
-    description,
-    created_at: date,
-    last_modified: date,
-    extras: {} as TopicExtras,
-    featured: false,
-    page,
-    private: false,
-    elements: rel,
-    tags: exampleTagsForPage(pageKey),
-    uri: '',
-    spatial: undefined
-  }
+  // the factory has no elements nor spatial coverage: the card footer won't query the API
+  const topic: Topic = topicFactory.one({
+    overrides: {
+      ...ownedByOrganization,
+      name: 'Se déplacer à vélo',
+      description,
+      last_modified: '2026-01-12T12:00:00+00:00',
+      page,
+      tags: exampleTagsForPage(pageKey)
+    }
+  })
   return [
     { label: 'Publié par une organisation', data: topic },
     {

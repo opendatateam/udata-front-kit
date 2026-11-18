@@ -5,7 +5,8 @@
     "src/components.d.ts",
     "src/auto-imports.d.ts",
     "src/**/*",
-    "src/**/*.vue"
+    "src/**/*.vue",
+    "cypress/support/factories/**/*"
   ],
   "exclude": ["src/**/__tests__/*"],
   "compilerOptions": {
