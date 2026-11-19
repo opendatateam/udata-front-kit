@@ -69,7 +69,8 @@ const datasetIdOrSlug = useRouteItem(
           .load(parentId, { toasted: false })
           .catch((err) => console.error('Failed to load parent dataset:', err))
       }
-    }
+    },
+    replaceWithSlug: true
   }
 )
 

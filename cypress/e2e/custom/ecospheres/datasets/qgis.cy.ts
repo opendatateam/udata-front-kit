@@ -15,7 +15,7 @@ describe('Dataset Page - QGIS Button', () => {
     const wfsResource = resourceFactory.one({ traits: ['wfs'] })
 
     cy.mockDatasetAndRelatedObjects(testDataset, [wfsResource])
-    cy.visit(`/datasets/${testDataset.id}`)
+    cy.visit(`/datasets/${testDataset.slug}`)
 
     cy.get('.test__open_dataset_in_qgis_btn').should('be.visible')
   })
@@ -25,7 +25,7 @@ describe('Dataset Page - QGIS Button', () => {
     const wmsResource = resourceFactory.one({ traits: ['wms'] })
 
     cy.mockDatasetAndRelatedObjects(testDataset, [wmsResource])
-    cy.visit(`/datasets/${testDataset.id}`)
+    cy.visit(`/datasets/${testDataset.slug}`)
 
     cy.get('.test__open_dataset_in_qgis_btn').should('be.visible')
   })
@@ -35,7 +35,7 @@ describe('Dataset Page - QGIS Button', () => {
     const csvResource = resourceFactory.one({ traits: ['csv'] })
 
     cy.mockDatasetAndRelatedObjects(testDataset, [csvResource])
-    cy.visit(`/datasets/${testDataset.id}`)
+    cy.visit(`/datasets/${testDataset.slug}`)
 
     cy.get('.test__open_dataset_in_qgis_btn').should('not.exist')
   })
@@ -45,7 +45,7 @@ describe('Dataset Page - QGIS Button', () => {
     const wfsResource = resourceFactory.one({ traits: ['wfs'] })
 
     cy.mockDatasetAndRelatedObjects(testDataset, [wfsResource])
-    cy.visit(`/datasets/${testDataset.id}`)
+    cy.visit(`/datasets/${testDataset.slug}`)
 
     cy.window().then((win) => {
       cy.spy(win.URL, 'createObjectURL').as('createObjectURL')
