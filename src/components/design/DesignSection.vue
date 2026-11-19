@@ -17,7 +17,7 @@ useDesignSection(props.id, props.title)
       {{ title }}
       <code class="design-section__component">{{ component }}</code>
     </h3>
-    <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list fr-p-0">
+    <ul class="fr-grid-row fr-grid-row--gutters tiles-list fr-p-0">
       <slot />
     </ul>
   </section>
