@@ -7,14 +7,14 @@ import type {
   Reuse
 } from '@datagouv/components-next'
 
+import { dataserviceFactory } from '@/fixtures/factories/dataservices_factory'
+import { datasetFactory } from '@/fixtures/factories/datasets_factory'
+import { organizationFactory } from '@/fixtures/factories/organizations_factory'
+import { reuseFactory } from '@/fixtures/factories/reuses_factory'
+import { topicFactory } from '@/fixtures/factories/topics_factory'
 import type { Topic } from '@/model/topic'
 import { usePageConf, usePagesConf } from '@/utils/config'
 import { useFilterValue } from '@/utils/filters'
-import { dataserviceFactory } from '../../../cypress/support/factories/dataservices_factory'
-import { datasetFactory } from '../../../cypress/support/factories/datasets_factory'
-import { organizationFactory } from '../../../cypress/support/factories/organizations_factory'
-import { reuseFactory } from '../../../cypress/support/factories/reuses_factory'
-import { topicFactory } from '../../../cypress/support/factories/topics_factory'
 
 export interface CardExample<T> {
   label: string

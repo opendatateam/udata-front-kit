@@ -1,8 +1,8 @@
+import { dataserviceFactory } from '@/fixtures/factories/dataservices_factory'
+import { datasetFactory } from '@/fixtures/factories/datasets_factory'
+import { topicFactory } from '@/fixtures/factories/topics_factory'
 import type { Topic } from '@/model/topic'
 import type { Dataservice, DatasetV2 } from '@datagouv/components-next'
-import { dataserviceFactory } from 'cypress/support/factories/dataservices_factory'
-import { datasetFactory } from 'cypress/support/factories/datasets_factory'
-import { topicFactory } from 'cypress/support/factories/topics_factory'
 
 describe('a11y contrast testing', () => {
   let testTopics: Topic[]

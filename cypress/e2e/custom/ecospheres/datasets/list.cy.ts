@@ -1,6 +1,6 @@
+import { datasetFactory } from '@/fixtures/factories/datasets_factory'
 import type { DatasetV2 } from '@datagouv/components-next'
 import { datagouvResponseBuilder } from 'cypress/support/datagouv_mocks'
-import { datasetFactory } from 'cypress/support/factories/datasets_factory'
 import { createIndicator } from '../indicators/support'
 
 describe('Datasets - List Page', () => {

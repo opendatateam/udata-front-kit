@@ -1,7 +1,7 @@
+import { datasetFactory } from '@/fixtures/factories/datasets_factory'
+import { discussionFactory } from '@/fixtures/factories/discussions_factory'
+import { resourceFactory } from '@/fixtures/factories/resources_factory'
 import type { DatasetV2 } from '@datagouv/components-next'
-import { datasetFactory } from 'cypress/support/factories/datasets_factory'
-import { discussionFactory } from 'cypress/support/factories/discussions_factory'
-import { resourceFactory } from 'cypress/support/factories/resources_factory'
 
 const NETWORKS = Cypress.expose('siteConfig').networks
 const SIMM_TOPIC_ID: string =
