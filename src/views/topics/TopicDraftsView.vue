@@ -102,7 +102,7 @@ useMeta({
     </p>
     <ul
       v-else-if="drafts.length > 0"
-      class="fr-grid-row fr-grid-row--gutters es__tiles__list"
+      class="fr-grid-row fr-grid-row--gutters tiles-list"
     >
       <li v-for="topic in drafts" :key="topic.id" class="fr-col-12 fr-col-lg-4">
         <TopicCard :topic="topic" :page-key="pageKey" />
@@ -120,13 +120,13 @@ useMeta({
 </template>
 
 <style scoped>
-.es__tiles__list :deep(article) {
+.tiles-list :deep(article) {
   display: flex;
   flex-direction: column;
   height: 100%;
 }
 
-.es__tiles__list :deep(.card-footer) {
+.tiles-list :deep(.card-footer) {
   margin-top: auto;
 }
 </style>

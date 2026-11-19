@@ -173,7 +173,7 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
 
 <!-- global styles -->
 <style>
-.es__tiles__list {
+.tiles-list {
   list-style-type: none;
 }
 .justify-end {
