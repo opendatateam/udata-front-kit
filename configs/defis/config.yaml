@@ -226,6 +226,11 @@ website:
     meta_description:
   footer:
     logo:
+      src: '/static/logos/numerique-gouv-logo.svg'
+      width: '180px'
+      height: '93px'
+      href: 'https://www.numerique.gouv.fr/offre-accompagnement/numeriquegouv-charte-utilisation/'
+      alt: 'Numérique.gouv - L’alliance du numérique de l’État'
     phrase: 'Ce site présente des exemples de défis de réutilisations de données publiques sélectionnés par l’équipe data.gouv.fr en collaboration avec les producteurs de données.'
     external_links:
       - label: 'data.gouv.fr'
