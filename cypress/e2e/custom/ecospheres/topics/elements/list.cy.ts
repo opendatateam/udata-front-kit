@@ -1,10 +1,10 @@
+import { dataserviceFactory } from '@/fixtures/factories/dataservices_factory'
 import {
   Availability,
   type Factor,
   type SiteId,
   type Topic
 } from '@/model/topic'
-import { dataserviceFactory } from 'cypress/support/factories/dataservices_factory'
 import { createIndicator } from '../../indicators/support'
 import {
   createTestTopic,

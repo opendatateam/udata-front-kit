@@ -1,4 +1,4 @@
-import { discussionFactory } from 'cypress/support/factories/discussions_factory'
+import { discussionFactory } from '@/fixtures/factories/discussions_factory'
 import {
   createTestFactors,
   setupTopicWithExistingFactors,
