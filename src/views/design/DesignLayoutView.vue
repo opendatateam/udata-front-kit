@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { provideDesignMenu } from '@/utils/design/designSections'
+import { provideDesignMenu } from '@/components/design/designSections'
 import { useCanonicalUrl, useMeta } from '@/utils/seo'
 
 const menuItems = provideDesignMenu()

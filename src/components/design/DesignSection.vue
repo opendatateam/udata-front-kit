@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useDesignSection } from '@/utils/design/designSections'
+import { useDesignSection } from '@/components/design/designSections'
 
 const props = defineProps<{
   id: string

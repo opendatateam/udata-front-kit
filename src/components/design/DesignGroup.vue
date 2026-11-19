@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useDesignGroup } from '@/utils/design/designSections'
+import { useDesignGroup } from '@/components/design/designSections'
 
 const props = defineProps<{
   id: string
