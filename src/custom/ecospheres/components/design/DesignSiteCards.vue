@@ -8,7 +8,7 @@ import {
   exampleDataset,
   exampleTagsForPage,
   galleryUrl
-} from '@/utils/design/cardExamples'
+} from '@/views/design/cardExamples'
 import DatasetOrIndicatorCard from '../datasets/DatasetOrIndicatorCard.vue'
 import DatasetOrIndicatorInTopicCard from '../datasets/DatasetOrIndicatorInTopicCard.vue'
 import IndicatorCard from '../indicators/IndicatorCard.vue'

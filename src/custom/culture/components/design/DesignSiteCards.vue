@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import DesignExample from '@/components/design/DesignExample.vue'
 import DesignSection from '@/components/design/DesignSection.vue'
-import { illustration } from '@/utils/design/cardExamples'
+import { illustration } from '@/views/design/cardExamples'
 import CultureDatasetCard from '../CultureDatasetCard.vue'
 
 const description =

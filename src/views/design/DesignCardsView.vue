@@ -16,6 +16,7 @@ import OrganizationCard from '@/components/OrganizationCard.vue'
 import SubSectionCards from '@/components/sections/SubSectionCards.vue'
 import TopicCard from '@/components/topics/TopicCard.vue'
 import { useNetworksEntries, usePageConf } from '@/utils/config'
+import { useLabels } from '@/utils/labels'
 import {
   exampleDataservices,
   exampleDatasets,
@@ -25,8 +26,7 @@ import {
   exampleTopics,
   findTopicsPageKey,
   galleryUrl
-} from '@/utils/design/cardExamples'
-import { useLabels } from '@/utils/labels'
+} from '@/views/design/cardExamples'
 
 const router = useRouter()
 
