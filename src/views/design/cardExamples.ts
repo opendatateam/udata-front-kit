@@ -3,7 +3,6 @@ import type {
   DatasetV2,
   Organization,
   OrganizationReference,
-  Quality,
   Reuse
 } from '@datagouv/components-next'
 
@@ -12,6 +11,17 @@ import { datasetFactory } from '@/fixtures/factories/datasets_factory'
 import { organizationFactory } from '@/fixtures/factories/organizations_factory'
 import { reuseFactory } from '@/fixtures/factories/reuses_factory'
 import { topicFactory } from '@/fixtures/factories/topics_factory'
+import {
+  highDataserviceMetrics,
+  highDatasetMetrics,
+  highOrganizationMetrics,
+  highReuseMetrics
+} from '@/fixtures/metrics'
+import {
+  completeDataserviceQuality,
+  completeDatasetQuality,
+  partialDatasetQuality
+} from '@/fixtures/quality'
 import type { Topic } from '@/model/topic'
 import { usePageConf, usePagesConf } from '@/utils/config'
 import { useFilterValue } from '@/utils/filters'
@@ -50,7 +60,7 @@ const organization = (name: string, badges: string[], withLogo: boolean) =>
       logo_thumbnail: withLogo ? logo : '',
       badges: badges.map((kind) => ({ kind })),
       description,
-      metrics: { datasets: 1240, dataservices: 12, reuses: 37, followers: 2400 }
+      metrics: highOrganizationMetrics
     },
     postBuild: (built) => ({ ...built, class: 'Organization' as const })
   })
@@ -75,19 +85,6 @@ export const exampleOrganizations: CardExample<
 
 const ownedByOrganization = { organization: publicOrganization, owner: null }
 
-const quality: Quality = {
-  score: 1,
-  dataset_description_quality: true,
-  resources_documentation: true,
-  license: true,
-  update_frequency: true,
-  update_fulfilled_in_time: true,
-  has_open_format: true,
-  temporal_coverage: true,
-  spatial: true,
-  all_resources_available: true
-}
-
 export const exampleDataset: DatasetV2 = datasetFactory.one({
   overrides: {
     ...ownedByOrganization,
@@ -96,14 +93,8 @@ export const exampleDataset: DatasetV2 = datasetFactory.one({
     description,
     description_short: description,
     page,
-    quality,
-    metrics: {
-      dataservices: 3,
-      followers: 120,
-      resources_downloads: 42500,
-      reuses: 18,
-      views: 1250000
-    }
+    quality: completeDatasetQuality,
+    metrics: highDatasetMetrics
   }
 })
 
@@ -117,14 +108,7 @@ export const exampleDatasets: CardExample<DatasetV2>[] = [
       title: longTitle,
       organization: localOrganization,
       owner: null,
-      quality: {
-        ...quality,
-        score: 0.33,
-        resources_documentation: false,
-        spatial: false,
-        temporal_coverage: false,
-        update_fulfilled_in_time: false
-      }
+      quality: partialDatasetQuality
     }
   },
   {
@@ -159,20 +143,8 @@ const dataservice: Dataservice = dataserviceFactory.one({
     acronym: '',
     description,
     availability: 99.9,
-    metrics: { followers: 42, reuses: 8, views: 24300 },
-    quality: {
-      score: 1,
-      has_description: true,
-      has_machine_documentation: true,
-      has_technical_documentation: true,
-      has_business_documentation: true,
-      license: true,
-      has_contact_point: true,
-      has_base_api_url: true,
-      availability_documented: true,
-      rate_limiting_documented: true,
-      access_conditions_clear: true
-    }
+    metrics: highDataserviceMetrics,
+    quality: completeDataserviceQuality
   }
 })
 
@@ -223,7 +195,7 @@ const reuse: Reuse = reuseFactory.one({
     url: page,
     image: illustration,
     image_thumbnail: illustration,
-    metrics: { datasets: 4, followers: 340, views: 98700 },
+    metrics: highReuseMetrics,
     page
   }
 })
