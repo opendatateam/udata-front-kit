@@ -25,3 +25,7 @@ allowBuilds:
   cypress: true
   esbuild: false
   vue-demi: false
+
+# Security: patch vulnerable transitive deps pinned by upstream (same major only)
+overrides:
+  'editorconfig>minimatch': ^9.0.9

@@ -7,7 +7,7 @@ import ErrorMessage from '../ErrorMessage.vue'
 
 const factor = defineModel('factor-model', {
   type: Object as () => ResolvedFactor,
-  default: {}
+  default: () => ({}) as ResolvedFactor
 })
 
 const props = defineProps<{

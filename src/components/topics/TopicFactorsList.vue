@@ -33,7 +33,7 @@ import TopicGroup from './TopicGroup.vue'
 
 const factors = defineModel({
   type: Array<ResolvedFactor>,
-  default: []
+  default: () => []
 })
 
 const props = defineProps({
