@@ -64,7 +64,6 @@ onErrorCaptured(() => {
     message="Une erreur est survenue lors du chargement des ressources."
   />
   <Suspense v-else>
-    <!-- @vue-expect-error exploreTo accepts route locations at runtime, typed upstream in datagouv/cdata#1341 -->
     <DatagouvfrResourceExplorer
       :dataset="datasetForExplorer"
       :fullscreen="fullscreen"

@@ -56,7 +56,6 @@ const goToHarvester = (sourceId: string) => {
 
 <template>
   <div class="divide-y">
-    <!-- @vue-expect-error tagUrl accepts route locations at runtime, typed upstream in datagouv/cdata#1341 -->
     <DatasetInformationSection :dataset="dataset" :tag-url="tagUrl">
       <div v-if="doi || canRequestDoi(dataset)">
         <DescriptionListTerm>DOI</DescriptionListTerm>

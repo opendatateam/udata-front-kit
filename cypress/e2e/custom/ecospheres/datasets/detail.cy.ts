@@ -32,8 +32,8 @@ describe('Dataset Detail View - Networks (univers)', () => {
       }
     ])
 
-    cy.visit(`/datasets/${dataset.id}`)
-    cy.wait(`@get_datasets_${dataset.id}`)
+    cy.visit(`/datasets/${dataset.slug}`)
+    cy.wait(`@get_datasets_${dataset.slug}`)
     cy.wait(`@get_dataset_networks_${dataset.id}`)
 
     cy.contains('dt', 'Réseau').should('be.visible')
@@ -45,8 +45,8 @@ describe('Dataset Detail View - Networks (univers)', () => {
   })
 
   it('does not display the network block when the dataset belongs to no network', () => {
-    cy.visit(`/datasets/${dataset.id}`)
-    cy.wait(`@get_datasets_${dataset.id}`)
+    cy.visit(`/datasets/${dataset.slug}`)
+    cy.wait(`@get_datasets_${dataset.slug}`)
     cy.wait(`@get_dataset_networks_${dataset.id}`)
 
     cy.contains('dt', 'Réseau').should('not.exist')
@@ -76,8 +76,8 @@ describe('Dataset Page - Tab counts', () => {
     // Differs from metrics.discussions: the tab shows the loaded list's total
     cy.mockDatagouvObjectList('discussions', discussionFactory.many(2))
 
-    cy.visit(`/datasets/${testDataset.id}`)
-    cy.wait(`@get_datasets_${testDataset.id}`)
+    cy.visit(`/datasets/${testDataset.slug}`)
+    cy.wait(`@get_datasets_${testDataset.slug}`)
 
     cy.contains('button', 'Fichiers (4)').should('be.visible')
     cy.contains('button', 'Réutilisations et API (5)').should('be.visible')
@@ -98,8 +98,8 @@ describe('Dataset Page - Keywords', () => {
     })
     cy.mockDatasetAndRelatedObjects(dataset)
 
-    cy.visit(`/datasets/${dataset.id}`)
-    cy.wait(`@get_datasets_${dataset.id}`)
+    cy.visit(`/datasets/${dataset.slug}`)
+    cy.wait(`@get_datasets_${dataset.slug}`)
     cy.contains('button', 'Informations').click()
 
     dataset.tags?.forEach((tag) => {
@@ -124,7 +124,7 @@ describe('Dataset Page - Parent dataset', () => {
     cy.mockDatasetAndRelatedObjects(child)
     cy.mockDatagouvObject('datasets', parent.id, parent)
 
-    cy.visit(`/datasets/${child.id}`)
+    cy.visit(`/datasets/${child.slug}`)
     cy.wait(`@get_datasets_${parent.id}`)
 
     cy.get('.fr-callout')
@@ -142,7 +142,7 @@ describe('Dataset Page - Parent dataset', () => {
     cy.mockDatasetAndRelatedObjects(child)
     cy.mockDatasetAndRelatedObjects(parent)
 
-    cy.visit(`/datasets/${child.id}`)
+    cy.visit(`/datasets/${child.slug}`)
     cy.get('.fr-callout').contains('a', parent.title).click()
 
     cy.location('pathname').should('eq', `/datasets/${parent.slug}`)
@@ -154,9 +154,44 @@ describe('Dataset Page - Parent dataset', () => {
     const dataset = datasetFactory.one()
     cy.mockDatasetAndRelatedObjects(dataset)
 
+    cy.visit(`/datasets/${dataset.slug}`)
+    cy.wait(`@get_datasets_${dataset.slug}`)
+
+    cy.get('.fr-callout').should('not.exist')
+  })
+})
+
+describe('Dataset Page - Slug URL', () => {
+  let dataset: DatasetV2
+
+  beforeEach(() => {
+    cy.mockMatomo()
+    cy.mockStaticDatagouv()
+    dataset = datasetFactory.one()
+    cy.mockDatasetAndRelatedObjects(dataset)
+  })
+
+  it('should replace the id with the slug in the URL', () => {
     cy.visit(`/datasets/${dataset.id}`)
     cy.wait(`@get_datasets_${dataset.id}`)
 
-    cy.get('.fr-callout').should('not.exist')
+    cy.location('pathname').should('eq', `/datasets/${dataset.slug}`)
+    cy.get('h1').should('contain', dataset.title)
+  })
+
+  it('should keep the tab and query when replacing the id', () => {
+    cy.visit(`/datasets/${dataset.id}/files?resource_id=abc`)
+    cy.wait(`@get_datasets_${dataset.id}`)
+
+    cy.location('pathname').should('eq', `/datasets/${dataset.slug}/files`)
+    cy.location('search').should('eq', '?resource_id=abc')
+  })
+
+  it('should keep the slug URL as is', () => {
+    cy.visit(`/datasets/${dataset.slug}`)
+    cy.wait(`@get_datasets_${dataset.slug}`)
+
+    cy.location('pathname').should('eq', `/datasets/${dataset.slug}`)
+    cy.get('h1').should('contain', dataset.title)
   })
 })

@@ -63,7 +63,11 @@ describe('Dataservices (API) - List Page', () => {
     const firstDataservice = testDataservices[0]
 
     // Mock the detail page API call
-    cy.mockDatagouvObject('dataservices', firstDataservice.id, firstDataservice)
+    cy.mockDatagouvObject(
+      'dataservices',
+      firstDataservice.slug,
+      firstDataservice
+    )
     cy.mockDataserviceMetricsApi(firstDataservice.id)
     cy.mockDatagouvObjectList('discussions')
     // Mock the datasets for this dataservice
@@ -87,7 +91,10 @@ describe('Dataservices (API) - List Page', () => {
     cy.contains(firstDataservice.title).click()
 
     // Check that we're on the detail page
-    cy.url().should('include', `/dataservices/${firstDataservice.id}`)
+    cy.location('pathname').should(
+      'eq',
+      `/dataservices/${firstDataservice.slug}`
+    )
   })
 
   it('should handle empty dataservices list', () => {

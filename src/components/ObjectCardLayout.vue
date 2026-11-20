@@ -3,7 +3,11 @@ import type {
   OrganizationReference,
   UserReference
 } from '@datagouv/components-next'
-import { ObjectCardOwner, useFormatDate } from '@datagouv/components-next'
+import {
+  getOwnerName,
+  OrganizationNameWithCertificate,
+  useFormatDate
+} from '@datagouv/components-next'
 import { RiSubtractLine } from '@remixicon/vue'
 import type { Component } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
@@ -18,6 +22,7 @@ const props = withDefaults(
     icon?: Component
     organization?: OrganizationReference | null
     owner?: UserReference | null
+    // not rendered yet: the organization name is plain text until the cards redesign
     organizationUrl?: RouteLocationRaw | null
     lastUpdate: string
     description?: string | null
@@ -43,17 +48,21 @@ const shortDescription = computed(() =>
     ? stripFromMarkdown(props.description, 500).trim()
     : ''
 )
+
+const ownerName = computed(() =>
+  props.owner ? getOwnerName({ organization: null, owner: props.owner }) : ''
+)
 </script>
 
 <template>
-  <!-- mirrors components-next DatasetCard's ObjectCard/ObjectCardHeader markup, which are not exported -->
+  <!-- mirrors components-next 1.4.0 DatasetCard markup (ObjectCard/ObjectCardHeader), not exported -->
   <article
     class="fr-px-3w fr-py-2w border bg-white border-gray-default relative hover:bg-gray-some fr-enlarge-link"
   >
     <div class="flex flex-wrap md:flex-nowrap gap-4 items-start">
       <div v-if="$slots.media" class="flex-none">
         <div
-          class="flex justify-center items-center border border-gray-lower bg-[#fff] rounded-md overflow-hidden p-2"
+          class="object-card-media flex justify-center items-center border bg-white rounded-md overflow-hidden p-2"
         >
           <slot name="media" />
         </div>
@@ -78,15 +87,23 @@ const shortDescription = computed(() =>
           v-if="organization || owner"
           class="text-sm flex flex-wrap md:flex-nowrap gap-y-1 items-center truncate"
         >
-          <ObjectCardOwner
-            :organization="organization"
-            :owner="owner"
-            :organization-url="organizationUrl"
-          />
+          <!-- inlined components-next 1.4.0 ObjectCardOwner, its 1.5.0 markup breaks this one-line layout -->
+          <div v-if="organization" class="flex-initial truncate">
+            <span class="text-sm overflow-hidden flex items-center truncate">
+              <OrganizationNameWithCertificate
+                :organization="organization"
+                size="sm"
+                color-class="text-gray-title"
+              />
+            </span>
+          </div>
+          <div v-else-if="ownerName" class="mr-1 truncate">
+            {{ ownerName }}
+          </div>
           <RiSubtractLine
             class="hidden md:block size-4 flex-none fill-gray-medium"
           />
-          <div class="w-full md:w-auto text-gray-medium whitespace-nowrap">
+          <div class="object-card-date text-gray-medium whitespace-nowrap">
             Mis à jour
             {{
               formatRelativeIfRecentDate(lastUpdate, { dateStyle: 'medium' })
@@ -95,7 +112,7 @@ const shortDescription = computed(() =>
         </div>
         <p
           v-if="shortDescription"
-          class="fr-text--sm fr-mt-1w fr-mb-0 overflow-wrap-anywhere hidden sm:line-clamp-2"
+          class="object-card-description fr-text--sm fr-mt-1w fr-mb-0 overflow-wrap-anywhere"
         >
           {{ shortDescription }}
         </p>
@@ -108,6 +125,35 @@ const shortDescription = computed(() =>
 </template>
 
 <style scoped>
+/* replace utilities no longer shipped by components-next 1.5.0 CSS */
+.object-card-media {
+  border-color: var(--color-gray-lower);
+}
+
+.object-card-date {
+  width: 100%;
+}
+
+.object-card-description {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .object-card-description {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+  }
+}
+
+@media (min-width: 768px) {
+  .object-card-date {
+    width: auto;
+  }
+}
+
 /* compensate DSFR badges bottom margin */
 .object-card-footer :deep(.fr-badges-group) {
   margin-bottom: -0.5rem;
