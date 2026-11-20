@@ -18,6 +18,7 @@ import { useDataserviceStore } from '@/store/DataserviceStore'
 import { descriptionFromMarkdown, formatDate } from '@/utils'
 import { useAsyncComponent } from '@/utils/component'
 import { useLabels } from '@/utils/labels'
+import { getStatusBadge } from '@/utils/objectStatus'
 import { useMeta } from '@/utils/seo'
 import { Tab, tabIds, useRoutedTabs } from '@/utils/tabs'
 import { OpenApiViewer } from '@datagouv/components-next'
@@ -45,6 +46,15 @@ const dataserviceIdOrSlug = useRouteItem(
 
 const dataservice = computed(() =>
   dataserviceStore.get(dataserviceIdOrSlug.value)
+)
+const statusBadge = computed(
+  () =>
+    dataservice.value &&
+    getStatusBadge({
+      deleted: dataservice.value.deleted_at,
+      archived: dataservice.value.archived_at,
+      private: dataservice.value.private
+    })
 )
 // totals are stored by id, while the route can hold a slug
 const total = computed(
@@ -142,12 +152,20 @@ useMeta({
 </script>
 
 <template>
-  <div class="fr-container">
-    <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
+  <div class="fr-container fr-grid-row fr-grid-row--middle fr-mt-1v">
+    <div class="fr-col">
+      <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
+    </div>
   </div>
   <GenericContainer v-if="dataservice" :key="dataservice.id">
-    <div class="fr-grid-row fr-grid-row--gutters fr-mb-2w">
+    <div class="fr-grid-row fr-grid-row--gutters fr-mt-1w fr-mb-2w">
       <div class="fr-col-12 fr-col-md-8">
+        <DsfrBadge
+          v-if="statusBadge"
+          class="fr-mb-2v"
+          :label="statusBadge.label"
+          :type="statusBadge.type"
+        />
         <h1 class="fr-mb-2v">{{ dataservice.title }}</h1>
         <ReadMore max-height="600">
           <!-- eslint-disable-next-line vue/no-v-html -->

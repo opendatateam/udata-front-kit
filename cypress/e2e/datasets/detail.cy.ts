@@ -1,6 +1,34 @@
 import type { DatasetV2 } from '@datagouv/components-next'
 import { datasetFactory } from 'cypress/support/factories/datasets_factory'
 
+describe('Dataset Page - Status badge', () => {
+  const visit = (dataset: DatasetV2) => {
+    cy.mockDatasetAndRelatedObjects(dataset)
+    cy.visit(`/datasets/${dataset.id}`)
+    cy.wait(`@get_datasets_${dataset.id}`)
+    cy.get('h1').should('contain', dataset.title)
+  }
+
+  beforeEach(() => {
+    cy.mockMatomo()
+    cy.mockStaticDatagouv()
+  })
+
+  it('should display the "Archivé" badge for an archived dataset', () => {
+    visit(datasetFactory.one({ overrides: { archived: true } }))
+
+    cy.contains('.fr-badge', 'Archivé').should('be.visible')
+  })
+
+  it('should not display a status badge for a public dataset', () => {
+    visit(datasetFactory.one())
+
+    cy.contains('.fr-badge', 'Archivé').should('not.exist')
+    cy.contains('.fr-badge', 'Brouillon').should('not.exist')
+    cy.contains('.fr-badge', 'Supprimé').should('not.exist')
+  })
+})
+
 describe('Dataset Page - DOI', () => {
   const DOI = '10.1234/abcd'
 

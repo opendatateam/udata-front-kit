@@ -382,6 +382,29 @@ describe('Dataservices (API) - Detail Page', () => {
     })
   })
 
+  describe('Status badge', () => {
+    it('should display the "Archivé" badge for an archived dataservice', () => {
+      const archivedDataservice = createMockedDataservice({
+        archived_at: '2026-10-03T00:00:00+00:00'
+      })
+
+      cy.visit(`/dataservices/${archivedDataservice.slug}`)
+      cy.wait(`@get_dataservices_${archivedDataservice.slug}`)
+
+      cy.contains('.fr-badge', 'Archivé').should('be.visible')
+    })
+
+    it('should not display a status badge for a public dataservice', () => {
+      cy.visit(`/dataservices/${testDataservice.slug}`)
+      cy.wait(`@get_dataservices_${testDataservice.slug}`)
+
+      cy.get('h1').should('contain', testDataservice.title)
+      cy.contains('.fr-badge', 'Archivé').should('not.exist')
+      cy.contains('.fr-badge', 'Brouillon').should('not.exist')
+      cy.contains('.fr-badge', 'Supprimé').should('not.exist')
+    })
+  })
+
   describe('Empty States', () => {
     it('should handle dataservice without datasets', () => {
       // Create a dataservice with no datasets
