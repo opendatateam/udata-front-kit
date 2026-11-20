@@ -1,4 +1,8 @@
-import { createIndicator, createIndicatorResource } from './support'
+import {
+  createIndicator,
+  createIndicatorResource,
+  interceptTabularData
+} from './support'
 
 describe('Indicator Viz', () => {
   beforeEach(() => {
@@ -10,7 +14,7 @@ describe('Indicator Viz', () => {
     it('should not display the previsualisation', () => {
       const indicator = createIndicator({}, { enable_visualization: false })
       cy.mockDatasetAndRelatedObjects(indicator)
-      cy.visit(`/indicators/${indicator.id}`)
+      cy.visit(`/indicators/${indicator.slug}`)
       cy.contains('Prévisualisation').should('not.exist')
     })
   })
@@ -23,12 +27,11 @@ describe('Indicator Viz', () => {
       )
       const vizResource = createIndicatorResource()
       cy.mockDatasetAndRelatedObjects(indicatorWithViz, [vizResource])
-      cy.intercept(
-        'GET',
-        `https://tabular-api*.data.gouv.fr/api/resources/${vizResource.id}/data/**`,
-        { statusCode: 500, body: 'Internal Server Error' }
-      )
-      cy.visit(`/indicators/${indicatorWithViz.id}`)
+      interceptTabularData(vizResource, {
+        statusCode: 500,
+        body: 'Internal Server Error'
+      })
+      cy.visit(`/indicators/${indicatorWithViz.slug}`)
       cy.contains('Prévisualisation').click()
       cy.contains('Erreur lors du chargement').should('be.visible')
       cy.contains('k: millier, M: million, Md: milliard').should('not.exist')
@@ -41,12 +44,8 @@ describe('Indicator Viz', () => {
       )
       const vizResource = createIndicatorResource('fr')
       cy.mockDatasetAndRelatedObjects(indicatorWithViz, [vizResource])
-      cy.intercept(
-        'GET',
-        `https://tabular-api*.data.gouv.fr/api/resources/${vizResource.id}/data/**`,
-        { statusCode: 200, body: { data: [] } }
-      )
-      cy.visit(`/indicators/${indicatorWithViz.id}`)
+      interceptTabularData(vizResource)
+      cy.visit(`/indicators/${indicatorWithViz.slug}`)
       cy.contains('Prévisualisation').click()
       cy.contains(
         'Aucune donnée disponible pour le territoire sélectionné.'
@@ -65,12 +64,8 @@ describe('Indicator Viz', () => {
         vizResource,
         communeResource
       ])
-      cy.intercept(
-        'GET',
-        `https://tabular-api*.data.gouv.fr/api/resources/${vizResource.id}/data/**`,
-        { statusCode: 200, body: { data: [] } }
-      )
-      cy.visit(`/indicators/${indicatorWithViz.id}`)
+      interceptTabularData(vizResource)
+      cy.visit(`/indicators/${indicatorWithViz.slug}`)
       cy.contains('Prévisualisation').click()
       cy.get('#viz-mesh-select').select('commune')
       cy.contains(
@@ -86,16 +81,132 @@ describe('Indicator Viz', () => {
       )
       const vizResource = createIndicatorResource('region')
       cy.mockDatasetAndRelatedObjects(indicatorWithViz, [vizResource])
-      cy.intercept(
-        'GET',
-        `https://tabular-api*.data.gouv.fr/api/resources/${vizResource.id}/data/**`,
-        { statusCode: 200, body: { data: [] } }
-      )
-      cy.visit(`/indicators/${indicatorWithViz.id}`)
+      interceptTabularData(vizResource)
+      cy.visit(`/indicators/${indicatorWithViz.slug}`)
       cy.contains('Prévisualisation').click()
       cy.get('#viz-mesh-select')
         .find('option[value="commune"]')
         .should('not.exist')
+    })
+
+    // The chart loads its own resources; it used to rely on the Fichiers tab's mount, which never happens with the explorer enabled.
+    it('should still display the previsualisation when the new resources explorer is enabled', () => {
+      cy.window().then((win) => {
+        win.localStorage.setItem('resources_explorer_enabled', 'true')
+      })
+
+      const indicatorWithViz = createIndicator(
+        {},
+        { enable_visualization: true }
+      )
+      const vizResource = createIndicatorResource('fr')
+      cy.mockDatasetAndRelatedObjects(indicatorWithViz, [vizResource])
+      interceptTabularData(vizResource)
+
+      cy.visit(`/indicators/${indicatorWithViz.slug}`)
+      cy.contains('Prévisualisation').click()
+      cy.get('#viz-mesh-select').should('exist')
+    })
+  })
+
+  describe('Deep link', () => {
+    const setup = () => {
+      const indicatorWithViz = createIndicator(
+        {},
+        { enable_visualization: true }
+      )
+      const frResource = createIndicatorResource('fr')
+      const regionResource = createIndicatorResource('region')
+      cy.mockDatasetAndRelatedObjects(indicatorWithViz, [
+        frResource,
+        regionResource
+      ])
+      interceptTabularData(regionResource).as('regionData')
+      interceptTabularData(frResource).as('frData')
+      return indicatorWithViz
+    }
+
+    it('should preselect mesh and territory from the URL', () => {
+      const indicator = setup()
+      cy.visit(`/indicators/${indicator.slug}?mesh=region&territory=53`)
+      cy.get('#viz-mesh-select').should('have.value', 'region')
+      cy.contains('Bretagne - 53').should('be.visible')
+      cy.wait('@regionData')
+        .its('request.url')
+        .should('include', 'geocode_region__exact=53')
+      cy.location('search').should('eq', '?mesh=region&territory=53')
+    })
+
+    it('should fall back to the first territory without rewriting the URL', () => {
+      const indicator = setup()
+      // late failing response for the invalid territory must not override the fallback
+      cy.intercept(
+        {
+          method: 'GET',
+          url: 'https://tabular-api*.data.gouv.fr/api/resources/*/data/**',
+          query: { geocode_region__exact: 'unknown' }
+        },
+        { statusCode: 500, body: 'Internal Server Error', delay: 1000 }
+      ).as('unknownData')
+      cy.visit(`/indicators/${indicator.slug}?mesh=region&territory=unknown`)
+      cy.get('#viz-mesh-select').should('have.value', 'region')
+      cy.contains('Auvergne-Rhône-Alpes - 84').should('be.visible')
+      cy.wait('@unknownData')
+      cy.contains('Erreur lors du chargement').should('not.exist')
+      cy.contains(
+        'Aucune donnée disponible pour le territoire sélectionné.'
+      ).should('be.visible')
+      cy.location('search').should('eq', '?mesh=region&territory=unknown')
+    })
+
+    it('should fall back to the first mesh for an unknown mesh', () => {
+      const indicator = setup()
+      cy.visit(`/indicators/${indicator.slug}?mesh=unknown`)
+      cy.get('#viz-mesh-select').should('have.value', 'fr')
+      cy.wait('@frData')
+    })
+
+    it('should not write the URL on load', () => {
+      const indicator = setup()
+      cy.visit(`/indicators/${indicator.slug}`)
+      cy.wait('@frData')
+      cy.location('search').should('eq', '')
+    })
+
+    it('should write the URL on user changes', () => {
+      const indicator = setup()
+      cy.visit(`/indicators/${indicator.slug}`)
+      cy.wait('@frData')
+      cy.get('#viz-mesh-select').select('region')
+      cy.location('search').should('eq', '?mesh=region&territory=84')
+      cy.get('#viz-mesh-select').select('fr')
+      cy.location('search').should('eq', '?mesh=fr')
+    })
+  })
+
+  describe('Resource link', () => {
+    it('should open the Fichiers tab instead of the default Prévisualisation tab', () => {
+      const indicatorWithViz = createIndicator(
+        {},
+        { enable_visualization: true }
+      )
+      const resource = createIndicatorResource()
+      cy.mockDatasetAndRelatedObjects(indicatorWithViz, [resource])
+      // the preview panel is mounted even when hidden, so its chart still fetches
+      interceptTabularData(resource)
+
+      cy.visit(
+        `/indicators/${indicatorWithViz.slug}/files?resource_id=${resource.id}`
+      )
+
+      cy.get('[role="tab"][aria-selected="true"]').should('contain', 'Fichiers')
+      cy.location('pathname').should('match', /\/files$/)
+      cy.location('search').should('include', `resource_id=${resource.id}`)
+
+      // query belongs to the tab being left
+      cy.contains('[role="tab"]', 'Sources').click()
+      cy.location('pathname').should('match', /\/sources$/)
+      cy.location('search').should('eq', '')
     })
   })
 })

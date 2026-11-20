@@ -13,12 +13,12 @@ const labels = useLabels(pageConf.labels)
 
 const factor = defineModel('factor-model', {
   type: Object as () => ResolvedFactor,
-  default: {}
+  default: () => ({}) as ResolvedFactor
 })
 
 const factorsGroups = defineModel('groups-model', {
   type: Object as () => FactorsGroups,
-  default: []
+  default: () => new Map()
 })
 
 defineProps({
