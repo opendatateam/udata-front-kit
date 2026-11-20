@@ -37,7 +37,7 @@ const factorRef = toRef(props, 'factor')
     :dataset="datasetContent"
     :dataset-url="{
       name: 'datasets_detail',
-      params: { item_id: datasetContent.id }
+      params: { item_id: datasetContent.slug }
     }"
     :show-description-short="false"
     :organization-url="null"
