@@ -1,3 +1,4 @@
+// TODO: use upstream ObjectStatusBadge/DatasetBadge/DataserviceBadge once released in @datagouv/components-next (> 1.5.0)
 export type StatusBadge = {
   label: string
   type?: 'error' | 'warning'
