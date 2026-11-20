@@ -16,6 +16,7 @@ export type TypedHarvest = Harvest & {
   issued_at?: string
   modified_at?: string
   source_id?: string
+  doi?: string | null
 }
 
 export interface DatasetV2Response extends GenericResponse {
@@ -29,10 +30,21 @@ export interface DatasetModalData {
   mode: 'edit' | 'create'
 }
 
+// extras written by the DCAT harvester
+export type DcatExtras = {
+  [key: string]: string | string[] | undefined
+  accessRights?: string[]
+  provenance?: string[]
+  // data.gouv.fr id of the parent dataset
+  parent?: string
+}
+
 export type ExtendedDatasetV2WithFullObject = DatasetV2WithFullObject & {
   extras: {
     [key: string]: unknown
-    dcat?: Record<string, string[] | undefined>
+    dcat?: DcatExtras
   }
   harvest: TypedHarvest | null
+  // FIXME: remove when typed upstream in @datagouv/components-next
+  doi?: string | null
 }

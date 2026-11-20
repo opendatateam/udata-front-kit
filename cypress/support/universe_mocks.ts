@@ -10,7 +10,7 @@
 Cypress.Commands.add('mockListApis', (primaryType, primaryData = []) => {
   cy.mockUniverseOrganizations()
 
-  const pages = (Cypress.env('siteConfig')?.pages ?? {}) as Record<
+  const pages = (Cypress.expose('siteConfig')?.pages ?? {}) as Record<
     string,
     { list_all?: boolean; object_type?: string }
   >
@@ -37,7 +37,7 @@ Cypress.Commands.add('mockUniverseOrganizations', () => {
       type: ''
     }
   ]
-  const siteId = Cypress.env('siteId')
+  const siteId = Cypress.expose('siteId')
 
   cy.intercept(
     'GET',

@@ -36,7 +36,7 @@ const pageSize = 5
 const getDataservicePage = (dataservice: Dataservice) => {
   const hasInternalDataservices = !!config.pages.dataservices
   return hasInternalDataservices
-    ? { name: 'dataservices_detail', params: { item_id: dataservice.id } }
+    ? { name: 'dataservices_detail', params: { item_id: dataservice.slug } }
     : dataservice.self_web_url
 }
 
@@ -75,6 +75,7 @@ onMounted(fetchDataservices)
         <DataserviceCard
           :dataservice="dataservice"
           :dataservice-url="getDataservicePage(dataservice)"
+          :organization-url="null"
           title-tag="p"
         />
       </li>
