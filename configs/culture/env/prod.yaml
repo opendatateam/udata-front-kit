@@ -1,0 +1,6 @@
+# prod overrides, applied to ../config.yaml as a JSON Merge Patch (see README "Configuration par environnement")
+website:
+  seo:
+    canonical_url: https://culture.data.gouv.fr
+    meta:
+      robots: 'index, follow'

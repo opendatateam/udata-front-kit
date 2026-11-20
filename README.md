@@ -17,6 +17,24 @@ Chaque verticale est configurée dans un fichier `config.yaml` stocké sous [`co
 La variable d'environnement `VITE_SITE_ID` permet de définir la configuration utilisée au lancement de l'application.
 Cette variable peut être définie dans le fichier [`.env`](.env) ou ses dérivés.
 
+### Configuration par environnement
+
+Les valeurs propres à un environnement de déploiement (`demo`, `preprod`, `prod`) sont définies dans `configs/$verticale/env/$env.yaml`, sur `main`. Ce fichier ne contient que les clés qui diffèrent de `config.yaml` (URL de data.gouv.fr, client OAuth, `canonical_url`, meta `robots`, Sentry, identifiants de topics/organisations, etc.).
+
+La variable `VITE_DEPLOY_ENV` (positionnée automatiquement par le workflow de déploiement) sélectionne l'environnement. Sans elle, seul `config.yaml` est utilisé : c'est le cas en développement local, sur les review apps et dans la CI.
+
+Le fichier d'environnement est appliqué comme un [JSON Merge Patch (RFC 7396)](https://www.rfc-editor.org/rfc/rfc7396) :
+
+- les objets sont fusionnés clé par clé ;
+- les scalaires et les listes sont remplacés en entier ;
+- `null` supprime la clé (ex : `networks: null` pour désactiver une fonctionnalité).
+
+La configuration résolue est publiée par le build sous `/site-config.json` (ex : <https://ecologie.data.gouv.fr/site-config.json>), notamment à destination des outils externes (ex : `udata-front-kit-seo`). En local, `VITE_DEPLOY_ENV=prod pnpm build` la génère dans `dist/site-config.json`, et `VITE_DEPLOY_ENV=prod pnpm dev` lance un site avec sa configuration de production.
+
+Un test ([`configs/__tests__/configs.test.ts`](configs/__tests__/configs.test.ts)) vérifie qu'un fichier d'environnement ne surcharge que des clés existant dans `config.yaml`, afin de détecter les fautes de frappe.
+
+Toute la configuration, quel que soit l'environnement, est maintenue sur `main` : les branches `{site}-{env}` ne modifient pas les fichiers de `configs/`.
+
 ## 🚀 Développement
 
 ### Environnement recommandé
@@ -337,7 +355,7 @@ Pour ces sites, `scripts/deploy.sh` ne s'applique pas car il n'y a pas de branch
 
 ### sitemap.xml et robots.txt
 
-Le référencement des verticales est géré via la section `website.seo` du fichier de configuration. Cette configuration pilote la génération de `robots.txt` et `sitemap.xml` par le package [`udata-front-kit-seo`](https://github.com/opendatateam/udata-front-kit-seo), qui lit cette configuration et génère les fichiers pour chaque couple site/environnement.
+Le référencement des verticales est géré via la section `website.seo` du fichier de configuration. Cette configuration pilote la génération de `robots.txt` et `sitemap.xml` par le package [`udata-front-kit-seo`](https://github.com/opendatateam/udata-front-kit-seo), qui lit la configuration résolue publiée par chaque site (`/site-config.json`, cf [Configuration par environnement](#configuration-par-environnement)) et génère les fichiers pour chaque couple site/environnement.
 
 Les clés dans `sitemap_xml` (`topics_pages`, `datasets_pages`, `dataservices_pages`) doivent correspondre aux identifiants définis dans la section `pages:` du fichier de configuration.
 

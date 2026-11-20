@@ -1,6 +1,7 @@
 import { defineConfig } from 'cypress'
-import { readdirSync, readFileSync } from 'fs'
-import { load } from 'js-yaml'
+import { readdirSync } from 'fs'
+
+import { loadSiteConfig } from './scripts/site-config.ts'
 
 export default defineConfig({
   allowCypressEnv: false,
@@ -18,8 +19,10 @@ export default defineConfig({
 
       // Load site config and make it available to tests
       if (siteId) {
-        const configPath = `./configs/${siteId}/config.yaml`
-        const siteConfig = load(readFileSync(configPath, 'utf-8'))
+        const siteConfig = loadSiteConfig(
+          siteId,
+          process.env.VITE_DEPLOY_ENV || undefined
+        )
         config.expose = { ...config.expose, siteConfig, siteId }
       }
 

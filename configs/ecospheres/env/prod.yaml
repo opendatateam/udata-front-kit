@@ -1,0 +1,34 @@
+# prod overrides, applied to ../config.yaml as a JSON Merge Patch (see README "Configuration par environnement")
+datagouvfr:
+  base_url: https://www.data.gouv.fr
+  oauth_client_id: 66fa76d405b98d06ca73854a
+  tabular_api_url: https://tabular-api.data.gouv.fr
+
+sentry:
+  dsn: https://a72e28ddb7b20ea56b0c8e43d52b3ffc@errors.data.gouv.fr/49
+  domain_url: https://errors.data.gouv.fr
+  environment: prod
+  tracesSampleRate: 0.1 # enables performance monitoring for 10% of navigations
+
+website:
+  seo:
+    canonical_url: https://ecologie.data.gouv.fr
+    meta:
+      robots: 'index, follow'
+  notice:
+    display: false
+  matomo:
+    siteId: 299
+
+organizations:
+  datasets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-prod/organizations-datasets.json
+  dataservices: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-prod/organizations-dataservices.json
+  bouquets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/ecospheres-prod/organizations-bouquets.json
+
+pages:
+  indicators:
+    universe_query:
+      organization: 67884b4da4fca9c97bbef479
+
+# networks are not enabled in prod yet; prod topics: sieau 6a8eff5ce148bf49b3267152, simm 6a82baef02381db0dc7229cf
+networks: null

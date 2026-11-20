@@ -13,10 +13,11 @@ datagouvfr:
 website:
   title: "Point d'accès unique aux données d'accessibilité"
   seo:
-    canonical_url: https://accessibilite.data.gouv.fr
+    canonical_url: https://accessibilite.preprod.data.gouv.fr
     meta:
       keywords:
-      description:
+      description: |
+        accessibilite.data.gouv.fr vise à faciliter l'accès, l'ouverture et la réutilisation des données d'accessibilité. Vous y trouverez des données brutes téléchargeables et utilisables de manière libre et gratuite.
       robots: 'noindex, nofollow'
     robots_txt:
       disallow:
