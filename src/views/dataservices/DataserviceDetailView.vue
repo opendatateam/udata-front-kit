@@ -152,11 +152,13 @@ useMeta({
 </script>
 
 <template>
-  <div class="fr-container">
-    <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
+  <div class="fr-container fr-grid-row fr-grid-row--middle fr-mt-1v">
+    <div class="fr-col">
+      <DsfrBreadcrumb class="fr-mb-1v" :links="links" />
+    </div>
   </div>
   <GenericContainer v-if="dataservice" :key="dataservice.id">
-    <div class="fr-grid-row fr-grid-row--gutters fr-mb-2w">
+    <div class="fr-grid-row fr-grid-row--gutters fr-mt-1w fr-mb-2w">
       <div class="fr-col-12 fr-col-md-8">
         <DsfrBadge
           v-if="statusBadge"
