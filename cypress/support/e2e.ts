@@ -36,4 +36,5 @@ Cypress.on('uncaught:exception', (err) => {
 // Fail tests when external API calls are not mocked
 beforeEach(() => {
   cy.catchUnmockedRequests()
+  cy.mockCmsNewsDefault()
 })

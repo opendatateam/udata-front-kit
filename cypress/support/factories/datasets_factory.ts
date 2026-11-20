@@ -75,18 +75,22 @@ export const datasetFactory = build<DatasetV2>({
       (x) => `https://www.data.gouv.fr/api/2/datasets/topic_slug_${x}/`
     ),
     page: sequence((x) => `https://www.data.gouv.fr/datasets/topic_slug_${x}/`),
+    // matches the configured datagouvfr.base_url, not a hardcoded domain, so
+    // the app's HATEOAS-style href-following still hits a mocked host
     resources: sequence((x) => {
+      const baseUrl = Cypress.env('siteConfig').datagouvfr.base_url
       return {
         rel: 'subsection',
-        href: `https://www.data.gouv.fr/api/2/datasets/dataset_id_${x}/resources/?page=1&page_size=50`,
+        href: `${baseUrl}/api/2/datasets/dataset_id_${x}/resources/?page=1&page_size=50`,
         type: 'GET',
         total: 0
       }
     }),
     community_resources: sequence((x) => {
+      const baseUrl = Cypress.env('siteConfig').datagouvfr.base_url
       return {
         rel: 'subsection',
-        href: `https://www.data.gouv.fr/api/1/datasets/community_resources/?dataset=dataset_id_${x}&page=1&page_size=50`,
+        href: `${baseUrl}/api/1/datasets/community_resources/?dataset=dataset_id_${x}&page=1&page_size=50`,
         type: 'GET',
         total: 0
       }
