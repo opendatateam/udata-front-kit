@@ -18,17 +18,17 @@ const emit = defineEmits(['updateValidation'])
 
 const factor = defineModel({
   type: Object as () => ResolvedFactor,
-  default: {}
+  default: () => ({}) as ResolvedFactor
 })
 
 const factorsGroups = defineModel('groups-model', {
   type: Object as () => FactorsGroups,
-  default: []
+  default: () => new Map()
 })
 
 const formErrors = defineModel('errors-model', {
   type: Array<string>,
-  default: []
+  default: () => []
 })
 
 defineProps({
