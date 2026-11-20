@@ -39,7 +39,7 @@ const factors = defineModel({
 })
 const factorsGroups = defineModel('groups-model', {
   type: Object as () => FactorsGroups,
-  default: []
+  default: () => new Map()
 })
 const props = defineProps({
   topicId: {

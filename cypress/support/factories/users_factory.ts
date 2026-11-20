@@ -31,6 +31,10 @@ export const UserFactory = build<User>({
     last_login_at: null,
     password_rotation_demanded: null,
     password_rotation_performed: null,
+    has_password: null,
+    has_two_factor: null,
+    proconnect: null,
+    can_switch_to_proconnect_only: null,
     metrics: {
       datasets: 0,
       dataservices: 0,
