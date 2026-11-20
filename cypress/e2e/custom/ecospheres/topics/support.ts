@@ -13,7 +13,10 @@ import type { Factor, SiteId, Topic } from '@/model/topic'
 import { Availability } from '@/model/topic'
 import { datasetFactory } from 'cypress/support/factories/datasets_factory'
 import { topicFactory } from 'cypress/support/factories/topics_factory'
-import { UserFactory } from 'cypress/support/factories/users_factory'
+import {
+  UserFactory,
+  UserReferenceFactory
+} from 'cypress/support/factories/users_factory'
 
 // Factor/Element factory for testing
 export const factorFactory = build<Factor>({
@@ -55,7 +58,7 @@ export const factorFactory = build<Factor>({
           ['ecospheres' as SiteId]: {
             uri: sequence((x) => {
               const canonicalUrl =
-                Cypress.env('siteConfig').website.seo.canonical_url ||
+                Cypress.expose('siteConfig').website.seo.canonical_url ||
                 'https://demo.ecologie.data.gouv.fr'
               return `${canonicalUrl}/bouquets/referenced-topic-${x}`
             }),
@@ -72,7 +75,7 @@ export const factorFactory = build<Factor>({
           ['ecospheres' as SiteId]: {
             uri: sequence((x) => {
               const canonicalUrl =
-                Cypress.env('siteConfig').website.seo.canonical_url
+                Cypress.expose('siteConfig').website.seo.canonical_url
               return `${canonicalUrl}/dataservices/referenced-dataservice-${x}`
             }),
             availability: Availability.LOCAL_AVAILABLE,
@@ -87,7 +90,8 @@ export const factorFactory = build<Factor>({
         extras: {
           ['ecospheres' as SiteId]: {
             uri: sequence((x) => {
-              const canonicalUrl = Cypress.env('siteConfig').datagouvfr.base_url
+              const canonicalUrl =
+                Cypress.expose('siteConfig').datagouvfr.base_url
               return `${canonicalUrl}/dataservices/referenced-dataservice-${x}`
             }),
             availability: Availability.LOCAL_AVAILABLE,
@@ -122,7 +126,7 @@ export const activityFactory = build<Activity>({
   fields: {
     key: 'topic:updated',
     label: 'Topic updated',
-    actor: () => UserFactory.one(),
+    actor: () => UserReferenceFactory.one(),
     created_at: () => new Date().toISOString(),
     organization: null,
     related_to: '',

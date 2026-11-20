@@ -7,7 +7,7 @@ describe('Login', () => {
   })
 
   it('redirects to home with a toast when localStorage is unavailable', () => {
-    if (Cypress.env('siteConfig')?.website?.oauth_option !== true) {
+    if (Cypress.expose('siteConfig')?.website?.oauth_option !== true) {
       cy.log('oauth is not configured for this site, skipping')
       return
     }
