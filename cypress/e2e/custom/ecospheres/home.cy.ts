@@ -1,4 +1,4 @@
-import { topicFactory } from 'cypress/support/factories/topics_factory'
+import { topicFactory } from '@/fixtures/factories/topics_factory'
 
 describe('Home Page Ecologie', () => {
   beforeEach(() => {

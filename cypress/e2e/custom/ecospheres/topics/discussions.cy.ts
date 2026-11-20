@@ -1,7 +1,7 @@
+import { discussionFactory } from '@/fixtures/factories/discussions_factory'
+import { OrganizationReferenceFactory } from '@/fixtures/factories/organizations_factory'
+import { UserReferenceFactory } from '@/fixtures/factories/users_factory'
 import type { Discussion } from '@/model/discussion'
-import { discussionFactory } from 'cypress/support/factories/discussions_factory'
-import { OrganizationReferenceFactory } from 'cypress/support/factories/organizations_factory'
-import { UserReferenceFactory } from 'cypress/support/factories/users_factory'
 import { setupTopicWithExistingFactors, visitTopic } from './support'
 
 const testUser = UserReferenceFactory.one({
