@@ -1,3 +1,3 @@
 // @datagouv/components-next ships raw .ts source (main points to src/main.ts) which imports .vue files.
-// Plain tsc can't resolve .vue imports, so this shim satisfies them when type-checking cypress.
-declare module '*.vue' {}
+// Plain tsc can't read .vue files, so any import from one (default or named) is typed as any.
+declare module '*.vue'

@@ -30,7 +30,7 @@
     "type-check:cypress": "tsc --noEmit --project cypress/tsconfig.json"
   },
   "dependencies": {
-    "@datagouv/components-next": "1.4.0",
+    "@datagouv/components-next": "1.5.0",
     "@gouvfr/dsfr": "~1.14.4",
     "@gouvfr/dsfr-chart": "^2.0.4",
     "@gouvminint/vue-dsfr": "^8.15.0",
@@ -51,7 +51,7 @@
     "pinia": "^2.3.1",
     "string-strip-html": "^13.5.0",
     "vite-plugin-html": "^3.2.2",
-    "vue": "^3.5.30",
+    "vue": "^3.5.45",
     "vue-loading-overlay": "^6.0.6",
     "vue-matomo": "^4.2.0",
     "vue-router": "^4.6.4",
@@ -94,7 +94,7 @@
     "vite": "^6.4.5",
     "vite-plugin-dynamic-import": "^1.6.0",
     "vite-plugin-vue-devtools": "^7.7.9",
-    "vitest": "^5.0.2",
+    "vitest": "^5.1.0",
     "vue-tsc": "^2.2.12"
   },
   "lint-staged": {
