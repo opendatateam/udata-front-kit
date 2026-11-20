@@ -177,6 +177,7 @@ website:
     # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
     harvest_backends_quality_warning: []
     show_extended_information_panel: false
+    resources_explorer_enabled: true
   topics:
     can_add_topics:
       everyone: false
