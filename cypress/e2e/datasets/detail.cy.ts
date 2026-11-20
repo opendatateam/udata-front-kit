@@ -18,7 +18,6 @@ describe('Dataset Page - DOI', () => {
 
   it('should display the dataset DOI', () => {
     const dataset = datasetFactory.one({
-      // @ts-expect-error doi not yet typed upstream in DatasetV2
       overrides: { doi: DOI }
     })
     visitInformations(dataset)
@@ -39,7 +38,6 @@ describe('Dataset Page - DOI', () => {
   it('should prefer the data.gouv.fr DOI over the harvest source one', () => {
     const sourceDoi = '10.1234/source'
     const dataset = datasetFactory.one({
-      // @ts-expect-error doi not yet typed upstream in DatasetV2
       overrides: { doi: DOI, harvest: { doi: sourceDoi } }
     })
     visitInformations(dataset)

@@ -23,6 +23,7 @@ export const datasetFactory = build<DatasetV2>({
     created_at: '2025-09-24T08:35:58.525000+00:00',
     last_modified: '2025-09-24T08:35:59.477000+00:00',
     deleted: null,
+    doi: null,
     private: false,
     tags: [],
     badges: [],

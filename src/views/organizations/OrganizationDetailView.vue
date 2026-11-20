@@ -130,7 +130,10 @@ watchEffect(() => {
       <li v-for="d in datasets" :key="d.id" class="fr-col-md-12 fr-py-1w">
         <DatasetCard
           :dataset="d"
-          :dataset-url="{ name: 'datasets_detail', params: { item_id: d.id } }"
+          :dataset-url="{
+            name: 'datasets_detail',
+            params: { item_id: d.slug }
+          }"
           :organization-url="null"
         />
       </li>

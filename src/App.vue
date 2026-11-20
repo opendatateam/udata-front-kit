@@ -161,6 +161,8 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
       height: logo?.height,
       width: logo?.width
     }"
+    :operator-to="logo?.href"
+    :operator-img-alt="logo?.alt"
     :desc-text="phrase"
     :ecosystem-links="external_links"
     :mandatory-links="mandatory_links"
