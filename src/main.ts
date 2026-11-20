@@ -50,6 +50,10 @@ if (
 
 routerPromise
   .then((router) => {
+    if (Sentry.getClient() && config.sentry?.tracesSampleRate) {
+      Sentry.addIntegration(Sentry.browserTracingIntegration({ router }))
+    }
+
     app.use(router)
     app.use(pinia)
     app.use(head)
@@ -59,6 +63,7 @@ routerPromise
     app.use(datagouv, {
       name: 'data.gouv.fr',
       baseUrl: config.datagouvfr.base_url,
+      trustedDomains: ['data.gouv.fr'], // a resource is previewable if its CORS allow-origin header includes one of these (e.g. demo.data.gouv.fr)
       apiBase: config.datagouvfr.base_url,
       tabularApiUrl: config.datagouvfr.tabular_api_url,
       tabularAllowRemote: true,

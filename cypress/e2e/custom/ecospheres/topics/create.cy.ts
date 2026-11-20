@@ -6,7 +6,7 @@ import {
 
 describe('Ecospheres - Topic (Collection) Creation', () => {
   const universeTag =
-    Cypress.env('siteConfig').pages.bouquets.universe_query.tag
+    Cypress.expose('siteConfig').pages.bouquets.universe_query.tag
 
   beforeEach(() => {
     cy.mockMatomo()

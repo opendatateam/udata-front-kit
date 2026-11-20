@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { trackEvent } from '@datagouv/components-next'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -15,6 +16,9 @@ const props = defineProps({
 })
 
 const isActive = (link: string) => {
+  // explicit override for routes that don't share a path prefix with their nav
+  // menu entry at all (e.g. /organizations/:oid highlighting "Contributeurs" at /contributors)
+  if (route.meta.activeMenuLink === link) return true
   // highlight the parent section nav item for routes that share a pageKey but live outside /:pageKey (e.g. /admin/:pageKey/drafts)
   if (route.meta.pageKey && link === `/${route.meta.pageKey}`) return true
   return route.matched.some(({ path }) => {
@@ -50,6 +54,9 @@ const navItems = computed(() => {
         v-else-if="navItem.to && navItem.text"
         v-bind="navItem"
         @toggle-id="props.onClick"
+        @click="
+          trackEvent('Navigation principale', 'Clic onglet', navItem.text)
+        "
       />
     </DsfrNavigationItem>
   </DsfrNavigation>

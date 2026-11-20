@@ -1,7 +1,7 @@
 FROM node:22 AS builder
 
-# Install pnpm
-RUN corepack enable && corepack prepare pnpm@latest-11 --activate
+# Install pnpm, pinned by "packageManager" in package.json
+RUN corepack enable
 
 WORKDIR /app
 
@@ -13,19 +13,19 @@ RUN pnpm install
 # Copy source files
 COPY ./ /app
 
-ENV NODE_OPTIONS=--openssl-legacy-provider
-
 ARG VITE_SITE_ID
-# only set the environment variable if the build arg was provided
-ENV VITE_SITE_ID=${VITE_SITE_ID:-}
+RUN test -n "$VITE_SITE_ID" || { echo "VITE_SITE_ID build arg is required" >&2; exit 1; }
 
-RUN echo "$(date)" && \
-    export $(cat /app/*.env | xargs) && \
+# node base image is a floating tag: log what it resolved to, and the pnpm in use
+RUN echo "$(date) - node $(node --version), pnpm $(pnpm --version)" && \
     pnpm run build
 
 FROM nginx:alpine-slim
 
 COPY --from=builder /app/dist /usr/share/nginx/html
+
+# alpine-slim is a floating tag: log what it resolved to
+RUN nginx -v && echo "alpine $(cat /etc/alpine-release)"
 
 RUN echo 'server { \
     listen 80; \

@@ -7,6 +7,17 @@
 import './authentication'
 import './filters'
 
+// call before the cy.visit()/cy.reload() that triggers the page load
+Cypress.Commands.add('trackConsoleErrors', () => {
+  cy.on('window:before:load', (win) => {
+    cy.stub(win.console, 'error').as('consoleError')
+  })
+})
+
+Cypress.Commands.add('expectNoConsoleErrors', () => {
+  cy.get('@consoleError').should('not.have.been.called')
+})
+
 Cypress.Commands.add('checkRGAAContrast', () => {
   cy.checkA11y(undefined, {
     runOnly: {
