@@ -5,7 +5,7 @@ site_id: solidarites
 
 datagouvfr:
   # data.gouv.fr base URL (use www subdomain on prod)
-  base_url: https://demo.data.gouv.fr
+  base_url: https://www.data.gouv.fr
   # oauth settings
   oauth_client_id: 68b1ac79a751200a42f2ba19
   tabular_api_url: https://tabular-api.data.gouv.fr
@@ -14,7 +14,7 @@ datagouvfr:
 website:
   title: 'solidarites.data.gouv.fr'
   seo:
-    canonical_url: https://solidarites.preprod.data.gouv.fr
+    canonical_url: https://solidarites.data.gouv.fr
     meta:
       keywords:
       description:
@@ -168,7 +168,7 @@ website:
   # Grist organisations ministère de la Santé https://grist.numerique.gouv.fr/o/verticalesolidarites/api/docs/sPQmuF8WuFGV/tables/Demo/records?filter={"Type": ["organization"]}
   # Organisations transversale des données ouvertes de la solidarité
 organizations:
-  datasets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/solidarites-demo/organizations-datasets.json
+  datasets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/solidarites-prod/organizations-datasets.json
   page: # organizations.page is a special case of config.pages
     breadcrumb_title: Contributeurs
     labels:
@@ -190,7 +190,7 @@ pages:
     object_type: datasets
     list_all: true
     universe_query:
-      topic: 6ae2290671218d1466f1af57
+      topic: 6aec94d43e67a064ae0464cb
     filter_prefix:
     title: Données
     breadcrumb_title: Données
