@@ -18,33 +18,43 @@ describe('Indicator Detail View', () => {
     cy.mockDatasetAndRelatedObjects(indicator)
   })
 
+  describe('Slug URL', () => {
+    it('should replace the id with the slug in the URL', () => {
+      cy.visit(`/indicators/${indicator.id}`)
+      cy.wait(`@get_datasets_${indicator.id}`)
+
+      cy.location('pathname').should('eq', `/indicators/${indicator.slug}`)
+      cy.contains(indicator.title).should('be.visible')
+    })
+  })
+
   describe('Native attributes', () => {
     it('should display the indicator title', () => {
-      cy.visit(`/indicators/${indicator.id}`)
+      cy.visit(`/indicators/${indicator.slug}`)
       cy.contains(indicator.title).should('be.visible')
     })
 
     it('should display the indicator description', () => {
-      cy.visit(`/indicators/${indicator.id}`)
+      cy.visit(`/indicators/${indicator.slug}`)
       cy.contains(indicator.description).should('be.visible')
     })
   })
 
   describe('Tags display', () => {
     it('should display the secteur tag', () => {
-      cy.visit(`/indicators/${indicator.id}`)
+      cy.visit(`/indicators/${indicator.slug}`)
       cy.contains('Energie').should('be.visible')
     })
 
     it('should display the levier tag', () => {
-      cy.visit(`/indicators/${indicator.id}`)
+      cy.visit(`/indicators/${indicator.slug}`)
       cy.contains('Biogaz').should('be.visible')
     })
 
     it('should not display a placeholder when there are no tags', () => {
       const untaggedIndicator = createIndicator({ tags: [] })
       cy.mockDatasetAndRelatedObjects(untaggedIndicator)
-      cy.visit(`/indicators/${untaggedIndicator.id}`)
+      cy.visit(`/indicators/${untaggedIndicator.slug}`)
       cy.contains(untaggedIndicator.title).should('be.visible')
       cy.contains('Non renseigné').should('not.exist')
     })
@@ -56,14 +66,14 @@ describe('Indicator Detail View', () => {
         tags: ['ecospheres-indicateurs', 'ecospheres-indicateurs-beta']
       })
       cy.mockDatasetAndRelatedObjects(betaIndicator)
-      cy.visit(`/indicators/${betaIndicator.id}`)
+      cy.visit(`/indicators/${betaIndicator.slug}`)
       cy.contains('.fr-callout', 'Indicateur en cours de revue').should(
         'be.visible'
       )
     })
 
     it('should not display the review callout for a regular indicator', () => {
-      cy.visit(`/indicators/${indicator.id}`)
+      cy.visit(`/indicators/${indicator.slug}`)
       cy.contains(indicator.title).should('be.visible')
       cy.contains('Indicateur en cours de revue').should('not.exist')
     })
@@ -71,7 +81,7 @@ describe('Indicator Detail View', () => {
 
   describe('Informations Tab', () => {
     beforeEach(() => {
-      cy.visit(`/indicators/${indicator.id}`)
+      cy.visit(`/indicators/${indicator.slug}`)
       cy.contains('Informations').click()
     })
 
@@ -127,7 +137,7 @@ describe('Indicator Detail View', () => {
 
   describe('Sources Tab', () => {
     beforeEach(() => {
-      cy.visit(`/indicators/${indicator.id}`)
+      cy.visit(`/indicators/${indicator.slug}`)
       cy.contains('Sources').click()
     })
 
@@ -190,7 +200,7 @@ describe('Indicator Detail View', () => {
       // Differs from metrics.discussions: the tab shows the loaded list's total
       cy.mockDatagouvObjectList('discussions', discussionFactory.many(3))
 
-      cy.visit(`/indicators/${countsIndicator.id}`)
+      cy.visit(`/indicators/${countsIndicator.slug}`)
 
       cy.contains('button', 'Fichiers (5)').should('be.visible')
       cy.contains('button', 'Sources (2)').should('be.visible')
@@ -210,7 +220,7 @@ describe('Indicator Detail View', () => {
         { enable_visualization: false }
       )
       cy.mockDatasetAndRelatedObjects(indicatorWithApis, [], dataservices)
-      cy.visit(`/indicators/${indicatorWithApis.id}`)
+      cy.visit(`/indicators/${indicatorWithApis.slug}`)
       cy.contains('Réutilisations et API').click()
       cy.contains(`${dataservices.length} API`).should('be.visible')
       cy.contains(dataservices[0].title).should('be.visible')
@@ -218,7 +228,7 @@ describe('Indicator Detail View', () => {
     })
 
     it('should display empty state when no dataservices', () => {
-      cy.visit(`/indicators/${indicator.id}`)
+      cy.visit(`/indicators/${indicator.slug}`)
       cy.contains('Réutilisations et API').click()
       cy.contains("Il n'y a pas encore d'API pour cet indicateur.").should(
         'be.visible'
@@ -232,14 +242,14 @@ describe('Indicator Detail View', () => {
         { enable_visualization: false }
       )
       cy.mockDatasetAndRelatedObjects(indicatorWithReuses, [], [], reuses)
-      cy.visit(`/indicators/${indicatorWithReuses.id}`)
+      cy.visit(`/indicators/${indicatorWithReuses.slug}`)
       cy.contains('Réutilisations et API').click()
       cy.contains(reuses[0].title).should('be.visible')
       cy.contains(reuses[1].title).should('be.visible')
     })
 
     it('should display empty state when no reuses', () => {
-      cy.visit(`/indicators/${indicator.id}`)
+      cy.visit(`/indicators/${indicator.slug}`)
       cy.contains('Réutilisations et API').click()
       cy.contains(
         "Il n'y a pas encore de réutilisation pour cet indicateur."

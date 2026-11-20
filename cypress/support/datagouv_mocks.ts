@@ -300,6 +300,7 @@ Cypress.Commands.add(
     // Update dataset.resources.total to match the resources array
     dataset.resources.total = resources.length
     cy.mockDatagouvObject('datasets', dataset.id, dataset)
+    cy.mockDatagouvObject('datasets', dataset.slug, dataset)
     // Mock related APIs
     cy.mockDatasetBadges()
     cy.mockSpatialLevels()

@@ -207,7 +207,7 @@ onMounted(() => {
             :dataset="dataset"
             :dataset-url="{
               name: detailRouteName,
-              params: { item_id: dataset.id }
+              params: { item_id: dataset.slug }
             }"
             :organization-url="null"
           />
@@ -222,7 +222,7 @@ onMounted(() => {
             :dataservice="dataservice"
             :dataservice-url="{
               name: detailRouteName,
-              params: { item_id: dataservice.id }
+              params: { item_id: dataservice.slug }
             }"
             :organization-url="null"
           />

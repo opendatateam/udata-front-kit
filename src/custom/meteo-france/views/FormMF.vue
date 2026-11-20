@@ -137,7 +137,7 @@ onMounted(() => {
 
 async function fetchStationsGeoJSON(depCode: string) {
   const response = await fetch(
-    `https://object.data.gouv.fr/meteofrance/data/stations/stations_${depCode}.geojson`
+    `https://files.data.gouv.fr/meteofrance/data/stations/stations_${depCode}.geojson`
   )
   const data: FeatureCollection = await response.json()
   stations.value = data

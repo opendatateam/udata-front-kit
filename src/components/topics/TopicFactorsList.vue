@@ -395,7 +395,7 @@ defineExpose({
                     :dataservice="getDataserviceForFactor(factor)!"
                     :dataservice-url="{
                       name: 'dataservices_detail',
-                      params: { item_id: getDataserviceForFactor(factor)!.id }
+                      params: { item_id: getDataserviceForFactor(factor)!.slug }
                     }"
                     :organization-url="null"
                     :show-description="false"
