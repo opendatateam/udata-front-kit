@@ -4,7 +4,7 @@ import { topicFactory } from 'cypress/support/factories/topics_factory'
 describe('Topics - List Page', () => {
   let testTopics: Topic[]
   const universeTag =
-    Cypress.env('siteConfig').pages.bouquets.universe_query.tag
+    Cypress.expose('siteConfig').pages.bouquets.universe_query.tag
   const universeTagRegex = new RegExp(`[?&]tag=${universeTag}(?:&|$)`)
 
   beforeEach(() => {

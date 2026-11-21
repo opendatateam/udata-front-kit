@@ -139,13 +139,17 @@ onMounted(async () => {
           "
         />
         <span v-if="typedResources.resources.length != 0">
-          <ResourceAccordion
+          <!-- some tabs (e.g. data structure) have an async setup and need a Suspense boundary -->
+          <Suspense
             v-for="resource in typedResources.resources"
             :key="resource.id"
-            :dataset="datasetForAccordion"
-            :resource="resource"
-            :resource-external-url="resourceExternalUrl"
-          />
+          >
+            <ResourceAccordion
+              :dataset="datasetForAccordion"
+              :resource="resource"
+              :resource-external-url="resourceExternalUrl"
+            />
+          </Suspense>
           <Pagination
             v-if="typedResources.total > pageSize"
             class="fr-mt-3w"

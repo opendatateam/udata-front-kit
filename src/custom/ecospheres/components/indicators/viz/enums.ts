@@ -14,6 +14,12 @@ export const GEOCOLUMNS: Record<
   epci: 'geocode_epci'
 }
 
+export type TerritorialMesh = keyof typeof GEOCOLUMNS
+
+// territorial meshes are those filterable by geocode
+export const needsTerritory = (mesh: string): mesh is TerritorialMesh =>
+  Object.keys(GEOCOLUMNS).includes(mesh)
+
 // 'commune' is excluded (see GEOCOLUMNS above); IndicatorVizMeshSelect lists
 // it separately, gated on commune-level data actually being available.
 export const MESHES: [IndicatorMesh, string][] = [

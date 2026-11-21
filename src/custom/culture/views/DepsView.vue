@@ -74,7 +74,7 @@ const formatTopItemsAsCards = (items: TopItem[]) => {
 const fetchSections = async () => {
   try {
     const response = await fetch(
-      'https://grist.numerique.gouv.fr/api/docs/mrvekg9fyhQZ/tables/Demo_deps_sections/records?sort=ordre'
+      'https://grist.numerique.gouv.fr/api/docs/mrvekg9fyhQZ/tables/Sections/records?sort=ordre'
     )
     const data = await response.json()
     sections.value = data.records
@@ -86,7 +86,7 @@ const fetchSections = async () => {
 const fetchContent = async () => {
   try {
     const response = await fetch(
-      'https://grist.numerique.gouv.fr/api/docs/mrvekg9fyhQZ/tables/Demo_deps_content_section/records'
+      'https://grist.numerique.gouv.fr/api/docs/mrvekg9fyhQZ/tables/Content_section/records'
     )
     const data = await response.json()
     contentItems.value = data.records
@@ -98,7 +98,7 @@ const fetchContent = async () => {
 const fetchTopItems = async () => {
   try {
     const response = await fetch(
-      'https://grist.numerique.gouv.fr/api/docs/mrvekg9fyhQZ/tables/Demo_deps_tops/records?sort=ordre'
+      'https://grist.numerique.gouv.fr/api/docs/mrvekg9fyhQZ/tables/Tops/records?sort=ordre'
     )
     const data = await response.json()
     topItems.value = data.records

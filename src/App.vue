@@ -8,6 +8,7 @@ import HeaderComponent from './components/header/HeaderComponent.vue'
 import type { InfoToAnnounce } from './components/LiveRegion.vue'
 import LiveRegion from './components/LiveRegion.vue'
 import SkipLinks, { type SkipLinksProps } from './components/SkipLinks.vue'
+import SurveyModal from './components/SurveyModal.vue'
 import {
   AccessibilityPropertiesKey,
   type AccessibilityPropertiesType
@@ -39,6 +40,9 @@ const noticeContent = computed(() => {
 
 const siteID = config.site_id
 const isLoggedIn = computed(() => userStore.$state.isLoggedIn)
+const hideHeaderSearch = computed(
+  () => route.name === 'home' && !!config.website.header.search.hide_on_home
+)
 
 const userName = computed(() => userStore.userName)
 const quickLinks = computed(() => {
@@ -141,6 +145,7 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
     :user-name="userName"
     :quick-links="quickLinks"
     :custom-search="true"
+    :hide-search="hideHeaderSearch"
   />
 
   <main id="main-content" :class="siteID" role="main">
@@ -156,11 +161,14 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
       height: logo?.height,
       width: logo?.width
     }"
+    :operator-to="logo?.href"
+    :operator-img-alt="logo?.alt"
     :desc-text="phrase"
     :ecosystem-links="external_links"
     :mandatory-links="mandatory_links"
     :home-title="`Retour à l'accueil du site - ${title}`"
   />
+  <SurveyModal />
 </template>
 
 <!-- global styles -->
