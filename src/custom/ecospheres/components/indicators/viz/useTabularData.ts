@@ -1,7 +1,12 @@
 import type { Ref } from 'vue'
 import type { IndicatorMesh, IndicatorResource } from '../../../model/indicator'
 import { debug } from './debug'
-import { DEFAULT_TABULAR_API_URL, GEOCOLUMNS, YEAR_COLUMN } from './enums'
+import {
+  DEFAULT_TABULAR_API_URL,
+  GEOCOLUMNS,
+  YEAR_COLUMN,
+  needsTerritory
+} from './enums'
 import { formatData } from './format'
 import type { IndicatorVizFormattedRow } from './types'
 
@@ -41,12 +46,16 @@ export function useTabularData(
   const isLoading = ref(false)
   const error = ref<string | null>(null)
 
-  const availableAxisValues = computed<Record<string, string[]>>(() => {
-    const resource = resources.value.find(
+  const currentResource = computed(() =>
+    resources.value.find(
       (r) =>
         r.extras['ecospheres-indicateurs']?.maille ===
         selectedIndicatorVizMesh.value
     )
+  )
+
+  const availableAxisValues = computed<Record<string, string[]>>(() => {
+    const resource = currentResource.value
     if (!resource || rawData.value.length === 0) return {}
     const axisKeys = Object.keys(
       resource.extras['ecospheres-indicateurs']?.axes ?? {}
@@ -57,37 +66,41 @@ export function useTabularData(
     }, {})
   })
 
+  let latestRequestId = 0
+
   async function fetchData() {
     const mesh = selectedIndicatorVizMesh.value
 
     // Commune preview isn't supported (see IndicatorVizChart's isCommuneMesh
     // alert): clear any stale data from a previous mesh instead of fetching.
     if (mesh === 'commune') {
+      latestRequestId++
       rawData.value = []
       isLoading.value = false
       error.value = null
       return
     }
 
-    const resource = resources.value.find(
-      (r) => r.extras['ecospheres-indicateurs']?.maille === mesh
-    )
+    const resource = currentResource.value
     if (!resource) return
 
-    if (mesh !== 'fr' && !selectedTerritory.value) return
+    if (needsTerritory(mesh) && !selectedTerritory.value) return
 
     isLoading.value = true
     error.value = null
 
-    const geoCondition =
-      mesh !== 'fr'
-        ? `${GEOCOLUMNS[mesh]}__exact=${selectedTerritory.value}&`
-        : ''
+    const geoCondition = needsTerritory(mesh)
+      ? `${GEOCOLUMNS[mesh]}__exact=${selectedTerritory.value}&`
+      : ''
 
     const baseUrl = tabularApiUrl.value || DEFAULT_TABULAR_API_URL
     const url = `${baseUrl}/api/resources/${resource.id}/data/?${geoCondition}${YEAR_COLUMN}__sort=asc`
 
     debug.log(`🔄 Fetching data for resource ${resource.id}`, { mesh, url })
+
+    const requestId = ++latestRequestId
+    // a newer request was started while this one was pending
+    const isStale = () => requestId !== latestRequestId
 
     try {
       if (fetchCache.has(url)) {
@@ -98,20 +111,29 @@ export function useTabularData(
       const allData = await fetchAllPages(url)
       const formatted = formatData(allData, resource)
       fetchCache.set(url, formatted)
+      if (isStale()) return
       rawData.value = formatted
       debug.log(`✅ Data fetched: ${formatted.length} records`)
     } catch (err) {
+      if (isStale()) return
       debug.error('Failed to fetch data', err)
       error.value = err instanceof Error ? err.message : String(err)
       rawData.value = []
     } finally {
-      isLoading.value = false
+      if (!isStale()) isLoading.value = false
     }
   }
 
-  watch([selectedIndicatorVizMesh, selectedTerritory], () => fetchData(), {
-    immediate: true
-  })
+  // resource id is watched too: a mesh from the URL is set before resources load
+  watch(
+    [
+      selectedIndicatorVizMesh,
+      selectedTerritory,
+      () => currentResource.value?.id
+    ],
+    () => fetchData(),
+    { immediate: true }
+  )
 
   return { rawData, availableAxisValues, isLoading, error }
 }

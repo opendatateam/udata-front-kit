@@ -1,10 +1,10 @@
-import config from '@/config'
 import type {
   AxiosError,
   AxiosResponseData,
   RequestConfig,
   URLParams
 } from '@/model/api'
+import { organizationsConfigUrl } from '@/utils/config'
 import { toastHttpError } from '@/utils/error'
 import axios from 'axios'
 
@@ -13,10 +13,11 @@ export default class CustomOrganizationsAPI {
   toasted: boolean
 
   constructor(pageKey: string) {
-    this.baseUrl = config.organizations[pageKey]
-    if (!this.baseUrl) {
+    const resolved = organizationsConfigUrl(pageKey)
+    if (typeof resolved !== 'string') {
       throw new Error(`No organizations base URL found for ${pageKey}`)
     }
+    this.baseUrl = resolved
     this.toasted = true
   }
 
