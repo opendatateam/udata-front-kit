@@ -14,7 +14,7 @@ describe('Dataset Page - Fichiers Tab', () => {
     })
     cy.mockDatasetAndRelatedObjects(dataset, [resource])
 
-    cy.visit(`/datasets/${dataset.id}`)
+    cy.visit(`/datasets/${dataset.slug}`)
     cy.contains('Test resource').should('be.visible')
   })
 
@@ -29,7 +29,7 @@ describe('Dataset Page - Fichiers Tab', () => {
     })
     cy.mockDatasetAndRelatedObjects(dataset, [resource])
 
-    cy.visit(`/datasets/${dataset.id}`)
+    cy.visit(`/datasets/${dataset.slug}`)
     // Confirms the new explorer actually mounted, not just that the resource is visible.
     cy.contains("Revenir sur l'ancienne navigation").should('be.visible')
     cy.contains('Test resource').should('be.visible')
@@ -46,7 +46,7 @@ describe('Dataset Page - Fichiers Tab', () => {
     })
     cy.mockDatasetAndRelatedObjects(dataset, [resource])
 
-    cy.visit(`/datasets/${dataset.id}`)
+    cy.visit(`/datasets/${dataset.slug}`)
 
     cy.window().then((win) => {
       cy.stub(win.navigator.clipboard, 'writeText').as('writeText')
@@ -55,7 +55,7 @@ describe('Dataset Page - Fichiers Tab', () => {
 
     cy.get('@writeText').should(
       'have.been.calledWith',
-      `${Cypress.config('baseUrl')}/datasets/${dataset.slug}?resource_id=${resource.id}`
+      `${Cypress.config('baseUrl')}/datasets/${dataset.slug}/files?resource_id=${resource.id}`
     )
   })
 })

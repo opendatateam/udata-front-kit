@@ -16,10 +16,11 @@ export const datagouvResponseBuilder = (data: object[]) => {
 
 const datagouvUrlRegex = (
   resourceName: string,
-  resourceId: string | null = null
+  resourceId: string | null = null,
+  queryParams: string | null = null
 ) => {
   return new RegExp(
-    `.*data\\.gouv\\.fr/api/\\d/${resourceName}${resourceId ? `/${resourceId}` : ''}.*`
+    `.*data\\.gouv\\.fr/api/\\d/${resourceName}${resourceId ? `/${resourceId}` : ''}${queryParams ? `/\\?${queryParams}` : ''}.*`
   )
 }
 
@@ -194,6 +195,13 @@ Cypress.Commands.add('mockSpatialZonesSuggest', () => {
   }).as('get_spatial_zones_suggest')
 })
 
+Cypress.Commands.add('mockTagsSuggest', () => {
+  cy.intercept('GET', datagouvUrlRegex('tags/suggest'), {
+    statusCode: 200,
+    body: [{ text: 'climat' }, { text: 'qualite-air' }]
+  }).as('get_tags_suggest')
+})
+
 Cypress.Commands.add('mockSpatialZone', () => {
   cy.intercept('GET', datagouvUrlRegex('spatial/zone/fr:commune:75056'), {
     statusCode: 200,
@@ -223,6 +231,17 @@ Cypress.Commands.add('mockResources', (datasetId, data = []) => {
       total: data.length
     }
   }).as(`get_resources_${datasetId}`)
+})
+
+Cypress.Commands.add('mockDatasetNetworks', (datasetId, topics = []) => {
+  cy.intercept(
+    'GET',
+    datagouvUrlRegex('topics', null, `dataset=${datasetId}`),
+    {
+      statusCode: 200,
+      body: datagouvResponseBuilder(topics)
+    }
+  ).as(`get_dataset_networks_${datasetId}`)
 })
 
 Cypress.Commands.add('mockMetricsApi', (datasetId) => {
@@ -281,6 +300,7 @@ Cypress.Commands.add(
     // Update dataset.resources.total to match the resources array
     dataset.resources.total = resources.length
     cy.mockDatagouvObject('datasets', dataset.id, dataset)
+    cy.mockDatagouvObject('datasets', dataset.slug, dataset)
     // Mock related APIs
     cy.mockDatasetBadges()
     cy.mockSpatialLevels()
@@ -294,5 +314,6 @@ Cypress.Commands.add(
     cy.mockDatagouvObjectList('dataservices', dataservices)
     cy.mockResources(dataset.id, resources)
     cy.mockMetricsApi(dataset.id)
+    cy.mockDatasetNetworks(dataset.id)
   }
 )

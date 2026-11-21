@@ -2,6 +2,7 @@
 import type { ExtendedDatasetV2WithFullObject } from '@/model/dataset'
 import {
   AnimatedLoader,
+  CopyButton,
   DatasetEmbedSection,
   DatasetInformationSection,
   DatasetSchemaSection,
@@ -12,19 +13,40 @@ import {
 } from '@datagouv/components-next'
 
 import { storeToRefs } from 'pinia'
+import { useRouter } from 'vue-router'
 import DatasetTemporalitySection from './DatasetTemporalitySection.vue'
 
 import LeafletMap from './LeafletMap.vue'
 
 import config from '@/config'
+import { useCurrentPageConf } from '@/router/utils'
 import { useUserStore } from '@/store/UserStore'
+import { canRequestDoi, getDatasetDoi } from '@/utils/dataset'
 
-defineProps<{
+const props = defineProps<{
   dataset: ExtendedDatasetV2WithFullObject
 }>()
 
+const doi = computed(() => getDatasetDoi(props.dataset))
+
+// The request form lives on data.gouv.fr
+const doiRequestUrl = computed(() => `${props.dataset.page}/informations`)
+
 const userStore = useUserStore()
 const { isAdmin } = storeToRefs(userStore)
+
+const router = useRouter()
+const { pageKey, pageConf } = useCurrentPageConf()
+
+// Link tags to the local list page when it supports tag filtering, else keep the data.gouv.fr default
+const hasLocalTagSearch =
+  pageConf.list_all &&
+  pageConf.filters.some((f) => f.type === 'tag') &&
+  router.hasRoute(pageKey)
+
+const tagUrl = hasLocalTagSearch
+  ? (tag: string) => ({ name: pageKey, query: { tag } })
+  : undefined
 
 const goToHarvester = (sourceId: string) => {
   const url = `${config.datagouvfr.base_url}/admin/harvesters/${sourceId}`
@@ -34,7 +56,42 @@ const goToHarvester = (sourceId: string) => {
 
 <template>
   <div class="divide-y">
-    <DatasetInformationSection :dataset="dataset" />
+    <DatasetInformationSection :dataset="dataset" :tag-url="tagUrl">
+      <div v-if="doi || canRequestDoi(dataset)">
+        <DescriptionListTerm>DOI</DescriptionListTerm>
+        <DescriptionListDetails v-if="doi" class="flex items-center gap-2">
+          <a
+            :href="`https://doi.org/${doi}`"
+            class="fr-text--sm fr-link"
+            target="_blank"
+            rel="noopener noreferrer"
+            :title="`${doi} - nouvelle fenêtre`"
+            >{{ doi }}</a
+          >
+          <CopyButton
+            class="!-mt-0.5"
+            label="Copier le DOI"
+            copied-label="DOI copié !"
+            :text="doi"
+            :hide-label="true"
+          />
+        </DescriptionListDetails>
+        <DescriptionListDetails
+          v-else
+          class="flex flex-wrap items-center gap-x-3 gap-y-1"
+        >
+          <span>Ce jeu de données n'a pas de DOI.</span>
+          <a
+            :href="doiRequestUrl"
+            class="fr-text--sm fr-link"
+            target="_blank"
+            rel="noopener"
+            title="Demander un DOI sur data.gouv.fr - nouvelle fenêtre"
+            >Demander un DOI sur data.gouv.fr</a
+          >
+        </DescriptionListDetails>
+      </div>
+    </DatasetInformationSection>
     <DatasetTemporalitySection :dataset="dataset" />
     <DatasetSpatialSection :dataset="dataset">
       <template #map="{ geojson }">

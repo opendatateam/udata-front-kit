@@ -26,8 +26,8 @@ const zIndex = (key: number) => {
   return { zIndex: fetchedDatasets.value.length - key }
 }
 
-const getDatasetPage = (id: string) => {
-  return { name: 'datasets_detail', params: { item_id: id } }
+const getDatasetPage = (slug: string) => {
+  return { name: 'datasets_detail', params: { item_id: slug } }
 }
 
 onMounted(() => {
@@ -43,7 +43,7 @@ onMounted(() => {
       :key="d.id"
       :style="zIndex(index)"
       :dataset="d"
-      :dataset-url="getDatasetPage(d.id)"
+      :dataset-url="getDatasetPage(d.slug)"
       :organization-url="null"
     />
   </div>

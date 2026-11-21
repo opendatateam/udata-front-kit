@@ -25,10 +25,7 @@ const organizationsConfig = config.organizations as OrganizationsConfig
 
 const breadcrumbLinks: Ref<BreadcrumbItem[]> = ref([
   { to: '/', text: 'Accueil' },
-  {
-    to: '/organizations',
-    text: organizationsConfig.page?.breadcrumb_title || 'Organisations'
-  }
+  ...(route.meta.parentBreadcrumbs ?? [])
 ])
 
 const currentPage = ref(1)
@@ -99,8 +96,8 @@ watchEffect(() => {
   <div class="fr-container">
     <DsfrBreadcrumb class="fr-mb-1v" :links="breadcrumbLinks" />
   </div>
-  <GenericContainer>
-    <h1 class="fr-mb-2v">{{ org?.name }}</h1>
+  <GenericContainer v-if="org">
+    <h1 class="fr-mb-2v">{{ org.name }}</h1>
     <!-- eslint-disable-next-line vue/no-v-html -->
     <div v-html="description"></div>
 
@@ -133,7 +130,10 @@ watchEffect(() => {
       <li v-for="d in datasets" :key="d.id" class="fr-col-md-12 fr-py-1w">
         <DatasetCard
           :dataset="d"
-          :dataset-url="{ name: 'datasets_detail', params: { item_id: d.id } }"
+          :dataset-url="{
+            name: 'datasets_detail',
+            params: { item_id: d.slug }
+          }"
           :organization-url="null"
         />
       </li>
