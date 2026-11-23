@@ -1,5 +1,4 @@
 import type { BuiltInFilterKey } from '@datagouv/components-next'
-import type { DsfrFooterProps } from '@gouvminint/vue-dsfr'
 
 export const CUSTOM_FILTER_TYPES = ['select', 'organization_custom'] as const
 export type CustomFilterType = (typeof CUSTOM_FILTER_TYPES)[number]
@@ -67,6 +66,11 @@ export type PageUniverseQueryConf = {
 export type PageBannerConf = {
   title: string
   content: string
+  logo?: string
+  external_link?: {
+    url: string
+    label: string
+  }
 }
 
 export type PageSearchConf = {
@@ -83,7 +87,9 @@ export type PageLabelsConf = {
 
 export type PageObjectType = 'datasets' | 'dataservices' | 'topics'
 
-export type PageConf = {
+// Minimum a GlobalSearch list page needs. PageConf below adds the fields only
+// read by the detail-view chain (DatasetDetailView, DiscussionsList, etc.).
+export type PageListConf = {
   object_type: PageObjectType
   list_all: boolean
   filter_prefix: string | null
@@ -95,10 +101,19 @@ export type PageConf = {
   search: PageSearchConf
   banner: PageBannerConf | null
   default_sort: string | null
+  meta?: {
+    title?: string
+    description?: string
+  }
+  filters: PageFilterConf[]
+}
+
+export type PageConf = PageListConf & {
   resources_tabs: {
     discussions: {
       display: boolean
       create: boolean
+      notify_url_override?: boolean
     }
     datasets: {
       display: boolean
@@ -108,15 +123,36 @@ export type PageConf = {
     }
   }
   editable: boolean
-  meta?: {
-    title?: string
-    description?: string
-  }
-  filters: PageFilterConf[]
 }
 
 export type PagesConf = {
   [key: string]: PageConf
+}
+
+export type PagesListConf = {
+  [key: string]: PageListConf
+}
+
+// Network pages stop at the list view, so PageListConf (not PageConf) is enough.
+export type NetworkPageConf = PageListConf & {
+  banner: PageBannerConf & { logo: string }
+}
+
+// A network is an ordered group of pages nested under /contributors/<slug>,
+// one per URL subpath (see networkDefaultPage in utils/config.ts).
+export type NetworkConf = {
+  pages: { [subpath: string]: NetworkPageConf }
+  // Org-list URLs for this network, keyed like `pages` (e.g. organizations.datasets).
+  organizations?: Record<string, string>
+}
+
+export type NetworkEntriesConf = {
+  [slug: string]: NetworkConf
+}
+
+export type NetworksConf = {
+  tag?: string
+  entries: NetworkEntriesConf
 }
 
 export type DatasetsConf = {
@@ -125,6 +161,7 @@ export type DatasetsConf = {
   } | null
   harvest_backends_quality_warning: string[]
   show_extended_information_panel: boolean
+  resources_explorer_enabled?: boolean
 }
 
 interface Logo {
@@ -142,19 +179,49 @@ export type HeaderConf = {
   search: {
     display: boolean
     placeholder?: string
+    hide_on_home?: boolean
   }
 }
 
+type FooterExternalLink = {
+  label: string
+  href: string
+  title: string
+}
+
+type FooterMandatoryLink = {
+  label: string
+  to: string | undefined
+  href: string | undefined
+  title?: string
+}
+
+interface FooterLogo extends Logo {
+  href?: string
+  alt?: string
+}
+
 export type FooterConf = {
-  logo?: Logo
+  logo?: FooterLogo
   phrase?: string
-  external_links?: DsfrFooterProps['ecosystemLinks']
-  mandatory_links?: DsfrFooterProps['mandatoryLinks']
+  external_links?: FooterExternalLink[]
+  mandatory_links?: FooterMandatoryLink[]
+}
+
+export type SurveyConf = {
+  display: boolean
+  id: string // change it for a new survey, so that users who dismissed the previous one see it
+  url: string
+  delay?: number // seconds of browsing before opening the modal
+  title: string
+  content: string
+  button_label: string
 }
 
 export type WebsiteConfig = {
   title: string
   rf_title: string
+  survey?: SurveyConf
   seo?: {
     canonical_url?: string
     meta?: {
@@ -173,23 +240,25 @@ export type SentryConfig = {
   domain_url?: string // Mandatory to send sourcemaps to Sentry. This is not used in sentry options, it is only used in vite.config.mts to send sourcemaps to the correct domain.
   environment?: string
   tracePropagationTargets?: RegExp[]
-  tracesSampleRate?: number
+  tracesSampleRate?: number // Enables performance monitoring (page loads, navigations, requests) when set
   replaysSessionSampleRate?: number
   replaysOnErrorSampleRate?: number
+}
+
+export type OrganizationsPageConf = {
+  breadcrumb_title?: string
+  labels?: {
+    singular?: string
+  }
+  meta?: {
+    title?: string
+    description?: string
+  }
 }
 
 export type OrganizationsConfig = {
   datasets?: string
   dataservices?: string
   bouquets?: string
-  page?: {
-    breadcrumb_title?: string
-    labels?: {
-      singular?: string
-    }
-    meta?: {
-      title?: string
-      description?: string
-    }
-  }
+  page?: OrganizationsPageConf
 }

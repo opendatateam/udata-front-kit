@@ -1,13 +1,34 @@
 export default {
+  isAvailable(): boolean {
+    const testKey = '__storage_test__'
+    try {
+      localStorage.setItem(testKey, testKey)
+      localStorage.removeItem(testKey)
+      return true
+    } catch {
+      return false
+    }
+  },
   setItem(key: string, value: object | string) {
-    if (typeof value === 'object') {
-      localStorage.setItem(key, JSON.stringify(value))
-    } else {
-      localStorage.setItem(key, value)
+    try {
+      if (typeof value === 'object') {
+        localStorage.setItem(key, JSON.stringify(value))
+      } else {
+        localStorage.setItem(key, value)
+      }
+    } catch (err) {
+      // localStorage can be unavailable (blocked cookies, private browsing, sandboxed iframe...)
+      console.warn(`Failed to write to localStorage (key: ${key})`, err)
     }
   },
   getItem(key: string) {
-    const item = localStorage.getItem(key)
+    let item: string | null
+    try {
+      item = localStorage.getItem(key)
+    } catch (err) {
+      console.warn(`Failed to read from localStorage (key: ${key})`, err)
+      return undefined
+    }
     if (item !== null) {
       try {
         return JSON.parse(item)
@@ -17,6 +38,10 @@ export default {
     }
   },
   removeItem(key: string) {
-    localStorage.removeItem(key)
+    try {
+      localStorage.removeItem(key)
+    } catch (err) {
+      console.warn(`Failed to remove from localStorage (key: ${key})`, err)
+    }
   }
 }

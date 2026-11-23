@@ -77,7 +77,7 @@ export const useTopicStore = defineStore('topic', {
      */
     async loadTopicsForUniverse(pageKey?: string): Promise<Topic[]> {
       const mergedApiParams = useUniverseQuery(pageKey || 'topics', {})
-      // make sure our user has registerd its permissions
+      // make sure our user has registered its permissions
       await useUserStore().waitForStoreInit()
       let response = await topicsAPI.list({
         params: {
@@ -98,6 +98,16 @@ export const useTopicStore = defineStore('topic', {
         this.topics = [...this.topics, ...response.data]
       }
       return this.topics
+    },
+    /**
+     * Find topics containing a given dataset
+     */
+    async loadForDataset(datasetId: string, tag?: string): Promise<Topic[]> {
+      const response = await topicsAPI.list({
+        params: { dataset: datasetId, ...(tag ? { tag } : {}) },
+        toasted: false
+      })
+      return response.data
     },
     /**
      * Get a single topic from API

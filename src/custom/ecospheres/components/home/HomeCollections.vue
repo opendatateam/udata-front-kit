@@ -3,6 +3,7 @@ import config from '@/config'
 import type { EcologieHomepageConf } from '@/custom/ecospheres/model/config'
 import TopicsAPI from '@/services/api/resources/TopicsAPI'
 import { useUniverseQuery } from '@/utils/universe'
+import { trackEvent } from '@datagouv/components-next'
 
 const homepage = config.ecospheres.homepage as EcologieHomepageConf
 const collections = homepage.collections
@@ -62,7 +63,7 @@ onMounted(() => {
       </div>
       <div class="collections-grid">
         <article
-          v-for="collection in collections"
+          v-for="(collection, index) in collections"
           :key="collection.slug || collection.title"
           :class="[
             'card',
@@ -79,6 +80,13 @@ onMounted(() => {
                   name: 'bouquets_detail',
                   params: { item_id: collection.slug }
                 }"
+                @click="
+                  trackEvent(
+                    'Accueil - Collections thématiques',
+                    'Clic collection',
+                    `Bloc ${index + 1} | ${collection.title}`
+                  )
+                "
               >
                 {{ collection.title }}
               </RouterLink>
@@ -96,17 +104,13 @@ onMounted(() => {
           <div class="card-footer">
             <ul class="fr-tags-group">
               <li>
-                <p
-                  class="fr-tag fr-icon-database-line fr-tag--icon-left fr-mb-0"
-                >
+                <p class="fr-tag fr-icon-database-line fr-tag--icon-left">
                   {{ nbDatasetsPerCollection[collection.slug] || '...' }} jeux
                   de données
                 </p>
               </li>
               <li>
-                <p
-                  class="fr-tag fr-icon-map-pin-2-line fr-tag--icon-left fr-mb-0"
-                >
+                <p class="fr-tag fr-icon-map-pin-2-line fr-tag--icon-left">
                   {{ collection.maille }}
                 </p>
               </li>
@@ -206,8 +210,15 @@ onMounted(() => {
 
   .fr-tags-group {
     flex-wrap: wrap;
+    margin: 0;
+    gap: 0.5rem;
+
     > li {
       line-height: 1.5rem;
+    }
+
+    .fr-tag {
+      margin: 0;
     }
   }
 }

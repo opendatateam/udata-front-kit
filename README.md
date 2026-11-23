@@ -2,7 +2,7 @@
 
 # udata front kit
 
-[![GitHub Actions](https://img.shields.io/github/actions/workflow/status/opendatateam/udata-front-kit/create-deploy-release.yml?branch=main)](https://github.com/opendatateam/udata-front-kit/actions)
+[![GitHub Actions](https://img.shields.io/github/actions/workflow/status/opendatateam/udata-front-kit/tests.yml?branch=main)](https://github.com/opendatateam/udata-front-kit/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Kit de développement frontend Vue.js permettant de créer des sites thématiques ("verticales") spécialisés basés sur l'écosystème [data.gouv.fr](https://www.data.gouv.fr/). Ce framework fournit les composants, la configuration et l'architecture nécessaires pour déployer rapidement des verticales dédiées à des domaines spécifiques (écologie, météo, défis, etc.).
@@ -116,7 +116,7 @@ On utilise la librairie [mimicry-js](https://github.com/Stivooo/mimicry-js) comm
 pnpm run lint
 ```
 
-#### Typage via [TSc](https://www.typescriptlang.org/docs/handbook/compiler-options.html/)
+#### Typage via [tsc](https://www.typescriptlang.org/docs/handbook/compiler-options.html)
 
 ```sh
 pnpm run hint
@@ -147,7 +147,7 @@ agent-vm setup  # creates a base VM
 Créer un fichier `.env.local` à la racine du projet (non versionné) :
 
 ```sh
-VITE_SITE_ID=simplifions
+VITE_SITE_ID=ecospheres
 ```
 
 **Lancement :**
@@ -201,7 +201,7 @@ Les **review apps** ne sont **pas créées automatiquement** lors de l'ouverture
 
 ##### Solution 1 : Script de déploiement local (recommandé)
 
-Un script bash `scripts/deploy.sh` simplifie le processus de déploiement en deux étapes.
+Un script bash `scripts/deploy.sh` simplifie le processus de déploiement en deux étapes. Ce processus repose sur des branches par environnement (`{site}-{env}`) et sur des Pull Requests entre ces branches. Il ne s'applique donc qu'aux sites qui suivent ce modèle (voir [Sites déployés directement depuis `main`](#sites-déployés-directement-depuis-main) sinon).
 
 **Prérequis :** [GitHub CLI (`gh`)](https://cli.github.com/) et `jq` installés, `gh` authentifié.
 
@@ -211,17 +211,17 @@ Crée une branche de merge temporaire, fusionne les changements (avec résolutio
 
 ```bash
 # Pour demo/preprod (source = main par défaut)
-./scripts/deploy.sh prepare <site> <env> <version>
+./scripts/deploy.sh prepare <site> <env>
 
 # Pour prod (--source obligatoire)
-./scripts/deploy.sh prepare <site> prod <version> --source <site>-preprod
+./scripts/deploy.sh prepare <site> prod --source <site>-preprod
 ```
 
 **Exemples :**
 
 ```bash
-./scripts/deploy.sh prepare ecospheres demo minor
-./scripts/deploy.sh prepare ecospheres prod minor --source ecospheres-demo
+./scripts/deploy.sh prepare ecospheres demo
+./scripts/deploy.sh prepare ecospheres prod --source ecospheres-demo
 ```
 
 Le script :
@@ -247,18 +247,16 @@ Après validation et approbation de la PR, lancez le déploiement avec l'URL ou 
 Le script :
 
 - Vérifie que la PR est ouverte et approuvée
-- Merge la PR avec le message normalisé `[{env}:{site}:{version}] {titre_pr} #{numéro_pr}`
-- Supprime la branche de merge
-- Pour les déploiements **prod** : crée une release GitHub avec changelog auto-généré
-- Déclenche automatiquement le pipeline GitLab
+- Merge la PR et supprime la branche de merge
+- Déclenche le workflow de déploiement, qui crée le tag et construit l'image
+- Pour les déploiements **prod** : demande au workflow de créer une release GitHub avec changelog auto-généré
 
 **Arguments :**
 
-| Argument    | Valeurs possibles                                      |
-| ----------- | ------------------------------------------------------ |
-| `<site>`    | Déterminé dynamiquement depuis les dossiers `configs/` |
-| `<env>`     | `demo`, `preprod`, `prod`                              |
-| `<version>` | `major`, `minor`, `patch`                              |
+| Argument | Valeurs possibles                                      |
+| -------- | ------------------------------------------------------ |
+| `<site>` | Déterminé dynamiquement depuis les dossiers `configs/` |
+| `<env>`  | `demo`, `preprod`, `prod`                              |
 
 **Options :**
 
@@ -268,62 +266,29 @@ Le script :
 | `--ignore-git-clean` | Ignore la vérification de l'état git (utile pour les tests)               |
 | `--skip-release`     | Ne pas créer de release GitHub (prod uniquement)                          |
 
-##### Solution 2 : Message de commit
+##### Solution 2 : Interface GitHub Actions
 
-Le déploiement des verticales thématiques en preprod et en production peut s'effectuer via un workflow GitHub qui se déclenche automatiquement à partir du message de commit. Le format du message de commit doit être :
-
-```
-[<environment>:<site>:<version_type>] <description>
-```
-
-**Paramètres :**
-
-- `<environment>` : Environnement cible (`prod` ou `demo`/`preprod` suivant la verticale)
-- `<site>` : Nom du site
-  - **Sites disponibles :**
-    - `ecospheres` - Site écologie
-    - `meteo-france` - Site météo
-    - `logistique` - Site logistique
-    - `defis` - Site défis
-    - `hackathon` - Site hackathon
-    - `simplifions` - Site simplifions
-    - `accessibilite` - Site accessibilite
-- `<version_type>` : Type de version (`major`, `minor`, ou `patch`)
-
-**Exemple :**
-
-```
-[prod:ecologie:minor] nouvelle fonctionnalité incroyable
-```
-
-Le workflow se déclenche sur tous les push vers toutes les branches, mais ne s'exécute que si le message de commit commence par `[` (condition `startsWith(github.event.head_commit.message, '[')`). Cette condition n'est pas parfaite mais GitHub Actions ne supporte pas directement le déclenchement de workflows basé sur des expressions régulières dans les messages de commit.
-
-Toutes les variables et secrets nécessaires pour ce workflow sont listés dans la section `env:` du [workflow de déploiement](.github/workflows/create-deploy-release.yml).
-
-##### Solution 3 : Interface GitHub Actions
-
-Le déploiement peut être déclenché manuellement via l'interface GitHub Actions :
+Le déploiement peut aussi être déclenché manuellement via l'interface GitHub Actions :
 
 1. **Aller dans l'onglet "Actions"** du dépôt GitHub
-2. **Sélectionner "Deployment on datagouv domains with version bump"** dans la liste des workflows
+2. **Sélectionner "Deployment of a given site on a given env"** dans la liste des workflows
 3. **Cliquer sur "Run workflow"**
 4. **Choisir** :
    - **Site** : Le site à déployer (dropdown avec les sites disponibles)
    - **Environment** : L'environnement cible (`demo`, `preprod`, ou `prod`)
-   - **Version type** : Le type de version (`major`, `minor`, ou `patch`)
+   - **Ref** : Optionnel, la branche à déployer (défaut : `{site}-{env}`). Si cette branche n'existe pas, le workflow se rabat automatiquement sur `main`. C'est le cas des sites sans branche `{site}-{env}` dédiée (voir plus bas).
+   - **Create release** : Créer une release GitHub (désactivé par défaut)
 5. **Cliquer sur "Run workflow"**
 
 #### Architecture de déploiement en preprod et en production
 
-Pour des raisons de sécurité, le déploiement est effectué par un dépôt privé GitLab dédié à l'infrastructure. Le processus fonctionne ainsi :
+Le déploiement s'articule autour d'un tag `{site}-{env}-{YYYYMMDD}-{N}`, et repose sur un unique workflow, **`deploy-site.yml`**, composé de trois jobs :
 
-1. **GitHub Actions** : Les actions sur GitHub déclenchent le workflow
-2. **GitHub Actions** : Calcul de la prochaine version basée sur les tags existants
-3. **GitHub Actions** : Création d'un nouveau tag avec cette version. Le tag créé est utilisé lors de la construction de l'image et pendant le déploiement.
-4. **GitHub Actions** : Appels à l'API GitLab via un script téléchargé depuis le dépôt "scaffolding"
-5. **GitLab CI/CD** : Le script déclenche ensuite le pipeline de déploiement sur GitLab
+1. **`tag`** : calcule le prochain tag pour le jour courant, le crée sur la branche `{site}-{env}` (ou `main`, voir plus bas) et le pousse.
+2. **`build`** : construit l'image à partir du tag et la pousse sur le registre en `{site}-{env}:{YYYYMMDD}-{N}` et `{site}-{env}:latest`.
+3. **`release`** : crée la release GitHub si `create_release` est activé.
 
-**Note** : Pour cette raison il n'est pas encore possible de suivre le détail de l'avancement du déploiement directement depuis GitHub Actions (#TODO)
+Le workflow est déclenché exclusivement par `workflow_dispatch` : pousser un tag à la main ne construit rien. L'infrastructure récupère ensuite l'image depuis le registre et la déploie automatiquement dans l'environnement cible.
 
 #### Workflow de déploiement recommandé
 
@@ -332,11 +297,17 @@ Pour des raisons de sécurité, le déploiement est effectué par un dépôt pri
 - La branche `main` recueille les fonctionnalités au fur et à mesure de leur développement.
 - La branche `{site}-preprod` est utilisée pour les déploiements sur <https://{site}.preprod.data.gouv.fr>.
   - On commence par créer une Pull Request depuis `main` vers `{site}-preprod` ;
-  - Une fois cette PR validée, on déploie soit via un message de commit normé soit via l'UI GitHub Actions (cf plus haut).
+  - Une fois cette PR validée, on déploie via `scripts/deploy.sh` ou via l'UI GitHub Actions (cf plus haut).
 - La branche `{site}-prod` est utilisée pour les déploiements sur <https://{site}.data.gouv.fr>.
-  - Même processus que pour la preprod, mais en créant une PR depuis `{site}-preprod` vers `{site})-prod`.
+  - Même processus que pour la preprod, mais en créant une PR depuis `{site}-preprod` vers `{site}-prod`.
 
-NB : dans certains cas, il possible de créer et de déployer des Pull Requests depuis une _feature branch_ vers `{site}-(pre)prod`, par exemple pour définir une configuration spécifique à l'environnement de preprod ou de prod.
+NB : dans certains cas, il est possible de créer et de déployer des Pull Requests depuis une _feature branch_ vers `{site}-(pre)prod`, par exemple pour définir une configuration spécifique à l'environnement de preprod ou de prod.
+
+#### Sites déployés directement depuis `main`
+
+Certains sites (peu déployés, sans distinction demo/preprod) n'ont pas de branche `{site}-{env}` et sont déployés directement depuis `main`, par exemple `defis` ou `hackathon`.
+
+Pour ces sites, `scripts/deploy.sh` ne s'applique pas car il n'y a pas de branche `{site}-{env}` à préparer, ni de PR à créer. Le déploiement se fait uniquement via l'**interface GitHub Actions** (cf plus haut). Choisir le site, l'environnement `prod`, et laisser **Ref** vide. Le workflow détecte l'absence de branche `{site}-prod` et se rabat automatiquement sur `main`.
 
 ## 📚 Bibliothèques et plugins utilisés
 
@@ -370,6 +341,8 @@ Le référencement des verticales est géré via la section `website.seo` du fic
 
 Les clés dans `sitemap_xml` (`topics_pages`, `datasets_pages`, `dataservices_pages`) doivent correspondre aux identifiants définis dans la section `pages:` du fichier de configuration.
 
+Le sitemap ne doit lister que des pages dont l'URL canonique est sur le site lui-même. Les pages de détail génériques des jeux de données et des API ayant leur URL canonique sur data.gouv.fr ne doivent pas y figurer. Les topics et les pages ayant une URL canonique propre (ex : `indicators` sur ecospheres) peuvent y figurer.
+
 Exemple :
 
 ```yaml
@@ -388,8 +361,7 @@ website:
         - bouquets
       datasets_pages:
         - indicators
-      dataservices_pages:
-        - dataservices
+      dataservices_pages: []
 ```
 
 ### Gestion des meta tags dans l'application
@@ -408,9 +380,60 @@ sentry:
   domain_url: 'https://errors.data.gouv.fr/' # Ou tout autre domaine où vous hébergez votre sentry
   dsn: 'https://c8268303ac0799edda45ced7faa7e0a0@errors.data.gouv.fr/38' # Vous trouverez ce DSN lors de l'initialisation de votre projet dans Sentry
   environment: 'preprod' # Ou autre (par exemple 'production'), selon la branche de déploiement
+  tracesSampleRate: 0.1 # Optionnel, active le suivi des performances (chargements de page, navigations, requêtes) sur 10 % des navigations
 ```
 
 D'autres éléments de configuration sont disponibles dans le fichier [src/model/config.ts](./src/model/config.ts)
+
+## Configurer l'authentification OAuth
+
+OAuth permet aux utilisateurs de se connecter à une verticale avec leur compte data.gouv.fr. Le site utilise le flux _Authorization Code_ avec PKCE, via un client OAuth public (sans secret). Le jeton obtenu est ensuite joint aux appels à l'API data.gouv.fr pour les actions authentifiées.
+
+### Paramètres
+
+```yaml
+datagouvfr:
+  base_url: https://demo.data.gouv.fr # instance data.gouv.fr utilisée pour la connexion
+  oauth_client_id: 6ae2255fc8f9fa6f88af573f # client OAuth enregistré sur cette instance
+
+website:
+  oauth_option: true # active les routes /login, /login/callback et /logout, et le bouton de connexion
+```
+
+L'URL de callback n'est pas configurable : elle vaut toujours `{origine du site}/login/callback`.
+
+### Configuration par environnement
+
+Un client OAuth n'existe que sur l'instance où il a été créé : `base_url` et `oauth_client_id` doivent donc toujours être modifiés ensemble. Ces valeurs sont définies dans le `config.yaml` de chaque branche `{site}-{env}` (voir [Workflow de déploiement recommandé](#workflow-de-déploiement-recommandé)).
+
+Exemple pour `ecospheres` :
+
+| Branche           | `base_url`                  | `oauth_client_id`          |
+| ----------------- | --------------------------- | -------------------------- |
+| `ecospheres-demo` | `https://demo.data.gouv.fr` | `6ae2255fc8f9fa6f88af573f` |
+| `ecospheres-prod` | `https://www.data.gouv.fr`  | `66fa76d405b98d06ca73854a` |
+
+Une preprod peut viser `demo.data.gouv.fr` ou `www.data.gouv.fr` selon les sites : son client doit être enregistré sur l'instance choisie.
+
+:warning: Les review apps reprennent la configuration de la branche de la PR. La connexion n'y fonctionne que si `base_url` vise `demo.data.gouv.fr`, seule instance acceptant les URLs de callback avec wildcard.
+
+### Demander un client OAuth à data.gouv.fr
+
+Il faut un client par instance. La demande se fait auprès de l'équipe data.gouv.fr, en précisant :
+
+- le nom du site ;
+- l'instance visée (`demo.data.gouv.fr` ou `www.data.gouv.fr`) ;
+- le type de client : public (sans secret), flux _Authorization Code_ avec PKCE (`S256`), scope `default` ;
+- les URLs de callback, listées ci-dessous.
+
+| Environnement       | Instance                  | URL de callback                                                                              |
+| ------------------- | ------------------------- | -------------------------------------------------------------------------------------------- |
+| Développement local | `demo.data.gouv.fr` seule | `http://localhost:5173/login/callback`                                                       |
+| Review apps         | `demo.data.gouv.fr` seule | `https://deploy-preview-*--{site}.sandbox.data.developpement-durable.gouv.fr/login/callback` |
+| Preprod             | Celle de `base_url`       | `https://{domaine de preprod}/login/callback`                                                |
+| Production          | `www.data.gouv.fr`        | `https://{domaine de production}/login/callback`                                             |
+
+`{site}` est l'identifiant du site dans [`configs/`](configs) (par exemple `ecospheres`). Il peut différer du domaine public (par exemple `ecologie.data.gouv.fr`).
 
 ## 👥 Auteurs
 
