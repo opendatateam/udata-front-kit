@@ -25,3 +25,18 @@ allowBuilds:
   cypress: true
   esbuild: false
   vue-demi: false
+
+# Security: patch vulnerable transitive deps pinned by upstream (same major only)
+overrides:
+  'editorconfig>minimatch': ^9.0.9
+
+# geopf's Panoramax control is unused: skip installing the viewer and its vulnerable maplibre-gl 5 (GHSA-jrc7-96c5-q579)
+packageExtensions:
+  geopf-extensions-openlayers@1.0.0-beta.15:
+    peerDependenciesMeta:
+      '@panoramax/web-viewer':
+        optional: true
+
+# Render GetCapabilities strings as text and only link http(s) URLs (ported from datagouv/cdata)
+patchedDependencies:
+  geopf-extensions-openlayers@1.0.0-beta.15: patches/geopf-extensions-openlayers@1.0.0-beta.15.patch

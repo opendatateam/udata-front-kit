@@ -2,9 +2,9 @@ import type {
   Indicator,
   IndicatorExtras
 } from '@/custom/ecospheres/model/indicator'
+import { datasetFactory } from '@/fixtures/factories/datasets_factory'
+import { resourceFactory } from '@/fixtures/factories/resources_factory'
 import type { Resource } from '@/model/resource'
-import { datasetFactory } from 'cypress/support/factories/datasets_factory'
-import { resourceFactory } from 'cypress/support/factories/resources_factory'
 import type { StaticResponse } from 'cypress/types/net-stubbing'
 
 // Helper to create an indicator from a dataset

@@ -1,5 +1,5 @@
+import { datasetFactory } from '@/fixtures/factories/datasets_factory'
 import type { Topic } from '@/model/topic'
-import { datasetFactory } from 'cypress/support/factories/datasets_factory'
 import { factorFactory, setupEmptyTopic, visitTopic } from '../support'
 
 describe('Topic Elements - Factor Addition', () => {

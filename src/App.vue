@@ -161,6 +161,8 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
       height: logo?.height,
       width: logo?.width
     }"
+    :operator-to="logo?.href"
+    :operator-img-alt="logo?.alt"
     :desc-text="phrase"
     :ecosystem-links="external_links"
     :mandatory-links="mandatory_links"
@@ -171,7 +173,7 @@ provide(AccessibilityPropertiesKey, setAccessibilityProperties)
 
 <!-- global styles -->
 <style>
-.es__tiles__list {
+.tiles-list {
   list-style-type: none;
 }
 .justify-end {

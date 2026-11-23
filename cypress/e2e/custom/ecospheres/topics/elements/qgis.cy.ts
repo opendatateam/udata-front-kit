@@ -1,5 +1,5 @@
+import { resourceFactory } from '@/fixtures/factories/resources_factory'
 import type { Topic } from '@/model/topic'
-import { resourceFactory } from 'cypress/support/factories/resources_factory'
 import {
   createTestTopicWithElements,
   factorFactory,

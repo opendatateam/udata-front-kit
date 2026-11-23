@@ -1,5 +1,5 @@
+import { datasetFactory } from '@/fixtures/factories/datasets_factory'
 import type { DatasetV2 } from '@datagouv/components-next'
-import { datasetFactory } from 'cypress/support/factories/datasets_factory'
 
 describe('Culture - Datasets List Page', () => {
   let testDatasets: DatasetV2[]

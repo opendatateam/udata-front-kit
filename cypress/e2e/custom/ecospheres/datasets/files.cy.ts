@@ -1,5 +1,5 @@
-import { datasetFactory } from 'cypress/support/factories/datasets_factory'
-import { resourceFactory } from 'cypress/support/factories/resources_factory'
+import { datasetFactory } from '@/fixtures/factories/datasets_factory'
+import { resourceFactory } from '@/fixtures/factories/resources_factory'
 
 describe('Dataset Page - Fichiers Tab', () => {
   beforeEach(() => {
@@ -14,7 +14,7 @@ describe('Dataset Page - Fichiers Tab', () => {
     })
     cy.mockDatasetAndRelatedObjects(dataset, [resource])
 
-    cy.visit(`/datasets/${dataset.id}`)
+    cy.visit(`/datasets/${dataset.slug}`)
     cy.contains('Test resource').should('be.visible')
   })
 
@@ -29,7 +29,7 @@ describe('Dataset Page - Fichiers Tab', () => {
     })
     cy.mockDatasetAndRelatedObjects(dataset, [resource])
 
-    cy.visit(`/datasets/${dataset.id}`)
+    cy.visit(`/datasets/${dataset.slug}`)
     // Confirms the new explorer actually mounted, not just that the resource is visible.
     cy.contains("Revenir sur l'ancienne navigation").should('be.visible')
     cy.contains('Test resource').should('be.visible')
@@ -46,7 +46,7 @@ describe('Dataset Page - Fichiers Tab', () => {
     })
     cy.mockDatasetAndRelatedObjects(dataset, [resource])
 
-    cy.visit(`/datasets/${dataset.id}`)
+    cy.visit(`/datasets/${dataset.slug}`)
 
     cy.window().then((win) => {
       cy.stub(win.navigator.clipboard, 'writeText').as('writeText')

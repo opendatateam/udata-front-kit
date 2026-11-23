@@ -1,6 +1,6 @@
+import { resourceFactory } from '@/fixtures/factories/resources_factory'
 import type { Resource } from '@/model/resource'
 import { describe, expect, it } from 'vitest'
-import { resourceFactory } from '../../../cypress/support/factories/resources_factory'
 import {
   extractBaseUrl,
   extractLayerNameFromUrl,
