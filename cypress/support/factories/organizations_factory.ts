@@ -1,4 +1,7 @@
-import type { Organization } from '@datagouv/components-next'
+import type {
+  Organization,
+  OrganizationReference
+} from '@datagouv/components-next'
 import { build, sequence } from 'mimicry-js'
 
 export const organizationFactory = build<Organization>({
@@ -41,6 +44,32 @@ export const organizationFactory = build<Organization>({
       reuses: 46,
       reuses_by_months: {},
       views: 47
+    }
+  }
+})
+
+export const OrganizationReferenceFactory = build<OrganizationReference>({
+  fields: {
+    class: 'Organization',
+    id: sequence((x) => `org_id_${x}`),
+    name: sequence((x) => `Organization ${x}`),
+    acronym: null,
+    slug: sequence((x) => `organization-${x}`),
+    uri: sequence(
+      (x) => `https://demo.data.gouv.fr/api/1/organizations/organization-${x}/`
+    ),
+    page: sequence(
+      (x) => `https://demo.data.gouv.fr/organizations/organization-${x}/`
+    ),
+    logo: '/public/static/blank_state/file.svg',
+    logo_thumbnail: '/public/static/blank_state/file.svg',
+    badges: [],
+    permissions: {
+      delete: false,
+      edit: false,
+      harvest: false,
+      members: false,
+      private: false
     }
   }
 })

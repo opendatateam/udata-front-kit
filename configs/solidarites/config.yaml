@@ -1,0 +1,320 @@
+# config file for solidarites
+
+# used as extras key
+site_id: solidarites
+
+datagouvfr:
+  # data.gouv.fr base URL (use www subdomain on prod)
+  base_url: https://demo.data.gouv.fr
+  # oauth settings
+  oauth_client_id: 68b1ac79a751200a42f2ba19
+  tabular_api_url: https://tabular-api.data.gouv.fr
+
+# UI customizations
+website:
+  title: 'solidarites.data.gouv.fr'
+  seo:
+    canonical_url: https://solidarites.preprod.data.gouv.fr
+    meta:
+      keywords:
+      description:
+      robots: 'noindex, nofollow'
+    robots_txt:
+      disallow:
+        - /admin
+    sitemap_xml:
+      topics_pages: []
+      datasets_pages: []
+      dataservices_pages: []
+  formatted_title: '<i>solidarites.</i><b>data.gouv</b><i>.fr</i>'
+  rf_title: 'Ministère<br>
+    de la Santé, des Familles,<br>
+    de l’Autonomie<br>
+    et des Personnes handicapées'
+  # leave empty if not pertinent
+  homepage:
+    title:
+    subtitle:
+    sections:
+      - title:
+        content:
+        sub_section_datasets:
+        sub_section_cards:
+        sub_section_tiles:
+        sub_section_buttons:
+    meta_description: solidarites.data.gouv.fr référence et centralise les données du domaine de la santé.
+  footer:
+    logo:
+    phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives au domaine de la solidarité, réalisé par le ministère de la Santé'
+    external_links:
+      - label: 'data.gouv.fr'
+        href: 'https://data.gouv.fr'
+      - label: 'numerique.gouv.fr'
+        href: 'https://numerique.gouv.fr/'
+      - label: 'sante.gouv.fr'
+        href: 'https://sante.gouv.fr/'
+    mandatory_links:
+      - label: 'Mentions légales'
+        to: '/mentions-legales'
+      - label: "Modalités d'utilisation"
+        to: '/modalites'
+      - label: 'Politique de confidentialité'
+        to: '/rgpd'
+      - label: 'Licences'
+        to: '/licences'
+      - label: 'Nous contacter'
+        to: '/contact'
+      - label: 'Accessibilité : non conforme'
+        to: '/accessibility'
+  header:
+    logo:
+    title_image:
+    admin_shortcut: true
+    beta: true
+    button:
+      display: false
+      label:
+      link:
+    search:
+      display: true
+      placeholder: Rechercher un jeu de données solidarité
+  search_bar:
+    display: true
+    placeholder: Rechercher un jeu de données solidarité
+  secondary_search:
+    display: false
+    name:
+    link:
+  notice:
+    display: false
+    content:
+    closeable: false
+  # ⚠️ When updating this menu, also update the sitemap below if needed
+  menu:
+    - text: Accueil
+      to: /
+    - text: Nos webinaires
+      to: /webinaires
+    - text: Données
+      to: /datasets
+    - text: "Outils d'exploration"
+      to: /outils-exploration
+    - text: Contributeurs
+      to: /contributors
+    - text: À propos du réseau
+      to: /a-propos
+  router:
+    # ⚠️ When updating this list, also update the sitemap below if needed
+    static_pages:
+      - title: 'À propos'
+        id: 'about'
+        route: '/a-propos'
+        url: '/static/solidarites/pages/about.md'
+      - title: 'Accessibilité'
+        id: 'accessibility'
+        route: '/accessibility'
+        url: '/static/solidarites/pages/accessibility.md'
+      - title: 'Mentions légales'
+        id: 'mentions-legales'
+        route: '/mentions-legales'
+        url: '/static/solidarites/pages/mentions-legales.md'
+      - title: 'Licences'
+        id: 'licences'
+        route: '/licences'
+        url: '/static/solidarites/pages/licences.md'
+      - title: "Modalités d'utilisation"
+        id: 'modalites'
+        route: '/modalites'
+        url: '/static/solidarites/pages/modalites.md'
+      - title: 'Nous contacter'
+        id: 'contact'
+        route: '/contact'
+        url: '/static/solidarites/pages/contact.md'
+      - title: 'Politique de confidentialité'
+        id: 'rgpd'
+        route: '/rgpd'
+        url: '/static/solidarites/pages/rgpd.md'
+  sitemap:
+  show_quality_component: true
+  oauth_option: true
+  # debounce high enough for accessibility (screen readers will announce results)
+  default_debounce_wait: 600
+  pagination_sizes:
+    organizations_list: 9
+    topics_drafts_list: 9
+    files_list: 6
+  contact_email: datagouv@datagouv.gouv.fr
+  home_banner_colors:
+    - '#f6f6f6'
+    - '#e3e3fd'
+    - '#019FE3'
+  matomo:
+    host: 'https://stats.data.gouv.fr'
+    siteId:
+  datasets:
+    # TODO: better place for that?
+    add_to_topic:
+      enable: false
+      page:
+    # similar to QUALITY_METADATA_BACKEND_IGNORE on data.gouv.fr
+    harvest_backends_quality_warning: []
+    show_extended_information_panel:
+  # TODO: better place for that?
+  topics:
+    can_add_topics:
+      everyone: true
+      authorized_users:
+
+  # Grist organisations ministère de la Santé https://grist.numerique.gouv.fr/o/verticalesolidarites/api/docs/sPQmuF8WuFGV/tables/Demo/records?filter={"Type": ["organization"]}
+  # Organisations transversale des données ouvertes de la solidarité
+organizations:
+  datasets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/solidarites-demo/organizations-datasets.json
+  page: # organizations.page is a special case of config.pages
+    breadcrumb_title: Contributeurs
+    labels:
+      singular: contributeur
+    meta:
+      title: Liste des contributeurs
+      description: Recherchez une organisation qui a partagé un jeu de données
+
+definitions: &definitions
+  filter_org: &filter_org
+    id: org
+    name: Organisation
+    default_option: Toutes les organisations
+    type: organization_custom
+
+pages:
+  # DATASETS
+  datasets:
+    object_type: datasets
+    list_all: true
+    universe_query:
+      topic: 6ae2290671218d1466f1af57
+    filter_prefix:
+    title: Données
+    breadcrumb_title: Données
+    labels:
+      singular: jeu de données
+      plural: jeux de données
+      extended: jeu de données
+    search:
+      input: Rechercher un jeu de données
+      placeholder: null
+    resources_tabs:
+      discussions:
+        display: true
+        create: true
+      datasets:
+        display: true
+      reuses:
+        display: true
+    editable: true
+    filters:
+      - *filter_org
+solidarites:
+  selections:
+    - title: Toutes prestations - Répartition des allocataires selon la prestation et la situation familiale [National]
+      href: datasets/66d1e5ab79919854e97093c3
+    - title: Taux de couverture d'accueil du jeune enfant [Communal]
+      href: datasets/66d1e5ac79919854e97093c6
+    - title: Prix hébergement et tarifs dépendance des EHPAD
+      href: datasets/5dadc5b7634f4142ddf7b41e
+    - title: Les subventions de la Caisse nationale de solidarité pour l'autonomie (CNSA)
+      href: datasets/5cf92430634f417e13c47bf8
+    - title: Les effectifs de retraités, montants de pensions et âges de départ à la retraite
+      href: datasets/6226330b5eafccb7033e0c48
+    - title: ISD - Protection de l'enfance
+      href: datasets/6226330da9c4efef2f3e0c47
+  news:
+    sub_section_cards:
+      title: Les actualités
+      cards:
+        # Suivre la doc VueDSFR pour DsfrBadge
+        #- name: Titre Exemple
+        #badges:
+        #- label: loi
+        #type: standard
+        #noIcon: true
+        #url:
+        #image_url: /static/solidarites/assets/news/image.png
+        #description: Exemple description
+        - name: Lancement des Rendez-vous des Données de Solidarités
+          image_url: /static/solidarites/assets/news/news-2.png
+          description: |
+            Découvrez les Rendez-vous des Données de Solidarités, une nouvelle série de
+            webinaires ouverts à tous pour mieux connaître les données et outils du champ des
+            solidarités, leurs usages et échanger avec leurs producteurs.
+        - name: 'Solidarités Data : un nouvel espace pour les données publiques des solidarités'
+          url:
+          image_url:
+          description: |
+            Découvrez Solidarités Data, le nouveau portail qui facilite l’accès, la compréhension
+            et la réutilisation des données publiques du champ des solidarités, ainsi que des
+            ressources et outils pour les explorer.
+  # OUTILS
+  outils:
+    outils:
+      - title: 'Vilas : Visualisation d’Indicateurs Localisés sur l’Action Sociale'
+        description: L’outil VILAS vise à regrouper un certain nombre d’indicateurs basés sur les données produites à l’échelle départementale et fournies par les Conseils Départementaux. Ces indicateurs, dont la liste est disponible sur le site, sont, organisés par rubrique thématique. Le site permet également des comparaisons entre départements ayant des caractéristiques sociales proches.
+        href: https://odin-dataviz-drees.sante.gouv.fr/digdash_dashboard_dataviz_drees/?defaultPage=vilas_Accueil&user=dataviz_sante&pass=dataviz_sante
+        href_title: Accéder à l'outils VILAS
+        img: drees.png
+      - title: Panorama des prestations légales
+        description: Basé sur le fichier statistique des allocataires (FR6), le panorama des prestations légales propose une vue mensuelle des indicateurs sur les différentes prestations versées aux allocataires, de l’échelle départementale à l’échelle nationale.
+        href: https://data.caf.fr/pages/dataviz-kpi/
+        href_title: Accéder au panorama
+        img: caf.png
+      - title: Explorer un territoire
+        description: Cet outil d’exploration propose des visualisations détaillées par thématique et par territoire (de l’échelle communale à l’échelle nationale) des dernières données disponibles concernant les prestations versées aux allocataires.
+        href: https://data.caf.fr/pages/accueil/
+        href_title: Explorer un territoire
+        img:
+      - title: Accueil du jeune enfant
+        description: Cet outil d’exploration propose des visualisations détaillées des données d’accueil des jeunes en France depuis 2017, par territoire et par type d’accueil. Il permet également les comparaisons entre territoires
+        href: https://data.caf.fr/carto-mode-accueil/?annee=2023&geographicalLevel=regions&indicator=petite-enfance-couverture&type_accueil=tout&visualizationMode=map
+        href_title: Accéder à l’accueil du jeune enfant
+        img:
+      - title: Baromètre des maisons départementales des personnes handicapées
+        description: Le baromètre, publié chaque trimestre, mesure certaines des activités des maisons départementales des personnes handicapées (MDPH) - telles que le délai de traitement des demandes, l’intensité de l’activité, la scolarisation des enfants handicapés - ainsi que la perception des personnes handicapées et de leurs proches sur leur MDPH. Il publie les données les plus récentes ainsi que celles de la période précédente afin de montrer l’évolution dans le temps des résultats obtenus
+        href: https://data.cnsa.fr/Layouts/dashonic/Applications/DashboardPage.aspx?Key=lEMuvhDH&Plateform=false&OverrideConnection=false&customAppKey=4nloMAqQ
+        href_title: Accéder au baromètre
+        img: cnsa.png
+      - title: 'Data Autonomie : Visualisations'
+        description: Le portail Data Autonomie propose des visualisations à travers différents tableaux de bords thématiques
+        href: https://data-autonomie.cnsa.fr/pages/visualisations/
+        href_title: Accéder à Data Autonomie
+        img:
+      - title: Observatoire de l’offre
+        description: L’ambition de ce portail est de proposer un outil d’aide à la décision pour les acteurs du médico-social en permettant de visualiser des données et des indicateurs clés de l’offre autonomie sur les territoires
+        href: https://cnsa.opendatasoft.com/pages/observatoire/
+        href_title: Accéder à l’observatoire de l’offre
+        img:
+      - title: Portrait des territoires
+        description: Cette application permet de consulter l’ensemble des données disponibles pour caractériser la politique de l’autonomie sur un territoire. Ciblée au niveau départemental, cette dernière vous permet, selon différents axes choisis, de comparer les indicateurs d’un département à ceux des autres départements de sa région, ou à tout autre département choisi.
+        href: https://cnsa-apps.shinyapps.io/portraits-des-territoires/
+        href_title: Accéder au portrait des territoires
+        img:
+      - title: Situation financière des établissements sociaux ou médico-sociaux
+        description: Cette application propose des graphiques interactifs et des tableaux de données, vous permettant de filtrer et explorer les résultats financiers des établissements sociaux ou médicaux sociaux (ESMS) en fonction de l’année, de la région ou de la catégorie d’établissement.
+        href: https://cnsa-apps.shinyapps.io/Situation_financiere_des_ESMS/
+        href_title: Accéder à la situation financière
+        img:
+      - title: Observatoire des Situations de Fragilité
+        description: 'Géofragilité propose des données thématiques sous forme de cartes et rapports qui permettent d’identifier les territoires prioritaires d’intervention. Il permet également de réaliser des diagnostics au regard de la fragilité sur le champ de la santé et du social. Plusieurs niveaux géographiques sont disponibles : communes, départements, nouvelles régions administratives, régions Carsat.'
+        href: https://www.observatoires-fragilites-national.fr/
+        href_title: Accéder à l’Observatoire des Situations de Fragilité
+        img: geo.png
+  # WEBINAIRES
+  webinaires:
+    webinaires:
+      # Le 1er webinaire sera affiché sur la page d'accueil
+      - title: '1er Rendez-vous des Données de Solidarités : les indicateurs sociaux départementaux'
+        date: 19 novembre 2026, de 9h à 10 h
+        description: |
+          Le 19 novembre 2026, participez au premier Rendez-vous des Données de
+          Solidarités pour découvrir les indicateurs sociaux départementaux (ISD), les
+          nouveaux jeux de données et l’outil de datavisualisation VILAS de la DREES.
+        href: https://www.eventbrite.fr/e/billets-les-rendez-vous-des-donnees-des-solidarites-1998754332012
+        href_title: Lien d'inscription
+        img: /static/solidarites/assets/webinaires/nos-webinaires.png

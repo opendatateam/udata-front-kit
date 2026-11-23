@@ -7,12 +7,16 @@ import type {
 } from '@datagouv/components-next'
 
 import type { Activity } from '@/model/activity'
+import type { Discussion } from '@/model/discussion'
 import type { Resource } from '@/model/resource'
 import type { Factor, SiteId, Topic } from '@/model/topic'
 import { Availability } from '@/model/topic'
 import { datasetFactory } from 'cypress/support/factories/datasets_factory'
 import { topicFactory } from 'cypress/support/factories/topics_factory'
-import { UserFactory } from 'cypress/support/factories/users_factory'
+import {
+  UserFactory,
+  UserReferenceFactory
+} from 'cypress/support/factories/users_factory'
 
 // Factor/Element factory for testing
 export const factorFactory = build<Factor>({
@@ -54,7 +58,7 @@ export const factorFactory = build<Factor>({
           ['ecospheres' as SiteId]: {
             uri: sequence((x) => {
               const canonicalUrl =
-                Cypress.env('siteConfig').website.seo.canonical_url ||
+                Cypress.expose('siteConfig').website.seo.canonical_url ||
                 'https://demo.ecologie.data.gouv.fr'
               return `${canonicalUrl}/bouquets/referenced-topic-${x}`
             }),
@@ -71,7 +75,7 @@ export const factorFactory = build<Factor>({
           ['ecospheres' as SiteId]: {
             uri: sequence((x) => {
               const canonicalUrl =
-                Cypress.env('siteConfig').website.seo.canonical_url
+                Cypress.expose('siteConfig').website.seo.canonical_url
               return `${canonicalUrl}/dataservices/referenced-dataservice-${x}`
             }),
             availability: Availability.LOCAL_AVAILABLE,
@@ -86,7 +90,8 @@ export const factorFactory = build<Factor>({
         extras: {
           ['ecospheres' as SiteId]: {
             uri: sequence((x) => {
-              const canonicalUrl = Cypress.env('siteConfig').datagouvfr.base_url
+              const canonicalUrl =
+                Cypress.expose('siteConfig').datagouvfr.base_url
               return `${canonicalUrl}/dataservices/referenced-dataservice-${x}`
             }),
             availability: Availability.LOCAL_AVAILABLE,
@@ -121,7 +126,7 @@ export const activityFactory = build<Activity>({
   fields: {
     key: 'topic:updated',
     label: 'Topic updated',
-    actor: () => UserFactory.one(),
+    actor: () => UserReferenceFactory.one(),
     created_at: () => new Date().toISOString(),
     organization: null,
     related_to: '',
@@ -181,7 +186,7 @@ export function createTestFactors(
 
 // Create test topic with proper setup
 export function createTestTopic(overrides = {}): Topic {
-  // user owned Topic to faciliate permission tests
+  // user owned Topic to facilitate permission tests
   const owner = UserFactory.one({
     overrides: {
       id: 'test-user-id',
@@ -280,6 +285,8 @@ export interface MockTopicOptions {
   referencedDataservices?: Dataservice[]
   // Activity history for the topic
   activities?: Activity[]
+  // Discussions on the topic
+  discussions?: Discussion[]
   // Dataset resources mapped by dataset ID
   datasetResources?: Record<string, Resource[]>
   /** Custom datasets mapped by dataset ID (overrides auto-generated ones) */
@@ -298,6 +305,7 @@ export function mockTopicAndRelatedObjects(
     referencedTopics = [],
     referencedDataservices = [],
     activities = [],
+    discussions = [],
     datasetResources = {},
     datasets = {}
   } = options
@@ -343,7 +351,7 @@ export function mockTopicAndRelatedObjects(
       }
     ).as(`getDataserviceDatasets_${refDataservice.id}`)
   })
-  cy.mockDatagouvObjectList('discussions')
+  cy.mockDatagouvObjectList('discussions', discussions)
   cy.mockDatagouvObjectList('reuses')
   cy.mockDatagouvObjectList('activity', activities)
 
@@ -360,16 +368,25 @@ export function expandDisclosureGroup(groupName = 'Test Group') {
 }
 
 // Combined setup for tests with existing factors
-export function setupTopicWithExistingFactors(
-  factors?: Factor[],
-  activities: Activity[] = []
-) {
+export function setupTopicWithExistingFactors({
+  factors,
+  activities = [],
+  discussions = []
+}: {
+  factors?: Factor[]
+  activities?: Activity[]
+  discussions?: Discussion[]
+} = {}) {
   setupElementTest()
 
   const testFactors = factors || createTestFactors(2)
   const testTopic = createTestTopicWithElements(testFactors)
 
-  mockTopicAndRelatedObjects(testTopic, { factors: testFactors, activities })
+  mockTopicAndRelatedObjects(testTopic, {
+    factors: testFactors,
+    activities,
+    discussions
+  })
 
   // Determine element class distribution based on factor traits
   const datasetFactors = testFactors.filter(
