@@ -18,6 +18,7 @@ export const resourceFactory = build<Resource>({
     last_modified: '2024-01-01T00:00:00',
     extras: {},
     harvest: null,
+    geopf: null,
     preview_url: '',
     schema: null,
     checksum: null,

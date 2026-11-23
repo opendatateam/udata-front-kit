@@ -3,7 +3,7 @@
   "version": "0.4.0",
   "private": true,
   "type": "module",
-  "packageManager": "pnpm@11.28.11+sha512.740184d10f81f5d5b165be88560ee7ba62406c4134896abc27a580109eec2f47c1e41d91251c944c2cababcb1c22461799ebb72de2ec625af2030b0e36c735a3",
+  "packageManager": "pnpm@11.28.12+sha512.94833387e35d503e8ad1010417cdeb82c120e7e69bafdf0a9db0690515beae7159274571e692b96abc2a085d3566fec54381afd978f65f64a85362dfd7e108f7",
   "engines": {
     "node": ">= 22.0.0",
     "npm": "please-use-pnpm",
@@ -30,7 +30,7 @@
     "type-check:cypress": "tsc --noEmit --project cypress/tsconfig.json"
   },
   "dependencies": {
-    "@datagouv/components-next": "1.4.0",
+    "@datagouv/components-next": "1.5.0",
     "@gouvfr/dsfr": "~1.14.4",
     "@gouvfr/dsfr-chart": "^2.0.4",
     "@gouvminint/vue-dsfr": "^8.15.0",
@@ -51,7 +51,7 @@
     "pinia": "^2.3.1",
     "string-strip-html": "^13.5.0",
     "vite-plugin-html": "^3.2.2",
-    "vue": "^3.5.30",
+    "vue": "^3.5.45",
     "vue-loading-overlay": "^6.0.6",
     "vue-matomo": "^4.2.0",
     "vue-router": "^4.6.4",
@@ -94,7 +94,7 @@
     "vite": "^6.4.5",
     "vite-plugin-dynamic-import": "^1.6.0",
     "vite-plugin-vue-devtools": "^7.7.9",
-    "vitest": "^5.0.2",
+    "vitest": "^5.1.0",
     "vue-tsc": "^2.2.12"
   },
   "lint-staged": {

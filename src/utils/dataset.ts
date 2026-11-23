@@ -11,6 +11,18 @@ export const getParentDatasetId = (
   (dataset as ExtendedDatasetV2WithFullObject | undefined)?.extras?.dcat
     ?.parent || undefined
 
+// DOI minted by data.gouv.fr, else the one declared by the harvest source
+export const getDatasetDoi = (
+  dataset: ExtendedDatasetV2WithFullObject
+): string | null => dataset.doi ?? dataset.harvest?.doi ?? null
+
+// DOI eligibility: public dataset published by an organization
+export const canRequestDoi = (dataset: DatasetV2WithFullObject): boolean =>
+  !!dataset.organization &&
+  !dataset.private &&
+  !dataset.deleted &&
+  !dataset.archived
+
 export const useBadges = (
   dataset: Ref<DatasetV2WithFullObject | undefined>
 ): Ref<TranslatedBadge[]> => {
