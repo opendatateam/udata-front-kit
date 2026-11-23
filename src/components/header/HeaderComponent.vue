@@ -7,6 +7,7 @@ import SearchComponent from '../SearchComponent.vue'
 type Props = {
   userName: string | undefined
   customSearch: boolean
+  hideSearch?: boolean
 }
 
 withDefaults(defineProps<DsfrHeaderProps & Props>(), {
@@ -14,7 +15,8 @@ withDefaults(defineProps<DsfrHeaderProps & Props>(), {
   operatorImgStyle: () => ({}),
   searchLabel: 'Rechercher',
   quickLinks: () => [],
-  customSearch: false
+  customSearch: false,
+  hideSearch: false
 })
 
 // DsfrHeader does not expose the hidemodal function, so we do this to close the modal after a custom search.
@@ -43,7 +45,7 @@ const { logo, title_image, description, beta, search } = header
     :service-title="title_image ? undefined : title"
     :service-description="description"
     :quick-links
-    :show-search="search.display && !customSearch"
+    :show-search="search.display && !customSearch && !hideSearch"
     :home-label="`Retour à l'accueil du site - ${title}`"
     :show-beta="beta"
   >
@@ -72,7 +74,7 @@ const { logo, title_image, description, beta, search } = header
 
     <template #after-quick-links>
       <SearchComponent
-        v-if="customSearch && search.display"
+        v-if="customSearch && search.display && !hideSearch"
         id="header-select-search"
         class="custom-search"
         :search-label="searchLabel"

@@ -21,6 +21,17 @@ describe('Topic Activity List', () => {
       cy.get('[role="tab"]').contains('Activité').should('be.visible')
     })
 
+    it('should open the Activity tab from the URL once permissions are known', () => {
+      const { testTopic } = setupTopicWithExistingFactors()
+      cy.visit(`/bouquets/${testTopic.slug}/activity`)
+
+      cy.get('[role="tab"][aria-selected="true"]').should('contain', 'Activité')
+      cy.location('pathname').should(
+        'eq',
+        `/bouquets/${testTopic.slug}/activity`
+      )
+    })
+
     it('should not show Activity tab for non-owners', () => {
       const { testTopic } = setupTopicWithExistingFactors()
 
@@ -103,6 +114,13 @@ describe('Topic Activity List', () => {
       cy.contains("a modifié l'élément")
         .should('have.prop', 'tagName', 'A')
         .and('have.class', 'activity-link')
+
+      // links point to the topic page, not to the current /activity URL
+      cy.contains("a ajouté l'élément").should(
+        'have.attr',
+        'href',
+        `/bouquets/${testTopic.slug}#factor-${testFactors[0].id}`
+      )
     })
 
     it('should make non-element activities non-clickable', () => {
