@@ -1,5 +1,5 @@
+import { dataserviceFactory } from '@/fixtures/factories/dataservices_factory'
 import type { Dataservice } from '@datagouv/components-next'
-import { dataserviceFactory } from '../../../../support/factories/dataservices_factory'
 
 describe('Dataservices (API) - List Page', () => {
   let testDataservices: Dataservice[]

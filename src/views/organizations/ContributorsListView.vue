@@ -60,7 +60,7 @@ onMounted(() => {
 
     <template v-if="hasNetworks">
       <h2 class="fr-mb-3v">Réseaux</h2>
-      <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list fr-mb-8v">
+      <ul class="fr-grid-row fr-grid-row--gutters tiles-list fr-mb-8v">
         <li
           v-for="(network, slug) in networks"
           :key="slug"
@@ -77,7 +77,7 @@ onMounted(() => {
       <h2 class="fr-mb-3v">Organisations</h2>
     </template>
 
-    <ul class="fr-grid-row fr-grid-row--gutters es__tiles__list">
+    <ul class="fr-grid-row fr-grid-row--gutters tiles-list">
       <li
         v-for="org in organizations"
         :key="org.id"

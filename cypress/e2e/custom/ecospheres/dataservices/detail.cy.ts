@@ -1,11 +1,11 @@
+import { dataserviceFactory } from '@/fixtures/factories/dataservices_factory'
+import { datasetFactory } from '@/fixtures/factories/datasets_factory'
+import { discussionFactory } from '@/fixtures/factories/discussions_factory'
 import type {
   Dataservice,
   DatasetV2,
   DatasetV2WithFullObject
 } from '@datagouv/components-next'
-import { discussionFactory } from 'cypress/support/factories/discussions_factory'
-import { dataserviceFactory } from '../../../../support/factories/dataservices_factory'
-import { datasetFactory } from '../../../../support/factories/datasets_factory'
 import { createIndicator } from '../indicators/support'
 
 /**
