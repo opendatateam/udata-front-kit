@@ -17,7 +17,7 @@ describe('Topic detail page meta', () => {
     mockTopicElementsByClass(topic.id, [], [], [])
     visitTopic(topic.slug)
 
-    const { pages, website } = Cypress.env('siteConfig')
+    const { pages, website } = Cypress.expose('siteConfig')
     const singular = pages.bouquets.labels.singular
     const capitalizedSingular =
       singular.charAt(0).toUpperCase() + singular.slice(1)
@@ -33,7 +33,7 @@ describe('Topic detail page meta', () => {
     mockTopicElementsByClass(topic.id, [], [], [])
     visitTopic(topic.slug)
 
-    const { pages, website } = Cypress.env('siteConfig')
+    const { pages, website } = Cypress.expose('siteConfig')
     const singular = pages.bouquets.labels.singular
     const capitalizedSingular =
       singular.charAt(0).toUpperCase() + singular.slice(1)
@@ -54,7 +54,8 @@ describe('Topic detail page meta', () => {
 
       visitTopic(topic.slug)
 
-      const expectedRobots = Cypress.env('siteConfig').website.seo?.meta?.robots
+      const expectedRobots =
+        Cypress.expose('siteConfig').website.seo?.meta?.robots
       cy.get('head meta[name="robots"]').should(
         'have.attr',
         'content',
@@ -69,7 +70,7 @@ describe('Topic detail page meta', () => {
 
       visitTopic(topic.slug)
 
-      const siteTitle = Cypress.env('siteConfig').website.title
+      const siteTitle = Cypress.expose('siteConfig').website.title
       cy.title().should('contain', siteTitle)
     })
   })
@@ -85,7 +86,7 @@ describe('Topic detail page meta', () => {
 
       visitTopic(topic.slug)
 
-      const siteTitle = Cypress.env('siteConfig').website.title
+      const siteTitle = Cypress.expose('siteConfig').website.title
       cy.get('head meta[property="og:title"]').should(
         'have.attr',
         'content',
@@ -135,7 +136,8 @@ describe('Topic detail page meta', () => {
 
       visitTopic(publicTopic.slug)
 
-      const expectedRobots = Cypress.env('siteConfig').website.seo?.meta?.robots
+      const expectedRobots =
+        Cypress.expose('siteConfig').website.seo?.meta?.robots
       cy.get(`head meta[name="robots"][content="${expectedRobots}"]`).should(
         'exist'
       )
@@ -155,13 +157,13 @@ describe('Topic list page meta', () => {
   })
 
   it('should set window title from page meta config', () => {
-    const { pages, website } = Cypress.env('siteConfig')
+    const { pages, website } = Cypress.expose('siteConfig')
     const title = pages.bouquets.meta?.title
     cy.title().should('eq', `${title} | ${website.title}`)
   })
 
   it('should announce page title in live region', () => {
-    const { pages, website } = Cypress.env('siteConfig')
+    const { pages, website } = Cypress.expose('siteConfig')
     const title = pages.bouquets.meta?.title
     cy.get('[aria-live="assertive"]')
       .find('li')
