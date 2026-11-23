@@ -7,7 +7,7 @@ datagouvfr:
   # data.gouv.fr base URL (use www subdomain on prod)
   base_url: https://demo.data.gouv.fr
   # oauth settings
-  oauth_client_id: 68b1ac79a751200a42f2ba19
+  oauth_client_id: 6b041e8a125c24bba4e77065
   tabular_api_url: https://tabular-api.data.gouv.fr
 
 # UI customizations
