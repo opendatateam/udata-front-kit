@@ -1,11 +1,11 @@
+import { dataserviceFactory } from '@/fixtures/factories/dataservices_factory'
+import { datasetFactory } from '@/fixtures/factories/datasets_factory'
+import { discussionFactory } from '@/fixtures/factories/discussions_factory'
 import type {
   Dataservice,
   DatasetV2,
   DatasetV2WithFullObject
 } from '@datagouv/components-next'
-import { discussionFactory } from 'cypress/support/factories/discussions_factory'
-import { dataserviceFactory } from '../../../../support/factories/dataservices_factory'
-import { datasetFactory } from '../../../../support/factories/datasets_factory'
 import { createIndicator } from '../indicators/support'
 
 /**
@@ -379,6 +379,29 @@ describe('Dataservices (API) - Detail Page', () => {
 
       cy.contains('Taux de disponibilité').should('be.visible')
       cy.contains('Non communiqué').should('be.visible')
+    })
+  })
+
+  describe('Status badge', () => {
+    it('should display the "Archivé" badge for an archived dataservice', () => {
+      const archivedDataservice = createMockedDataservice({
+        archived_at: '2026-10-03T00:00:00+00:00'
+      })
+
+      cy.visit(`/dataservices/${archivedDataservice.slug}`)
+      cy.wait(`@get_dataservices_${archivedDataservice.slug}`)
+
+      cy.contains('.fr-badge', 'Archivé').should('be.visible')
+    })
+
+    it('should not display a status badge for a public dataservice', () => {
+      cy.visit(`/dataservices/${testDataservice.slug}`)
+      cy.wait(`@get_dataservices_${testDataservice.slug}`)
+
+      cy.get('h1').should('contain', testDataservice.title)
+      cy.contains('.fr-badge', 'Archivé').should('not.exist')
+      cy.contains('.fr-badge', 'Brouillon').should('not.exist')
+      cy.contains('.fr-badge', 'Supprimé').should('not.exist')
     })
   })
 

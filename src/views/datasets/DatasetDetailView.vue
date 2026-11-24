@@ -23,6 +23,7 @@ import { useDatasetsConf, usePageConf } from '@/utils/config'
 import { getParentDatasetId } from '@/utils/dataset'
 import { useResourceExplorer } from '@/utils/explorer'
 import { useLabels } from '@/utils/labels'
+import { getStatusBadge } from '@/utils/objectStatus'
 import type { OgcLayerInfo } from '@/utils/ogcServices'
 import { fetchAllOgcResources } from '@/utils/ogcServices'
 import { openInQgis } from '@/utils/qgis'
@@ -102,6 +103,10 @@ const parentDataset = computed(() => {
   const parentId = getParentDatasetId(dataset.value)
   return parentId ? datasetStore.get(parentId) : undefined
 })
+
+const statusBadge = computed(
+  () => dataset.value && getStatusBadge(dataset.value)
+)
 
 const showAddToTopicModal = ref(false)
 
@@ -229,6 +234,12 @@ useMeta({
   <GenericContainer v-if="dataset" :key="dataset.id">
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-1w">
       <div class="fr-col-12 fr-col-md-8">
+        <DsfrBadge
+          v-if="statusBadge"
+          class="fr-mb-2v"
+          :label="statusBadge.label"
+          :type="statusBadge.type"
+        />
         <h1 class="fr-mb-2v">{{ dataset.title }}</h1>
         <DsfrCallout v-if="parentDataset" class="fr-mb-4v">
           <p>

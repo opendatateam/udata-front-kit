@@ -1,5 +1,5 @@
+import { topicFactory } from '@/fixtures/factories/topics_factory'
 import type { Topic } from '@/model/topic'
-import { topicFactory } from 'cypress/support/factories/topics_factory'
 
 describe('Topics - Drafts Page', () => {
   const universeTag =

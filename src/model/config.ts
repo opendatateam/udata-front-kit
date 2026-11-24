@@ -196,8 +196,13 @@ type FooterMandatoryLink = {
   title?: string
 }
 
+interface FooterLogo extends Logo {
+  href?: string
+  alt?: string
+}
+
 export type FooterConf = {
-  logo?: Logo
+  logo?: FooterLogo
   phrase?: string
   external_links?: FooterExternalLink[]
   mandatory_links?: FooterMandatoryLink[]

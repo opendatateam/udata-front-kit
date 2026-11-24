@@ -1,5 +1,33 @@
+import { datasetFactory } from '@/fixtures/factories/datasets_factory'
 import type { DatasetV2 } from '@datagouv/components-next'
-import { datasetFactory } from 'cypress/support/factories/datasets_factory'
+
+describe('Dataset Page - Status badge', () => {
+  const visit = (dataset: DatasetV2) => {
+    cy.mockDatasetAndRelatedObjects(dataset)
+    cy.visit(`/datasets/${dataset.id}`)
+    cy.wait(`@get_datasets_${dataset.id}`)
+    cy.get('h1').should('contain', dataset.title)
+  }
+
+  beforeEach(() => {
+    cy.mockMatomo()
+    cy.mockStaticDatagouv()
+  })
+
+  it('should display the "Archivé" badge for an archived dataset', () => {
+    visit(datasetFactory.one({ overrides: { archived: true } }))
+
+    cy.contains('.fr-badge', 'Archivé').should('be.visible')
+  })
+
+  it('should not display a status badge for a public dataset', () => {
+    visit(datasetFactory.one())
+
+    cy.contains('.fr-badge', 'Archivé').should('not.exist')
+    cy.contains('.fr-badge', 'Brouillon').should('not.exist')
+    cy.contains('.fr-badge', 'Supprimé').should('not.exist')
+  })
+})
 
 describe('Dataset Page - DOI', () => {
   const DOI = '10.1234/abcd'
@@ -18,7 +46,6 @@ describe('Dataset Page - DOI', () => {
 
   it('should display the dataset DOI', () => {
     const dataset = datasetFactory.one({
-      // @ts-expect-error doi not yet typed upstream in DatasetV2
       overrides: { doi: DOI }
     })
     visitInformations(dataset)
@@ -39,7 +66,6 @@ describe('Dataset Page - DOI', () => {
   it('should prefer the data.gouv.fr DOI over the harvest source one', () => {
     const sourceDoi = '10.1234/source'
     const dataset = datasetFactory.one({
-      // @ts-expect-error doi not yet typed upstream in DatasetV2
       overrides: { doi: DOI, harvest: { doi: sourceDoi } }
     })
     visitInformations(dataset)

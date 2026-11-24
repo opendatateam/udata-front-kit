@@ -1,9 +1,9 @@
 import type { Indicator } from '@/custom/ecospheres/model/indicator'
+import { dataserviceFactory } from '@/fixtures/factories/dataservices_factory'
+import { discussionFactory } from '@/fixtures/factories/discussions_factory'
+import { resourceFactory } from '@/fixtures/factories/resources_factory'
+import { reuseFactory } from '@/fixtures/factories/reuses_factory'
 import type { Dataservice, Reuse } from '@datagouv/components-next'
-import { dataserviceFactory } from 'cypress/support/factories/dataservices_factory'
-import { discussionFactory } from 'cypress/support/factories/discussions_factory'
-import { resourceFactory } from 'cypress/support/factories/resources_factory'
-import { reuseFactory } from 'cypress/support/factories/reuses_factory'
 import { createIndicator } from './support'
 
 describe('Indicator Detail View', () => {
