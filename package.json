@@ -25,8 +25,9 @@
     "format:check": "prettier --check \"**/*.{js,ts,mjs,mts,vue,yml,yaml,json,md,css}\"",
     "prepare": "husky",
     "generate-robots-txt": "node scripts/generate-robots-txt.mjs",
-    "type-check": "pnpm run type-check:app && pnpm run type-check:cypress",
+    "type-check": "pnpm run type-check:app && pnpm run type-check:node && pnpm run type-check:cypress",
     "type-check:app": "vue-tsc --noEmit --project tsconfig.app.json",
+    "type-check:node": "tsc --noEmit --project tsconfig.node.json",
     "type-check:cypress": "tsc --noEmit --project cypress/tsconfig.json"
   },
   "dependencies": {
