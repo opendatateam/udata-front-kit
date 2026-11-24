@@ -21,7 +21,7 @@ Cette variable peut être définie dans le fichier [`.env`](.env) ou ses dériv�
 
 Les valeurs propres à un environnement de déploiement (`demo`, `preprod`, `prod`) sont définies dans `configs/$verticale/env/$env.yaml`, sur `main`. Ce fichier ne contient que les clés qui diffèrent de `config.yaml` (URL de data.gouv.fr, client OAuth, `canonical_url`, meta `robots`, Sentry, identifiants de topics/organisations, etc.).
 
-La variable `VITE_DEPLOY_ENV` (positionnée automatiquement par le workflow de déploiement) sélectionne l'environnement. Sans elle, seul `config.yaml` est utilisé : c'est le cas en développement local, sur les review apps et dans la CI.
+La variable `VITE_DEPLOY_ENV` (positionnée automatiquement par le workflow de déploiement, et par les review apps et la CI pour une PR vers une branche `{site}-{env}`) sélectionne l'environnement. Sans elle, seul `config.yaml` est utilisé : c'est le cas en développement local, sur les review apps et dans la CI.
 
 Le fichier d'environnement est appliqué comme un [JSON Merge Patch (RFC 7396)](https://www.rfc-editor.org/rfc/rfc7396) :
 
@@ -319,7 +319,7 @@ Le workflow est déclenché exclusivement par `workflow_dispatch` : pousser un t
 - La branche `{site}-prod` est utilisée pour les déploiements sur <https://{site}.data.gouv.fr>.
   - Même processus que pour la preprod, mais en créant une PR depuis `{site}-preprod` vers `{site}-prod`.
 
-NB : dans certains cas, il est possible de créer et de déployer des Pull Requests depuis une _feature branch_ vers `{site}-(pre)prod`, par exemple pour définir une configuration spécifique à l'environnement de preprod ou de prod.
+NB : dans certains cas, il est possible de créer et de déployer des Pull Requests depuis une _feature branch_ vers `{site}-(pre)prod`.
 
 #### Sites déployés directement depuis `main`
 
@@ -397,7 +397,7 @@ Après avoir créé votre projet (VueJs) sur sentry, voici la configuration à a
 sentry:
   domain_url: 'https://errors.data.gouv.fr/' # Ou tout autre domaine où vous hébergez votre sentry
   dsn: 'https://c8268303ac0799edda45ced7faa7e0a0@errors.data.gouv.fr/38' # Vous trouverez ce DSN lors de l'initialisation de votre projet dans Sentry
-  environment: 'preprod' # Ou autre (par exemple 'production'), selon la branche de déploiement
+  environment: 'preprod' # Ou autre (par exemple 'production'), selon l'environnement de déploiement
   tracesSampleRate: 0.1 # Optionnel, active le suivi des performances (chargements de page, navigations, requêtes) sur 10 % des navigations
 ```
 
@@ -422,7 +422,7 @@ L'URL de callback n'est pas configurable : elle vaut toujours `{origine du site}
 
 ### Configuration par environnement
 
-Un client OAuth n'existe que sur l'instance où il a été créé : `base_url` et `oauth_client_id` doivent donc toujours être modifiés ensemble. Ces valeurs sont définies dans le `config.yaml` de chaque branche `{site}-{env}` (voir [Workflow de déploiement recommandé](#workflow-de-déploiement-recommandé)).
+Un client OAuth n'existe que sur l'instance où il a été créé : `base_url` et `oauth_client_id` doivent donc toujours être modifiés ensemble. Ces valeurs sont définies dans `config.yaml`, et surchargées si besoin dans `env/$env.yaml` (voir [Configuration par environnement](#configuration-par-environnement)).
 
 Exemple pour `ecospheres` :
 
@@ -433,7 +433,7 @@ Exemple pour `ecospheres` :
 
 Une preprod peut viser `demo.data.gouv.fr` ou `www.data.gouv.fr` selon les sites : son client doit être enregistré sur l'instance choisie.
 
-:warning: Les review apps reprennent la configuration de la branche de la PR. La connexion n'y fonctionne que si `base_url` vise `demo.data.gouv.fr`, seule instance acceptant les URLs de callback avec wildcard.
+:warning: Sur les review apps, la connexion ne fonctionne que si `base_url` vise `demo.data.gouv.fr`, seule instance acceptant les URLs de callback avec wildcard.
 
 ### Demander un client OAuth à data.gouv.fr
 
