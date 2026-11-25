@@ -208,6 +208,21 @@ Or abort: git merge --abort"
     fi
   fi
 
+  # configs/ must match the source after merge: git keeps env-only edits when the source didn't touch those lines
+  if ! git diff --quiet "origin/$source_branch" -- configs/; then
+    warn "configs/ differs from $source_branch after merge (drift, or a hotfix $source_branch doesn't have yet):"
+    git --no-pager diff --stat "origin/$source_branch" -- configs/
+    read -p "Reset configs/ to $source_branch? [Y/n] " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Nn]$ ]]; then
+      # restore (unlike checkout) also removes files missing from the source
+      git restore --source="origin/$source_branch" --staged --worktree -- configs/
+      # no hooks: prettier could rewrite the files and break the exact copy
+      git commit --no-verify -m "chore(config): reset configs/ to $source_branch"
+      info "configs/ reset to $source_branch"
+    fi
+  fi
+
   # Confirm before pushing to remote
   warn "Ready to push merge branch to origin and create PR"
   read -p "Continue? [y/N] " -n 1 -r
