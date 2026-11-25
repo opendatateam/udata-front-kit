@@ -338,6 +338,7 @@ definitions: &definitions
 #   {page_id}:                        # page identifier, acts as a slug /{page_id}/{object_id?}
 #     list_all: {bool}                # whether to have a list view or not
 #     universe_query: {dict}          # used to define a "universe" on a given {page_id}, through query args
+#     search_params: {dict?}          # static API params added to every list page search, not part of the universe (e.g. include_geozone_ancestors: true)
 #     filter_prefix: {string}         # prefix/namespace for filter value (eg ?tag={filter_prefix}-{value})
 #     title: {string}                 # title for the list page
 #     breadcrumb_title: {string}      # title in breadcrumb (optional, falls back to title)
@@ -379,8 +380,6 @@ definitions: &definitions
 #         default_value: {string?}    # default value for the filter (optional)
 #         advanced: {bool?}           # show in the advanced (collapsed) section of GlobalSearch; omit for basic (always visible)
 #                                     # ⚠️ only applicable to data.gouv.fr native filters (eg badge)
-#         hidden_params: {object?}    # static API params always sent with the search (e.g. include_geozone_ancestors: true)
-#                                     # ⚠️ only applicable to data.gouv.fr native filters (eg geozone)
 #         values:                     # list of values for this filter
 #           - id: {string}            # id of the value ⚠️ needs to be unique among all values of the filter, across all parent values
 #             name: {string}          # name of the value
@@ -392,6 +391,9 @@ pages:
     list_all: true
     universe_query:
       topic: 65e9aa6cb5c809c30c70ee02
+    search_params:
+      include_geozone_ancestors: true
+      include_detected_geozones: true
     filter_prefix:
     title: Toutes les données
     breadcrumb_title: Toutes les données
@@ -426,9 +428,6 @@ pages:
       - id: geozone
         name: Couverture spatiale
         type: geozone
-        hidden_params:
-          include_geozone_ancestors: true
-          include_detected_geozones: true
       - id: tag
         name: Mot-clé
         type: tag
