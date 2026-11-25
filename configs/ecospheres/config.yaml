@@ -379,6 +379,8 @@ definitions: &definitions
 #         default_value: {string?}    # default value for the filter (optional)
 #         advanced: {bool?}           # show in the advanced (collapsed) section of GlobalSearch; omit for basic (always visible)
 #                                     # ⚠️ only applicable to data.gouv.fr native filters (eg badge)
+#         hidden_params: {object?}    # static API params always sent with the search (e.g. include_geozone_ancestors: true)
+#                                     # ⚠️ only applicable to data.gouv.fr native filters (eg geozone)
 #         values:                     # list of values for this filter
 #           - id: {string}            # id of the value ⚠️ needs to be unique among all values of the filter, across all parent values
 #             name: {string}          # name of the value
@@ -421,6 +423,12 @@ pages:
       - *filter_badge
       - *filter_org
       - *filter_inspire
+      - id: geozone
+        name: Couverture spatiale
+        type: geozone
+        hidden_params:
+          include_geozone_ancestors: true
+          include_detected_geozones: true
       - id: tag
         name: Mot-clé
         type: tag

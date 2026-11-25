@@ -55,6 +55,8 @@ export interface PageFilterConf {
   default_value: string | boolean | null
   use_filter_prefix: boolean | null
   api_param: string | null
+  // Static API params always sent with the search when this native filter is enabled
+  hidden_params?: PageUniverseQueryConf
   form: PageFilterFormConf | null
   values: PageFilterValueConf[]
 }

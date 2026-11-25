@@ -208,6 +208,9 @@ function buildSingleTypeConfig(
   const advancedFilters: string[] = []
   for (const filter of pageConf.filters) {
     if (CUSTOM_FILTER_TYPE_SET.has(filter.type as CustomFilterType)) continue
+    for (const [key, value] of Object.entries(filter.hidden_params ?? {})) {
+      hiddenFilters.push({ key, value })
+    }
     if (filter.advanced) {
       advancedFilters.push(filter.type)
     } else {
