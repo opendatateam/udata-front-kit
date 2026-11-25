@@ -1,0 +1,18 @@
+# prod overrides, applied to ../config.yaml as a JSON Merge Patch (see README "Configuration par environnement")
+datagouvfr:
+  base_url: https://www.data.gouv.fr
+  oauth_client_id: 6b041f799177f8401be868c9
+
+website:
+  seo:
+    canonical_url: https://solidarites.data.gouv.fr
+    meta:
+      robots: 'index, follow'
+
+organizations:
+  datasets: https://raw.githubusercontent.com/opendatateam/udata-front-kit-universe/refs/heads/artifacts/dist/solidarites-prod/organizations-datasets.json
+
+pages:
+  datasets:
+    universe_query:
+      topic: 6aec94d43e67a064ae0464cb
