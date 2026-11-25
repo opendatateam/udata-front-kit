@@ -15,6 +15,7 @@ describe('a11y contrast testing', () => {
     cy.mockStaticDatagouv()
     cy.mockSpatialLevels()
     cy.mockUniverseOrganizations()
+    cy.mockSpatialZonesSuggest()
     // mock topics
     testTopics = topicFactory.many(3)
     cy.mockDatagouvObjectList('topics', testTopics)
