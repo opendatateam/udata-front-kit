@@ -9,6 +9,8 @@
  */
 Cypress.Commands.add('mockListApis', (primaryType, primaryData = []) => {
   cy.mockUniverseOrganizations()
+  // GlobalSearch's geozone filter fetches suggestions on mount
+  cy.mockSpatialZonesSuggest()
 
   const pages = (Cypress.expose('siteConfig')?.pages ?? {}) as Record<
     string,
