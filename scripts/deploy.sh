@@ -45,7 +45,7 @@ Arguments (prepare):
   env        Environment (${VALID_ENVS})
 
 Arguments (deploy):
-  pr         PR number or URL
+  pr         PR number or URL, targeting {site}-{env}
 
 Options:
   --source <branch>   Source branch (required for prod, defaults to main for demo/preprod)
@@ -287,12 +287,12 @@ cmd_deploy() {
     fi
   fi
 
-  local merge_branch=$(echo "$pr_json" | jq -r '.headRefName')
+  local head_branch=$(echo "$pr_json" | jq -r '.headRefName')
   local target_branch=$(echo "$pr_json" | jq -r '.baseRefName')
 
-  # Parse site and env from branch name ({site}-{env}-merge)
-  if [[ ! "$merge_branch" =~ ^(.+)-([^-]+)-merge$ ]]; then
-    error "Cannot parse site/env from branch name: $merge_branch"
+  # Parse site and env from target branch ({site}-{env})
+  if [[ ! "$target_branch" =~ ^(.+)-([^-]+)$ ]]; then
+    error "Cannot parse site/env from target branch: $target_branch"
   fi
   local site="${BASH_REMATCH[1]}"
   local env="${BASH_REMATCH[2]}"
@@ -301,10 +301,15 @@ cmd_deploy() {
   validate_site "$site"
   validate_env "$env"
 
-  info "Deploying: $merge_branch → $target_branch"
+  # Head branch is deleted after merge: refuse long-lived branches
+  if [[ "$head_branch" == "main" || "$head_branch" =~ -(demo|preprod|prod)$ ]]; then
+    error "PR head '$head_branch' is a long-lived branch and would be deleted after merge. Use a temporary branch (e.g. via '$0 prepare')."
+  fi
+
+  info "Deploying: $head_branch → $target_branch"
   info "Site: $site, Env: $env"
 
-  # Merge PR and delete merge branches locally and remotely
+  # Merge PR and delete head branch locally and remotely
   local commit_msg="${pr_title} #${pr_number}"
   info "Merging PR #$pr_number with message: $commit_msg"
   local admin_flag=""

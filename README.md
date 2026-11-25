@@ -312,6 +312,8 @@ Le workflow est déclenché exclusivement par `workflow_dispatch` : pousser un t
 
 :warning: Cette section est une recommandation, chaque verticale/site est libre de définir ses propres processus.
 
+##### Déploiement régulier
+
 - La branche `main` recueille les fonctionnalités au fur et à mesure de leur développement.
 - La branche `{site}-preprod` est utilisée pour les déploiements sur <https://{site}.preprod.data.gouv.fr>.
   - On commence par créer une Pull Request depuis `main` vers `{site}-preprod` ;
@@ -319,7 +321,24 @@ Le workflow est déclenché exclusivement par `workflow_dispatch` : pousser un t
 - La branche `{site}-prod` est utilisée pour les déploiements sur <https://{site}.data.gouv.fr>.
   - Même processus que pour la preprod, mais en créant une PR depuis `{site}-preprod` vers `{site}-prod`.
 
-NB : dans certains cas, il est possible de créer et de déployer des Pull Requests depuis une _feature branch_ vers `{site}-(pre)prod`.
+##### Correctif urgent (hotfix)
+
+Un correctif urgent (code ou configuration) est d'abord mergé sur `main`, puis reporté sur `{site}-{env}` par cherry-pick. `main` reste ainsi la référence : un changement est toujours fait sur `main` avant d'arriver sur une branche `{site}-{env}`.
+
+1. Créer une PR vers `main` avec le correctif, et la merger (squash).
+2. Reporter le commit dans une branche créée depuis la branche cible :
+
+   ```shell
+   git fetch origin
+   git switch -c hotfix/mon-correctif origin/ecospheres-prod
+   git cherry-pick -x <commit-sur-main>
+   git push -u origin hotfix/mon-correctif
+   ```
+
+3. Créer une PR vers `{site}-{env}`. Commenter `/deploy {site}` pour obtenir une review app avec la configuration de cet environnement.
+4. Une fois la PR validée, déployer avec `./scripts/deploy.sh deploy <pr>` (ou merger et utiliser l'UI github pour déployer `{env}`).
+
+Le prochain déploiement régulier intègre le même changement depuis `main`. Un conflit n'est possible que si ces lignes ont encore été modifiées sur `main` entre-temps : garder alors la version de `main`.
 
 #### Sites déployés directement depuis `main`
 
