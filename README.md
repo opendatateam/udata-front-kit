@@ -21,7 +21,7 @@ Cette variable peut être définie dans le fichier [`.env`](.env) ou ses dériv�
 
 Les valeurs propres à un environnement de déploiement (`demo`, `preprod`, `prod`) sont définies dans `configs/$verticale/env/$env.yaml`, sur `main`. Ce fichier ne contient que les clés qui diffèrent de `config.yaml` (URL de data.gouv.fr, client OAuth, `canonical_url`, meta `robots`, Sentry, identifiants de topics/organisations, etc.).
 
-La variable `VITE_DEPLOY_ENV` (positionnée automatiquement par le workflow de déploiement, et par les review apps et la CI pour une PR vers une branche `{site}-{env}`) sélectionne l'environnement. Sans elle, seul `config.yaml` est utilisé : c'est le cas en développement local, sur les review apps et dans la CI.
+La variable `VITE_DEPLOY_ENV` (positionnée automatiquement par le workflow de déploiement, et par les review apps et la CI pour une PR vers une branche `{site}-{env}`) sélectionne l'environnement. Sans elle, seul `config.yaml` est utilisé : c'est le cas en développement local, et sur les review apps et dans la CI pour les autres PR.
 
 Le fichier d'environnement est appliqué comme un [JSON Merge Patch (RFC 7396)](https://www.rfc-editor.org/rfc/rfc7396) :
 
@@ -33,7 +33,7 @@ La configuration résolue est publiée par le build sous `/site-config.json` (ex
 
 Un test ([`configs/__tests__/configs.test.ts`](configs/__tests__/configs.test.ts)) vérifie qu'un fichier d'environnement ne surcharge que des clés existant dans `config.yaml`, afin de détecter les fautes de frappe.
 
-Toute la configuration, quel que soit l'environnement, est maintenue sur `main` : les branches `{site}-{env}` ne modifient pas les fichiers de `configs/`.
+Toute la configuration, quel que soit l'environnement, est maintenue sur `main` : une modification de `configs/` n'arrive sur une branche `{site}-{env}` que depuis `main` (déploiement régulier ou [correctif urgent](#correctif-urgent-hotfix)).
 
 ## 🚀 Développement
 
