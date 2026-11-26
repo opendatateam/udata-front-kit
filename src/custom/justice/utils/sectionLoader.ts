@@ -8,7 +8,8 @@ export function useSectionLoader(load: () => Promise<void>) {
   onMounted(async () => {
     try {
       await load()
-    } catch {
+    } catch (err) {
+      console.error(err)
       error.value = true
     } finally {
       loading.value = false

@@ -77,16 +77,3 @@ export function metroBounds(
     (lon, lat) => lon >= -12 && lon <= 15 && lat >= 40 && lat <= 52
   )
 }
-
-export function popupLines(lines: string[]): HTMLElement {
-  const wrapper = document.createElement('div')
-  lines.forEach((line, index) => {
-    const element =
-      index === 0
-        ? document.createElement('strong')
-        : document.createElement('div')
-    element.textContent = line
-    wrapper.append(element)
-  })
-  return wrapper
-}

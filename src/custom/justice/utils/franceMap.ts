@@ -10,7 +10,7 @@ import '@/custom/justice/utils/franceMap.css'
 
 import '@/utils/maplibreWorker'
 
-export const MAP_STYLE: StyleSpecification = {
+const MAP_STYLE: StyleSpecification = {
   version: 8,
   glyphs: 'https://openmaptiles.data.gouv.fr/fonts/{fontstack}/{range}.pbf',
   sources: {
@@ -73,6 +73,20 @@ export function mountFranceMap(container: HTMLElement) {
 }
 
 export type FranceMap = ReturnType<typeof mountFranceMap>
+
+// first line in bold, following lines as plain text
+export function popupLines(lines: string[]): HTMLElement {
+  const wrapper = document.createElement('div')
+  lines.forEach((line, index) => {
+    const element =
+      index === 0
+        ? document.createElement('strong')
+        : document.createElement('div')
+    element.textContent = line
+    wrapper.append(element)
+  })
+  return wrapper
+}
 
 // sets the `hover` feature-state and shows a popup for the feature under the cursor; returns a reset function
 export function bindHoverPopup(

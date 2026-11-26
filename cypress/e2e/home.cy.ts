@@ -12,7 +12,13 @@ describe('Home Page', () => {
     // some site home pages fetch tabular data, datasets by id and resources (eg justice)
     cy.mockTabularRows('*')
     cy.mockDatagouvObject('datasets', '[0-9a-f]{24}', datasetFactory.one())
-    cy.mockDatagouvObject('datasets/resources', '[^/]+', { resource: {} })
+    cy.mockDatagouvObject('datasets/resources', '[^/]+', {
+      resource: { url: 'https://static.data.gouv.fr/resources/mock.geojson' }
+    })
+    cy.intercept('GET', 'https://static.data.gouv.fr/resources/mock.geojson', {
+      statusCode: 200,
+      body: { type: 'FeatureCollection', features: [] }
+    })
     cy.visit('/')
   })
 

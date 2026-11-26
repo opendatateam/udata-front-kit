@@ -10,11 +10,11 @@ import { BLUE, integerFormat } from '@/custom/justice/utils/chartTheme'
 import {
   bindHoverPopup,
   mountFranceMap,
+  popupLines,
   type FranceMap
 } from '@/custom/justice/utils/franceMap'
 import {
   boundsOf,
-  popupLines,
   type MapFeature,
   type MapGeometry
 } from '@/custom/justice/utils/geojson'

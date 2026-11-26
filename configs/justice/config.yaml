@@ -167,7 +167,7 @@ pages:
           - id: crime
             name: Crime
           - id: delit
-            name: Delit
+            name: Délit
           - id: infractions
             name: Infractions
           - id: juridictions

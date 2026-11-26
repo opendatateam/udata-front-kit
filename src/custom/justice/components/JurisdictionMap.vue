@@ -6,13 +6,10 @@ import { BLUE, PURPLE } from '@/custom/justice/utils/chartTheme'
 import {
   bindHoverPopup,
   mountFranceMap,
+  popupLines,
   type FranceMap
 } from '@/custom/justice/utils/franceMap'
-import {
-  metroBounds,
-  popupLines,
-  type MapFeature
-} from '@/custom/justice/utils/geojson'
+import { metroBounds, type MapFeature } from '@/custom/justice/utils/geojson'
 
 export type JurisdictionLayer = {
   id: string

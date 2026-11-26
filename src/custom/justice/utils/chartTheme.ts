@@ -5,9 +5,9 @@ export const PURPLE = '#6A6AF4'
 export const RED = '#E1000F'
 export const TEAL = '#009081'
 export const ORANGE = '#E4794A'
-export const GOLD = '#B7A73F'
-export const PLUM = '#A558A0'
-export const SKY = '#0063CB'
+const GOLD = '#B7A73F'
+const PLUM = '#A558A0'
+const SKY = '#0063CB'
 
 export const PALETTE = [
   BLUE,
@@ -40,10 +40,7 @@ export type ChartSeries = {
   label: string
   data: (number | null)[]
   color: string
-  fill?: string
   kind?: 'bar' | 'line'
-  markers?: boolean
-  stack?: string
 }
 
 export type PieSlice = {

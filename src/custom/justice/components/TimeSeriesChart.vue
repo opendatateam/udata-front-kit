@@ -61,23 +61,15 @@ function render() {
               borderColor: item.color,
               backgroundColor: item.color,
               tension: 0.2,
-              order: mixed ? 1 : 0,
-              ...(item.markers
-                ? {
-                    pointBackgroundColor: '#fff',
-                    pointBorderColor: item.color,
-                    pointBorderWidth: 2
-                  }
-                : {})
+              order: mixed ? 1 : 0
             }
           : {
               type: 'bar' as const,
               label: item.label,
               data: item.data,
-              backgroundColor: item.fill ?? item.color,
-              borderColor: item.color,
-              borderWidth: item.fill && item.fill !== item.color ? 1 : 0,
-              stack: props.stacked ? (item.stack ?? 'values') : undefined,
+              backgroundColor: item.color,
+              borderWidth: 0,
+              stack: props.stacked ? 'values' : undefined,
               order: mixed ? 2 : 0
             }
       )
