@@ -14,6 +14,7 @@ useMeta({
 </script>
 
 <template>
+  <h1 class="fr-sr-only">{{ config.website.homepage.title }}</h1>
   <div class="bands">
     <div class="band fr-py-6w">
       <div class="fr-container">
