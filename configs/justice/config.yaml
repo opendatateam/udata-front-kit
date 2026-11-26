@@ -4,20 +4,20 @@ site_id: justice
 
 datagouvfr:
   # data.gouv.fr base URL
-  base_url: https://demo.data.gouv.fr
+  base_url: https://www.data.gouv.fr
   # oauth settings — no dedicated client for this vertical
   oauth_client_id:
-  tabular_api_url: https://tabular-api.preprod.data.gouv.fr
+  tabular_api_url: https://tabular-api.data.gouv.fr
 
 # UI customizations
 website:
   title: 'justice.data.gouv.fr'
   seo:
-    canonical_url: https://justice.preprod.data.gouv.fr
+    canonical_url: https://justice.data.gouv.fr
     meta:
       keywords:
       description:
-      robots: 'noindex, nofollow'
+      robots: 'index, follow'
     robots_txt:
       disallow:
         - /admin
@@ -96,7 +96,7 @@ website:
   show_quality_component: true
   oauth_option: false
   notice:
-    display: true
+    display: false
     content: ⚠️ Vous naviguez sur une version de démonstration de justice.data.gouv.fr ⚠️
     closeable: false
   default_debounce_wait: 600
@@ -128,7 +128,7 @@ pages:
     object_type: datasets
     list_all: true
     universe_query:
-      topic: 6ae22343c299924210c524a7
+      topic: 6b0832d7f53384bc08dd5490
     filter_prefix:
     title: Jeux de données
     breadcrumb_title: Jeux de données
