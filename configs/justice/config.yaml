@@ -83,6 +83,12 @@ website:
       to: /demarche
   router:
     static_pages:
+      - title: 'Démarche'
+        id: 'demarche'
+        route: '/demarche'
+        url: '/static/justice/pages/demarche.md'
+        meta:
+          description: 'Découvrez la démarche de justice.data.gouv.fr : diffuser et valoriser les données publiques de la justice pour les rendre compréhensibles.'
       - title: 'Accessibilité'
         id: 'accessibility'
         route: '/accessibility'

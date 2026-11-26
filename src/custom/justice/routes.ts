@@ -10,14 +10,6 @@ export const routes: RouteRecordRaw[] = [
     },
     component: async () => await import('./views/HomeView.vue')
   },
-  {
-    path: '/demarche',
-    name: 'demarche',
-    meta: {
-      title: 'Démarche'
-    },
-    component: async () => await import('./views/DemarcheView.vue')
-  },
   useGlobalSearchPageRoutes({
     pageKey: 'datasets'
   })
