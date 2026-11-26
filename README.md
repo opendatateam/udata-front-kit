@@ -319,7 +319,6 @@ Pour ces sites, `scripts/deploy.sh` ne s'applique pas car il n'y a pas de branch
 - `@vueuse/core` - Utilitaires Vue.js (useTitle, etc.)
   - `@vueuse/integrations` - Intégrations supplémentaires de VueUse (focustrap)
 - `unplugin-auto-import` - Auto-import d'API Vue.js et vue-dsfr
-- `unplugin-vue-components` - Auto-import des composants custom et vue-dsfr
 - `@unhead/vue` - Gestion du SEO et des métadonnées
 
 ### 🧹 Formatage et validation du code
