@@ -1,0 +1,17 @@
+# prod overrides, applied to ../config.yaml as a JSON Merge Patch (see README "Configuration par environnement")
+datagouvfr:
+  base_url: https://www.data.gouv.fr
+  tabular_api_url: https://tabular-api.data.gouv.fr
+
+website:
+  seo:
+    canonical_url: https://justice.data.gouv.fr
+    meta:
+      robots: 'index, follow'
+  notice:
+    display: false
+
+pages:
+  datasets:
+    universe_query:
+      topic: 6b0832d7f53384bc08dd5490
