@@ -26,7 +26,7 @@ website:
       datasets_pages: []
       dataservices_pages: []
   formatted_title: '<i>justice.</i><b>data.gouv</b><i>.fr</i>'
-  rf_title: 'MINISTERE<br>
+  rf_title: 'MINISTÈRE<br>
     DE LA JUSTICE'
   homepage:
     title: 'Explorer les données de la justice'
@@ -35,7 +35,6 @@ website:
     meta_description: justice.data.gouv.fr vise à diffuser et valoriser les données publiques de la justice, pour les rendre compréhensibles par le grand public.
   footer:
     logo:
-    logo_text: 'Ministère<br>de la justice'
     phrase: 'Ce site est une déclinaison thématique de data.gouv.fr sur les données relatives au domaine de la justice, réalisé par le ministère de la Justice.'
     external_links:
       - label: 'justice.gouv.fr'

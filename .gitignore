@@ -13,9 +13,6 @@ cypress/downloads
 # vim swap files
 *.swp
 
-# leftover from unplugin-vue-components (plugin removed)
-src/components.d.ts
-
 # GitHub Act
 .actrc
 .secrets
