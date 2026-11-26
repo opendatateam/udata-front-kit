@@ -419,6 +419,10 @@ pages:
       title: 'Jeux de données publics sur la transition écologique : climat, énergie, biodiversité'
       description: Vous recherchez une sélection de données sur la transition écologique ? Explorez notre catalogue alimenté par l'administration et la société civile.
     filters:
+      # custom filters: always rendered first, before data.gouv.fr native ones
+      - *filter_org
+      - *filter_inspire
+      # data.gouv.fr native filters: rendered in this order, after custom ones
       - id: geozone
         name: Couverture spatiale
         type: geozone
@@ -426,8 +430,7 @@ pages:
         name: Date de mise à jour
         type: last_update_range
       - *filter_badge
-      - *filter_org
-      - *filter_inspire
+      # native advanced filters: rendered last, in the collapsed section
       - id: tag
         name: Mot-clé
         type: tag
