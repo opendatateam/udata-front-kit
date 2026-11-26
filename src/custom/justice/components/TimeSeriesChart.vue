@@ -4,9 +4,9 @@ import { onMounted, onUnmounted, ref, watch } from 'vue'
 
 import {
   compactFormat,
+  decimalFormat,
   FONT,
   integerFormat,
-  monthFormat,
   type ChartSeries
 } from '@/custom/justice/utils/chartTheme'
 
@@ -36,7 +36,7 @@ let chart: Chart | null = null
 
 function formatValue(value: number): string {
   return props.valueFormat === 'month'
-    ? `${monthFormat.format(value)} mois`
+    ? `${decimalFormat.format(value)} mois`
     : integerFormat.format(value)
 }
 
@@ -144,7 +144,7 @@ function render() {
             font: { family: FONT },
             callback: (value) =>
               props.valueFormat === 'month'
-                ? monthFormat.format(Number(value))
+                ? decimalFormat.format(Number(value))
                 : compactFormat.format(Number(value))
           }
         }

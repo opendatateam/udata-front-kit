@@ -38,35 +38,8 @@ export async function fetchResourceGeoJson(
 }
 
 export function boundsOf(
-  features: Array<{ geometry: MapGeometry }>
-): LngLatBounds | null {
-  let minLon = 180
-  let minLat = 90
-  let maxLon = -180
-  let maxLat = -90
-  let found = false
-  const visit = (coords: unknown) => {
-    if (!Array.isArray(coords)) return
-    if (typeof coords[0] === 'number' && typeof coords[1] === 'number') {
-      found = true
-      minLon = Math.min(minLon, coords[0])
-      minLat = Math.min(minLat, coords[1])
-      maxLon = Math.max(maxLon, coords[0])
-      maxLat = Math.max(maxLat, coords[1])
-      return
-    }
-    for (const child of coords) visit(child)
-  }
-  for (const feature of features) visit(feature.geometry.coordinates)
-  if (!found) return null
-  return [
-    [minLon, minLat],
-    [maxLon, maxLat]
-  ]
-}
-
-export function metroBounds(
-  features: Array<{ geometry: MapGeometry }>
+  features: Array<{ geometry: MapGeometry }>,
+  keep: (lon: number, lat: number) => boolean = () => true
 ): LngLatBounds | null {
   let minLon = 180
   let minLat = 90
@@ -78,7 +51,7 @@ export function metroBounds(
     if (typeof coords[0] === 'number' && typeof coords[1] === 'number') {
       const lon = coords[0]
       const lat = coords[1]
-      if (lon < -12 || lon > 15 || lat < 40 || lat > 52) return
+      if (!keep(lon, lat)) return
       found = true
       minLon = Math.min(minLon, lon)
       minLat = Math.min(minLat, lat)
@@ -94,6 +67,15 @@ export function metroBounds(
     [minLon, minLat],
     [maxLon, maxLat]
   ]
+}
+
+export function metroBounds(
+  features: Array<{ geometry: MapGeometry }>
+): LngLatBounds | null {
+  return boundsOf(
+    features,
+    (lon, lat) => lon >= -12 && lon <= 15 && lat >= 40 && lat <= 52
+  )
 }
 
 export function popupLines(lines: string[]): HTMLElement {

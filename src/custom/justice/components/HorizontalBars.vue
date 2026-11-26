@@ -2,19 +2,10 @@
 import { computed } from 'vue'
 
 import {
-  BLUE,
-  GOLD,
   integerFormat,
-  ORANGE,
-  PLUM,
-  PURPLE,
-  RED,
-  SKY,
-  TEAL,
+  PALETTE,
   type PieSlice
 } from '@/custom/justice/utils/chartTheme'
-
-const BAR_COLORS = [BLUE, PURPLE, RED, GOLD, TEAL, ORANGE, PLUM, SKY, '#417DC4']
 
 const percentFormat = new Intl.NumberFormat('fr-FR', {
   style: 'percent',
@@ -34,7 +25,7 @@ const bars = computed(() => {
     value: slice.value,
     width: max === 0 ? 0 : (slice.value / max) * 100,
     share: total === 0 ? 0 : slice.value / total,
-    color: BAR_COLORS[index % BAR_COLORS.length]
+    color: PALETTE[index % PALETTE.length]
   }))
 })
 </script>

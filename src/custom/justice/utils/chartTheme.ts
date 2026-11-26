@@ -8,20 +8,24 @@ export const ORANGE = '#E4794A'
 export const GOLD = '#B7A73F'
 export const PLUM = '#A558A0'
 export const SKY = '#0063CB'
-export const BAR_PALE = '#C1C1FB'
 
-export const PIE_COLORS = [BLUE, PURPLE, RED, GOLD, TEAL, ORANGE, PLUM, SKY]
+export const PALETTE = [
+  BLUE,
+  PURPLE,
+  RED,
+  GOLD,
+  TEAL,
+  ORANGE,
+  PLUM,
+  SKY,
+  '#417DC4'
+]
 
 export const integerFormat = new Intl.NumberFormat('fr-FR', {
   maximumFractionDigits: 0
 })
 
 export const decimalFormat = new Intl.NumberFormat('fr-FR', {
-  minimumFractionDigits: 1,
-  maximumFractionDigits: 1
-})
-
-export const monthFormat = new Intl.NumberFormat('fr-FR', {
   minimumFractionDigits: 1,
   maximumFractionDigits: 1
 })

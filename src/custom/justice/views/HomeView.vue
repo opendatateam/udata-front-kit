@@ -44,26 +44,11 @@ useMeta({
 </template>
 
 <style scoped>
-.hero {
-  background: var(--background-contrast-blue-france, #e3e3fd);
-}
-
-.intro {
-  max-inline-size: 62rem;
-}
-
-h1 {
-  margin-bottom: 1rem;
-  font-size: clamp(2.25rem, 1.2vw + 1.9rem, 3rem);
-  line-height: 1.15;
-  text-wrap: balance;
-}
-
 .band:nth-child(odd) {
-  background: var(--background-default-grey, #fff);
+  background: var(--background-default-grey);
 }
 
 .band:nth-child(even) {
-  background: #f3f6fe;
+  background: var(--background-alt-blue-france);
 }
 </style>

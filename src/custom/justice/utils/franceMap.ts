@@ -1,7 +1,7 @@
 import { Map as MapLibreMap, Popup, type StyleSpecification } from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 
-import '@/custom/justice/utils/maplibreWorker'
+import '@/utils/maplibreWorker'
 
 export const MAP_STYLE: StyleSpecification = {
   version: 8,

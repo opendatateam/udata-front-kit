@@ -6,7 +6,7 @@ import {
   decimalFormat,
   FONT,
   integerFormat,
-  PIE_COLORS,
+  PALETTE,
   type PieSlice
 } from '@/custom/justice/utils/chartTheme'
 
@@ -15,11 +15,9 @@ const props = withDefaults(
     slices: PieSlice[]
     accessibleLabel: string
     height?: number
-    colors?: string[]
   }>(),
   {
-    height: 460,
-    colors: () => PIE_COLORS
+    height: 460
   }
 )
 
@@ -36,7 +34,7 @@ function render() {
       datasets: [
         {
           data: props.slices.map((slice) => slice.value),
-          backgroundColor: props.colors
+          backgroundColor: PALETTE
         }
       ]
     },
