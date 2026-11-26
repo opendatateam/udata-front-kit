@@ -40,7 +40,6 @@ const isLoading = ref(false)
 const activeIndex = ref(-1)
 
 const listboxId = computed(() => `${props.id}-listbox`)
-const hintId = computed(() => `${props.id}-hint`)
 const optionId = (index: number) => `${props.id}-option-${index}`
 const activeDescendant = computed(() =>
   isOpen.value && activeIndex.value >= 0
@@ -129,7 +128,7 @@ watch(zone, (value) => {
   <div class="fr-input-group territory-select">
     <label class="fr-label" :for="id">
       {{ label }}
-      <span v-if="hint" :id="hintId" class="fr-hint-text">{{ hint }}</span>
+      <span v-if="hint" class="fr-hint-text">{{ hint }}</span>
     </label>
     <div class="fr-input-wrap fr-icon-map-pin-2-line">
       <input
@@ -143,7 +142,6 @@ watch(zone, (value) => {
         :aria-expanded="isOpen"
         :aria-controls="listboxId"
         :aria-activedescendant="activeDescendant"
-        :aria-describedby="hint ? hintId : undefined"
         :placeholder="placeholder"
         @input="onInput"
         @keydown.down.prevent="move(1)"
