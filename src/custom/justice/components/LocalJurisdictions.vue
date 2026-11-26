@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 
 import JurisdictionMap, {
   type JurisdictionLayer
@@ -11,6 +11,7 @@ import {
   fetchResourceGeoJson,
   type MapFeature
 } from '@/custom/justice/utils/geojson'
+import { useSectionLoader } from '@/custom/justice/utils/sectionLoader'
 
 const COURTS = [
   {
@@ -36,8 +37,6 @@ const COURTS = [
 ] as const
 
 const layers = ref<JurisdictionLayer[]>([])
-const error = ref(false)
-const loading = ref(true)
 
 function asCourts(features: MapFeature[]): MapFeature[] {
   return features.map((feature, index) => ({
@@ -48,21 +47,15 @@ function asCourts(features: MapFeature[]): MapFeature[] {
   }))
 }
 
-onMounted(async () => {
-  try {
-    const collections = await Promise.all(
-      COURTS.map((court) => fetchResourceGeoJson(court.resource))
-    )
-    layers.value = COURTS.map((court, index) => ({
-      id: court.id,
-      label: court.label,
-      features: asCourts(collections[index] ?? [])
-    }))
-  } catch {
-    error.value = true
-  } finally {
-    loading.value = false
-  }
+const { loading, error } = useSectionLoader(async () => {
+  const collections = await Promise.all(
+    COURTS.map((court) => fetchResourceGeoJson(court.resource))
+  )
+  layers.value = COURTS.map((court, index) => ({
+    id: court.id,
+    label: court.label,
+    features: asCourts(collections[index] ?? [])
+  }))
 })
 </script>
 

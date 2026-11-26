@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 
 import JusticeSection from '@/custom/justice/components/JusticeSection.vue'
 import PieChart from '@/custom/justice/components/PieChart.vue'
@@ -7,6 +7,7 @@ import ResourceTable from '@/custom/justice/components/ResourceTable.vue'
 import VizCard from '@/custom/justice/components/VizCard.vue'
 import { integerFormat, type PieSlice } from '@/custom/justice/utils/chartTheme'
 import { SAMPLE_DATASET_ID } from '@/custom/justice/utils/dataset'
+import { useSectionLoader } from '@/custom/justice/utils/sectionLoader'
 import {
   cellNumber,
   fetchResourceRows,
@@ -38,8 +39,6 @@ type Indicator = {
   years: number[]
 }
 
-const loading = ref(true)
-const error = ref(false)
 const indicators = ref<Indicator[]>([])
 const victimesSlices = ref<PieSlice[]>([])
 const jugeesSlices = ref<PieSlice[]>([])
@@ -72,63 +71,56 @@ function buildIndicator(
   }
 }
 
-onMounted(async () => {
-  try {
-    const [traitees, classees, poursuites, victimes, jugees] =
-      await Promise.all([
-        fetchResourceRows(TRAITEES_RESOURCE),
-        fetchResourceRows(CLASSEES_RESOURCE),
-        fetchResourceRows(POURSUITES_RESOURCE),
-        fetchResourceRows(VICTIMES_RESOURCE),
-        fetchResourceRows(JUGEES_RESOURCE)
-      ])
-    const traiteesYear = latestYear(traitees)
-    const classeesYear = latestYear(classees)
-    const poursuitesYear = latestYear(poursuites)
-    const classeesValues =
-      classeesYear == null
-        ? null
-        : CLASSEES_ROWS.map((label) =>
-            cellNumber(findRow(classees, label), classeesYear)
-          )
-    const classeesSum = classeesValues?.every((value) => value != null)
-      ? classeesValues.reduce((sum, value) => sum + value, 0)
-      : null
+const { loading, error } = useSectionLoader(async () => {
+  const [traitees, classees, poursuites, victimes, jugees] = await Promise.all([
+    fetchResourceRows(TRAITEES_RESOURCE),
+    fetchResourceRows(CLASSEES_RESOURCE),
+    fetchResourceRows(POURSUITES_RESOURCE),
+    fetchResourceRows(VICTIMES_RESOURCE),
+    fetchResourceRows(JUGEES_RESOURCE)
+  ])
+  const traiteesYear = latestYear(traitees)
+  const classeesYear = latestYear(classees)
+  const poursuitesYear = latestYear(poursuites)
+  const classeesValues =
+    classeesYear == null
+      ? null
+      : CLASSEES_ROWS.map((label) =>
+          cellNumber(findRow(classees, label), classeesYear)
+        )
+  const classeesSum = classeesValues?.every((value) => value != null)
+    ? classeesValues.reduce((sum, value) => sum + value, 0)
+    : null
 
-    indicators.value = [
-      buildIndicator(
-        'traitees',
-        'Affaires traitées',
-        'Total des affaires pénales traitées par les parquets.',
-        traitees,
-        traiteesYear == null
-          ? null
-          : cellNumber(findRow(traitees, 'Affaires traitées'), traiteesYear)
-      ),
-      buildIndicator(
-        'classees',
-        'Affaires classées sans poursuites',
-        'Addition des classements pour infraction non poursuivable, défaut d’élucidation et inopportunité des poursuites.',
-        classees,
-        classeesSum
-      ),
-      buildIndicator(
-        'poursuivies',
-        'Affaires pénales poursuivies',
-        'Total des affaires pénales orientées vers une poursuite.',
-        poursuites,
-        poursuitesYear == null
-          ? null
-          : cellNumber(findRow(poursuites, 'Total'), poursuitesYear)
-      )
-    ]
-    victimesSlices.value = pieSlices(victimes)
-    jugeesSlices.value = pieSlices(jugees)
-  } catch {
-    error.value = true
-  } finally {
-    loading.value = false
-  }
+  indicators.value = [
+    buildIndicator(
+      'traitees',
+      'Affaires traitées',
+      'Total des affaires pénales traitées par les parquets.',
+      traitees,
+      traiteesYear == null
+        ? null
+        : cellNumber(findRow(traitees, 'Affaires traitées'), traiteesYear)
+    ),
+    buildIndicator(
+      'classees',
+      'Affaires classées sans poursuites',
+      'Addition des classements pour infraction non poursuivable, défaut d’élucidation et inopportunité des poursuites.',
+      classees,
+      classeesSum
+    ),
+    buildIndicator(
+      'poursuivies',
+      'Affaires pénales poursuivies',
+      'Total des affaires pénales orientées vers une poursuite.',
+      poursuites,
+      poursuitesYear == null
+        ? null
+        : cellNumber(findRow(poursuites, 'Total'), poursuitesYear)
+    )
+  ]
+  victimesSlices.value = pieSlices(victimes)
+  jugeesSlices.value = pieSlices(jugees)
 })
 </script>
 

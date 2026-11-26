@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 
 import JusticeSection from '@/custom/justice/components/JusticeSection.vue'
 import TimeSeriesChart from '@/custom/justice/components/TimeSeriesChart.vue'
@@ -11,6 +11,7 @@ import {
   type ChartSeries
 } from '@/custom/justice/utils/chartTheme'
 import { SAMPLE_DATASET_ID } from '@/custom/justice/utils/dataset'
+import { useSectionLoader } from '@/custom/justice/utils/sectionLoader'
 import {
   cellNumber,
   fetchResourceRows,
@@ -27,8 +28,6 @@ const DUREE_FOND = 'duree_moyenne_mois_affaires_au_fond'
 const DUREE_REFERES = 'duree_moyenne_mois_referes'
 
 const rows = ref<TabularRow[]>([])
-const error = ref(false)
-const loading = ref(true)
 
 const years = computed(() => yearColumns(rows.value))
 const labels = computed(() => years.value.map(String))
@@ -72,14 +71,8 @@ const durations = computed<ChartSeries[]>(() => [
   }
 ])
 
-onMounted(async () => {
-  try {
-    rows.value = await fetchResourceRows(RESOURCE_ID)
-  } catch {
-    error.value = true
-  } finally {
-    loading.value = false
-  }
+const { loading, error } = useSectionLoader(async () => {
+  rows.value = await fetchResourceRows(RESOURCE_ID)
 })
 </script>
 

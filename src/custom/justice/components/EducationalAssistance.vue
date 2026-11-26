@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 
 import HorizontalBars from '@/custom/justice/components/HorizontalBars.vue'
 import JusticeSection from '@/custom/justice/components/JusticeSection.vue'
@@ -16,6 +16,7 @@ import {
   type PieSlice
 } from '@/custom/justice/utils/chartTheme'
 import { SAMPLE_DATASET_ID } from '@/custom/justice/utils/dataset'
+import { useSectionLoader } from '@/custom/justice/utils/sectionLoader'
 import {
   cellNumber,
   fetchResourceRows,
@@ -61,8 +62,6 @@ const LABELS: Record<string, string> = {
 
 const rows = ref<TabularRow[]>([])
 const ageRows = ref<TabularRow[]>([])
-const error = ref(false)
-const loading = ref(true)
 
 const years = computed(() => yearColumns(rows.value))
 const latest = computed(() => latestYear(rows.value))
@@ -152,19 +151,13 @@ function ageSeries(prefix: 'garcons' | 'filles'): ChartSeries[] {
   }))
 }
 
-onMounted(async () => {
-  try {
-    const [resourceRows, ageResourceRows] = await Promise.all([
-      fetchResourceRows(RESOURCE_ID),
-      fetchResourceRows(AGE_RESOURCE_ID)
-    ])
-    rows.value = resourceRows
-    ageRows.value = ageResourceRows
-  } catch {
-    error.value = true
-  } finally {
-    loading.value = false
-  }
+const { loading, error } = useSectionLoader(async () => {
+  const [resourceRows, ageResourceRows] = await Promise.all([
+    fetchResourceRows(RESOURCE_ID),
+    fetchResourceRows(AGE_RESOURCE_ID)
+  ])
+  rows.value = resourceRows
+  ageRows.value = ageResourceRows
 })
 </script>
 

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 
 import ChoroplethMap from '@/custom/justice/components/ChoroplethMap.vue'
 import JusticeSection from '@/custom/justice/components/JusticeSection.vue'
@@ -16,6 +16,7 @@ import {
   fetchResourceGeoJson,
   type MapFeature
 } from '@/custom/justice/utils/geojson'
+import { useSectionLoader } from '@/custom/justice/utils/sectionLoader'
 import {
   asNumber,
   fetchResourceRows,
@@ -38,8 +39,6 @@ const METRICS = [
 
 const series = ref<TabularRow[]>([])
 const territories = ref<MapFeature[]>([])
-const error = ref(false)
-const loading = ref(true)
 
 const yearLabels = computed(() =>
   series.value.map((row) => String(row.date).slice(0, 4))
@@ -94,22 +93,16 @@ function joinTerritories(features: MapFeature[], rows: TabularRow[]) {
   })
 }
 
-onMounted(async () => {
-  try {
-    const [seriesRows, territoryRows, features] = await Promise.all([
-      fetchResourceRows(SERIES_RESOURCE),
-      fetchResourceRows(TERRITORY_RESOURCE),
-      fetchResourceGeoJson(GEOJSON_RESOURCE)
-    ])
-    series.value = [...seriesRows]
-      .filter((row) => String(row.date).slice(0, 4) !== '2026')
-      .sort((a, b) => String(a.date).localeCompare(String(b.date)))
-    territories.value = joinTerritories(features, territoryRows)
-  } catch {
-    error.value = true
-  } finally {
-    loading.value = false
-  }
+const { loading, error } = useSectionLoader(async () => {
+  const [seriesRows, territoryRows, features] = await Promise.all([
+    fetchResourceRows(SERIES_RESOURCE),
+    fetchResourceRows(TERRITORY_RESOURCE),
+    fetchResourceGeoJson(GEOJSON_RESOURCE)
+  ])
+  series.value = [...seriesRows]
+    .filter((row) => String(row.date).slice(0, 4) !== '2026')
+    .sort((a, b) => String(a.date).localeCompare(String(b.date)))
+  territories.value = joinTerritories(features, territoryRows)
 })
 </script>
 
