@@ -13,7 +13,7 @@ datagouvfr:
 website:
   title: 'justice.data.gouv.fr'
   seo:
-    canonical_url: https://justice.data.gouv.fr
+    canonical_url: https://justice.preprod.data.gouv.fr
     meta:
       keywords:
       description:
