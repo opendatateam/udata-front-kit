@@ -13,7 +13,7 @@ import { onMounted, ref, watch } from 'vue'
 import styleUrl from '../assets/style.json?url'
 import type { Feature, FeatureCollection, MapOptions, Station } from '../types'
 // Side-effect import to register the maplibre-gl v6 worker
-import '../utils/maplibreWorker'
+import '@/utils/maplibreWorker'
 
 const props = defineProps<{
   options: MapOptions
