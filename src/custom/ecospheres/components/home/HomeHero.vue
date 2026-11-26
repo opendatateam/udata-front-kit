@@ -59,12 +59,7 @@ const doSearch = () => {
             Retrouvez les données clés de la
             <span class="highlight">transition écologique</span>
           </h1>
-          <form
-            class="big-search"
-            role="search"
-            aria-label="Rechercher une donnée"
-            @submit.prevent="doSearch"
-          >
+          <form class="big-search" role="search" @submit.prevent="doSearch">
             <div class="fr-input-group big-search__query">
               <label class="fr-label" for="big-select-search">
                 Recherchez dans tout le site
