@@ -7,6 +7,7 @@ import { useDebounceFn } from '@vueuse/core'
 const MIN_CHARS = 2
 const MAX_RESULTS = 8
 
+// short badge labels: names from /spatial/levels are too long (e.g. "Intercommunalité française (EPCI)")
 const LEVEL_LABELS: Record<string, string> = {
   'country-group': 'Groupe de pays',
   country: 'Pays',
@@ -31,6 +32,7 @@ const props = defineProps<{
 const zone = defineModel<SpatialCoverage | null>({ default: null })
 
 const api = new SpatialAPI()
+
 const query = ref(zone.value?.name ?? '')
 const results = ref<SpatialCoverage[]>([])
 const isOpen = ref(false)
