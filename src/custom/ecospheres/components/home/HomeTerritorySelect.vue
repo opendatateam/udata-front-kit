@@ -2,6 +2,7 @@
 import type { SpatialCoverage } from '@/model/spatial'
 import SpatialAPI from '@/services/api/SpatialAPI'
 import { debounceWait } from '@/utils/config'
+import { latestRequest } from '@/utils/request'
 import { useDebounceFn } from '@vueuse/core'
 
 const MIN_CHARS = 2
@@ -50,22 +51,22 @@ const showEmpty = computed(
   () => !isLoading.value && query.value.trim().length >= MIN_CHARS
 )
 
-let lastRequest = 0
+const suggestRequest = latestRequest()
 const fetchSuggestions = useDebounceFn(async (q: string) => {
   // input changed (e.g. cleared) since this call was scheduled
   if (query.value.trim() !== q) return
-  const requestId = ++lastRequest
+  const isLatest = suggestRequest()
   try {
     const zones = await api.suggestZones(q, { size: MAX_RESULTS })
     // drop responses superseded by a newer query
-    if (requestId !== lastRequest) return
+    if (!isLatest()) return
     results.value = zones
     activeIndex.value = -1
   } catch (error) {
     console.error('Territory suggest error', error)
-    if (requestId === lastRequest) results.value = []
+    if (isLatest()) results.value = []
   } finally {
-    if (requestId === lastRequest) isLoading.value = false
+    if (isLatest()) isLoading.value = false
   }
 }, debounceWait)
 
@@ -74,7 +75,7 @@ const onInput = () => {
   zone.value = null
   const q = query.value.trim()
   if (q.length < MIN_CHARS) {
-    lastRequest++
+    suggestRequest()
     results.value = []
     isLoading.value = false
     isOpen.value = false
@@ -88,7 +89,7 @@ const onInput = () => {
 
 const select = (selected: SpatialCoverage) => {
   // discard in-flight responses, whose finally won't reset loading anymore
-  lastRequest++
+  suggestRequest()
   isLoading.value = false
   zone.value = selected
   query.value = selected.name
