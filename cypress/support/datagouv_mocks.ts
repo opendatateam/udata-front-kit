@@ -65,6 +65,17 @@ Cypress.Commands.add('mockMatomo', () => {
   }).as('mockMatomo')
 })
 
+Cypress.Commands.add('mockTabularRows', (resourceId, rows = []) => {
+  const resourcePattern = resourceId === '*' ? '[^/]+' : resourceId
+  const urlRegex = new RegExp(
+    `^https://tabular-api(\\.[a-z]+)?\\.data\\.gouv\\.fr/api/resources/${resourcePattern}/data/`
+  )
+  cy.intercept('GET', urlRegex, {
+    statusCode: 200,
+    body: { data: rows, links: {}, meta: { total: rows.length } }
+  }).as(`get_tabular_${resourceId}_rows`)
+})
+
 Cypress.Commands.add('mockStaticDatagouv', () => {
   cy.intercept('GET', 'https://**static.data.gouv.fr/**', {
     statusCode: 200,
