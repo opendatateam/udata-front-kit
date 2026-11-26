@@ -69,5 +69,14 @@ jobs:
           node-version: 22.x
           cache: 'pnpm'
       - run: pnpm install
+      # PR targeting {site}-{env} (e.g. a release PR): test with that env config
+      - name: Resolve deploy env from PR base branch
+        env:
+          SITE: ${{ matrix.site_id }}
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          for env in demo preprod prod; do
+            if [ "$BASE_REF" = "$SITE-$env" ]; then echo "VITE_DEPLOY_ENV=$env" >> $GITHUB_ENV; fi
+          done
       - run: VITE_SITE_ID=${{ matrix.site_id }} pnpm run build -- --mode test
       - run: VITE_SITE_ID=${{ matrix.site_id }} pnpm run test:e2e:for_production_build

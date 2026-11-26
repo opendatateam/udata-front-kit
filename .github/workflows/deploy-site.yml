@@ -137,6 +137,7 @@ jobs:
           push: true
           build-args: |
             VITE_SITE_ID=${{ inputs.site }}
+            VITE_DEPLOY_ENV=${{ inputs.environment }}
           tags: |
             ${{ vars.CONTAINER_REGISTRY_SERVER }}/${{ vars.CONTAINER_REGISTRY_NAMESPACE }}/${{ inputs.site }}-${{ inputs.environment }}:${{ needs.tag.outputs.version }}
             ${{ vars.CONTAINER_REGISTRY_SERVER }}/${{ vars.CONTAINER_REGISTRY_NAMESPACE }}/${{ inputs.site }}-${{ inputs.environment }}:latest

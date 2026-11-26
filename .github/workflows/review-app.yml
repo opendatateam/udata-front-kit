@@ -48,6 +48,7 @@ jobs:
           - justice
     permissions:
       deployments: write
+      pull-requests: read
     # Run for all PRs including forks and for manual triggers
     if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     steps:
@@ -156,7 +157,21 @@ jobs:
           # omitting this will prevent the app from being built (which is what we want)
           # branch: 'main'
 
-      - name: Set site id as build arg
+      # PR targeting {site}-{env} (e.g. a release PR): preview with that env config
+      - name: Resolve deploy env from PR base branch
+        if: env.SHOULD_DEPLOY == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          BASE_REF=$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json baseRefName --jq .baseRefName)
+          DEPLOY_ENV=""
+          for env in demo preprod prod; do
+            if [ "$BASE_REF" = "$SITE-$env" ]; then DEPLOY_ENV=$env; fi
+          done
+          echo "Base branch: $BASE_REF, deploy env: ${DEPLOY_ENV:-<none>}"
+          echo "DEPLOY_ENV=$DEPLOY_ENV" >> $GITHUB_ENV
+
+      - name: Set site id and deploy env as build args
         if: env.SHOULD_DEPLOY == 'true'
         uses: appleboy/ssh-action@823bd89e131d8d508129f9443cad5855e9ba96f0 # v1.2.4
         with:
@@ -165,7 +180,7 @@ jobs:
           key: ${{ secrets.REVIEW_APP_SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            docker-options:add deploy-preview-${{ env.PR_NUMBER }}--${{ env.SITE }} build "--build-arg VITE_SITE_ID=${{ env.SITE }}"
+            docker-options:add deploy-preview-${{ env.PR_NUMBER }}--${{ env.SITE }} build "--build-arg VITE_SITE_ID=${{ env.SITE }} --build-arg VITE_DEPLOY_ENV=${{ env.DEPLOY_ENV }}"
 
       - name: Push to dokku
         if: env.SHOULD_DEPLOY == 'true'

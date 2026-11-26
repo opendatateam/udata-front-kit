@@ -33,8 +33,10 @@ website:
         - /admin
     # sitemap.xml content (consumed by udata-front-kit-seo)
     sitemap_xml:
-      topics_pages: []
-      datasets_pages: []
+      topics_pages:
+        - bouquets
+      datasets_pages:
+        - indicators
       dataservices_pages: []
   formatted_title: '<i>ecologie.</i><b>data.gouv</b><i>.fr</i>'
   rf_title: 'RÉPUBLIQUE<br>FRANÇAISE'

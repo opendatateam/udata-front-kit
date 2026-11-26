@@ -45,7 +45,7 @@ Arguments (prepare):
   env        Environment (${VALID_ENVS})
 
 Arguments (deploy):
-  pr         PR number or URL
+  pr         PR number or URL, targeting {site}-{env}
 
 Options:
   --source <branch>   Source branch (required for prod, defaults to main for demo/preprod)
@@ -208,6 +208,21 @@ Or abort: git merge --abort"
     fi
   fi
 
+  # configs/ must match the source after merge: git keeps env-only edits when the source didn't touch those lines
+  if ! git diff --quiet "origin/$source_branch" -- configs/; then
+    warn "configs/ differs from $source_branch after merge (drift, or a hotfix $source_branch doesn't have yet):"
+    git --no-pager diff --stat "origin/$source_branch" -- configs/
+    read -p "Reset configs/ to $source_branch? [Y/n] " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Nn]$ ]]; then
+      # restore (unlike checkout) also removes files missing from the source
+      git restore --source="origin/$source_branch" --staged --worktree -- configs/
+      # no hooks: prettier could rewrite the files and break the exact copy
+      git commit --no-verify -m "chore(config): reset configs/ to $source_branch"
+      info "configs/ reset to $source_branch"
+    fi
+  fi
+
   # Confirm before pushing to remote
   warn "Ready to push merge branch to origin and create PR"
   read -p "Continue? [y/N] " -n 1 -r
@@ -287,12 +302,12 @@ cmd_deploy() {
     fi
   fi
 
-  local merge_branch=$(echo "$pr_json" | jq -r '.headRefName')
+  local head_branch=$(echo "$pr_json" | jq -r '.headRefName')
   local target_branch=$(echo "$pr_json" | jq -r '.baseRefName')
 
-  # Parse site and env from branch name ({site}-{env}-merge)
-  if [[ ! "$merge_branch" =~ ^(.+)-([^-]+)-merge$ ]]; then
-    error "Cannot parse site/env from branch name: $merge_branch"
+  # Parse site and env from target branch ({site}-{env})
+  if [[ ! "$target_branch" =~ ^(.+)-([^-]+)$ ]]; then
+    error "Cannot parse site/env from target branch: $target_branch"
   fi
   local site="${BASH_REMATCH[1]}"
   local env="${BASH_REMATCH[2]}"
@@ -301,10 +316,15 @@ cmd_deploy() {
   validate_site "$site"
   validate_env "$env"
 
-  info "Deploying: $merge_branch → $target_branch"
+  # Head branch is deleted after merge: refuse long-lived branches
+  if [[ "$head_branch" == "main" || "$head_branch" =~ -(demo|preprod|prod)$ ]]; then
+    error "PR head '$head_branch' is a long-lived branch and would be deleted after merge. Use a temporary branch (e.g. via '$0 prepare')."
+  fi
+
+  info "Deploying: $head_branch → $target_branch"
   info "Site: $site, Env: $env"
 
-  # Merge PR and delete merge branches locally and remotely
+  # Merge PR and delete head branch locally and remotely
   local commit_msg="${pr_title} #${pr_number}"
   info "Merging PR #$pr_number with message: $commit_msg"
   local admin_flag=""

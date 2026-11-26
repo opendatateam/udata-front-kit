@@ -17,6 +17,24 @@ Chaque verticale est configurée dans un fichier `config.yaml` stocké sous [`co
 La variable d'environnement `VITE_SITE_ID` permet de définir la configuration utilisée au lancement de l'application.
 Cette variable peut être définie dans le fichier [`.env`](.env) ou ses dérivés.
 
+### Configuration par environnement
+
+Les valeurs propres à un environnement de déploiement (`demo`, `preprod`, `prod`) sont définies dans `configs/$verticale/env/$env.yaml`, sur `main`. Ce fichier ne contient que les clés qui diffèrent de `config.yaml` (URL de data.gouv.fr, client OAuth, `canonical_url`, meta `robots`, Sentry, identifiants de topics/organisations, etc.).
+
+La variable `VITE_DEPLOY_ENV` (positionnée automatiquement par le workflow de déploiement, et par les review apps et la CI pour une PR vers une branche `{site}-{env}`) sélectionne l'environnement. Sans elle, seul `config.yaml` est utilisé : c'est le cas en développement local, et sur les review apps et dans la CI pour les autres PR.
+
+Le fichier d'environnement est appliqué comme un [JSON Merge Patch (RFC 7396)](https://www.rfc-editor.org/rfc/rfc7396) :
+
+- les objets sont fusionnés clé par clé ;
+- les scalaires et les listes sont remplacés en entier ;
+- `null` supprime la clé (ex : `networks: null` pour désactiver une fonctionnalité).
+
+La configuration résolue est publiée par le build sous `/site-config.json` (ex : <https://ecologie.data.gouv.fr/site-config.json>), notamment à destination des outils externes (ex : `udata-front-kit-seo`). En local, `VITE_DEPLOY_ENV=prod pnpm build` la génère dans `dist/site-config.json`, et `VITE_DEPLOY_ENV=prod pnpm dev` lance un site avec sa configuration de production.
+
+Un test ([`configs/__tests__/configs.test.ts`](configs/__tests__/configs.test.ts)) vérifie qu'un fichier d'environnement ne surcharge que des clés existant dans `config.yaml`, afin de détecter les fautes de frappe.
+
+Toute la configuration, quel que soit l'environnement, est maintenue sur `main` : une modification de `configs/` n'arrive sur une branche `{site}-{env}` que depuis `main` (déploiement régulier ou [correctif urgent](#correctif-urgent-hotfix)).
+
 ## 🚀 Développement
 
 ### Environnement recommandé
@@ -294,6 +312,8 @@ Le workflow est déclenché exclusivement par `workflow_dispatch` : pousser un t
 
 :warning: Cette section est une recommandation, chaque verticale/site est libre de définir ses propres processus.
 
+##### Déploiement régulier
+
 - La branche `main` recueille les fonctionnalités au fur et à mesure de leur développement.
 - La branche `{site}-preprod` est utilisée pour les déploiements sur <https://{site}.preprod.data.gouv.fr>.
   - On commence par créer une Pull Request depuis `main` vers `{site}-preprod` ;
@@ -301,7 +321,24 @@ Le workflow est déclenché exclusivement par `workflow_dispatch` : pousser un t
 - La branche `{site}-prod` est utilisée pour les déploiements sur <https://{site}.data.gouv.fr>.
   - Même processus que pour la preprod, mais en créant une PR depuis `{site}-preprod` vers `{site}-prod`.
 
-NB : dans certains cas, il est possible de créer et de déployer des Pull Requests depuis une _feature branch_ vers `{site}-(pre)prod`, par exemple pour définir une configuration spécifique à l'environnement de preprod ou de prod.
+##### Correctif urgent (hotfix)
+
+Un correctif urgent (code ou configuration) est d'abord mergé sur `main`, puis reporté sur `{site}-{env}` par cherry-pick. `main` reste ainsi la référence : un changement est toujours fait sur `main` avant d'arriver sur une branche `{site}-{env}`.
+
+1. Créer une PR vers `main` avec le correctif, et la merger (squash).
+2. Reporter le commit dans une branche créée depuis la branche cible :
+
+   ```shell
+   git fetch origin
+   git switch -c hotfix/mon-correctif origin/ecospheres-prod
+   git cherry-pick -x <commit-sur-main>
+   git push -u origin hotfix/mon-correctif
+   ```
+
+3. Créer une PR vers `{site}-{env}`. Commenter `/deploy {site}` pour obtenir une review app avec la configuration de cet environnement.
+4. Une fois la PR validée, déployer avec `./scripts/deploy.sh deploy <pr>` (ou merger et utiliser l'UI github pour déployer `{env}`).
+
+Le prochain déploiement régulier intègre le même changement depuis `main`. Un conflit n'est possible que si ces lignes ont encore été modifiées sur `main` entre-temps : garder alors la version de `main`.
 
 #### Sites déployés directement depuis `main`
 
@@ -336,7 +373,7 @@ Pour ces sites, `scripts/deploy.sh` ne s'applique pas car il n'y a pas de branch
 
 ### sitemap.xml et robots.txt
 
-Le référencement des verticales est géré via la section `website.seo` du fichier de configuration. Cette configuration pilote la génération de `robots.txt` et `sitemap.xml` par le package [`udata-front-kit-seo`](https://github.com/opendatateam/udata-front-kit-seo), qui lit cette configuration et génère les fichiers pour chaque couple site/environnement.
+Le référencement des verticales est géré via la section `website.seo` du fichier de configuration. Cette configuration pilote la génération de `robots.txt` et `sitemap.xml` par le package [`udata-front-kit-seo`](https://github.com/opendatateam/udata-front-kit-seo), qui lit la configuration résolue publiée par chaque site (`/site-config.json`, cf [Configuration par environnement](#configuration-par-environnement)) et génère les fichiers pour chaque couple site/environnement.
 
 Les clés dans `sitemap_xml` (`topics_pages`, `datasets_pages`, `dataservices_pages`) doivent correspondre aux identifiants définis dans la section `pages:` du fichier de configuration.
 
@@ -378,7 +415,7 @@ Après avoir créé votre projet (VueJs) sur sentry, voici la configuration à a
 sentry:
   domain_url: 'https://errors.data.gouv.fr/' # Ou tout autre domaine où vous hébergez votre sentry
   dsn: 'https://c8268303ac0799edda45ced7faa7e0a0@errors.data.gouv.fr/38' # Vous trouverez ce DSN lors de l'initialisation de votre projet dans Sentry
-  environment: 'preprod' # Ou autre (par exemple 'production'), selon la branche de déploiement
+  environment: 'preprod' # Ou autre (par exemple 'production'), selon l'environnement de déploiement
   tracesSampleRate: 0.1 # Optionnel, active le suivi des performances (chargements de page, navigations, requêtes) sur 10 % des navigations
 ```
 
@@ -403,7 +440,7 @@ L'URL de callback n'est pas configurable : elle vaut toujours `{origine du site}
 
 ### Configuration par environnement
 
-Un client OAuth n'existe que sur l'instance où il a été créé : `base_url` et `oauth_client_id` doivent donc toujours être modifiés ensemble. Ces valeurs sont définies dans le `config.yaml` de chaque branche `{site}-{env}` (voir [Workflow de déploiement recommandé](#workflow-de-déploiement-recommandé)).
+Un client OAuth n'existe que sur l'instance où il a été créé : `base_url` et `oauth_client_id` doivent donc toujours être modifiés ensemble. Ces valeurs sont définies dans `config.yaml`, et surchargées si besoin dans `env/$env.yaml` (voir [Configuration par environnement](#configuration-par-environnement)).
 
 Exemple pour `ecospheres` :
 
@@ -414,7 +451,7 @@ Exemple pour `ecospheres` :
 
 Une preprod peut viser `demo.data.gouv.fr` ou `www.data.gouv.fr` selon les sites : son client doit être enregistré sur l'instance choisie.
 
-:warning: Les review apps reprennent la configuration de la branche de la PR. La connexion n'y fonctionne que si `base_url` vise `demo.data.gouv.fr`, seule instance acceptant les URLs de callback avec wildcard.
+:warning: Sur les review apps, la connexion ne fonctionne que si `base_url` vise `demo.data.gouv.fr`, seule instance acceptant les URLs de callback avec wildcard.
 
 ### Demander un client OAuth à data.gouv.fr
 

@@ -16,6 +16,8 @@ COPY ./ /app
 
 ARG VITE_SITE_ID
 RUN test -n "$VITE_SITE_ID" || { echo "VITE_SITE_ID build arg is required" >&2; exit 1; }
+# demo|preprod|prod, applies configs/<site>/env/<env>.yaml on top of config.yaml (empty = config.yaml only)
+ARG VITE_DEPLOY_ENV
 
 # node base image is a floating tag: log what it resolved to, and the pnpm in use
 RUN echo "$(date) - node $(node --version), pnpm $(pnpm --version)" && \
