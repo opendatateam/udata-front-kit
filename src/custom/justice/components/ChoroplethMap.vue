@@ -7,7 +7,11 @@ import {
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
 import { BLUE, integerFormat } from '@/custom/justice/utils/chartTheme'
-import { mountFranceMap } from '@/custom/justice/utils/franceMap'
+import {
+  bindHoverPopup,
+  mountFranceMap,
+  type FranceMap
+} from '@/custom/justice/utils/franceMap'
 import {
   boundsOf,
   popupLines,
@@ -27,8 +31,7 @@ const props = defineProps<{
 const container = ref<HTMLDivElement | null>(null)
 const selected = ref(props.metrics[0]?.id ?? '')
 const view = ref<'metro' | 'outremer'>('metro')
-let mapHandle: ReturnType<typeof mountFranceMap> | null = null
-let hoveredId: string | number | null = null
+let mapHandle: FranceMap | null = null
 
 const selectedMetric = computed(
   () =>
@@ -106,16 +109,6 @@ function fillColor(): DataDrivenPropertyValueSpecification<string> {
   ] as DataDrivenPropertyValueSpecification<string>
 }
 
-function clearHover() {
-  const map = mapHandle?.map
-  if (map && hoveredId != null) {
-    map.setFeatureState({ source: 'areas', id: hoveredId }, { hover: false })
-  }
-  hoveredId = null
-  mapHandle?.popup.remove()
-  if (map) map.getCanvas().style.cursor = ''
-}
-
 function applyMetric() {
   const map = mapHandle?.map
   if (!map?.getLayer('areas-fill')) return
@@ -151,9 +144,8 @@ function popupContent(feature: MapGeoJSONFeature): HTMLElement {
 }
 
 function initMap() {
-  const map = mapHandle?.map
-  const popup = mapHandle?.popup
-  if (!map || !popup) return
+  if (!mapHandle) return
+  const { map } = mapHandle
   map.addSource('areas', {
     type: 'geojson',
     data: { type: 'FeatureCollection', features: props.features },
@@ -216,23 +208,7 @@ function initMap() {
       'text-halo-width': 1.4
     }
   })
-  map.on('mousemove', 'areas-fill', (event) => {
-    const feature = event.features?.[0]
-    if (!feature || !mapHandle) return
-    if (hoveredId !== feature.id) {
-      clearHover()
-      hoveredId = feature.id ?? null
-      if (hoveredId != null) {
-        map.setFeatureState({ source: 'areas', id: hoveredId }, { hover: true })
-      }
-    }
-    map.getCanvas().style.cursor = 'pointer'
-    popup
-      .setLngLat(event.lngLat)
-      .setDOMContent(popupContent(feature))
-      .addTo(map)
-  })
-  map.on('mouseleave', 'areas-fill', clearHover)
+  bindHoverPopup(mapHandle, 'areas', 'areas-fill', popupContent)
   showView('metro')
 }
 

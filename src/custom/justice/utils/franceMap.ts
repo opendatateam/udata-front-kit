@@ -1,4 +1,9 @@
-import { Map as MapLibreMap, Popup, type StyleSpecification } from 'maplibre-gl'
+import {
+  Map as MapLibreMap,
+  Popup,
+  type MapGeoJSONFeature,
+  type StyleSpecification
+} from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 
 import '@/utils/maplibreWorker'
@@ -63,4 +68,42 @@ export function mountFranceMap(container: HTMLElement) {
   }
 
   return { map, popup, destroy }
+}
+
+export type FranceMap = ReturnType<typeof mountFranceMap>
+
+// sets the `hover` feature-state and shows a popup for the feature under the cursor; returns a reset function
+export function bindHoverPopup(
+  { map, popup }: FranceMap,
+  source: string,
+  layer: string,
+  content: (feature: MapGeoJSONFeature) => HTMLElement
+): () => void {
+  let hoveredId: string | number | null = null
+
+  function clearHover() {
+    if (hoveredId != null) {
+      map.setFeatureState({ source, id: hoveredId }, { hover: false })
+    }
+    hoveredId = null
+    popup.remove()
+    map.getCanvas().style.cursor = ''
+  }
+
+  map.on('mousemove', layer, (event) => {
+    const feature = event.features?.[0]
+    if (!feature) return
+    if (hoveredId !== feature.id) {
+      clearHover()
+      hoveredId = feature.id ?? null
+      if (hoveredId != null) {
+        map.setFeatureState({ source, id: hoveredId }, { hover: true })
+      }
+    }
+    map.getCanvas().style.cursor = 'pointer'
+    popup.setLngLat(event.lngLat).setDOMContent(content(feature)).addTo(map)
+  })
+  map.on('mouseleave', layer, clearHover)
+
+  return clearHover
 }

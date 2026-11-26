@@ -3,7 +3,11 @@ import { type GeoJSONSource, type MapGeoJSONFeature } from 'maplibre-gl'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
 import { BLUE, PURPLE } from '@/custom/justice/utils/chartTheme'
-import { mountFranceMap } from '@/custom/justice/utils/franceMap'
+import {
+  bindHoverPopup,
+  mountFranceMap,
+  type FranceMap
+} from '@/custom/justice/utils/franceMap'
 import {
   metroBounds,
   popupLines,
@@ -22,8 +26,8 @@ const props = defineProps<{
 
 const container = ref<HTMLDivElement | null>(null)
 const selected = ref(props.layers[0]?.id ?? '')
-let mapHandle: ReturnType<typeof mountFranceMap> | null = null
-let hoveredId: string | number | null = null
+let mapHandle: FranceMap | null = null
+let clearHover = () => {}
 
 const selectedLayer = computed(
   () =>
@@ -32,16 +36,6 @@ const selectedLayer = computed(
 
 function currentFeatures(): MapFeature[] {
   return selectedLayer.value?.features ?? []
-}
-
-function clearHover() {
-  const map = mapHandle?.map
-  if (map && hoveredId != null) {
-    map.setFeatureState({ source: 'courts', id: hoveredId }, { hover: false })
-  }
-  hoveredId = null
-  mapHandle?.popup.remove()
-  if (map) map.getCanvas().style.cursor = ''
 }
 
 function showLayer(animate: boolean) {
@@ -60,9 +54,8 @@ function showLayer(animate: boolean) {
 }
 
 function initMap() {
-  const map = mapHandle?.map
-  const popup = mapHandle?.popup
-  if (!map || !popup) return
+  if (!mapHandle) return
+  const { map } = mapHandle
   map.addSource('courts', {
     type: 'geojson',
     data: { type: 'FeatureCollection', features: currentFeatures() }
@@ -105,26 +98,7 @@ function initMap() {
       ]
     }
   })
-  map.on('mousemove', 'courts-fill', (event) => {
-    const feature = event.features?.[0]
-    if (!feature || !mapHandle) return
-    if (hoveredId !== feature.id) {
-      clearHover()
-      hoveredId = feature.id ?? null
-      if (hoveredId != null) {
-        map.setFeatureState(
-          { source: 'courts', id: hoveredId },
-          { hover: true }
-        )
-      }
-    }
-    map.getCanvas().style.cursor = 'pointer'
-    popup
-      .setLngLat(event.lngLat)
-      .setDOMContent(popupContent(feature))
-      .addTo(map)
-  })
-  map.on('mouseleave', 'courts-fill', clearHover)
+  clearHover = bindHoverPopup(mapHandle, 'courts', 'courts-fill', popupContent)
   const bounds = metroBounds(currentFeatures())
   if (bounds) map.fitBounds(bounds, { padding: 32, animate: false })
 }
