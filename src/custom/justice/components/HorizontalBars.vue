@@ -33,7 +33,7 @@ const bars = computed(() => {
 <template>
   <ul class="bars" :aria-label="accessibleLabel">
     <li v-for="bar in bars" :key="bar.label">
-      <p class="label">{{ bar.label }}</p>
+      <p class="label fr-mb-1v">{{ bar.label }}</p>
       <div class="row">
         <div class="track">
           <div
@@ -43,7 +43,9 @@ const bars = computed(() => {
         </div>
         <p class="figures">
           <span class="value">{{ integerFormat.format(bar.value) }}</span>
-          <span class="share">{{ percentFormat.format(bar.share) }}</span>
+          <span class="fr-text-mention--grey">{{
+            percentFormat.format(bar.share)
+          }}</span>
         </p>
       </div>
     </li>
@@ -62,7 +64,6 @@ const bars = computed(() => {
 }
 
 .label {
-  margin: 0 0 0.25rem;
   font-size: 0.875rem;
   line-height: 1.3;
 }
@@ -76,7 +77,7 @@ const bars = computed(() => {
 .track {
   flex: 1;
   height: 0.85rem;
-  background: var(--background-contrast-grey, #eee);
+  background: var(--background-contrast-grey);
 }
 
 .fill {
@@ -92,9 +93,5 @@ const bars = computed(() => {
   margin: 0;
   font-variant-numeric: tabular-nums;
   font-size: 0.875rem;
-}
-
-.share {
-  color: var(--text-mention-grey, #666);
 }
 </style>

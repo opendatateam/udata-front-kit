@@ -1,0 +1,14 @@
+.france-map {
+  height: 560px;
+  border: 1px solid var(--border-default-grey);
+}
+
+.france-map .maplibregl-popup-content {
+  padding: 0.5rem 0.75rem;
+  font-family: Marianne, arial, sans-serif;
+}
+
+.france-map .maplibregl-popup-content strong {
+  display: block;
+  margin-bottom: 0.15rem;
+}

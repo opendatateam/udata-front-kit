@@ -84,7 +84,7 @@ const { loading, error } = useSectionLoader(async () => {
     :error="error"
   >
     <div class="fr-grid-row fr-grid-row--gutters">
-      <div class="fr-col-12 fr-col-md-6 justice-col">
+      <div class="fr-col-12 fr-col-md-6">
         <VizCard
           :dataset-id="SAMPLE_DATASET_ID"
           title="1,4 million d’affaires nouvelles en 2024"
@@ -101,7 +101,7 @@ const { loading, error } = useSectionLoader(async () => {
           />
         </VizCard>
       </div>
-      <div class="fr-col-12 fr-col-md-6 justice-col">
+      <div class="fr-col-12 fr-col-md-6">
         <VizCard
           :dataset-id="SAMPLE_DATASET_ID"
           title="Délais de jugement"

@@ -36,10 +36,10 @@ onMounted(async () => {
 </script>
 
 <template>
-  <article class="panel">
+  <article class="panel fr-p-3w">
     <h3 v-if="title">{{ title }}</h3>
     <slot />
-    <div class="sources">
+    <div class="sources fr-pt-2w">
       <DsfrAccordion
         :id="sourceId"
         title="Sources et description"
@@ -66,9 +66,8 @@ onMounted(async () => {
   flex-direction: column;
   width: 100%;
   height: 100%;
-  padding: 1.5rem;
-  background: var(--background-default-grey, #fff);
-  border: 1px solid var(--border-default-grey, #ddd);
+  background: var(--background-default-grey);
+  border: 1px solid var(--border-default-grey);
 }
 
 h3 {
@@ -78,6 +77,5 @@ h3 {
 
 .sources {
   margin-top: auto;
-  padding-top: 1rem;
 }
 </style>

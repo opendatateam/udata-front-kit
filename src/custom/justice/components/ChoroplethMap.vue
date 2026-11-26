@@ -242,7 +242,7 @@ watch(
 </script>
 
 <template>
-  <div class="justice-toolbar">
+  <div class="toolbar fr-mb-3v">
     <ul
       class="fr-btns-group fr-btns-group--inline-sm"
       role="group"
@@ -287,18 +287,54 @@ watch(
       </li>
     </ul>
   </div>
-  <div v-if="legend && selectedMetric" class="justice-legend">
+  <div
+    v-if="legend && selectedMetric"
+    class="legend fr-mb-3v fr-text-mention--grey"
+  >
     <span>{{ integerFormat.format(legend.min) }}</span>
-    <span class="justice-ramp" />
+    <span class="ramp" />
     <span>{{ integerFormat.format(legend.max) }}</span>
-    <span class="justice-legend-caption">
+    <span class="legend-caption">
       {{ selectedMetric.label }}, du plus faible au plus élevé
     </span>
   </div>
   <div
     ref="container"
-    class="justice-map"
+    class="france-map"
     role="application"
     :aria-label="accessibleLabel"
   />
 </template>
+
+<style scoped>
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toolbar .fr-btns-group {
+  margin-bottom: 0;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+.ramp {
+  width: 8rem;
+  height: 0.65rem;
+  /* matches the LOW → BLUE fill scale painted on the map */
+  background: linear-gradient(to right, #e3e3fd, #000091);
+}
+
+.legend-caption {
+  flex-basis: 100%;
+}
+</style>

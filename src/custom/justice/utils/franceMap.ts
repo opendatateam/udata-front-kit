@@ -6,6 +6,8 @@ import {
 } from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 
+import '@/custom/justice/utils/franceMap.css'
+
 import '@/utils/maplibreWorker'
 
 export const MAP_STYLE: StyleSpecification = {

@@ -128,7 +128,7 @@ onUnmounted(() => {
 
 <template>
   <ul
-    class="fr-btns-group fr-btns-group--inline-sm justice-buttons"
+    class="fr-btns-group fr-btns-group--inline-sm fr-mb-2w"
     role="group"
     aria-label="Type de juridiction"
   >
@@ -146,14 +146,8 @@ onUnmounted(() => {
   </ul>
   <div
     ref="container"
-    class="justice-map"
+    class="france-map"
     role="application"
     :aria-label="`Carte des ${selectedLayer?.label.toLowerCase() ?? 'juridictions'}`"
   />
 </template>
-
-<style scoped>
-.justice-buttons {
-  margin-bottom: 1rem;
-}
-</style>

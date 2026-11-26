@@ -22,8 +22,8 @@ function formatCell(row: TabularRow, year: number): string {
 </script>
 
 <template>
-  <div class="justice-table-scroll">
-    <table class="justice-table">
+  <div class="table-scroll">
+    <table>
       <caption class="fr-sr-only">
         {{
           caption
@@ -48,3 +48,29 @@ function formatCell(row: TabularRow, year: number): string {
     </table>
   </div>
 </template>
+
+<style scoped>
+.table-scroll {
+  max-inline-size: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+th,
+td {
+  padding: 0.35rem 0.5rem;
+  border-bottom: 1px solid var(--border-default-grey);
+  text-align: left;
+  vertical-align: top;
+}
+
+.number {
+  text-align: right;
+  white-space: nowrap;
+}
+</style>

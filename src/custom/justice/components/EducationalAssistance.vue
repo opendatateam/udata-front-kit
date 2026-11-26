@@ -170,7 +170,7 @@ const { loading, error } = useSectionLoader(async () => {
     :error="error"
   >
     <div class="fr-grid-row fr-grid-row--gutters">
-      <div class="fr-col-12 fr-col-md-6 justice-col">
+      <div class="fr-col-12 fr-col-md-6">
         <VizCard
           :dataset-id="SAMPLE_DATASET_ID"
           :title="headline"
@@ -187,7 +187,7 @@ const { loading, error } = useSectionLoader(async () => {
           />
         </VizCard>
       </div>
-      <div class="fr-col-12 fr-col-md-6 justice-col">
+      <div class="fr-col-12 fr-col-md-6">
         <VizCard
           :dataset-id="SAMPLE_DATASET_ID"
           :title="originTitle"
@@ -205,7 +205,7 @@ const { loading, error } = useSectionLoader(async () => {
       v-if="ageRows.length"
       class="fr-grid-row fr-grid-row--gutters fr-mt-4w"
     >
-      <div class="fr-col-12 fr-col-md-6 justice-col">
+      <div class="fr-col-12 fr-col-md-6">
         <VizCard
           :dataset-id="SAMPLE_DATASET_ID"
           :title="boysTitle"
@@ -222,7 +222,7 @@ const { loading, error } = useSectionLoader(async () => {
           />
         </VizCard>
       </div>
-      <div class="fr-col-12 fr-col-md-6 justice-col">
+      <div class="fr-col-12 fr-col-md-6">
         <VizCard
           :dataset-id="SAMPLE_DATASET_ID"
           :title="girlsTitle"

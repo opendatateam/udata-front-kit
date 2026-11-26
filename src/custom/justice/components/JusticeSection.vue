@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import './justice.css'
-
 withDefaults(
   defineProps<{
     title: string

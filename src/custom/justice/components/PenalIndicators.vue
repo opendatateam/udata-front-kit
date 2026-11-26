@@ -137,21 +137,21 @@ const { loading, error } = useSectionLoader(async () => {
       <div
         v-for="indicator in indicators"
         :key="indicator.id"
-        class="fr-col-12 fr-col-md-4 justice-col"
+        class="fr-col-12 fr-col-md-4"
       >
         <VizCard
           :dataset-id="SAMPLE_DATASET_ID"
           :source-id="`sources-${indicator.id}`"
         >
-          <p class="justice-figure">
+          <p class="figure fr-mb-1w">
             {{
               indicator.value == null
                 ? '—'
                 : integerFormat.format(indicator.value)
             }}
           </p>
-          <h3 class="justice-stat-title">{{ indicator.label }}</h3>
-          <p v-if="indicator.year" class="justice-year">
+          <h3 class="stat-title fr-mb-1v">{{ indicator.label }}</h3>
+          <p v-if="indicator.year" class="fr-mb-1w fr-text-mention--grey">
             En {{ indicator.year }}
           </p>
           <p>{{ indicator.explanation }}</p>
@@ -166,7 +166,7 @@ const { loading, error } = useSectionLoader(async () => {
       </div>
     </div>
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-4w">
-      <div class="fr-col-12 fr-col-md-6 justice-col">
+      <div class="fr-col-12 fr-col-md-6">
         <VizCard
           :dataset-id="SAMPLE_DATASET_ID"
           title="Les victimes selon le type d’infraction traitées par le parquet"
@@ -180,7 +180,7 @@ const { loading, error } = useSectionLoader(async () => {
           />
         </VizCard>
       </div>
-      <div class="fr-col-12 fr-col-md-6 justice-col">
+      <div class="fr-col-12 fr-col-md-6">
         <VizCard
           :dataset-id="SAMPLE_DATASET_ID"
           title="Les victimes selon le type d’infraction devant le tribunal"
@@ -205,3 +205,17 @@ const { loading, error } = useSectionLoader(async () => {
     </div>
   </JusticeSection>
 </template>
+
+<style scoped>
+.figure {
+  color: var(--text-title-blue-france);
+  font-size: clamp(2rem, 1.5vw + 1.25rem, 2.75rem);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.stat-title {
+  font-size: 1.125rem;
+  text-wrap: balance;
+}
+</style>
