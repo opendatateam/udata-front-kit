@@ -1,12 +1,7 @@
 <script lang="ts" setup>
-import type { DatasetV2WithFullObject } from '@datagouv/components-next'
-import { toRef } from 'vue'
-
-import { provideJusticeDataset } from '@/custom/justice/utils/dataset'
-
 import './justice.css'
 
-const props = withDefaults(
+withDefaults(
   defineProps<{
     title: string
     description: string
@@ -14,18 +9,14 @@ const props = withDefaults(
     error?: boolean
     loadingLabel?: string
     errorLabel?: string
-    dataset?: DatasetV2WithFullObject | null
   }>(),
   {
     loading: false,
     error: false,
     loadingLabel: 'Préparation des graphiques…',
-    errorLabel: 'Les données n’ont pas pu être chargées.',
-    dataset: null
+    errorLabel: 'Les données n’ont pas pu être chargées.'
   }
 )
-
-provideJusticeDataset(toRef(props, 'dataset'))
 </script>
 
 <template>

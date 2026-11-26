@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import type { DatasetV2WithFullObject } from '@datagouv/components-next'
 import { computed, onMounted, ref } from 'vue'
 
 import HorizontalBars from '@/custom/justice/components/HorizontalBars.vue'
@@ -16,7 +15,7 @@ import {
   type ChartSeries,
   type PieSlice
 } from '@/custom/justice/utils/chartTheme'
-import { loadJusticeDataset } from '@/custom/justice/utils/dataset'
+import { SAMPLE_DATASET_ID } from '@/custom/justice/utils/dataset'
 import {
   cellNumber,
   fetchResourceRows,
@@ -62,7 +61,6 @@ const LABELS: Record<string, string> = {
 
 const rows = ref<TabularRow[]>([])
 const ageRows = ref<TabularRow[]>([])
-const dataset = ref<DatasetV2WithFullObject | null>(null)
 const error = ref(false)
 const loading = ref(true)
 
@@ -156,14 +154,12 @@ function ageSeries(prefix: 'garcons' | 'filles'): ChartSeries[] {
 
 onMounted(async () => {
   try {
-    const [resourceRows, ageResourceRows, loadedDataset] = await Promise.all([
+    const [resourceRows, ageResourceRows] = await Promise.all([
       fetchResourceRows(RESOURCE_ID),
-      fetchResourceRows(AGE_RESOURCE_ID),
-      loadJusticeDataset()
+      fetchResourceRows(AGE_RESOURCE_ID)
     ])
     rows.value = resourceRows
     ageRows.value = ageResourceRows
-    dataset.value = loadedDataset
   } catch {
     error.value = true
   } finally {
@@ -179,11 +175,11 @@ onMounted(async () => {
     error-label="Les graphiques n’ont pas pu être chargés."
     :loading="loading"
     :error="error"
-    :dataset="dataset"
   >
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12 fr-col-md-6 justice-col">
         <VizCard
+          :dataset-id="SAMPLE_DATASET_ID"
           :title="headline"
           source-id="sources-saisines"
           source="Les barres empilent les saisines selon leur origine : le parquet, la saisine d’office du juge, et le mineur ou un proche. Une saisine peut concerner plusieurs enfants : les effectifs de filles et de garçons ne s’additionnent donc pas au nombre de saisines."
@@ -200,6 +196,7 @@ onMounted(async () => {
       </div>
       <div class="fr-col-12 fr-col-md-6 justice-col">
         <VizCard
+          :dataset-id="SAMPLE_DATASET_ID"
           :title="originTitle"
           source-id="sources-saisines-detail"
           :source="`Répartition des saisines en ${latest ?? ''} selon l’origine détaillée, avec l’effectif et la part de chaque origine. Les lignes « toutes les saisines », « saisines du parquet » et « saisines d’office » ne figurent pas : elles additionnent les autres catégories.`"
@@ -217,6 +214,7 @@ onMounted(async () => {
     >
       <div class="fr-col-12 fr-col-md-6 justice-col">
         <VizCard
+          :dataset-id="SAMPLE_DATASET_ID"
           :title="boysTitle"
           source-id="sources-garcons"
           source="Effectifs de garçons, empilés par classe d’âge pour chaque année. Les totaux ne sont pas repris : ils additionnent les classes."
@@ -233,6 +231,7 @@ onMounted(async () => {
       </div>
       <div class="fr-col-12 fr-col-md-6 justice-col">
         <VizCard
+          :dataset-id="SAMPLE_DATASET_ID"
           :title="girlsTitle"
           source-id="sources-filles"
           source="Même lecture pour les filles : effectifs empilés par classe d’âge, sans les lignes de total."

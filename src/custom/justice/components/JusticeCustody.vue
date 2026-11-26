@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import type { DatasetV2WithFullObject } from '@datagouv/components-next'
 import { computed, onMounted, ref } from 'vue'
 
 import ChoroplethMap from '@/custom/justice/components/ChoroplethMap.vue'
@@ -12,7 +11,7 @@ import {
   PURPLE,
   type ChartSeries
 } from '@/custom/justice/utils/chartTheme'
-import { loadJusticeDataset } from '@/custom/justice/utils/dataset'
+import { SAMPLE_DATASET_ID } from '@/custom/justice/utils/dataset'
 import {
   fetchResourceGeoJson,
   type MapFeature
@@ -39,7 +38,6 @@ const METRICS = [
 
 const series = ref<TabularRow[]>([])
 const territories = ref<MapFeature[]>([])
-const dataset = ref<DatasetV2WithFullObject | null>(null)
 const error = ref(false)
 const loading = ref(true)
 
@@ -98,18 +96,15 @@ function joinTerritories(features: MapFeature[], rows: TabularRow[]) {
 
 onMounted(async () => {
   try {
-    const [seriesRows, territoryRows, features, loadedDataset] =
-      await Promise.all([
-        fetchResourceRows(SERIES_RESOURCE),
-        fetchResourceRows(TERRITORY_RESOURCE),
-        fetchResourceGeoJson(GEOJSON_RESOURCE),
-        loadJusticeDataset()
-      ])
+    const [seriesRows, territoryRows, features] = await Promise.all([
+      fetchResourceRows(SERIES_RESOURCE),
+      fetchResourceRows(TERRITORY_RESOURCE),
+      fetchResourceGeoJson(GEOJSON_RESOURCE)
+    ])
     series.value = [...seriesRows]
       .filter((row) => String(row.date).slice(0, 4) !== '2026')
       .sort((a, b) => String(a.date).localeCompare(String(b.date)))
     territories.value = joinTerritories(features, territoryRows)
-    dataset.value = loadedDataset
   } catch {
     error.value = true
   } finally {
@@ -124,9 +119,9 @@ onMounted(async () => {
     description="Une personne sous écrou ou poursuivie n'est pas nécessairement incarcérée. Selon sa situation, elle peut être détenue en établissement pénitentiaire, placée sous surveillance électronique à domicile, ou exécuter sa peine/mesure en milieu ouvert sous le suivi du SPIP."
     :loading="loading"
     :error="error"
-    :dataset="dataset"
   >
     <VizCard
+      :dataset-id="SAMPLE_DATASET_ID"
       :title="headline"
       source-id="sources-main-justice"
       source="Chaque barre additionne les personnes écrouées et les personnes suivies en milieu ouvert. Les personnes détenues font partie des personnes écrouées : elles ne sont pas empilées en plus. L’année 2026 n’est pas affichée : le milieu ouvert n’y est pas encore renseigné."
@@ -151,6 +146,7 @@ onMounted(async () => {
       </p>
     </div>
     <VizCard
+      :dataset-id="SAMPLE_DATASET_ID"
       class="fr-mt-4w"
       title="Répartition de la population pénitentiaire"
       source-id="sources-main-justice-carte"

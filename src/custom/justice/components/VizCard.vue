@@ -1,22 +1,37 @@
 <script lang="ts" setup>
-import { DatasetCard, type DatasetV2 } from '@datagouv/components-next'
-import { computed } from 'vue'
+import {
+  DatasetCard,
+  type DatasetV2,
+  type DatasetV2WithFullObject
+} from '@datagouv/components-next'
+import { computed, onMounted, ref } from 'vue'
 
-import { useJusticeDataset } from '@/custom/justice/utils/dataset'
+import { loadDataset } from '@/custom/justice/utils/dataset'
 
-defineProps<{
+const props = defineProps<{
   title?: string
   sourceId: string
   source?: string
+  datasetId: string
 }>()
 
-const { dataset, datasetUrl } = useJusticeDataset()
+const dataset = ref<DatasetV2WithFullObject | null>(null)
+
+const datasetUrl = computed(() =>
+  dataset.value
+    ? { name: 'datasets_detail', params: { item_id: dataset.value.slug } }
+    : undefined
+)
 
 const datasetForCard = computed((): DatasetV2 | null => {
   if (!dataset.value) return null
   // FIXME: DatasetCard should accept DatasetV2WithFullObject — upstream bug in @datagouv/components-next
   // @ts-expect-error dataset prop is typed as Dataset | DatasetV2, not DatasetV2WithFullObject
   return dataset.value
+})
+
+onMounted(async () => {
+  dataset.value = await loadDataset(props.datasetId)
 })
 </script>
 

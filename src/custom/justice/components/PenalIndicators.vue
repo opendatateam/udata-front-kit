@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import type { DatasetV2WithFullObject } from '@datagouv/components-next'
 import { onMounted, ref } from 'vue'
 
 import JusticeSection from '@/custom/justice/components/JusticeSection.vue'
@@ -7,7 +6,7 @@ import PieChart from '@/custom/justice/components/PieChart.vue'
 import ResourceTable from '@/custom/justice/components/ResourceTable.vue'
 import VizCard from '@/custom/justice/components/VizCard.vue'
 import { integerFormat, type PieSlice } from '@/custom/justice/utils/chartTheme'
-import { loadJusticeDataset } from '@/custom/justice/utils/dataset'
+import { SAMPLE_DATASET_ID } from '@/custom/justice/utils/dataset'
 import {
   cellNumber,
   fetchResourceRows,
@@ -41,7 +40,6 @@ type Indicator = {
 
 const loading = ref(true)
 const error = ref(false)
-const dataset = ref<DatasetV2WithFullObject | null>(null)
 const indicators = ref<Indicator[]>([])
 const victimesSlices = ref<PieSlice[]>([])
 const jugeesSlices = ref<PieSlice[]>([])
@@ -76,14 +74,13 @@ function buildIndicator(
 
 onMounted(async () => {
   try {
-    const [traitees, classees, poursuites, victimes, jugees, loadedDataset] =
+    const [traitees, classees, poursuites, victimes, jugees] =
       await Promise.all([
         fetchResourceRows(TRAITEES_RESOURCE),
         fetchResourceRows(CLASSEES_RESOURCE),
         fetchResourceRows(POURSUITES_RESOURCE),
         fetchResourceRows(VICTIMES_RESOURCE),
-        fetchResourceRows(JUGEES_RESOURCE),
-        loadJusticeDataset()
+        fetchResourceRows(JUGEES_RESOURCE)
       ])
     const traiteesYear = latestYear(traitees)
     const classeesYear = latestYear(classees)
@@ -125,7 +122,6 @@ onMounted(async () => {
           : cellNumber(findRow(poursuites, 'Total'), poursuitesYear)
       )
     ]
-    dataset.value = loadedDataset
     victimesSlices.value = pieSlices(victimes)
     jugeesSlices.value = pieSlices(jugees)
   } catch {
@@ -144,7 +140,6 @@ onMounted(async () => {
     error-label="Les indicateurs n’ont pas pu être chargés."
     :loading="loading"
     :error="error"
-    :dataset="dataset"
   >
     <div class="fr-grid-row fr-grid-row--gutters">
       <div
@@ -152,7 +147,10 @@ onMounted(async () => {
         :key="indicator.id"
         class="fr-col-12 fr-col-md-4 justice-col"
       >
-        <VizCard :source-id="`sources-${indicator.id}`">
+        <VizCard
+          :dataset-id="SAMPLE_DATASET_ID"
+          :source-id="`sources-${indicator.id}`"
+        >
           <p class="justice-figure">
             {{
               indicator.value == null
@@ -178,6 +176,7 @@ onMounted(async () => {
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-4w">
       <div class="fr-col-12 fr-col-md-6 justice-col">
         <VizCard
+          :dataset-id="SAMPLE_DATASET_ID"
           title="Les victimes selon le type d’infraction traitées par le parquet"
           source-id="sources-victimes"
           source="Effectifs de victimes traitées selon la nature de l’affaire."
@@ -191,6 +190,7 @@ onMounted(async () => {
       </div>
       <div class="fr-col-12 fr-col-md-6 justice-col">
         <VizCard
+          :dataset-id="SAMPLE_DATASET_ID"
           title="Les victimes selon le type d’infraction devant le tribunal"
           source-id="sources-jugees"
           source="Effectifs de victimes jugées selon la nature de l’affaire."

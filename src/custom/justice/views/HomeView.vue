@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import config from '@/config'
+import CivilActivity from '@/custom/justice/components/CivilActivity.vue'
 import EducationalAssistance from '@/custom/justice/components/EducationalAssistance.vue'
 import JusticeCustody from '@/custom/justice/components/JusticeCustody.vue'
-import JusticeExplore from '@/custom/justice/components/JusticeExplore.vue'
 import LocalJurisdictions from '@/custom/justice/components/LocalJurisdictions.vue'
 import PenalIndicators from '@/custom/justice/components/PenalIndicators.vue'
 import { useCanonicalUrl, useMeta } from '@/utils/seo'
@@ -18,7 +18,7 @@ useMeta({
   <div class="bands">
     <div class="band fr-py-6w">
       <div class="fr-container">
-        <JusticeExplore />
+        <CivilActivity />
       </div>
     </div>
     <div class="band fr-py-6w">

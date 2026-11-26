@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import type { DatasetV2WithFullObject } from '@datagouv/components-next'
 import { onMounted, ref } from 'vue'
 
 import JurisdictionMap, {
@@ -7,7 +6,7 @@ import JurisdictionMap, {
 } from '@/custom/justice/components/JurisdictionMap.vue'
 import JusticeSection from '@/custom/justice/components/JusticeSection.vue'
 import VizCard from '@/custom/justice/components/VizCard.vue'
-import { loadJusticeDataset } from '@/custom/justice/utils/dataset'
+import { SAMPLE_DATASET_ID } from '@/custom/justice/utils/dataset'
 import {
   fetchResourceGeoJson,
   type MapFeature
@@ -37,7 +36,6 @@ const COURTS = [
 ] as const
 
 const layers = ref<JurisdictionLayer[]>([])
-const dataset = ref<DatasetV2WithFullObject | null>(null)
 const error = ref(false)
 const loading = ref(true)
 
@@ -52,11 +50,9 @@ function asCourts(features: MapFeature[]): MapFeature[] {
 
 onMounted(async () => {
   try {
-    const [loadedDataset, ...collections] = await Promise.all([
-      loadJusticeDataset(),
-      ...COURTS.map((court) => fetchResourceGeoJson(court.resource))
-    ])
-    dataset.value = loadedDataset
+    const collections = await Promise.all(
+      COURTS.map((court) => fetchResourceGeoJson(court.resource))
+    )
     layers.value = COURTS.map((court, index) => ({
       id: court.id,
       label: court.label,
@@ -78,9 +74,9 @@ onMounted(async () => {
     error-label="La carte n’a pas pu être chargée."
     :loading="loading"
     :error="error"
-    :dataset="dataset"
   >
     <VizCard
+      :dataset-id="SAMPLE_DATASET_ID"
       source-id="sources-juridictions"
       source="Le contour est le ressort de la juridiction, le territoire sur lequel elle est compétente. Le survol assombrit la zone et affiche son nom."
     >
