@@ -396,6 +396,24 @@ label:has(input[name='search-type']) span[aria-hidden='true']::after {
   dd + dt {
     margin-block-start: 1rem;
   }
+  /* markdown tables are bare <table>s, which DSFR only styles inside .fr-table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+  }
+  th,
+  td {
+    border: 1px solid var(--border-default-grey);
+    padding: 0.75rem;
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    background-color: var(--background-alt-grey);
+    font-weight: 600;
+    color: var(--text-title-grey);
+  }
 }
 
 /* ===== Lists ===== */

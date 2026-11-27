@@ -1,3 +1,5 @@
+import { datasetFactory } from '@/fixtures/factories/datasets_factory'
+
 describe('Home Page', () => {
   beforeEach(() => {
     // Visit the home page before each test
@@ -7,6 +9,16 @@ describe('Home Page', () => {
     cy.mockGristRecords('*')
     // some site home pages fetch topics (eg ecospheres)
     cy.mockDatagouvObjectList('topics', [])
+    // some site home pages fetch tabular data, datasets by id and resources (eg justice)
+    cy.mockTabularRows('*')
+    cy.mockDatagouvObject('datasets', '[0-9a-f]{24}', datasetFactory.one())
+    cy.mockDatagouvObject('datasets/resources', '[^/]+', {
+      resource: { url: 'https://static.data.gouv.fr/resources/mock.geojson' }
+    })
+    cy.intercept('GET', 'https://static.data.gouv.fr/resources/mock.geojson', {
+      statusCode: 200,
+      body: { type: 'FeatureCollection', features: [] }
+    })
     cy.visit('/')
   })
 
