@@ -1,3 +1,4 @@
+import { latestRequest } from '@/utils/request'
 import type { Ref } from 'vue'
 import type { IndicatorMesh, IndicatorResource } from '../../../model/indicator'
 import { debug } from './debug'
@@ -66,7 +67,7 @@ export function useTabularData(
     }, {})
   })
 
-  let latestRequestId = 0
+  const dataRequest = latestRequest()
 
   async function fetchData() {
     const mesh = selectedIndicatorVizMesh.value
@@ -74,7 +75,7 @@ export function useTabularData(
     // Commune preview isn't supported (see IndicatorVizChart's isCommuneMesh
     // alert): clear any stale data from a previous mesh instead of fetching.
     if (mesh === 'commune') {
-      latestRequestId++
+      dataRequest()
       rawData.value = []
       isLoading.value = false
       error.value = null
@@ -98,9 +99,8 @@ export function useTabularData(
 
     debug.log(`🔄 Fetching data for resource ${resource.id}`, { mesh, url })
 
-    const requestId = ++latestRequestId
-    // a newer request was started while this one was pending
-    const isStale = () => requestId !== latestRequestId
+    // false once a newer request was started while this one was pending
+    const isLatest = dataRequest()
 
     try {
       if (fetchCache.has(url)) {
@@ -111,16 +111,16 @@ export function useTabularData(
       const allData = await fetchAllPages(url)
       const formatted = formatData(allData, resource)
       fetchCache.set(url, formatted)
-      if (isStale()) return
+      if (!isLatest()) return
       rawData.value = formatted
       debug.log(`✅ Data fetched: ${formatted.length} records`)
     } catch (err) {
-      if (isStale()) return
+      if (!isLatest()) return
       debug.error('Failed to fetch data', err)
       error.value = err instanceof Error ? err.message : String(err)
       rawData.value = []
     } finally {
-      if (!isStale()) isLoading.value = false
+      if (isLatest()) isLoading.value = false
     }
   }
 

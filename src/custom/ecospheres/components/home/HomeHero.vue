@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import config from '@/config'
+import HomeTerritorySelect from '@/custom/ecospheres/components/home/HomeTerritorySelect.vue'
+import type { SpatialCoverage } from '@/model/spatial'
 import {
   networkBaseRouteName,
   networkDefaultPage,
@@ -28,12 +30,23 @@ const networksCatalogs = computed(() =>
 
 const router = useRouter()
 const searchQuery = ref('')
+const territory = ref<SpatialCoverage | null>(null)
 
-const doSearch = (q: string) => {
+const doSearch = () => {
+  const q = searchQuery.value
   trackSearchValidated(q, 'Accueil')
+  if (territory.value) {
+    trackEvent('Accueil', 'Recherche avec territoire', territory.value.id)
+  }
   router
-    .push({ name: 'datasets', query: { q } })
-    .then(() => (searchQuery.value = ''))
+    .push({
+      name: 'datasets',
+      query: { q: q || undefined, geozone: territory.value?.id }
+    })
+    .then(() => {
+      searchQuery.value = ''
+      territory.value = null
+    })
 }
 </script>
 
@@ -41,23 +54,38 @@ const doSearch = (q: string) => {
   <section class="hero-section fr-pt-12v fr-pb-10v">
     <div class="fr-container">
       <div class="fr-grid-row">
-        <div class="fr-col-12 fr-col-lg-9 hero-content">
+        <div class="fr-col-12 fr-col-lg-10 hero-content">
           <h1>
             Retrouvez les données clés de la
             <span class="highlight">transition écologique</span>
           </h1>
-          <div class="big-search">
-            <p class="fr-text--bold fr-mb-2v">Recherchez dans tout le site</p>
-            <DsfrSearchBar
-              id="big-select-search"
-              v-model="searchQuery"
-              label="Recherchez dans tout le site"
-              placeholder="Ex. GES, îlot de chaleur"
-              button-text="Rechercher"
-              :large="true"
-              @search="doSearch"
+          <form class="big-search" role="search" @submit.prevent="doSearch">
+            <div class="fr-input-group big-search__query">
+              <label class="fr-label" for="big-select-search">
+                Recherchez dans tout le site
+              </label>
+              <input
+                id="big-select-search"
+                v-model="searchQuery"
+                class="fr-input"
+                type="search"
+                placeholder="Ex. GES, îlot de chaleur"
+              />
+            </div>
+            <HomeTerritorySelect
+              id="big-select-territory"
+              v-model="territory"
+              class="big-search__territory"
+              label="Territoire (optionnel)"
+              placeholder="Ex. Finistère"
             />
-          </div>
+            <button
+              type="submit"
+              class="fr-btn fr-btn--lg fr-btn--icon-left fr-icon-search-line"
+            >
+              Rechercher
+            </button>
+          </form>
           <ul
             v-if="thematicTags.length"
             class="fr-tags-group fr-mt-5w"
@@ -158,8 +186,29 @@ h1 :deep(.highlight),
   line-height: 2rem;
 }
 
-.big-search :deep(.fr-search-bar) {
+.big-search {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 1.5rem;
+
+  .fr-input-group {
+    margin-bottom: 0;
+  }
+
+  .big-search__query {
+    flex: 1 1 17.5rem;
+    min-width: 0;
+  }
+
+  .big-search__territory {
+    flex: 1 1 15rem;
+    min-width: 0;
+  }
+
   .fr-input {
+    min-height: 3rem;
+    font-size: 1.125rem;
     box-shadow: inset 0 -2px 0 0 var(--text-default-grey);
   }
 }

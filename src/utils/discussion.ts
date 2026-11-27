@@ -10,17 +10,9 @@ import type {
   SubjectId
 } from '@/model/discussion'
 import DiscussionsAPI from '@/services/api/resources/DiscussionsAPI'
+import { latestRequest } from '@/utils/request'
 
 const discussionsAPI = new DiscussionsAPI()
-
-// Each call starts a request; the returned check tells if it's still the latest one
-const latestRequest = () => {
-  let last = 0
-  return () => {
-    const request = ++last
-    return () => request === last
-  }
-}
 
 interface SelectedDiscussionOptions {
   selectedDiscussionId: Ref<DiscussionId | undefined>

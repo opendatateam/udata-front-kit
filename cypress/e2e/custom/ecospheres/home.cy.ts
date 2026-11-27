@@ -24,6 +24,25 @@ describe('Home Page Ecologie', () => {
     cy.get('header .fr-search-bar').should('not.exist')
   })
 
+  it('should search datasets on the selected territory', () => {
+    cy.mockListApis('datasets')
+    cy.visit('/')
+
+    cy.get('#big-select-search').type('eau')
+    cy.get('#big-select-territory').type('Par')
+    cy.wait('@get_spatial_zones_suggest')
+    cy.contains('[role="option"]', '75056').click()
+    cy.get('#big-select-territory').should('have.value', 'Paris')
+    cy.contains('button', 'Rechercher').click()
+
+    cy.location().should((loc) => {
+      const params = new URLSearchParams(loc.search)
+      expect(loc.pathname).to.eq('/datasets')
+      expect(params.get('q')).to.eq('eau')
+      expect(params.get('geozone')).to.eq('fr:commune:75056')
+    })
+  })
+
   describe('Collections thématiques Cards Display', () => {
     it('should display collection cards in the discover section', () => {
       cy.visit('/')

@@ -201,9 +201,10 @@ function buildSingleTypeConfig(
   pageConf: PageListConf
 ): GlobalSearchConfig[number] {
   const searchType = pageConf.object_type
-  const hiddenFilters = Object.entries(pageConf.universe_query ?? {}).map(
-    ([key, value]) => ({ key, value })
-  )
+  const hiddenFilters = Object.entries({
+    ...pageConf.universe_query,
+    ...pageConf.search_params
+  }).map(([key, value]) => ({ key, value }))
   const basicFilters: string[] = []
   const advancedFilters: string[] = []
   for (const filter of pageConf.filters) {

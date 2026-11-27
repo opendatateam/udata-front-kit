@@ -94,6 +94,8 @@ export type PageListConf = {
   list_all: boolean
   filter_prefix: string | null
   universe_query: PageUniverseQueryConf | null
+  // Static params added to the list page search only, unlike universe_query
+  search_params?: PageUniverseQueryConf
   title: string
   breadcrumb_title: string | null
   icon?: string
